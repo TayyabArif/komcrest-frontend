@@ -1,12 +1,12 @@
 import ForgetPassword from '@/components/auth/ForgetPassword'
 import React from 'react'
 
-const forgetPassword = () => {
+const request = () => {
   return (
     <div>
-      <ForgetPassword type="purchaser"/>
+      <ForgetPassword type="vendor"/>
     </div>
   )
 }
 
-export default forgetPassword
+export default request

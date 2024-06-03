@@ -1,12 +1,12 @@
 import Login from '@/components/auth/Login'
 import React from 'react'
 
-const login = () => {
+const access = () => {
   return (
     <div>
-      <Login type="purchaser"/>
+      <Login type="vendor"/>
     </div>
   )
 }
 
-export default login
+export default access

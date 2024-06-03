@@ -1,7 +1,7 @@
 import CreatePassword from '@/components/auth/CreatePassword'
 import React from 'react'
 
-const createPassword = () => {
+const passwordConfirmation = () => {
   return (
     <div>
       <CreatePassword type="vendor"/>
@@ -9,4 +9,4 @@ const createPassword = () => {
   )
 }
 
-export default createPassword
+export default passwordConfirmation

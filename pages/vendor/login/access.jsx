@@ -1,7 +1,7 @@
 import Login from '@/components/auth/Login'
 import React from 'react'
 
-const login = () => {
+const access = () => {
   return (
     <div>
       <Login type="vendor"/>
@@ -9,4 +9,4 @@ const login = () => {
   )
 }
 
-export default login
+export default access

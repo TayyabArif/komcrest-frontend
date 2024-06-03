@@ -1,12 +1,12 @@
 import CreatePassword from '@/components/auth/CreatePassword'
 import React from 'react'
 
-const createPassword = () => {
+const passwordUpate = () => {
   return (
     <div>
-      <CreatePassword type="purchaser"/>
+      <CreatePassword type="vendor"/>
     </div>
   )
 }
 
-export default createPassword
+export default passwordUpate

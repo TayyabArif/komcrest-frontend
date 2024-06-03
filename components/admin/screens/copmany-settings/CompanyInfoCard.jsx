@@ -1,32 +1,45 @@
 import React from 'react'
 import {Input, Checkbox} from "@nextui-org/react";
 
-const CompanyInfoCard = () => {
+const CompanyInfoCard = ({action}) => {
   return (
-    <div className='flex flex-col bg-white shadow-md w-[45%] min-h-[480px] mt-12'>
+    <div className='flex flex-col bg-white shadow-md w-[45%] min-h-[500px] pb-10 mt-12'>
       <p className='px-4 py-4 border border-1.5 border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold'>Company info</p>
       <div className='mt-6 px-4'>
       <Input
       isRequired
-      type="email"
+      type="text"
       label="Company name"
       labelPlacement="outside"
-      defaultValue="Google"
+      placeholder="Google"
       variant="bordered"
       className="max-w-sm"
+      classNames={{inputWrapper: "rounded-md"}}
     />
       </div>
       <div className='mt-6 px-4'>
-     <Input
-      isRequired
-      type="email"
-      label="Company domain"
-      labelPlacement="outside"
-      defaultValue="Google.com"
-      variant="bordered"
-      className="max-w-sm"
-      classNames={{wrapper: "rounded-none"}}
-    />
+        <Input
+          isRequired
+          type="email"
+          label="Company email"
+          labelPlacement="outside"
+          placeholder="xyz@gmail.com"
+          variant="bordered"
+          className="max-w-sm"
+          classNames={{inputWrapper: "rounded-md"}}
+        />
+      </div>
+      <div className='mt-6 px-4'>
+        <Input
+          isRequired
+          type="text"
+          label="Company domain"
+          labelPlacement="outside"
+          placeholder="Google.com"
+          variant="bordered"
+          className="max-w-sm"
+          classNames={{inputWrapper: "rounded-md"}}
+        />
       </div>
     <div className='mt-6 px-4'>
       <p className=''>Company type<span className='text-red-500 ml-0.5'>*</span></p>

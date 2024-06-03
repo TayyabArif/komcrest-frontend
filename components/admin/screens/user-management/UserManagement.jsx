@@ -1,10 +1,9 @@
 import React from 'react'
 import { Button } from "@nextui-org/react";
-import CompaniesTable from './CompaniesTable';
+import UsersTable from './UsersTable';
 import { useRouter } from 'next/router';
 
-
-const CompanySettings = () => {
+const UserManagement = () => {
   const router = useRouter();
   return (
     <div className='flex flex-col w-full bg-white'>
@@ -12,24 +11,24 @@ const CompanySettings = () => {
       <div className='flex justify-between items-start bg-gray-50 pl-20 pr-10 py-6'>
         <div>
           <p className='font-semibold'>
-            Setup companies in Komcrest
+            Manage Komcrestusers
           </p>
           <p>
-            Fill in company information to create company profile and tenant
+            Invite and revoke access to users
           </p>
         </div>
         <Button
           radius="none"
           size="sm"
           className="text-white px-[25px] text-sm bg-btn-primary w-max rounded-[4px] -ml-1"
-          onClick={() => router.push("/admin/company-settings/create-new-company")}
+          onClick={() => router.push("/admin/user-management/create-user")}
         >
-          Activate company
+          Invite Users
         </Button>
       </div>
-      <CompaniesTable />
+      <UsersTable />
   </div>
   )
 }
 
-export default CompanySettings
+export default UserManagement

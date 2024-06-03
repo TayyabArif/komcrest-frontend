@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import {Input} from "@nextui-org/react";
 import { Search } from 'lucide-react';
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Popover, PopoverTrigger, PopoverContent, Button} from "@nextui-org/react";
-import { company_columns, company_users } from '@/utlis/data';
+import { users_columns, users } from '@/utlis/data';
 import { EditIcon } from '@/public/icons/EditIcon';
 import {useDisclosure} from "@nextui-org/react";
 import ConfirmationModal from '../../shared/ConfirmationModal';
@@ -10,52 +10,67 @@ import { useRouter } from 'next/router';
 
 
 const modalData = {
-  heading: "Deactivate Company",
-  desc: " Are you sure you want to deactivate the company? The tenant will no longer be available, and users won’t be able to access their information",
-  name: "Sodexo",
+  heading: "Deactivate user",
+  desc: " Are you sure you want to deactivate user? The user will no long be able to login to komcrest.",
+  name: "Richard Branco",
   confirmText: "Confirm deactivation"
 }
 
-const CompaniesTable = () => {
+const UsersTable = () => {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const router = useRouter();
+
   const renderCell = useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
 
     switch (columnKey) {
-      case "company_name":
+      case "company":
         return (
           <p>{cellValue}</p>
         );
-      case "company_domain":
+      case "f_name":
         return (
           <div className="flex flex-col">
             {cellValue}
           </div>
         );
-      case "company_type":
+      case "l_name":
         return (
           <div className="flex flex-col">
             {cellValue}
           </div>
         );
-      case "products":
-        return (
-          <div className='flex flex-wrap w-[100%] gap-2 font-semibold'>
-            {cellValue.map((item, index) => {
-              return(
-                <Chip key={index}>{item}</Chip>
-              )
-            })}
-          </div>
-        );
-      case "creation_date":
+      case "email":
         return (
           <div className="flex flex-col">
             {cellValue}
           </div>
         );
-      case "last_update":
+      case "position":
+        return (
+          <div className="flex flex-col">
+            {cellValue}
+          </div>
+        );
+      case "role":
+        return (
+          <div className="flex flex-col">
+            {cellValue}
+          </div>
+        );
+      case "c_date":
+        return (
+          <div className="flex flex-col">
+            {cellValue}
+          </div>
+        );
+      case "l_update":
+        return (
+          <div className="flex flex-col">
+            {cellValue}
+          </div>
+        );
+      case "i_status":
         return (
           <div className="flex flex-col">
             {cellValue}
@@ -77,7 +92,7 @@ const CompaniesTable = () => {
               <PopoverContent className='rounded-sm w-[120px] items-start text-start'>
                 <div className="px-2 py-2">
                   <div className="text-sm font-bold cursor-pointer"
-                   onClick={() => router.push("/admin/company-settings/update-company")}
+                  onClick={() => router.push("/admin/user-management/update-user")}
                   >Update</div>
                   <div className="text-sm mt-2 text-red-500 font-bold cursor-pointer" onClick={onOpen}>Deactivate</div>
                 </div>
@@ -107,14 +122,14 @@ const CompaniesTable = () => {
         th: "!h-[40px]"
 
       }}>
-      <TableHeader columns={company_columns}>
+      <TableHeader columns={users_columns}>
         {(column) => (
-          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"} className={`${column.uid === "products" ? 'w-[25%]' : 'w-[15%]'}`}>
+          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"} className={`${column.email === "products" ? 'w-[15%]' : 'w-[9%]'}`}>
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={company_users}>
+      <TableBody items={users}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
@@ -127,4 +142,4 @@ const CompaniesTable = () => {
   )
 }
 
-export default CompaniesTable
+export default UsersTable
