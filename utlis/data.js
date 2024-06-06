@@ -1,23 +1,23 @@
 export const company_columns = [
-  {name: "Copmany name", uid: "company_name"},
-  {name: "Company domain", uid: "company_domain"},
-  {name: "Company type", uid: "company_type"},
-  {name: "Products", uid: "products"},
-  {name: "Creation date", uid: "creation_date"},
-  {name: "Last update", uid: "last_update"},
+  {name: "Copmany name", uid: "name"},
+  {name: "Company domain", uid: "subdomain"},
+  {name: "Company type", uid: "companyType"},
+  {name: "Products", uid: "Products"},
+  {name: "Creation date", uid: "createdAt"},
+  {name: "Last update", uid: "updatedAt"},
   {name: "Actions", uid: "actions"},
 ];
 
 export const users_columns = [
   {name: "Copmany", uid: "company"},
-  {name: "First name", uid: "f_name"},
-  {name: "Last name", uid: "l_name"},
+  {name: "First name", uid: "firstName"},
+  {name: "Last name", uid: "lastName"},
   {name: "Email", uid: "email"},
   {name: "Position", uid: "position"},
   {name: "Role", uid: "role"},
-  {name: "Creation date", uid: "c_date"},
-  {name: "Last Update", uid: "l_update"},
-  {name: "Invitation Status", uid: "i_status"},
+  {name: "Creation date", uid: "createdAt"},
+  {name: "Last Update", uid: "updatedAt"},
+  {name: "Invitation Status", uid: "invitationStatus"},
   {name: "Actions", uid: "actions"},
 ];
 export const company_users = [

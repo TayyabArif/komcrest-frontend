@@ -4,7 +4,7 @@ import React from 'react'
 const passwordConfirmation = () => {
   return (
     <div>
-      <CreatePassword type="vendor"/>
+      <CreatePassword type="vendor" isNew={true}/>
     </div>
   )
 }

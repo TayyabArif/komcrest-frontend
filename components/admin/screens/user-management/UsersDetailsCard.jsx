@@ -6,9 +6,9 @@ const companies = [
   {key: "sodexo", label: "Sodexo"},
   {key: "Staffbase", label: "staffbase"},
 ];
-const UsersDetailsCard = () => {
+const UsersDetailsCard = ({handleChange, formData, allCompanies}) => {
   return (
-    <div className='flex flex-col bg-white shadow-md w-[45%] min-h-[480px] mt-12 pb-10'>
+    <div className='flex flex-col bg-white shadow-md w-[45%] min-h-[550px] mt-12 pb-10'>
     <p className='px-4 py-4 border border-1.5 border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold'>User details</p>
     <div className='mt-7 px-4'>
       <Select
@@ -21,10 +21,12 @@ const UsersDetailsCard = () => {
           isEnabled: false
         }}
         classNames={{label: "font-[550] ml-0.5 pb-1", trigger: "rounded-sm"}}
+        onChange={handleChange}
+        name="companyId"
       >
-        {companies.map((company) => (
-          <SelectItem key={company.key}>
-            {company.label}
+        {allCompanies.map((company) => (
+          <SelectItem key={company.id}>
+            {company.name}
           </SelectItem>
         ))}
       </Select>
@@ -32,6 +34,9 @@ const UsersDetailsCard = () => {
     <div className='mt-6 px-4'>
       <Input
       isRequired
+      value={formData.firstName}
+      onChange={handleChange}
+      name="firstName"
       type="text"
       label="First name"
       labelPlacement="outside"
@@ -44,6 +49,9 @@ const UsersDetailsCard = () => {
     <div className='mt-6 px-4'>
       <Input
       isRequired
+      value={formData.lastName}
+      onChange={handleChange}
+      name="lastName"
       type="text"
       label="Last name"
       labelPlacement="outside"
@@ -56,6 +64,9 @@ const UsersDetailsCard = () => {
     <div className='mt-6 px-4'>
       <Input
       isRequired
+      value={formData.email}
+      onChange={handleChange}
+      name="email"
       type="email"
       label="Email"
       labelPlacement="outside"
@@ -68,6 +79,9 @@ const UsersDetailsCard = () => {
     <div className='mt-6 px-4'>
       <Input
       isRequired
+      value={formData.position}
+      onChange={handleChange}
+      name="position"
       type="text"
       label="Position"
       labelPlacement="outside"

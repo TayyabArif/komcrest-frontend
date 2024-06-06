@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {Input} from "@nextui-org/react";
 import { Search } from 'lucide-react';
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip, Tooltip, Popover, PopoverTrigger, PopoverContent, Button} from "@nextui-org/react";
@@ -7,6 +7,8 @@ import { EditIcon } from '@/public/icons/EditIcon';
 import {useDisclosure} from "@nextui-org/react";
 import ConfirmationModal from '../../shared/ConfirmationModal';
 import { useRouter } from 'next/router';
+import { toast } from "react-toastify";
+
 
 
 const modalData = {
@@ -16,49 +18,86 @@ const modalData = {
   confirmText: "Confirm deactivation"
 }
 
-const CompaniesTable = () => {
+const CompaniesTable = ({allCompanies, setAllCompanies, isDeleted, setIsDeleted}) => {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const [selectedDecativateCompany, setSelectedDecativateCompany] = useState("")
   const router = useRouter();
-  const renderCell = useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const [filteredCompanies, setFilteredCompanies] = useState(allCompanies);
+  useEffect(() => {
+    setFilteredCompanies(allCompanies)
+  }, [allCompanies])
+  const handleSearch = (event) => {
+    const value = event.target.value.toLowerCase();
+    const filtered = allCompanies.filter(company =>
+        company.name.toLowerCase().includes(value)
+    );
+    setFilteredCompanies(filtered);
+};
+
+const handleDelete = async () => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const requestOptions = {
+    method: "DELETE",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  fetch(`http://localhost:3001/api/companies/${selectedDecativateCompany?.id}`, requestOptions)
+    .then((response) => response.text())
+    .then((result) => {
+      console.log("$$$$$$$$$", result)
+      toast.success("Company deleted successfully")
+      setIsDeleted(!isDeleted)
+    })
+    .catch((error) => console.error(error));
+}
+
+  const renderCell = useCallback((company, columnKey) => {
+    const cellValue = company[columnKey];
 
     switch (columnKey) {
-      case "company_name":
+      case "name":
         return (
           <p>{cellValue}</p>
         );
-      case "company_domain":
+      case "subdomain":
         return (
           <div className="flex flex-col">
             {cellValue}
           </div>
         );
-      case "company_type":
+      case "companyType":
         return (
           <div className="flex flex-col">
             {cellValue}
           </div>
         );
-      case "products":
+      case "Products":
         return (
           <div className='flex flex-wrap w-[100%] gap-2 font-semibold'>
             {cellValue.map((item, index) => {
               return(
-                <Chip key={index}>{item}</Chip>
+                <Chip key={index}>{item.name}</Chip>
               )
             })}
           </div>
         );
-      case "creation_date":
+      case "createdAt":
+        const date = new Date(cellValue);
+        const formattedDate = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
         return (
           <div className="flex flex-col">
-            {cellValue}
+            {formattedDate}
           </div>
         );
-      case "last_update":
+      case "updatedAt":
+        const update_date = new Date(cellValue);
+        const update_formattedDate = `${update_date.getFullYear()}/${String(update_date.getMonth() + 1).padStart(2, '0')}/${String(update_date.getDate()).padStart(2, '0')}`;
         return (
           <div className="flex flex-col">
-            {cellValue}
+            {update_formattedDate}
           </div>
         );
       case "actions":
@@ -77,9 +116,13 @@ const CompaniesTable = () => {
               <PopoverContent className='rounded-sm w-[120px] items-start text-start'>
                 <div className="px-2 py-2">
                   <div className="text-sm font-bold cursor-pointer"
-                   onClick={() => router.push("/admin/company-settings/update-company")}
+                   onClick={() => router.push(`/admin/company-settings/update-company?id=${company.id}`)}
                   >Update</div>
-                  <div className="text-sm mt-2 text-red-500 font-bold cursor-pointer" onClick={onOpen}>Deactivate</div>
+                  <div className="text-sm mt-2 text-red-500 font-bold cursor-pointer" onClick={() => {
+                    setSelectedDecativateCompany(company)
+                    onOpen()
+                  }
+                    }>Deactivate</div>
                 </div>
               </PopoverContent>
             </Popover>
@@ -91,8 +134,9 @@ const CompaniesTable = () => {
   }, []);
 
   return (
-    <div className='flex flex-col gap-2 bg-gray-200 pl-20 pr-10 py-3'>
+    <div className='flex flex-col gap-2 bg-gray-200 pl-20 pr-10 py-3 min-h-screen'>
       <Input
+        onChange={handleSearch}
         variant="bordered"
         placeholder="Search"
         endContent={
@@ -102,6 +146,7 @@ const CompaniesTable = () => {
         classNames={{inputWrapper: "bg-white"}}
         className="max-w-xs"
       />
+      {allCompanies.length > 0 ?
       <Table aria-label="Example table with custom cells" isHeaderSticky={true} classNames={{
         tr: "border border-1.5 border-bray-400 border-t-0 h-[70px]",
         th: "!h-[40px]"
@@ -109,12 +154,12 @@ const CompaniesTable = () => {
       }}>
       <TableHeader columns={company_columns}>
         {(column) => (
-          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"} className={`${column.uid === "products" ? 'w-[25%]' : 'w-[15%]'}`}>
+          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"} className={`${column.uid === "Products" ? 'w-[25%]' : 'w-[15%]'}`}>
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={company_users}>
+      <TableBody items={filteredCompanies} emptyContent="No Data Found">
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
@@ -122,7 +167,15 @@ const CompaniesTable = () => {
         )}
       </TableBody>
     </Table>
-    <ConfirmationModal isOpen={isOpen} onOpenChange ={onOpenChange} data={modalData}/>
+    :
+    <div className='w-full flex justify-center p-5 shadow-md rounded-lg bg-white items-center text-center gap-2 text-xl text-gray-700 mt-20'>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+      </svg>
+      <p>No Data Found</p>
+    </div>
+    }
+    <ConfirmationModal isOpen={isOpen} onOpenChange ={onOpenChange} data={modalData} handleSubmit={handleDelete} name={selectedDecativateCompany?.name}/>
     </div>
   )
 }

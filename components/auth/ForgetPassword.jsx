@@ -1,15 +1,56 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/react";
 import AuthLayout from "./AuthLayout";
-import { Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
+
 
 const ForgetPassword = ({type}) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [formData, setFormData] =useState({
+    email: "",
+  })
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const handleSubmit= async () => {
+    setIsLoading(true)
+    const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  email: formData?.email
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("http://localhost:3001/api/users/request-password-reset", requestOptions)
+  .then((response) => response.text())
+  .then((result) => {
+    toast.success("Reset password email sent successfully")
+    console.log(result)
+  })
+  .catch((error) => console.error(error))
+  .finally(setIsLoading(false));
+  }
   return (
     <AuthLayout Class={type === "vendor" ? 'bg-primary': "bg-secondry"} sideBarDesc={type === "vendor" ? 'Eliminate Security Questionnaire complexity thanks to our A.I. powered solution that helps you get customers the exact answers for their security review in no time.': "Manage your vendors’ security assessment in one place and allow them to use Komcrest A.I. powered solution to answers your questions promptly and qualitatively."}>
       <div className="flex flex-col w-[50%]">
         <p className="text-[28px] font-semibold">Did you forget your password? Enter your email to reset it</p>
         <Input
+          isRequired
+          value={formData.email}
+          onChange={handleChange}
+          name="email"
           size="md"
           type="email"
           placeholder="Email"
@@ -20,6 +61,9 @@ const ForgetPassword = ({type}) => {
           radius="none"
           size="sm"
           className="mt-6 text-white px-[45px] text-sm bg-[#4fa82e] w-max rounded-[6px] -ml-1"
+          isDisabled={!formData?.email || isLoading}
+            isLoading={isLoading}
+            onPress={handleSubmit}
         >
           Receive link
         </Button>

@@ -4,7 +4,7 @@ import React from 'react'
 const passwordUpate = () => {
   return (
     <div>
-      <CreatePassword type="vendor"/>
+      <CreatePassword type="vendor" isNew={false}/>
     </div>
   )
 }

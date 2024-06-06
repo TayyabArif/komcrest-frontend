@@ -4,27 +4,63 @@ import {useDisclosure} from "@nextui-org/react";
 import ConfirmationModal from '../../shared/ConfirmationModal';
 
 
-const UsersSettingsCard = ({action}) => {
+const UsersSettingsCard = ({action, handleChange, formData, products, handleProductsChange}) => {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
-  const modalData = {
-    heading: "Create User",
-    desc: "Verify information before confirming",
-    confirmText: action === "create" ? "Send invitation" : "Confirm update"
-  }
+  // const modalData = {
+  //   heading: "Create User",
+  //   desc: "Verify information before confirming",
+  //   confirmText: action === "create" ? "Send invitation" : "Confirm update"
+  // }
   return (
     <div className='w-[45%]'>
-      <div className='flex flex-col bg-white shadow-md w-full pb-20 mt-12'>
+      <div className='flex flex-col bg-white shadow-md w-full pb-20 mt-12  min-h-[550px]'>
         <p className='px-6 py-4 border border-1.5 border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold'>User Settings</p>
         <div className='flex flex-col mt-7 px-6'>
           <p className='mb-2 font-[550]'>User role</p>
           <div className='flex flex-col gap-5'>
-            <Checkbox radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>Admin</Checkbox>
+            {/* <Checkbox radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>Admin</Checkbox>
             <Checkbox defaultSelected radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>Contributor</Checkbox>
-            <Checkbox radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>Viewer</Checkbox>
+            <Checkbox radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>Viewer</Checkbox> */}
+             <Checkbox
+        name='Admin'
+        isSelected={formData.role === 'Admin'}
+        onChange={handleChange}
+        radius="none"
+        classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}
+    >
+        Admin
+    </Checkbox>
+    <Checkbox
+        name='Contributor'
+        isSelected={formData.role === 'Contributor'}
+        onChange={handleChange}
+        radius="none"
+        classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}
+    >
+        Contributor
+    </Checkbox>
+    <Checkbox
+        name='Viewer'
+        isSelected={formData.role === 'Viewer'}
+        onChange={handleChange}
+        radius="none"
+        classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}
+    >
+        Viewer
+    </Checkbox>
+          </div>
+
+        </div>
+        <div className='flex flex-col mt-8 px-6'>
+          <p className='mb-2 font-[550]'>Associated products</p>
+          <div className='flex flex-col gap-5'>
+            {products?.map((item, index) => (
+              <Checkbox key={index} onChange={handleProductsChange} value={item} name="products" radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>{item}</Checkbox>
+            ))}
           </div>
         </div>
       </div>
-      <div className="flex justify-end mb-5 mt-10">
+      {/* <div className="flex justify-end mb-5 mt-10">
           <div>
             <div className="flex items-center gap-5">
               <Button
@@ -44,8 +80,8 @@ const UsersSettingsCard = ({action}) => {
               </Button>
             </div>
           </div>
-      </div>
-      <ConfirmationModal isOpen={isOpen} onOpenChange ={onOpenChange} data={modalData}/>
+      </div> */}
+      {/* <ConfirmationModal isOpen={isOpen} onOpenChange ={onOpenChange} data={modalData}/> */}
     </div>
   )
 }

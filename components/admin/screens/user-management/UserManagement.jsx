@@ -1,10 +1,34 @@
-import React from 'react'
-import { Button } from "@nextui-org/react";
+import React, { useEffect, useState } from 'react'
+import { Button, CircularProgress } from "@nextui-org/react";
 import UsersTable from './UsersTable';
 import { useRouter } from 'next/router';
 
 const UserManagement = () => {
+  const [allUsers, setAllUsers] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [isDeleted, setIsDeleted] = useState(false)
   const router = useRouter();
+  useEffect(() => {
+    getAllUsers();
+  }, [isDeleted]);
+  const getAllUsers = async () => {
+    setIsLoading(true)
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };
+
+    fetch("http://localhost:3001/api/users", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        const response = JSON.parse(result)
+        setAllUsers(response)
+        console.log("result of all",response)
+      })
+      .catch((error) => console.error(error))
+      .finally(setIsLoading(false));
+      ;
+  };
   return (
     <div className='flex flex-col w-full bg-white'>
       <div className='flex justify-end font-bold pl-20 pr-10 py-2'>Logout</div>
@@ -26,7 +50,13 @@ const UserManagement = () => {
           Invite Users
         </Button>
       </div>
-      <UsersTable />
+      {isLoading ?
+        <div className='flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen'>
+          <CircularProgress label="Fetching Users..." size="lg"/>
+        </div>
+      :
+        <UsersTable  allUsers={allUsers} setAllUsers={setAllUsers} isDeleted={isDeleted} setIsDeleted ={setIsDeleted}/>
+      }
   </div>
   )
 }

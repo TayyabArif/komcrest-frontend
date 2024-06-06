@@ -1,10 +1,10 @@
-import CreatePassword from '@/components/auth/CreatePassword'
+import CreateNewPassword from '@/components/auth/CreateNewPassword'
 import React from 'react'
 
 const passwordUpate = () => {
   return (
     <div>
-      <CreatePassword type="purchaser"/>
+      <CreateNewPassword type="purchaser"/>
     </div>
   )
 }

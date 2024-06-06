@@ -3,13 +3,12 @@ import {Input, Checkbox} from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { X } from 'lucide-react';
 
-const CompanyProductCard = ({action}) => {
-  const [products, setProducts] = useState(["Intranet", "Email Marketing", "Mobile App"])
+const CompanyProductCard = ({products, setProducts, action}) => {
   const [product,setProduct] = useState("")
   const handleAddProduct = () => {
-    if (product) { // Check if product input is not empty
+    if (product) {
       setProducts([...products, product]);
-      setProduct(""); // Clear input field after adding
+      setProduct("");
     }
   };
 
