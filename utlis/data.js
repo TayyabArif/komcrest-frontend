@@ -153,3 +153,95 @@ export const users = [
     actions: "edit",
   },
 ];
+
+
+
+
+
+
+export const Document_Data = [
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: "kwdwjhjdwh"
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: "wkdwdkwd"
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: "wdmwdm"
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: ""
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: ""
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: "wldwld"
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: ""
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: ""
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: ""
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: ""
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: ""
+  },
+  {
+    title: "SOC 2 TYPE II REPORT",
+    description: "Description",
+    file: null,
+    associated_product: [],
+    document_link: ""
+  }
+];
