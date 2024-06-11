@@ -6,7 +6,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
 
-const Login = ({type}) => {
+const Login = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
@@ -23,22 +23,22 @@ const Login = ({type}) => {
       [name]: value,
     }));
   };
-  const handleSubmit= async () => {
+  const handleSubmit = async () => {
     setIsLoading(true)
     const myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Content-Type", "application/json");
 
-const raw = JSON.stringify({
-  email: formData?.email,
-  password: formData?.password
-});
+    const raw = JSON.stringify({
+      email: formData?.email,
+      password: formData?.password
+    });
 
-const requestOptions = {
-  method: "POST",
-  headers: myHeaders,
-  body: raw,
-  redirect: "follow"
-};
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
 
 // fetch("http://localhost:3001/api/users/login", requestOptions)
 //   .then((response) => response.text())
@@ -74,7 +74,7 @@ fetch("http://localhost:3001/api/users/login", requestOptions)
     // router.push(`/`)
   }
   return (
-    <AuthLayout Class={type === "vendor" ? 'bg-primary': "bg-secondry"} sideBarDesc={type === "vendor" ? 'Eliminate Security Questionnaire complexity thanks to our A.I. powered solution that helps you get customers the exact answers for their security review in no time.': "Manage your vendors’ security assessment in one place and allow them to use Komcrest A.I. powered solution to answers your questions promptly and qualitatively."}>
+    <AuthLayout Class={type === "vendor" ? 'bg-primary' : "bg-secondry"} sideBarDesc={type === "vendor" ? 'Eliminate Security Questionnaire complexity thanks to our A.I. powered solution that helps you get customers the exact answers for their security review in no time.' : "Manage your vendors’ security assessment in one place and allow them to use Komcrest A.I. powered solution to answers your questions promptly and qualitatively."}>
       <div className="flex flex-col w-[50%]">
         <p className="text-[30px] font-semibold">Log in to Komcrest</p>
         <Input

@@ -22,7 +22,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-    font-family: "Google Sans","Roboto","sans-serif";
+    font-family: "Aptos" !important;
 }
 
 @layer utilities {
