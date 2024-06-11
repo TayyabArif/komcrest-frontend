@@ -1,13 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
 import { Settings } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
-const DocumentCard = ({cardData}) => {
+import ConfirmationModal from "@/components/admin/shared/ConfirmationModal";
+import {useDisclosure} from "@nextui-org/react";
+import { useRouter } from "next/router";
+
+const DocumentCard = ({cardData , setIsDeleted}) => {
+
+    const router = useRouter()
     const [openPopoverIndex, setOpenPopoverIndex] = React.useState(null);
+    const [selectedDocument , setSelectedDocument] = useState(null)
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
+    const modalData = {
+      heading: "Delete Document",
+      desc: " Are you sure you want to delete the Document? The Document will no longer be available, and you won’t be able to access their information",
+      name: "Sodexo",
+      confirmText: "Confirm deleted"
+    }
+  
+    const handleDelete = async () => {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+    
+      const requestOptions = {
+        method: "DELETE",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+    
+      fetch(`http://localhost:3001/api/documents/${selectedDocument?.id}`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+          console.log("$$$$$$$$$", result)
+          toast.success("Document deleted successfully")
+          setIsDeleted(!isDeleted)
+        })
+        .catch((error) => console.error(error));
+    }
+  
   return (
     <div>
-      <div className="flex justify-between flex-wrap w-[80%] mx-auto my-10">
+      <div className="flex flex-wrap w-[80%] mx-auto my-5 gap-x-10">
         { cardData && cardData.map((item, index) => {
           return (
             <div
@@ -35,8 +71,17 @@ const DocumentCard = ({cardData}) => {
                   <PopoverContent>
                     <div className="px-1 py-2 space-y-1">
                      { item.document_link &&  <div className="text-small ">Download</div>} 
-                      <div className="text-small ">Update</div>
-                      <div className="text-small text-red-600">Delete</div>
+                      <div className="text-small cursor-pointer"
+                        onClick={()=>{router.push(`/vendor/document/AddDocument?id=${item.id}`)
+                        }}
+                      
+                      >Update</div>
+                      <div className="text-small text-red-600 cursor-pointer"
+                      onClick={()=>{setSelectedDocument(item)
+                        onOpen()
+                      }}
+                      
+                      >Delete</div>
                     </div>
                   </PopoverContent>
                 </Popover>
@@ -45,6 +90,7 @@ const DocumentCard = ({cardData}) => {
           );
         })}
       </div>
+      <ConfirmationModal isOpen={isOpen} onOpenChange ={onOpenChange} data={modalData} handleSubmit={handleDelete}/>
     </div>
   );
 };
