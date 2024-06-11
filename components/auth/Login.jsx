@@ -58,6 +58,7 @@ fetch("http://localhost:3001/api/users/login", requestOptions)
   })
   .then(({ status, ok, data }) => {
     if (ok) {
+      localStorage.setItem('token', data.token);
       console.log("Success:", data);
     } else {
       toast.error(data?.error || "Email or password is incorrect")
