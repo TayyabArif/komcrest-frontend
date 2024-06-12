@@ -3,11 +3,16 @@ import { Input, Textarea, Button, Checkbox } from "@nextui-org/react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { useCookies } from 'react-cookie';
 
 const NewDocument = () => {
+ 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
+
+  const [cookies, setCookie] = useCookies(['myCookie']);
+  const cookiesData = cookies.myCookie;
 
   const router = useRouter();
   const { id } = router.query;
@@ -37,6 +42,7 @@ const NewDocument = () => {
   };
 
   const handleDrop = (acceptedFiles) => {
+    console.log('fileeeee',acceptedFiles)
     setDocumentData((prevData) => ({
       ...prevData,
       file: acceptedFiles[0],
@@ -69,11 +75,12 @@ const NewDocument = () => {
     );
     formData.append("documentLink", documentData.documentLink);
 
-    const token = localStorage.getItem("token");
+    const token = cookiesData.token;
 
     let requestOptions;
 
     if (id) {
+     
       requestOptions = {
         method: "PUT",
         headers: {
@@ -87,11 +94,13 @@ const NewDocument = () => {
         .then((response) => response.json())
         .then((result) => {
           toast.success("Document updated successfully");
-          console, log("", result);
           router.push("/vendor/document");
+          console, log("", result);
+          
         })
         .catch((error) => console.error(error));
     } else {
+     
       requestOptions = {
         method: "POST",
         headers: {
@@ -113,7 +122,7 @@ const NewDocument = () => {
 
   useEffect(() => {
     if (id) {
-      const token = localStorage.getItem("token");
+      const token = cookiesData.token;
       const requestOptions = {
         method: "GET",
         headers: {
@@ -126,7 +135,8 @@ const NewDocument = () => {
         .then((response) => response.json())
         .then((result) => {
           setDocumentData(result);
-          console.log(result);
+          console.log(">>>>>>>>>>>>>>",result);
+        
         })
         .catch((error) => console.error(error));
     }
@@ -186,7 +196,7 @@ const NewDocument = () => {
                 </div>
               </div>
             </div>
-            <div className="w-[50%] px-5 space-y-6">
+            <div className="w-[50%] px-5 space-y-1">
               <div
                 {...getRootProps()}
                 className="flex justify-center items-center border-2 border-dashed border-gray-300 rounded-lg p-10 bg-gray-100 cursor-pointer"

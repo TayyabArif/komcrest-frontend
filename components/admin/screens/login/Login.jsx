@@ -4,8 +4,11 @@ import { Button } from "@nextui-org/react";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
+import { useCookies } from 'react-cookie';
 
 const Login = () => {
+
+  const [cookies, setCookie, removeCookie] = useCookies(['myCookie']);
   const [isLoading, setIsLoading] = useState(false)
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
@@ -49,7 +52,16 @@ const Login = () => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
+          const userData = {
+            token: data.token,
+            role: data.user.role,
+            companyType: data.user.Company.companyType,
+          };
+          setCookie('myCookie',  userData, { path: '/' });
           console.log("Success:", data);
+          toast.success("Login Successfully")
+          router.push("/admin/company-settings")
+
         } else {
           toast.error(data?.error || "Email or password is incorrect")
           console.error("Error:", data);

@@ -6,20 +6,25 @@ import DocumentCard from "./shared/DocumentCard";
 import { useRouter } from "next/router";
 import ExampleCard from "./shared/ExampleCard";
 import { Document_Data } from "@/utlis/data";
+import { useCookies } from 'react-cookie';
+
 
 const AddDocument = () => {
+  const [cookies, setCookie] = useCookies(['myCookie']);
+  const cookiesData = cookies.myCookie;
+
   const router = useRouter();
   const [Document_Data, setDocument_Data] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => {  
     getUserDocument();
   }, [isDeleted]);
 
   const getUserDocument = async () => {
     setIsLoading(true);
-    const token = localStorage.getItem("token");
+    const token = cookiesData && cookiesData .token
     const requestOptions = {
       method: "GET",
       headers: {

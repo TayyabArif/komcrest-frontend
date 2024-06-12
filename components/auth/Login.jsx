@@ -3,11 +3,16 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/react";
 import AuthLayout from "./AuthLayout";
 import { Eye, EyeOff } from "lucide-react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useCookies } from 'react-cookie';
+
+
 
 const Login = ({ type }) => {
-  const [isLoading, setIsLoading] = useState(false)
+
+  const [cookies, setCookie, removeCookie] = useCookies(['myCookie']);
+  const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
 
@@ -15,7 +20,7 @@ const Login = ({ type }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  })
+  });
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -24,57 +29,74 @@ const Login = ({ type }) => {
     }));
   };
   const handleSubmit = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify({
       email: formData?.email,
-      password: formData?.password
+      password: formData?.password,
     });
 
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: "follow"
+      redirect: "follow",
     };
 
-// fetch("http://localhost:3001/api/users/login", requestOptions)
-//   .then((response) => response.text())
-//   .then((result) => {
-//     // toast.success("Reset password email sent successfully")
-//     console.log("tayyab",result)
-//   })
-//   .catch((error) => console.error(error))
-//   .finally(setIsLoading(false));
-fetch("http://localhost:3001/api/users/login", requestOptions)
-  .then((response) => {
-    return response.json().then((data) => ({
-      status: response.status,
-      ok: response.ok,
-      data,
-    }));
-  })
-  .then(({ status, ok, data }) => {
-    if (ok) {
-      localStorage.setItem('token', data.token);
-      console.log("Success:", data);
-    } else {
-      toast.error(data?.error || "Email or password is incorrect")
-      console.error("Error:", data);
-    }
-  })
-  .catch((error) => {
-    console.error("Network error:", error);
-  })
-  .finally(() => {
-    setIsLoading(false);
-  });
+    // fetch("http://localhost:3001/api/users/login", requestOptions)
+    //   .then((response) => response.text())
+    //   .then((result) => {
+    //     // toast.success("Reset password email sent successfully")
+    //     console.log("tayyab",result)
+    //   })
+    //   .catch((error) => console.error(error))
+    //   .finally(setIsLoading(false));
+    fetch("http://localhost:3001/api/users/login", requestOptions)
+      .then((response) => {
+        return response.json().then((data) => ({
+          status: response.status,
+          ok: response.ok,
+          data,
+        }));
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          const userData = {
+            token: data.token,
+            role: data.user.role,
+            companyType: data.user.Company.companyType,
+          };
+          // const userDataString = JSON.stringify(userData);
+          // const expires = new Date();
+          // expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000);
+          // document.cookie = `userData=${userDataString};expires=${expires.toUTCString()};path=/`;
+          setCookie('myCookie',  userData, { path: '/' });
+          console.log("Success:", data);
+          router.push("/vendor/document");
+        } else {
+          toast.error(data?.error || "Email or password is incorrect");
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => {
+        console.error("Network error:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
     // router.push(`/`)
-  }
+  };
   return (
-    <AuthLayout Class={type === "vendor" ? 'bg-primary' : "bg-secondry"} sideBarDesc={type === "vendor" ? 'Eliminate Security Questionnaire complexity thanks to our A.I. powered solution that helps you get customers the exact answers for their security review in no time.' : "Manage your vendors’ security assessment in one place and allow them to use Komcrest A.I. powered solution to answers your questions promptly and qualitatively."}>
+    <AuthLayout
+      Class={type === "vendor" ? "bg-primary" : "bg-secondry"}
+      sideBarDesc={
+        type === "vendor"
+          ? "Eliminate Security Questionnaire complexity thanks to our A.I. powered solution that helps you get customers the exact answers for their security review in no time."
+          : "Manage your vendors’ security assessment in one place and allow them to use Komcrest A.I. powered solution to answers your questions promptly and qualitatively."
+      }
+    >
       <div className="flex flex-col w-[50%]">
         <p className="text-[30px] font-semibold">Log in to Komcrest</p>
         <Input
@@ -108,7 +130,14 @@ fetch("http://localhost:3001/api/users/login", requestOptions)
           classNames={{ inputWrapper: "h-[50px]" }}
           className="mt-4 -ml-1"
         />
-        <p className="underline mt-1 cursor-pointer" onClick={() => router.push(`/${type}/login/password-recovery/request`)}>Forget password</p>
+        <p
+          className="underline mt-1 cursor-pointer"
+          onClick={() =>
+            router.push(`/${type}/login/password-recovery/request`)
+          }
+        >
+          Forget password
+        </p>
         <Button
           radius="none"
           size="sm"
