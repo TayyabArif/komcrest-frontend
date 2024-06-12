@@ -18,6 +18,8 @@ const AddDocument = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+
   useEffect(() => {  
     getUserDocument();
   }, [isDeleted]);
@@ -35,7 +37,7 @@ const AddDocument = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3001/api/userdocuments",
+        `${baseUrl}/userdocuments`,
         requestOptions
       );
       if (!response.ok) {

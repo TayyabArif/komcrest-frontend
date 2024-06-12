@@ -15,6 +15,7 @@ const UsersTable = ({allUsers, setAllUsers, isDeleted, setIsDeleted}) => {
   const router = useRouter();
   const [selectedDecativateUser, setSelectedDecativateUser] = useState(null)
   const [filteredUsers, setFilteredUsers] = useState(allUsers);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   let modalData = {
     heading: "Deactivate user",
     desc: " Are you sure you want to deactivate user? The user will no long be able to login to komcrest.",
@@ -42,7 +43,7 @@ const handleDelete = async () => {
     redirect: "follow",
   };
 
-  fetch(`http://localhost:3001/api/users/${selectedDecativateUser?.id}`, requestOptions)
+  fetch(`${baseUrl}/users/${selectedDecativateUser?.id}`, requestOptions)
     .then((response) => response.text())
     .then((result) => {
       console.log("$$$$$$$$$", result)

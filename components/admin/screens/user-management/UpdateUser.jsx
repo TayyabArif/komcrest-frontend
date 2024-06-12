@@ -15,6 +15,7 @@ const UpdateUser = () => {
   const router = useRouter();
   const [products, setProducts] = useState([]);
   const { id } = router.query;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -60,7 +61,7 @@ const UpdateUser = () => {
       redirect: "follow",
     };
 
-    fetch("http://localhost:3001/api/companies", requestOptions)
+    fetch(`${baseUrl}/companies`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const response = JSON.parse(result)
@@ -81,7 +82,7 @@ const UpdateUser = () => {
         redirect: "follow",
       };
 
-      fetch(`http://localhost:3001/api/users/${id}`, requestOptions)
+      fetch(`${baseUrl}/users/${id}`, requestOptions)
         .then((response) => response.text())
         .then((result) => {
           const userData = JSON.parse(result)
@@ -121,7 +122,7 @@ const UpdateUser = () => {
       redirect: "follow",
     };
 
-    fetch(`http://localhost:3001/api/users/${id}`, requestOptions)
+    fetch(`${baseUrl}/users/${id}`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const userData = JSON.parse(result)

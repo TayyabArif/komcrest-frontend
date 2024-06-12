@@ -20,6 +20,7 @@ const CreateUser = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [products, setProducts] = useState([]);
   const [selectedProducts,setSelectedProducts] = useState([])
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -72,7 +73,7 @@ const CreateUser = () => {
       redirect: "follow",
     };
 
-    fetch("http://localhost:3001/api/companies", requestOptions)
+    fetch(`${baseUrl}http://localhost:3001/api/companies`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const response = JSON.parse(result)
@@ -103,7 +104,7 @@ const requestOptions = {
   redirect: "follow"
 };
 
-fetch("http://localhost:3001/api/users", requestOptions)
+fetch(`${baseUrl}/users`, requestOptions)
   .then((response) => response.text())
   .then((result) => {
     console.log("=========", result)

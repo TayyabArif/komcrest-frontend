@@ -17,6 +17,7 @@ const CreateCompany = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const [formData, setFormData] = useState({
     companyName: "",
     companyEmail: "",
@@ -56,7 +57,7 @@ const CreateCompany = () => {
       body: raw,
       redirect: "follow",
     };
-    fetch("http://localhost:3001/api/companies-with-products", requestOptions)
+    fetch(`${baseUrl}/companies-with-products`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         console.log("=========", result)

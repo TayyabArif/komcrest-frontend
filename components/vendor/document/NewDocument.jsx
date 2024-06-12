@@ -16,6 +16,7 @@ const NewDocument = () => {
 
   const router = useRouter();
   const { id } = router.query;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
   const [documentData, setDocumentData] = useState({
     title: "",
@@ -90,7 +91,7 @@ const NewDocument = () => {
         redirect: "follow",
       };
 
-      fetch(`http://localhost:3001/api/documents/${id}`, requestOptions)
+      fetch(`${baseUrl}/documents/${id}`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           toast.success("Document updated successfully");
@@ -110,7 +111,7 @@ const NewDocument = () => {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3001/api/documents", requestOptions)
+      fetch(`${baseUrl}/documents`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           toast.success("Document created successfully");
@@ -131,7 +132,7 @@ const NewDocument = () => {
         redirect: "follow",
       };
 
-      fetch(`http://localhost:3001/api/documents/${id}`, requestOptions)
+      fetch(`${baseUrl}/documents/${id}`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           setDocumentData(result);

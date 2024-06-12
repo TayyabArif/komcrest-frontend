@@ -15,6 +15,7 @@ const Login = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [formData, setFormData] = useState({
@@ -53,7 +54,7 @@ const Login = ({ type }) => {
     //   })
     //   .catch((error) => console.error(error))
     //   .finally(setIsLoading(false));
-    fetch("http://localhost:3001/api/users/login", requestOptions)
+    fetch(`${baseUrl}/users/login`, requestOptions)
       .then((response) => {
         return response.json().then((data) => ({
           status: response.status,

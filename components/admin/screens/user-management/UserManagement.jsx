@@ -8,6 +8,7 @@ const UserManagement = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false)
   const router = useRouter();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   useEffect(() => {
     getAllUsers();
   }, [isDeleted]);
@@ -18,7 +19,7 @@ const UserManagement = () => {
       redirect: "follow"
     };
 
-    fetch("http://localhost:3001/api/users", requestOptions)
+    fetch(`${baseUrl}/users`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const response = JSON.parse(result)

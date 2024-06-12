@@ -18,6 +18,7 @@ const UpdateCompany = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
   const [products, setProducts] = useState([]);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const { id } = router.query;
   console.log("========***", id)
   const [formData, setFormData] = useState({
@@ -40,7 +41,7 @@ const UpdateCompany = () => {
         redirect: "follow",
       };
 
-      fetch(`http://localhost:3001/api/companies/${id}`, requestOptions)
+      fetch(`${baseUrl}/companies/${id}`, requestOptions)
         .then((response) => response.text())
         .then((result) => {
           const companyData = JSON.parse(result)
@@ -92,7 +93,7 @@ const UpdateCompany = () => {
       redirect: "follow",
     };
 
-    fetch(`http://localhost:3001/api/companies/${id}`, requestOptions)
+    fetch(`${baseUrl}/companies/${id}`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const companyData = JSON.parse(result)

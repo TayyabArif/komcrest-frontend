@@ -23,6 +23,9 @@ const CompaniesTable = ({allCompanies, setAllCompanies, isDeleted, setIsDeleted}
   const [selectedDecativateCompany, setSelectedDecativateCompany] = useState("")
   const router = useRouter();
   const [filteredCompanies, setFilteredCompanies] = useState(allCompanies);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+
+
   useEffect(() => {
     setFilteredCompanies(allCompanies)
   }, [allCompanies])
@@ -44,7 +47,7 @@ const handleDelete = async () => {
     redirect: "follow",
   };
 
-  fetch(`http://localhost:3001/api/companies/${selectedDecativateCompany?.id}`, requestOptions)
+  fetch(`${baseUrl}/companies/${selectedDecativateCompany?.id}`, requestOptions)
     .then((response) => response.text())
     .then((result) => {
       console.log("$$$$$$$$$", result)

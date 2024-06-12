@@ -12,6 +12,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [formData, setFormData] = useState({
@@ -42,7 +43,7 @@ const Login = () => {
       redirect: "follow"
     };
 
-    fetch("http://localhost:3001/api/users/login", requestOptions)
+    fetch(`${baseUrl}/users/login`, requestOptions)
       .then((response) => {
         return response.json().then((data) => ({
           status: response.status,

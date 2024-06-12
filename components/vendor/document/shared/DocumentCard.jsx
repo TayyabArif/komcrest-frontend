@@ -18,6 +18,8 @@ const DocumentCard = ({ cardData, setIsDeleted }) => {
   const [cookies, setCookie] = useCookies(['myCookie']);
   const cookiesData = cookies.myCookie;
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+
   const modalData = {
     heading: "Delete Document",
     desc: " Are you sure you want to delete the Document? The Document will no longer be available, and you won’t be able to access their information",
@@ -35,7 +37,7 @@ const DocumentCard = ({ cardData, setIsDeleted }) => {
       redirect: "follow",
     };
     fetch(
-      `http://localhost:3001/api/documents/${selectedDocument?.id}`,
+      `${baseUrl}/documents/${selectedDocument?.id}`,
       requestOptions
     )
       .then((response) => response.text())
