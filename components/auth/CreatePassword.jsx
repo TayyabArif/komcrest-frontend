@@ -9,6 +9,7 @@ import { Eye, EyeOff } from "lucide-react";
 const CreatePassword = ({type, isNew}) => {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const { token } = router.query;
   const [formData, setFormData] = useState({
     password: "",
@@ -43,7 +44,7 @@ const requestOptions = {
   redirect: "follow"
 };
 
-fetch("http://localhost:3001/api/users/reset-password", requestOptions)
+fetch(`${baseUrl}/users/reset-password`, requestOptions)
   .then((response) => response.text())
   .then((result) => {
     console.log(result)

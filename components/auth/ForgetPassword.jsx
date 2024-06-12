@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 
 const ForgetPassword = ({type}) => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const [formData, setFormData] =useState({
     email: "",
   })
@@ -33,7 +35,7 @@ const requestOptions = {
   redirect: "follow"
 };
 
-fetch("http://localhost:3001/api/users/request-password-reset", requestOptions)
+fetch(`${baseUrl}/users/request-password-reset`, requestOptions)
   .then((response) => response.text())
   .then((result) => {
     toast.success("Reset password email sent successfully")
