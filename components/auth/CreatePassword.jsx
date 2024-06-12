@@ -1,13 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Checkbox, Button } from "@nextui-org/react";
 import AuthLayout from "./AuthLayout";
 import { toast } from "react-toastify";
 import { useRouter } from 'next/router';
 import { Eye, EyeOff } from "lucide-react";
+import TermsAndServicesModal from "../admin/shared/TermsAndServicesModal";
+import {useDisclosure} from "@nextui-org/react";
 
-const CreatePassword = ({type, isNew}) => {
+const modalData ={
+  privacyPolicy: {
+    heading: "Komcrest Privacy Policy",
+    desc: "Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis.Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam. Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis.Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam."
+  },
+  termsOfServices: {
+    heading: "Komcrest Terms of Services",
+    desc: " Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis.Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam. Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis.Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam."
+  }
+}
+const CreatePassword = ({type, isNew}) => { 
   const [isLoading, setIsLoading] = useState(false)
+  const [isTermsService, setIsTermsService] = useState(true)
+  const [isPrivacyPolicy, setIsPrivacyPolicy] = useState(true)
+  const [isTermsServiceClick, setIsTermsServiceClick] = useState(false)
+  const [isPrivacyPolicyClick, setIsPrivacyPolicyClick] = useState(false)
+  const [isTermsAggree, setIsTermsAggree] = useState(false);
+  const [isPrivacyAggree, setIsPrivacyAggree] = useState(false);
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const { token } = router.query;
@@ -64,6 +83,38 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
 
   const togglePasswordVisibility = () => setIsPasswordVisible(!isPassowrdVisible);
   const toggleConfirmPasswordVisibility = () => setIsConfirmPasswordVisible(!isConfirmPassowrdVisible);
+
+  useEffect(() => {
+    if(token) {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      fetch(`${baseUrl}/company-from-token/${token}`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+          const companyData = JSON.parse(result)
+          setIsTermsService(companyData?.termsServices)
+          setIsPrivacyPolicy(companyData?.privacyPolicy)
+          console.log(companyData);
+        })
+        .catch((error) => console.error(error));
+    }
+  }, [token])
+  const handleAggree = (value) => {
+    if (value === "terms") {
+      setIsTermsServiceClick(false)
+      setIsTermsAggree(true)
+    } else {
+      setIsPrivacyAggree(true)
+      setIsPrivacyPolicyClick(false)
+    }
+  }
   return (
     <AuthLayout Class={type === "vendor" ? 'bg-primary': "bg-secondry"} sideBarDesc={type === "vendor" ? 'Eliminate Security Questionnaire complexity thanks to our A.I. powered solution that helps you get customers the exact answers for their security review in no time.': "Manage your vendors’ security assessment in one place and allow them to use Komcrest A.I. powered solution to answers your questions promptly and qualitatively."}>
       <div className="w-[50%]">
@@ -112,18 +163,34 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
 
           />
           {isNew &&
-            <Checkbox size="md" className="mt-2" classNames={{ label: "mt-5" }}>
-              {" "}
-              I agree to Komcrest’s <a className="underline">
-                Terms of Services
-              </a>{" "}
-              including the <a className="underline">Privacy Policy</a>{" "}
-            </Checkbox>
+            <div>
+            {isTermsService &&
+              <Checkbox isSelected={isTermsAggree} size="md" className="mt-2" classNames={{ label: "mt-0" }} onClick={() => isTermsAggree && setIsTermsAggree(false)}>
+                {" "}
+                I agree to Komcrest’s <a className="underline" onClick={() => {
+                  setIsTermsServiceClick(true)
+                  onOpen()
+                  }}>
+                  Terms of Services
+                </a>
+              </Checkbox>
+            }
+            {isPrivacyPolicy &&
+              <Checkbox isSelected={isPrivacyAggree} size="md" className="mt-2" classNames={{ label: "mt-0" }} onClick={() => isPrivacyAggree && setIsPrivacyAggree(false)}>
+                {" "}
+                I agree to Komcrest’s <a className="underline" onClick={() => {
+                  setIsPrivacyPolicyClick(true)
+                  onOpen()
+                  }}
+                  >Privacy Policy</a>{" "}
+              </Checkbox>
+            }
+            </div>
           }
           <Button
             radius="sm"
             size="sm"
-            className={`${isNew ? "mt-2" :"mt-7"} text-white px-8 text-sm bg-[#4fa82e]`}
+            className={`${isNew ? "mt-4" :"mt-7"} text-white px-8 text-sm bg-[#4fa82e]`}
             isDisabled={!formData?.password || !formData?.confirmPassword || isLoading || !formData.isPasswordStrong}
             isLoading={isLoading}
             onPress={handleSubmit}
@@ -136,6 +203,11 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
             </p>
           )}
       </div>
+      {isTermsServiceClick &&
+      <TermsAndServicesModal isOpen={isOpen} onOpenChange ={onOpenChange} data={modalData.termsOfServices} handleSubmit={() => handleAggree("terms")} /> }
+      {isPrivacyPolicyClick &&
+      <TermsAndServicesModal isOpen={isOpen} onOpenChange ={onOpenChange} data={modalData.privacyPolicy} handleSubmit={() => handleAggree("privacy")} /> }
+
     </AuthLayout>
   );
 };

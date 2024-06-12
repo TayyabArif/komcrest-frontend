@@ -73,7 +73,7 @@ const CreateUser = () => {
       redirect: "follow",
     };
 
-    fetch(`${baseUrl}http://localhost:3001/api/companies`, requestOptions)
+    fetch(`${baseUrl}/api/companies`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const response = JSON.parse(result)

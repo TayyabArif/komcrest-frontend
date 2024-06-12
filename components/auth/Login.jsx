@@ -75,7 +75,12 @@ const Login = ({ type }) => {
           // document.cookie = `userData=${userDataString};expires=${expires.toUTCString()};path=/`;
           setCookie('myCookie',  userData, { path: '/' });
           console.log("Success:", data);
-          router.push("/vendor/document");
+          if (data?.user?.Company?.companyType === "vendor") {
+            router.push("/vendor/document");
+          } else {
+            router.push("/");
+          }
+          
         } else {
           toast.error(data?.error || "Email or password is incorrect");
           console.error("Error:", data);

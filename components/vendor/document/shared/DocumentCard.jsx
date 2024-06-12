@@ -51,7 +51,7 @@ const DocumentCard = ({ cardData, setIsDeleted }) => {
 
   const handleDownload = async (filePath) => {
     const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-    const fileUrl = `http://localhost:3001/${filePath}`;
+    const fileUrl = `${baseUrl}/${filePath}`;
     try {
       const response = await fetch(proxyUrl + fileUrl);
       const blob = await response.blob();
@@ -97,7 +97,7 @@ const DocumentCard = ({ cardData, setIsDeleted }) => {
             return (
               <div
                 key={index}
-                className="w-[180px] h-[130px] bg-white rounded-lg p-2 my-4 flex flex-col justify-between mx-2"
+                className="w-[230px] h-[180px] bg-white rounded-lg p-2 my-4 flex flex-col justify-between mx-2"
               >
                 <div>
                   <h1 className="text-[14px] font-semibold">{item.title}</h1>
@@ -120,7 +120,7 @@ const DocumentCard = ({ cardData, setIsDeleted }) => {
                       <Settings size={20} className="cursor-pointer" />
                     </PopoverTrigger>
                     <PopoverContent>
-                      <div className="px-1 py-2 space-y-1">
+                      <div className="px-3 py-2 space-y-1">
                         {item.filePath && (
                           <div
                             onClick={() => {
