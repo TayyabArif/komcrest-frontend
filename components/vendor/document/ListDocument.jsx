@@ -6,11 +6,10 @@ import DocumentCard from "./shared/DocumentCard";
 import { useRouter } from "next/router";
 import ExampleCard from "./shared/ExampleCard";
 import { Document_Data } from "@/utlis/data";
-import { useCookies } from 'react-cookie';
-
+import { useCookies } from "react-cookie";
 
 const AddDocument = () => {
-  const [cookies, setCookie] = useCookies(['myCookie']);
+  const [cookies, setCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
 
   const router = useRouter();
@@ -18,15 +17,15 @@ const AddDocument = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
-  useEffect(() => {  
+  useEffect(() => {
     getUserDocument();
   }, [isDeleted]);
 
   const getUserDocument = async () => {
     setIsLoading(true);
-    const token = cookiesData && cookiesData .token
+    const token = cookiesData && cookiesData.token;
     const requestOptions = {
       method: "GET",
       headers: {
@@ -36,10 +35,7 @@ const AddDocument = () => {
     };
 
     try {
-      const response = await fetch(
-        `${baseUrl}/userdocuments`,
-        requestOptions
-      );
+      const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -59,6 +55,7 @@ const AddDocument = () => {
       {Document_Data.length > 0 ? (
         <DocumentCard cardData={Document_Data} setIsDeleted={setIsDeleted} />
       ) : (
+
         <div className="text-center space-y-5 my-5">
           <div className="text-center w-[35%] mx-auto ">
             <div className="flex justify-center items-center">
@@ -70,6 +67,7 @@ const AddDocument = () => {
                 height={24}
                 priority
               />
+             
             </div>
 
             <span className="font-semibold">

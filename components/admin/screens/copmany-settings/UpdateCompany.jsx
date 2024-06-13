@@ -45,11 +45,12 @@ const UpdateCompany = () => {
         .then((response) => response.text())
         .then((result) => {
           const companyData = JSON.parse(result)
+          debugger
           setFormData({
             companyName: companyData?.name,
             companyEmail: companyData?.email,
             companyDomain: companyData?.subdomain,
-            isVendor: companyData?.companyType === "Vendor" ? true : false,
+            isVendor: companyData?.companyType === "vendor" ? true : false,
             isPurchaser:
               companyData?.companyType === "Purchaser" ? true : false,
             displayTOS: companyData?.termsServices,
@@ -109,7 +110,6 @@ const UpdateCompany = () => {
 
   return (
     <div className="flex flex-col w-full bg-white">
-      <div className="flex justify-end font-bold pl-20 pr-10 py-2">Logout</div>
       <div className="flex flex-col justify-between w-full gap-5 pl-20 pr-10 py-10 bg-gray-200 min-h-screen ">
         <div className="flex justify-start w-full gap-10 pl-20">
           <CompanyInfoCard

@@ -14,6 +14,7 @@ const modalData = {
 };
 
 const CreateCompany = () => {
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
@@ -37,6 +38,7 @@ const CreateCompany = () => {
     }));
   };
   const handleSubmit = async () => {
+    debugger
     setIsLoading(true)
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -57,19 +59,25 @@ const CreateCompany = () => {
       body: raw,
       redirect: "follow",
     };
+    
     fetch(`${baseUrl}/companies-with-products`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
-        console.log("=========", result)
-        toast.success("Company created successfully")
-        router.push("/admin/company-settings")
+      
+        if (result.status == 200 || result.status ===201){
+          console.log("=========", result)
+          toast.success("Company created successfully")
+          router.push("/admin/company-settings")
+        }else{
+          toast.error(result.error)
+        }
+       
       })
-      .catch((error) => console.error(error))
+      .catch((error) => console.error(">>>>>>",error))
       .finally(setIsLoading(false))
   };
   return (
     <div className="flex flex-col w-full bg-white">
-      <div className="flex justify-end font-bold pl-20 pr-10 py-2">Logout</div>
       <div className="flex flex-col justify-between w-full gap-5 pl-20 pr-10 py-10 bg-gray-200 min-h-screen ">
         <div className="flex justify-start w-full gap-10 pl-20">
           <CompanyInfoCard
