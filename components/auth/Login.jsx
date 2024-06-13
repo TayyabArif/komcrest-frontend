@@ -69,10 +69,6 @@ const Login = ({ type }) => {
             role: data.user.role,
             companyType: data.user.Company.companyType,
           };
-          // const userDataString = JSON.stringify(userData);
-          // const expires = new Date();
-          // expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000);
-          // document.cookie = `userData=${userDataString};expires=${expires.toUTCString()};path=/`;
           setCookie('myCookie',  userData, { path: '/' });
           console.log("Success:", data);
           if (data?.user?.Company?.companyType === "vendor") {

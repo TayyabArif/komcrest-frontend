@@ -7,6 +7,8 @@ const companies = [
   {key: "Staffbase", label: "staffbase"},
 ];
 const UsersDetailsCard = ({handleChange, formData, allCompanies}) => {
+  const [values, setValues] = React.useState(new Set(["cat", "dog"]));
+
   return (
     <div className='flex flex-col bg-white shadow-md w-[45%] min-h-[550px] mt-12 pb-10'>
     <p className='px-4 py-4 border border-1.5 border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold'>User details</p>
@@ -23,9 +25,10 @@ const UsersDetailsCard = ({handleChange, formData, allCompanies}) => {
         classNames={{label: "font-[550] ml-0.5 pb-1", trigger: "rounded-sm"}}
         onChange={handleChange}
         name="companyId"
+       
       >
         {allCompanies.map((company) => (
-          <SelectItem key={company.id}>
+          <SelectItem key={company.id}  >
             {company.name}
           </SelectItem>
         ))}

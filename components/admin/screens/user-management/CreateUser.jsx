@@ -13,6 +13,7 @@ const modalData = {
   confirmText: "Send invitation"
 }
 const CreateUser = () => {
+
   const [isClick, setClick] = useState(false)
   const [allCompanies, setAllCompanies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -58,6 +59,7 @@ const CreateUser = () => {
   }
 
   useEffect(() => {
+    debugger
     getAllCompanies();
   }, []);
 
@@ -73,7 +75,7 @@ const CreateUser = () => {
       redirect: "follow",
     };
 
-    fetch(`${baseUrl}/api/companies`, requestOptions)
+    fetch(`${baseUrl}/companies`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const response = JSON.parse(result)
@@ -108,15 +110,19 @@ fetch(`${baseUrl}/users`, requestOptions)
   .then((response) => response.text())
   .then((result) => {
     console.log("=========", result)
-    toast.success("User created successfully")
+    if(result.status == 200 || result.status == 201){
+      toast.success("User created successfully")
     router.push("/admin/user-management")
+    }
+    else{
+      alert("error")
+    }
   })
   .catch((error) => console.error(error))
   .finally(setIsLoading(false));
   }
   return (
     <div className="flex flex-col w-full bg-white">
-      <div className="flex justify-end font-bold pl-20 pr-10 py-2">Logout</div>
       <div className="flex flex-col justify-between w-full gap-5 pl-20 pr-10 py-10 bg-gray-200 min-h-screen ">
         <div className="flex items-start justify-start w-full gap-10 pl-20 h-full">
           <UsersDetailsCard action="create"

@@ -43,11 +43,28 @@ const NewDocument = () => {
   };
 
   const handleDrop = (acceptedFiles) => {
-    console.log('fileeeee',acceptedFiles)
-    setDocumentData((prevData) => ({
-      ...prevData,
-      file: acceptedFiles[0],
-    }));
+
+    const allowedTypes = [
+      'text/plain', 
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+      'application/msword', 
+      'application/json', 
+      'application/vnd.ms-excel', 
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ];
+
+    const file = acceptedFiles[0];
+    if (file && allowedTypes.includes(file.type)) {
+      setDocumentData((prevData) => ({
+        ...prevData,
+        file: file,
+      }));
+    } else {
+      toast.error('Invalid file type. Please upload a valid file.');
+    }
+
+
+   
   };
 
   const handleCheckboxChange = (index) => {
@@ -228,6 +245,9 @@ const NewDocument = () => {
           </div>
           <div className="text-right">
             <Button
+            onClick={() => {
+            router.push("/vendor/document");
+             }} 
               color="danger"
               size="sm"
               className="bg-red-100 rounded mx-3"

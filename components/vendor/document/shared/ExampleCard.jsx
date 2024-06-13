@@ -1,5 +1,7 @@
 import React from "react";
+import { useRouter } from "next/router";
 const ExampleCard = () => {
+  const router = useRouter()
   const ExampleData = [
        
     {
@@ -50,7 +52,9 @@ const ExampleCard = () => {
                 </div>
 
                 <div className="flex justify-between items-center border-t-2 py-2 px-2">
-                  <span className="text-[13px] text-blue-600">Upload</span>
+                  <span  onClick={() => {
+                router.push("/vendor/document/AddDocument");
+              }} className="text-[13px] text-blue-600 cursor-pointer">Upload</span>
                 </div>
               </div>
             );

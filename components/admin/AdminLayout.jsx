@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
+import { toast } from "react-toastify";
 
 const AdminLayout = ({children}) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
   const [selectedItem, setSelectedItem] = useState("company")
   useEffect(() => {
     const item = localStorage.getItem("selectedSideBar")
     if (item) setSelectedItem(item)
   }, [])
+ 
+  function handleLogout(){
+    removeCookie('myCookie', { path: '/' }); 
+    router.push("/admin/login")
+    toast.success("Logout Successfully")
+  }
   const router = useRouter();
   return (
     <div className="flex w-full min-h-screen">
@@ -23,8 +32,11 @@ const AdminLayout = ({children}) => {
             }}>User Management</p>
         </div>
       </div>
-      <div className="w-[85%] flex flex-col items-center">
-        {children}
+      <div className="w-[85%]">
+        <div className=" py-3 text-right px-10 font-bold cursor-pointer"onClick={handleLogout} ><h1>Logout</h1></div>
+         <div className="flex flex-col  bg-slate-100 ">
+           {children}
+         </div>
       </div>
   </div>
   )
