@@ -100,9 +100,9 @@ const DocumentCard = ({ cardData, setIsDeleted }) => {
                 className="w-[230px] h-[180px] bg-white rounded-lg p-2 my-4 flex flex-col justify-between mx-2"
               >
                 <div>
-                  <h1 className="text-[14px] font-semibold">{item.title}</h1>
-                  <h2 className="text-[11px] font-semibold">{item.name}</h2>
-                  <p className="text-[11px]">{item.description}</p>
+                  <h1 className="text-[17px] font-semibold">{item.title}</h1>
+                  {/* <h2 className="text-[13px] font-semibold">{item.name}</h2> */}
+                  <p className="text-[13px]">{item.description}</p>
                 </div>
 
                 <div className="flex justify-between items-center">

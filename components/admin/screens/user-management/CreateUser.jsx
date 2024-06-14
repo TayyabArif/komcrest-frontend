@@ -108,14 +108,9 @@ const requestOptions = {
 fetch(`${baseUrl}/users`, requestOptions)
   .then((response) => response.text())
   .then((result) => {
-    console.log("=========", result)
-    if(result.status == 200 || result.status == 201){
-      toast.success("User created successfully")
+    toast.success("User created successfully")
     router.push("/admin/user-management")
-    }
-    else{
-      alert("error")
-    }
+  
   })
   .catch((error) => console.error(error))
   .finally(setIsLoading(false));
@@ -143,6 +138,7 @@ fetch(`${baseUrl}/users`, requestOptions)
                 radius="none"
                 size="sm"
                 className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
+                onClick={()=>router.push("/admin/user-management")}
               >
                 Cancel
               </Button>

@@ -27,6 +27,7 @@ const Login = () => {
     }));
   };
   const handleSubmit = async () => {
+    debugger
     setIsLoading(true)
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -52,17 +53,17 @@ const Login = () => {
         }));
       })
       .then(({ status, ok, data }) => {
+        debugger
         if (ok) {
           const userData = {
             token: data.token,
             role: data.user.role,
-            companyType: data.user.Company.companyType,
+            companyType: data.user?.Company?.companyType,
           };
           setCookie('myCookie',  userData, { path: '/' });
           console.log("Success:", data);
           toast.success("Login Successfully")
           router.push("/admin/company-settings")
-
         } else {
           toast.error(data?.error || "Email or password is incorrect")
           console.error("Error:", data);
@@ -76,6 +77,53 @@ const Login = () => {
       });
     // router.push(`/`)
   }
+ 
+  //   try {
+  //     debugger;
+  //     setIsLoading(true);
+  
+  //     const myHeaders = new Headers();
+  //     myHeaders.append("Content-Type", "application/json");
+  
+  //     const raw = JSON.stringify({
+  //       email: formData?.email,
+  //       password: formData?.password,
+  //     });
+  
+  //     const requestOptions = {
+  //       method: "POST",
+  //       headers: myHeaders,
+  //       body: raw,
+  //       redirect: "follow",
+  //     };
+  
+  //     const response = await fetch(`${baseUrl}/users/login`, requestOptions);
+  //     const data = await response.json();
+  //     const { status, ok } = response;
+  
+  //     debugger;
+  //     if (ok) {
+  //       const userData = {
+  //         token: data.token,
+  //         role: data.user.role,
+  //         companyType: data.user?.Company?.companyType,
+  //       };
+  
+  //       setCookie('myCookie', userData, { path: '/' });
+  //       console.log("Success:", data);
+  //       toast.success("Login Successfully");
+  //       router.push("/admin/company-settings");
+  //     } else {
+  //       toast.error(data?.error || "Email or password is incorrect");
+  //       console.error("Error:", data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Network error:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+  
   return (
     <div className="flex flex-col w-[50%]">
     <p className="text-[30px] font-semibold">Log in to Komcrest Admin</p>

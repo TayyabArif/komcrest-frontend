@@ -6,13 +6,15 @@ import { useRouter } from "next/router";
 import { useCookies } from 'react-cookie';
 
 const NewDocument = () => {
- 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
 
   const [cookies, setCookie] = useCookies(['myCookie']);
   const cookiesData = cookies.myCookie;
+  console.log("<<<<<<<<<<<,",cookiesData?.companyId)
+
+  const[companyProducts , setCompanyProducts] = useState([])
 
   const router = useRouter();
   const { id } = router.query;
@@ -22,17 +24,9 @@ const NewDocument = () => {
     title: "",
     description: "",
     file: null,
-    associated_product: [],
+    productIds: [],
     documentLink: "",
   });
-
-  const [checkBoxData, setCheckBoxData] = useState([
-    { name: "product 1", check: false },
-    { name: "product 2", check: false },
-    { name: "product 3", check: false },
-    { name: "product 4", check: false },
-    { name: "product 5", check: false },
-  ]);
 
   const handleData = (e) => {
     const { name, value } = e.target;
@@ -43,7 +37,6 @@ const NewDocument = () => {
   };
 
   const handleDrop = (acceptedFiles) => {
-
     const allowedTypes = [
       'text/plain', 
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
@@ -62,23 +55,20 @@ const NewDocument = () => {
     } else {
       toast.error('Invalid file type. Please upload a valid file.');
     }
-
-
-   
   };
 
   const handleCheckboxChange = (index) => {
-    const newCheckBoxData = [...checkBoxData];
+    const newCheckBoxData = [...companyProducts];
     newCheckBoxData[index].check = !newCheckBoxData[index].check;
-    setCheckBoxData(newCheckBoxData);
+    setCompanyProducts(newCheckBoxData);
 
     const selectedProducts = newCheckBoxData
       .filter((item) => item.check)
-      .map((item) => item.name);
+      .map((item) => item.id);
 
     setDocumentData((prevData) => ({
       ...prevData,
-      associated_product: selectedProducts,
+      productIds: selectedProducts,
     }));
   };
 
@@ -88,13 +78,13 @@ const NewDocument = () => {
     formData.append("description", documentData.description);
     formData.append("file", documentData.file);
     formData.append(
-      "associated_product",
-      JSON.stringify(documentData.associated_product)
+      "productIds",
+      JSON.stringify(documentData.productIds)
     );
     formData.append("documentLink", documentData.documentLink);
 
-    const token = cookiesData.token;
 
+    const token = cookiesData.token;
     let requestOptions;
 
     if (id) {
@@ -129,16 +119,59 @@ const NewDocument = () => {
       };
 
       fetch(`${baseUrl}/documents`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          toast.success("Document created successfully");
-          router.push("/vendor/document");
+        .then((response) => {
+          return response.json().then((data) => ({
+            status: response.status,
+            ok: response.ok,
+            data,
+          }));
+        })
+        .then(({ status, ok, data }) => {
+          if (ok) {
+            console.log("Success:", data);
+            toast.success("Document created successfully");
+            router.push("/vendor/document");
+          } else {
+            toast.error(data?.error || "Document not Created")
+            console.error("Error:", data);
+          }
         })
         .catch((error) => console.error(error));
     }
   };
 
+  const getCompanyProducts = async () => {
+      const token = cookiesData.token;
+      const companyId = cookiesData?.companyId
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+      };
+      fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
+        .then((response) => {
+          return response.json().then((data) => ({
+            status: response.status,
+            ok: response.ok,
+            data,
+          }));
+        })
+        .then(({ status, ok, data }) => {
+          if (ok) {
+            setCompanyProducts(data?.Products);
+            console.log(data?.Products)
+          } else {
+            toast.error(data?.error)
+            console.error("Error:", data);
+          }
+        })
+        .catch((error) => console.error(error));
+  }
+
   useEffect(() => {
+    getCompanyProducts()
     if (id) {
       const token = cookiesData.token;
       const requestOptions = {
@@ -148,13 +181,21 @@ const NewDocument = () => {
         },
         redirect: "follow",
       };
-
       fetch(`${baseUrl}/documents/${id}`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          setDocumentData(result);
-          console.log(">>>>>>>>>>>>>>",result);
-        
+        .then((response) => {
+          return response.json().then((data) => ({
+            status: response.status,
+            ok: response.ok,
+            data,
+          }));
+        })
+        .then(({ status, ok, data }) => {
+          if (ok) {
+            setDocumentData( data );
+          } else {
+            toast.error(data?.error)
+            console.error("Error:", data);
+          }
         })
         .catch((error) => console.error(error));
     }
@@ -201,7 +242,7 @@ const NewDocument = () => {
               <div>
                 <h1>Select associated product(s)</h1>
                 <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
-                  {checkBoxData.map((item, index) => (
+                  {companyProducts.map((item, index) => (
                     <Checkbox
                       key={index}
                       radius="sm"
