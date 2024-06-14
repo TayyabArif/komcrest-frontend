@@ -16,6 +16,7 @@ const UpdateUser = () => {
   const [products, setProducts] = useState([]);
   const { id } = router.query;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -89,13 +90,13 @@ const UpdateUser = () => {
           setFormData({
             firstName: userData?.firstName,
             lastName: userData?.lastName,
-            companyName:userData?.Company?.name,
             email: userData?.email,
             position: userData?.position,
             role: userData?.role,
             companyId: userData?.companyId
           });
           console.log(userData);
+          setIsDataLoaded(true)
           const filteredProducts = userData?.Products?.map((item) => item.name)
           setProducts(filteredProducts || [])
         })
@@ -145,16 +146,22 @@ const UpdateUser = () => {
     <div className="flex flex-col w-full bg-white">
       <div className="flex flex-col justify-between w-full gap-5 pl-20 pr-10 py-10 bg-gray-200 min-h-screen ">
         <div className="flex items-start justify-start w-full gap-10 pl-20">
-          <UsersDetailsCard action="update"
-          formData={formData}
-          handleChange={(value) => handleChange(value)}
-          allCompanies={allCompanies}
-          />
-          <UsersSettingsCard action="update"
-           formData={formData}
-           handleChange={(value) => handleChange(value)}
-           products={products}
-          />
+        {isDataLoaded && formData && (
+          <>
+            <UsersDetailsCard 
+              action="update"
+              formData={formData}
+              handleChange={(value) => handleChange(value)}
+              allCompanies={allCompanies}
+            />
+            <UsersSettingsCard 
+              action="update"
+              formData={formData}
+              handleChange={(value) => handleChange(value)}
+              products={products}
+            />
+          </>
+        )}
         </div>
         <div className="flex justify-end mb-5 pr-16">
           <div>
@@ -163,6 +170,7 @@ const UpdateUser = () => {
                 radius="none"
                 size="sm"
                 className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
+                onClick={()=>router.push("/admin/user-management")}
               >
                 Cancel
               </Button>

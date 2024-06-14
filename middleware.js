@@ -85,5 +85,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/vendor/documnet' ,'/vendor/document/AddDocument'],
+  matcher: ['/admin/:path*', '/vendor/document' ,'/vendor/document/AddDocument'],
 };

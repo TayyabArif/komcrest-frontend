@@ -67,8 +67,10 @@ const Login = ({ type }) => {
           const userData = {
             token: data.token,
             role: data.user.role,
-            companyType: data.user.Company.companyType,
+            companyType: data.user?.Company?.companyType,
+            companyId : data.user.companyId
           };
+         
           setCookie('myCookie',  userData, { path: '/' });
           console.log("Success:", data);
           if (data?.user?.Company?.companyType === "vendor") {

@@ -1,14 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Input, Checkbox, Select, SelectItem} from "@nextui-org/react";
 
+// const companies = [
+//   {key: "google", label: "Google"},
+//   {key: "sodexo", label: "Sodexo"},
+//   {key: "Staffbase", label: "staffbase"},
+// ];
+
 const companies = [
-  {key: "google", label: "Google"},
-  {key: "sodexo", label: "Sodexo"},
-  {key: "Staffbase", label: "staffbase"},
+  {id: "1", label: "Google"},
+  {id: "2", label: "Sodexo"},
+  {id: "3", label: "staffbase"},
 ];
 const UsersDetailsCard = ({handleChange, formData, allCompanies}) => {
-  const [values, setValues] = React.useState(new Set(["cat", "dog"]));
 
+  console.log(">>>>>>><<<<<<<<<",formData)
+const id = 50
   return (
     <div className='flex flex-col bg-white shadow-md w-[45%] min-h-[550px] mt-12 pb-10'>
     <p className='px-4 py-4 border border-1.5 border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold'>User details</p>
@@ -25,10 +32,11 @@ const UsersDetailsCard = ({handleChange, formData, allCompanies}) => {
         classNames={{label: "font-[550] ml-0.5 pb-1", trigger: "rounded-sm"}}
         onChange={handleChange}
         name="companyId"
+        defaultSelectedKeys={[formData.companyId]}
        
       >
         {allCompanies.map((company) => (
-          <SelectItem key={company.id}  >
+          <SelectItem key={company.id} value={company.id}   >
             {company.name}
           </SelectItem>
         ))}
