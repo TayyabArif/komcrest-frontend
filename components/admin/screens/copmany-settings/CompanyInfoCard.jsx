@@ -52,6 +52,40 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
           classNames={{ inputWrapper: "rounded-md" }}
         />
       </div>
+      {action === "create" && 
+        <div className="mt-6 px-4">
+          <Input
+            isRequired
+            type="text"
+            value={formData.firstName}
+            onChange={handleChange}
+            name="firstName"
+            label="First name"
+            labelPlacement="outside"
+            placeholder="John"
+            variant="bordered"
+            className="max-w-sm"
+            classNames={{ inputWrapper: "rounded-md" }}
+          />
+        </div>
+      }
+      {action === "create" && 
+        <div className="mt-6 px-4">
+          <Input
+            isRequired
+            type="text"
+            value={formData.lastName}
+            onChange={handleChange}
+            name="lastName"
+            label="Last name"
+            labelPlacement="outside"
+            placeholder="Smith"
+            variant="bordered"
+            className="max-w-sm"
+            classNames={{ inputWrapper: "rounded-md" }}
+          />
+        </div>
+      }
       <div className="mt-6 px-4">
         <p className="">
           Company type<span className="text-red-500 ml-0.5">*</span>
