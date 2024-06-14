@@ -20,13 +20,13 @@ const UpdateCompany = () => {
   const [products, setProducts] = useState([]);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const { id } = router.query;
-  console.log("========***", id)
   const [formData, setFormData] = useState({
     companyName: "",
     companyEmail: "",
     companyDomain: "",
     isVendor: false,
     isPurchaser: true,
+    companyType: "vendor",
     displayTOS: false,
     displayPrivacyPolicy: false,
   });
@@ -45,14 +45,11 @@ const UpdateCompany = () => {
         .then((response) => response.text())
         .then((result) => {
           const companyData = JSON.parse(result)
-          debugger
           setFormData({
             companyName: companyData?.name,
             companyEmail: companyData?.email,
             companyDomain: companyData?.subdomain,
-            isVendor: companyData?.companyType === "vendor" ? true : false,
-            isPurchaser:
-              companyData?.companyType === "Purchaser" ? true : false,
+            companyType: companyData?.companyType,
             displayTOS: companyData?.termsServices,
             displayPrivacyPolicy: companyData?.privacyPolicy,
           });
@@ -66,10 +63,30 @@ const UpdateCompany = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    if (type === "checkbox") {
+      if(name==="vendor" || name === "purchaser") {
+        setFormData((prevState) => ({
+          ...prevState,
+          companyType: name === "vendor" ? 'vendor' : 'purchaser',
+        }));
+      } else if (name==="displayTOSYes" || name === "displayTOSNo") {
+        setFormData((prevState) => ({
+          ...prevState,
+          displayTOS: name === "displayTOSYes" ? checked : !checked,
+        }));
+      }
+      else if (name==="displayPrivacyPolicyYes" || name === "displayPrivacyPolicyNo") {
+        setFormData((prevState) => ({
+          ...prevState,
+          displayPrivacyPolicy: name === "displayPrivacyPolicyYes" ? checked : !checked,
+        }));
+      }
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -80,7 +97,7 @@ const UpdateCompany = () => {
     const raw = JSON.stringify({
       name: formData?.companyName,
       subdomain: formData?.companyDomain,
-      companyType: formData?.isVendor ? "Vendor": "Purchaser",
+      companyType: formData?.companyType,
       email: formData?.companyEmail,
       products,
       termsServices: formData?.displayTOS,
@@ -130,6 +147,7 @@ const UpdateCompany = () => {
                 radius="none"
                 size="sm"
                 className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
+                onPress={() => router.push("/admin/company-settings")}
               >
                 Cancel
               </Button>

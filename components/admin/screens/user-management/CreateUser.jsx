@@ -59,7 +59,6 @@ const CreateUser = () => {
   }
 
   useEffect(() => {
-    debugger
     getAllCompanies();
   }, []);
 

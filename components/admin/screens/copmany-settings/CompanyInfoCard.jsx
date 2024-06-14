@@ -57,15 +57,17 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
           Company type<span className="text-red-500 ml-0.5">*</span>
         </p>
         <div className="flex itemx-center gap-12 mt-3">
-          <Checkbox isSelected={formData.isVendor}
+          <Checkbox isSelected={formData.companyType === "vendor"}
           onChange={handleChange}
-          name="isVendor" radius="none" classNames={{ wrapper: "!rounded-[3px]" }}>
+          value="vendor"
+          name="vendor" radius="none" classNames={{ wrapper: "!rounded-[3px]" }}>
             Vendor
           </Checkbox>
           <Checkbox
-          isSelected={formData.isPurchaser}
+          isSelected={formData.companyType === "purchaser"}
           onChange={handleChange}
-          name="isPurchaser"
+          value="purchaser"
+          name="purchaser"
             radius="none"
             classNames={{ wrapper: "!rounded-[3px]" }}
           >
@@ -79,14 +81,16 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
           <Checkbox
           isSelected={formData.displayTOS}
           onChange={handleChange}
-          name="displayTOS"
+          name="displayTOSYes"
+          value={true}
            radius="none" classNames={{ wrapper: "!rounded-[3px]" }}>
             Yes
           </Checkbox>
           <Checkbox
             isSelected={!formData.displayTOS}
             onChange={handleChange}
-            name="displayTOS"
+            value={false}
+            name="displayTOSNo"
             radius="none"
             classNames={{ wrapper: "!rounded-[3px]" }}
           >
@@ -100,15 +104,17 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
           <Checkbox
           isSelected={formData.displayPrivacyPolicy}
           onChange={handleChange}
-          name="displayPrivacyPolicy"
+          name="displayPrivacyPolicyYes"
+          value={true}
           radius="none" classNames={{ wrapper: "!rounded-[3px]" }}>
             Yes
           </Checkbox>
           <Checkbox
             isSelected={!formData.displayPrivacyPolicy}
             onChange={handleChange}
-            name="displayPrivacyPolicy"
+            name="displayPrivacyPolicyNo"
             radius="none"
+            value={false}
             classNames={{ wrapper: "!rounded-[3px]" }}
           >
             No

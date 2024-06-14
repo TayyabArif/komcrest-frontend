@@ -25,20 +25,39 @@ const CreateCompany = () => {
     companyDomain: "",
     isVendor: false,
     isPurchaser: true,
+    companyType: "vendor",
     displayTOS: false,
     displayPrivacyPolicy: false,
   });
-  const [products, setProducts] = useState([
-  ]);
+  const [products, setProducts] = useState([]);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    if (type === "checkbox") {
+      if(name==="vendor" || name === "purchaser") {
+        setFormData((prevState) => ({
+          ...prevState,
+          companyType: name === "vendor" ? 'vendor' : 'purchaser',
+        }));
+      } else if (name==="displayTOSYes" || name === "displayTOSNo") {
+        setFormData((prevState) => ({
+          ...prevState,
+          displayTOS: name === "displayTOSYes" ? checked : !checked,
+        }));
+      }
+      else if (name==="displayPrivacyPolicyYes" || name === "displayPrivacyPolicyNo") {
+        setFormData((prevState) => ({
+          ...prevState,
+          displayPrivacyPolicy: name === "displayPrivacyPolicyYes" ? checked : !checked,
+        }));
+      }
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
   };
   const handleSubmit = async () => {
-    debugger
     setIsLoading(true)
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -46,13 +65,12 @@ const CreateCompany = () => {
     const raw = JSON.stringify({
       name: formData?.companyName,
       subdomain: formData?.companyDomain,
-      companyType: formData?.isVendor ? "vendor": "purchaser",
+      companyType: formData?.companyType,
       email: formData?.companyEmail,
       products,
       termsServices: formData?.displayTOS,
       privacyPolicy: formData?.displayPrivacyPolicy
     });
-
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -98,6 +116,7 @@ const CreateCompany = () => {
                 radius="none"
                 size="sm"
                 className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
+                onPress={() => router.push("/admin/company-settings")}
               >
                 Cancel
               </Button>
