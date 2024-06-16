@@ -27,21 +27,11 @@ const CompanySettings = () => {
     };
 
     fetch(`${baseUrl}/companies`, requestOptions)
-      .then((response) => {
-        return response.json().then((data) => ({
-          status: response.status,
-          ok: response.ok,
-          data,
-        }));
-      })
-      .then(({ status, ok, data }) => {
-        if (ok) {
-          setAllCompanies(data)
-          console.log("result of all",response)
-        } else {
-          toast.error(data?.error)
-          console.error("Error:", data);
-        }
+      .then((response) => response.text())
+      .then((result) => {
+        const response = JSON.parse(result)
+        setAllCompanies(response)
+        console.log("result of all",response)
       })
       .catch((error) => console.error(error))
       .finally(setIsLoading(false))

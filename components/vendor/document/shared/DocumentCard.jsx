@@ -10,7 +10,7 @@ import { formatDate } from "../../../../helper";
 import { useCookies } from 'react-cookie';
 import { toast } from "react-toastify";
 
-const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
+const DocumentCard = ({ cardData, setIsDeleted }) => {
   const router = useRouter();
   const [openPopoverIndex, setOpenPopoverIndex] = React.useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
@@ -44,7 +44,7 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
       .then((result) => {
         console.log("$$$$$$$$$", result);
         toast.success("Document deleted successfully");
-        setIsDeleted(!isDeleted);
+        setIsDeleted(true);
       })
       .catch((error) => console.error(error));
   };
@@ -91,24 +91,23 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
 
   return (
     <div>
-      <div className="flex flex-wrap  w-[85%] mx-auto py-6 gap-[3.4rem]">
+      <div className="flex flex-wrap w-[80%] mx-auto my-5 gap-x-10">
         {cardData &&
           cardData.map((item, index) => {
             return (
               <div
                 key={index}
-                className="w-[21%] h-[180px] bg-white rounded-lg p-2  flex flex-col justify-between"
+                className="w-[230px] h-[180px] bg-white rounded-lg p-2 my-4 flex flex-col justify-between mx-2"
               >
                 <div>
                   <h1 className="text-[17px] font-semibold">{item.title}</h1>
                   {/* <h2 className="text-[13px] font-semibold">{item.name}</h2> */}
-                  <p className="text-[15px]">{item.description}</p>
+                  <p className="text-[13px]">{item.description}</p>
                 </div>
 
                 <div className="flex justify-between items-center">
                   <span className="text-[13px]">
-                    DOCX 
-                    <span className="mx-2">{formatDate(item.createdAt)}</span>
+                    DOCX {formatDate(item.createdAt)}
                   </span>
                   <Popover
                     className="rounded-[0px]"

@@ -110,21 +110,14 @@ const UpdateCompany = () => {
     };
 
     fetch(`${baseUrl}/companies/${id}`, requestOptions)
-      .then((response) => {
-        return response.json().then((data) => ({
-          status: response.status,
-          ok: response.ok,
-          data,
-        }));
-      })
-      .then(({ status, ok, data }) => {
-        if (ok) {
+      .then((response) => response.text())
+      .then((result) => {
+        const companyData = JSON.parse(result)
+        if (companyData?.id) {
           toast.success("Company updated successfully")
           router.push("/admin/company-settings")
-        } else {
-          toast.error(data?.error)
-          console.error("Error:", data);
         }
+        console.log("update@@@", result)
       })
       .catch((error) => console.error(error))
       .finally(setIsLoading(false));

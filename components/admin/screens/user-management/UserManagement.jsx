@@ -20,21 +20,11 @@ const UserManagement = () => {
     };
 
     fetch(`${baseUrl}/users`, requestOptions)
-      .then((response) => {
-        return response.json().then((data) => ({
-          status: response.status,
-          ok: response.ok,
-          data,
-        }));
-      })
-      .then(({ status, ok, data }) => {
-        if (ok) {
-          setAllUsers(data)
-          console.log("result of all",response)
-        } else {
-          toast.error(data?.error)
-          console.error("Error:", data);
-        }
+      .then((response) => response.text())
+      .then((result) => {
+        const response = JSON.parse(result)
+        setAllUsers(response)
+        console.log("result of all",response)
       })
       .catch((error) => console.error(error))
       .finally(setIsLoading(false));

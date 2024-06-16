@@ -32,7 +32,8 @@ const id = 50
         classNames={{label: "font-[550] ml-0.5 pb-1", trigger: "rounded-sm"}}
         onChange={handleChange}
         name="companyId"
-        defaultSelectedKeys={formData.companyId ? [formData.companyId] : []}
+        defaultSelectedKeys={[formData.companyId]}
+       
       >
         {allCompanies.map((company) => (
           <SelectItem key={company.id} value={company.id}   >

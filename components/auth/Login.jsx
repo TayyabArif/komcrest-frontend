@@ -78,6 +78,7 @@ const Login = ({ type }) => {
           } else {
             router.push("/");
           }
+          
         } else {
           toast.error(data?.error || "Email or password is incorrect");
           console.error("Error:", data);
