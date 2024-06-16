@@ -25,37 +25,17 @@ const CreateCompany = () => {
     companyDomain: "",
     isVendor: false,
     isPurchaser: true,
-    companyType: "vendor",
     displayTOS: false,
     displayPrivacyPolicy: false,
   });
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([
+  ]);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
-      if(name==="vendor" || name === "purchaser") {
-        setFormData((prevState) => ({
-          ...prevState,
-          companyType: name === "vendor" ? 'vendor' : 'purchaser',
-        }));
-      } else if (name==="displayTOSYes" || name === "displayTOSNo") {
-        setFormData((prevState) => ({
-          ...prevState,
-          displayTOS: name === "displayTOSYes" ? checked : !checked,
-        }));
-      }
-      else if (name==="displayPrivacyPolicyYes" || name === "displayPrivacyPolicyNo") {
-        setFormData((prevState) => ({
-          ...prevState,
-          displayPrivacyPolicy: name === "displayPrivacyPolicyYes" ? checked : !checked,
-        }));
-      }
-    } else {
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: type === "checkbox" ? checked : value,
-      }));
-    }
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
   const handleSubmit = async () => {
     setIsLoading(true)
@@ -65,12 +45,13 @@ const CreateCompany = () => {
     const raw = JSON.stringify({
       name: formData?.companyName,
       subdomain: formData?.companyDomain,
-      companyType: formData?.companyType,
+      companyType: formData?.isVendor ? "vendor": "purchaser",
       email: formData?.companyEmail,
       products,
       termsServices: formData?.displayTOS,
       privacyPolicy: formData?.displayPrivacyPolicy
     });
+
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -79,23 +60,28 @@ const CreateCompany = () => {
     };
     
     fetch(`${baseUrl}/companies-with-products`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-      
-        if (result.status == 200 || result.status ===201){
-          console.log("=========", result)
+      .then((response) => {
+        return response.json().then((data) => ({
+          status: response.status,
+          ok: response.ok,
+          data,
+        }));
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
           toast.success("Company created successfully")
           router.push("/admin/company-settings")
-        }else{
-          toast.error(result.error)
+        } else {
+          toast.error(data?.error)
+          console.error("Error:", data);
         }
-       
       })
       .catch((error) => console.error(">>>>>>",error))
       .finally(setIsLoading(false))
   };
   return (
     <div className="flex flex-col w-full bg-white">
+
       <div className="flex flex-col justify-between w-full gap-5 pl-20 pr-10 py-10 bg-gray-200 min-h-screen ">
         <div className="flex justify-start w-full gap-10 pl-20">
           <CompanyInfoCard
@@ -116,7 +102,7 @@ const CreateCompany = () => {
                 radius="none"
                 size="sm"
                 className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
-                onPress={() => router.push("/admin/company-settings")}
+                onClick={()=>router.push("/admin/company-settings")}
               >
                 Cancel
               </Button>

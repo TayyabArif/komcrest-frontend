@@ -106,11 +106,21 @@ const requestOptions = {
 };
 
 fetch(`${baseUrl}/users`, requestOptions)
-  .then((response) => response.text())
-  .then((result) => {
-    toast.success("User created successfully")
-    router.push("/admin/user-management")
-  
+  .then((response) => {
+    return response.json().then((data) => ({
+      status: response.status,
+      ok: response.ok,
+      data,
+    }));
+  })
+  .then(({ status, ok, data }) => {
+    if (ok) {
+      toast.success("User created successfully")
+      router.push("/admin/user-management")
+    } else {
+      toast.error(data?.error)
+      console.error("Error:", data);
+    }
   })
   .catch((error) => console.error(error))
   .finally(setIsLoading(false));

@@ -125,14 +125,21 @@ const UpdateUser = () => {
     };
 
     fetch(`${baseUrl}/users/${id}`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        const userData = JSON.parse(result)
-        if (userData?.id) {
+      .then((response) => {
+        return response.json().then((data) => ({
+          status: response.status,
+          ok: response.ok,
+          data,
+        }));
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
           toast.success("User updated successfully")
           router.push("/admin/user-management")
+        } else {
+          toast.error(data?.error)
+          console.error("Error:", data);
         }
-        console.log("update@@@", result)
       })
       .catch((error) => console.error(error));
   };

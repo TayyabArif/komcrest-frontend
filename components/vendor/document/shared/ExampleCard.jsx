@@ -39,19 +39,19 @@ const ExampleCard = () => {
   ];
   return (
     <div>
-      <div className="flex justify-evenly flex-wrap w-[70%] mx-auto">
+      <div className="flex justify-between flex-wrap w-[70%] mx-auto">
         {ExampleData &&
           ExampleData.map((item, index) => {
             return (
               <div
                 key={index}
-                className="w-[180px] h-[130px] bg-white rounded-lg  my-4 flex flex-col justify-between mx-2"
+                className="w-[19%] h-[130px] bg-white rounded-lg  my-4 flex flex-col justify-between mx-2"
               >
                 <div className=" text-left px-4 py-5">
-                  <h1 className="text-[14px] font-bold">{item.title}</h1>
+                  <h1 className="text-[13px] font-semibold">{item.title}</h1>
                 </div>
 
-                <div className="flex justify-between items-center border-t-2 py-2 px-2">
+                <div className="flex justify-between items-center border-t-2 py-2 px-4">
                   <span  onClick={() => {
                 router.push("/vendor/document/AddDocument");
               }} className="text-[13px] text-blue-600 cursor-pointer">Upload</span>
