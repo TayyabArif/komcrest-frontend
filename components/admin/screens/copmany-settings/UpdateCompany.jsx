@@ -24,8 +24,6 @@ const UpdateCompany = () => {
     companyName: "",
     companyEmail: "",
     companyDomain: "",
-    isVendor: false,
-    isPurchaser: true,
     companyType: "vendor",
     displayTOS: false,
     displayPrivacyPolicy: false,

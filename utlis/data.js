@@ -5,6 +5,7 @@ export const company_columns = [
   {name: "Products", uid: "Products"},
   {name: "Creation date", uid: "createdAt"},
   {name: "Last update", uid: "updatedAt"},
+  {name: "Status", uid: "status"},
   {name: "Actions", uid: "actions"},
 ];
 

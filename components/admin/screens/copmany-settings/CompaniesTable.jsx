@@ -11,16 +11,23 @@ import { toast } from "react-toastify";
 
 
 
-const modalData = {
+const modalDataDeactivate = {
   heading: "Deactivate Company",
   desc: " Are you sure you want to deactivate the company? The tenant will no longer be available, and users won’t be able to access their information",
   name: "Sodexo",
   confirmText: "Confirm deactivation"
 }
+const modalDataActivate = {
+  heading: "Reactive Company",
+  desc: " Are you sure you want to Reactive the company? The tenant will again be available, and users will be able to access their information",
+  name: "Sodexo",
+  confirmText: "Confirm Reactivation"
+}
 
 const CompaniesTable = ({allCompanies, setAllCompanies, isDeleted, setIsDeleted}) => {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [selectedDecativateCompany, setSelectedDecativateCompany] = useState("")
+  const [updateAction, setupdateAction] = useState("")
   const router = useRouter();
   const [filteredCompanies, setFilteredCompanies] = useState(allCompanies);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
@@ -37,24 +44,62 @@ const CompaniesTable = ({allCompanies, setAllCompanies, isDeleted, setIsDeleted}
     setFilteredCompanies(filtered);
 };
 
-const handleDelete = async () => {
+const handleUpdate = async () => {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
+  if (updateAction === "Reactive") {
+    const myHeaders = new Headers();
+    myHeaders.append("Host", "tenant1.localhost");
 
-  const requestOptions = {
-    method: "DELETE",
-    headers: myHeaders,
-    redirect: "follow",
-  };
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow"
+    };
 
-  fetch(`${baseUrl}/companies/${selectedDecativateCompany?.id}`, requestOptions)
-    .then((response) => response.text())
-    .then((result) => {
-      console.log("$$$$$$$$$", result)
-      toast.success("Company deleted successfully")
-      setIsDeleted(!isDeleted)
+    fetch(`${baseUrl}/companies/${selectedDecativateCompany?.id}/reactivate`, requestOptions)
+    .then((response) => {
+      return response.json().then((data) => ({
+        status: response.status,
+        ok: response.ok,
+        data,
+      }));
     })
-    .catch((error) => console.error(error));
+    .then(({ status, ok, data }) => {
+      if (ok) {
+        toast.success("Company activated successfully")
+        setIsDeleted(!isDeleted)
+      } else {
+        toast.error(data?.error || "Error While Activating company")
+      }
+    })
+    .catch((error) => {
+      console.error("Network error:", error);
+    })
+  } else {
+    const requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+  
+    fetch(`${baseUrl}/companies/${selectedDecativateCompany?.id}`, requestOptions)
+      .then((response) => {
+        return {
+          status: response.status,
+          ok: response.ok,
+        }
+      })
+      .then(({ status, ok }) => {
+        if (ok) {
+          toast.success("Company deactivated successfully")
+          setIsDeleted(!isDeleted)
+        } else {
+          toast.error("Error While deactivating company")
+        }
+      })
+      .catch((error) => console.error(error));
+  }
 }
 
   const renderCell = useCallback((company, columnKey) => {
@@ -103,6 +148,14 @@ const handleDelete = async () => {
             {update_formattedDate}
           </div>
         );
+      case "status":
+        return (
+          <div className="flex flex-col">
+            {!company?.deletedAt ?  
+            <Chip color="success" size="sm">Active</Chip> :
+            <Chip color="danger" size="sm">Deactive</Chip>}
+          </div>
+        );
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
@@ -121,12 +174,22 @@ const handleDelete = async () => {
                   <div className="text-sm font-bold cursor-pointer"
                    onClick={() => router.push(`/admin/company-settings/update-company?id=${company.id}`)}
                   >Update</div>
+                  {!company?.deletedAt ?  
                   <div className="text-sm mt-2 text-red-500 font-bold cursor-pointer" onClick={() => {
+                    setupdateAction("Deactivate")
                     setSelectedDecativateCompany(company)
                     onOpen()
                   }
                     }>Deactivate</div>
-                </div>
+                    :
+                    <div className="text-sm mt-2 text-green-500 font-bold cursor-pointer" onClick={() => {
+                      setupdateAction("Reactive")
+                      setSelectedDecativateCompany(company)
+                      onOpen()
+                    }
+                      }>Reactive</div>
+                  }
+                  </div>
               </PopoverContent>
             </Popover>
           </div>
@@ -178,7 +241,7 @@ const handleDelete = async () => {
       <p>No Data Found</p>
     </div>
     }
-    <ConfirmationModal isOpen={isOpen} onOpenChange ={onOpenChange} data={modalData} handleSubmit={handleDelete} name={selectedDecativateCompany?.name}/>
+    <ConfirmationModal isOpen={isOpen} onOpenChange ={onOpenChange} data={updateAction === "Reactive" ? modalDataActivate : modalDataDeactivate} handleSubmit={handleUpdate} name={selectedDecativateCompany?.name}/>
     </div>
   )
 }

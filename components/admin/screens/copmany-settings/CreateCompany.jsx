@@ -23,8 +23,9 @@ const CreateCompany = () => {
     companyName: "",
     companyEmail: "",
     companyDomain: "",
-    isVendor: false,
-    isPurchaser: true,
+    firstName: "",
+    lastName: "",
+    companyType: "vendor",
     displayTOS: false,
     displayPrivacyPolicy: false,
   });
@@ -47,6 +48,8 @@ const CreateCompany = () => {
       subdomain: formData?.companyDomain,
       companyType: formData?.isVendor ? "vendor": "purchaser",
       email: formData?.companyEmail,
+      firstName: formData?.firstName,
+      lastName: formData?.lastName,
       products,
       termsServices: formData?.displayTOS,
       privacyPolicy: formData?.displayPrivacyPolicy
