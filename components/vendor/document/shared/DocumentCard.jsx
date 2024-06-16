@@ -68,9 +68,11 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
     }
   };
 
-  const  handleDocumentLink = (link) => {
-    window.open(link, '_blank');
-  } 
+
+  const handleDocumentLink = (link) => {
+    const formattedLink = link.startsWith('http://') || link.startsWith('https://') ? link : `https://${link}`;
+    window.open(formattedLink, '_blank');
+};
 
   // const handleDownload = async (filePath) => {
   //   const fileUrl = `http://localhost:3001/${filePath}`;
@@ -102,7 +104,7 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
                 <div>
                   <h1 className="text-[17px] font-semibold">{item.title}</h1>
                   {/* <h2 className="text-[13px] font-semibold">{item.name}</h2> */}
-                  <p className="text-[15px]">{item.description}</p>
+                  <p className="text-[15px] w-full">{item.description}</p>
                 </div>
 
                 <div className="flex justify-between items-center">

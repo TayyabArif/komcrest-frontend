@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, CircularProgress } from "@nextui-org/react";
 import CompaniesTable from "./CompaniesTable";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const CompanySettings = () => {
   const [allCompanies, setAllCompanies] = useState([])
@@ -37,15 +38,14 @@ const CompanySettings = () => {
       .then(({ status, ok, data }) => {
         if (ok) {
           setAllCompanies(data)
-          console.log("result of all",response)
         } else {
-          toast.error(data?.error)
-          console.error("Error:", data);
+          toast.error("Error while fetching companies, please contact support team")
         }
       })
       .catch((error) => console.error(error))
-      .finally(setIsLoading(false))
-      ;
+      .finally(() => {
+        setIsLoading(false);
+      })
   };
   return (
     <div className="flex flex-col w-full bg-white">
@@ -68,11 +68,11 @@ const CompanySettings = () => {
         </Button>
       </div>
       {isLoading ?
-      <div className='flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen'>
-        <CircularProgress label="Fetching Companies..." size="lg"/>
-      </div>
-      :
-        <CompaniesTable allCompanies={allCompanies} setAllCompanies={setAllCompanies} isDeleted={isDeleted} setIsDeleted ={setIsDeleted}/>
+        <div className='flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen'>
+          <CircularProgress label="Fetching Companies..." size="lg" />
+        </div>
+        :
+        <CompaniesTable allCompanies={allCompanies} setAllCompanies={setAllCompanies} isDeleted={isDeleted} setIsDeleted={setIsDeleted} />
       }
     </div>
   );

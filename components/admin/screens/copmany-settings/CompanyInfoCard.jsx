@@ -28,6 +28,7 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
           type="email"
           value={formData.companyEmail}
           onChange={handleChange}
+          isDisabled={action === "update"}
           name="companyEmail"
           label="Company email"
           labelPlacement="outside"
@@ -43,6 +44,7 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
           type="text"
           value={formData.companyDomain}
           onChange={handleChange}
+          isDisabled={action === "update"}
           name="companyDomain"
           label="Company domain"
           labelPlacement="outside"
@@ -93,6 +95,7 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
         <div className="flex itemx-center gap-12 mt-3">
           <Checkbox isSelected={formData.companyType === "vendor"}
           onChange={handleChange}
+          isDisabled={action === "update"}
           value="vendor"
           name="vendor" radius="none" classNames={{ wrapper: "!rounded-[3px]" }}>
             Vendor
@@ -100,6 +103,7 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
           <Checkbox
           isSelected={formData.companyType === "purchaser"}
           onChange={handleChange}
+          isDisabled={action === "update"}
           value="purchaser"
           name="purchaser"
             radius="none"

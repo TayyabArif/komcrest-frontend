@@ -4,7 +4,7 @@ import React from 'react'
 const access = () => {
   return (
     <div>
-      <Login type="vendor"/>
+      <Login type="purchaser"/>
     </div>
   )
 }

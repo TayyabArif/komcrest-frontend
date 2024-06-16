@@ -27,7 +27,6 @@ const Login = () => {
     }));
   };
   const handleSubmit = async () => {
-    debugger
     setIsLoading(true)
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -53,7 +52,6 @@ const Login = () => {
         }));
       })
       .then(({ status, ok, data }) => {
-        debugger
         if (ok) {
           const userData = {
             token: data.token,

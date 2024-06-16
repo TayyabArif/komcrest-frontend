@@ -12,6 +12,7 @@ const UpdateUser = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false)
   const [allCompanies, setAllCompanies] = useState([])
+  const [selectedProducts, setSelectedProducts] = useState([])
   const router = useRouter();
   const [products, setProducts] = useState([]);
   const { id } = router.query;
@@ -45,9 +46,34 @@ const UpdateUser = () => {
 }
   };
 
+  const handleProductsChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const convertedValue = parseInt(value)
+    setSelectedProducts(prevProducts => {
+      if (checked) {
+        return [...prevProducts, convertedValue];
+      } else {
+        return prevProducts.filter(item => item !== convertedValue);
+      }
+    });
+  }
+
   useEffect(() => {
     getAllCompanies();
   }, []);
+  useEffect(() => {
+    if (formData?.companyId && allCompanies.length > 0) {
+      getSelectedCompany(formData?.companyId);
+    }
+  }, [formData?.companyId , allCompanies]);
+
+  const getSelectedCompany = (companyId) => {
+    const selectedCompany = allCompanies.find(company => company.id === companyId);
+    
+    if (selectedCompany) {
+        setProducts( selectedCompany?.Products || [])
+    } 
+};
 
   const getAllCompanies = async () => {
     setIsLoading(true)
@@ -97,8 +123,9 @@ const UpdateUser = () => {
           });
           console.log(userData);
           setIsDataLoaded(true)
-          const filteredProducts = userData?.Products?.map((item) => item.name)
-          setProducts(filteredProducts || [])
+          const filteredProducts = userData?.Products?.map((item) => item.id)
+          // setProducts( userData?.Products || [])
+          setSelectedProducts(filteredProducts)
         })
         .catch((error) => console.error(error));
     }
@@ -114,7 +141,8 @@ const UpdateUser = () => {
       email: formData?.email,
       position: formData?.position,
       role: formData?.role,
-      companyId: parseInt(formData?.companyId)
+      companyId: parseInt(formData?.companyId),
+      products: selectedProducts
         });
 
     const requestOptions = {
@@ -164,8 +192,9 @@ const UpdateUser = () => {
             <UsersSettingsCard 
               action="update"
               formData={formData}
-              handleChange={(value) => handleChange(value)}
+              handleProductsChange={handleProductsChange}
               products={products}
+              selectedProducts={selectedProducts}
             />
           </>
         )}

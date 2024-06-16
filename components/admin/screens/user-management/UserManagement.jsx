@@ -20,25 +20,24 @@ const UserManagement = () => {
     };
 
     fetch(`${baseUrl}/users`, requestOptions)
-      .then((response) => {
-        return response.json().then((data) => ({
-          status: response.status,
-          ok: response.ok,
-          data,
-        }));
-      })
+    .then((response) => {
+      return response.json().then((data) => ({
+        status: response.status,
+        ok: response.ok,
+        data,
+      }));
+    })
       .then(({ status, ok, data }) => {
         if (ok) {
           setAllUsers(data)
-          console.log("result of all",response)
         } else {
-          toast.error(data?.error)
-          console.error("Error:", data);
+          toast.error("Error while fetching users, please contact support team")
         }
       })
       .catch((error) => console.error(error))
-      .finally(setIsLoading(false));
-      ;
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
   return (
     <div className='flex flex-col w-full bg-white'>

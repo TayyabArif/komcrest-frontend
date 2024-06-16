@@ -23,7 +23,7 @@ const DocumentLayout = ({ children }) => {
         </p>
         <div className="flex flex-col justify-between h-full ">
           <div className="flex flex-col gap-2">
-            <div className="flex gap-1 items-center px-4  bg-gray-100 cursor-pointer">
+            <div className="flex gap-1 items-center px-4  bg-gray-100 cursor-pointer" onClick={() => router.push("/vendor/document")}>
               <FileText size={20} />
               <h1 className="font-normal  py-1">Documents</h1>
             </div>

@@ -4,7 +4,7 @@ import {useDisclosure} from "@nextui-org/react";
 import ConfirmationModal from '../../shared/ConfirmationModal';
 
 
-const UsersSettingsCard = ({action, handleChange, formData, products, handleProductsChange}) => {
+const UsersSettingsCard = ({action, handleChange, formData, products, handleProductsChange, selectedProducts}) => {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   // const modalData = {
   //   heading: "Create User",
@@ -55,7 +55,7 @@ const UsersSettingsCard = ({action, handleChange, formData, products, handleProd
           <p className='mb-2 font-[550]'>Associated products</p>
           <div className='flex flex-col gap-5'>
             {products?.map((item, index) => (
-              <Checkbox key={index} onChange={handleProductsChange} value={item} name="products" radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>{item}</Checkbox>
+              <Checkbox key={index} onChange={handleProductsChange} value={item.id} isSelected={selectedProducts.includes(item.id)} name="products" radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>{item.name}</Checkbox>
             ))}
           </div>
         </div>

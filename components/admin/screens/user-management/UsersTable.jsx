@@ -44,11 +44,19 @@ const handleDelete = async () => {
   };
 
   fetch(`${baseUrl}/users/${selectedDecativateUser?.id}`, requestOptions)
-    .then((response) => response.text())
-    .then((result) => {
-      console.log("$$$$$$$$$", result)
-      toast.success("Company deleted successfully")
-      setIsDeleted(!isDeleted)
+  .then((response) => {
+    return {
+      status: response.status,
+      ok: response.ok,
+    }
+  })
+    .then(({ status, ok }) => {
+      if (ok) {
+        toast.success("User deleted successfully")
+        setIsDeleted(!isDeleted)
+      } else {
+        toast.error("Error While deactivating company")
+      }
     })
     .catch((error) => console.error(error));
 }

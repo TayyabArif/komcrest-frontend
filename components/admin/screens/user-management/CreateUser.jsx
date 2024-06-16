@@ -20,7 +20,7 @@ const CreateUser = () => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [products, setProducts] = useState([]);
-  const [selectedProducts,setSelectedProducts] = useState([])
+  const [selectedProducts, setSelectedProducts] = useState([])
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
   const [formData, setFormData] = useState({
     firstName: "",
@@ -34,28 +34,30 @@ const CreateUser = () => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
       setFormData(prevState => ({
-          ...prevState,
-          role: checked ? name : ''
+        ...prevState,
+        role: checked ? name : ''
       }));
-  } else {
+    } else {
       setFormData(prevState => ({
-          ...prevState,
-          [name]: value
+        ...prevState,
+        [name]: value
       }));
-  }
-  if (name === 'companyId') {
-    const company = allCompanies.find(company => company.id.toString() === value);
-    const filteredProducts = company?.Products?.map((item) => item.name)
-    setProducts(filteredProducts || [])
-}
+    }
+    if (name === 'companyId') {
+      const company = allCompanies.find(company => company.id.toString() === value);
+      setProducts(company?.Products || [])
+    }
   };
   const handleProductsChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const convertedValue = parseInt(value)
     setSelectedProducts(prevProducts => {
-      return checked
-          ? [...prevProducts, value]
-          : prev_ => prevProducts.filter(item => item !== value)
-  });
+      if (checked) {
+        return [...prevProducts, convertedValue];
+      } else {
+        return prevProducts.filter(item => item !== convertedValue);
+      }
+    });
   }
 
   useEffect(() => {
@@ -86,44 +88,45 @@ const CreateUser = () => {
   const handleSubmit = async () => {
     setIsLoading(true)
     const myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Content-Type", "application/json");
 
-const raw = JSON.stringify({
-  firstName: formData?.firstName,
-  lastName: formData?.lastName,
-  email: formData?.email,
-  position: formData?.position,
-  role: formData?.role,
-  companyId: parseInt(formData?.companyId),
-  products: selectedProducts
-});
+    const raw = JSON.stringify({
+      firstName: formData?.firstName,
+      lastName: formData?.lastName,
+      email: formData?.email,
+      position: formData?.position,
+      role: formData?.role,
+      companyId: parseInt(formData?.companyId),
+      products: selectedProducts
+    });
 
-const requestOptions = {
-  method: "POST",
-  headers: myHeaders,
-  body: raw,
-  redirect: "follow"
-};
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
 
-fetch(`${baseUrl}/users`, requestOptions)
-  .then((response) => {
-    return response.json().then((data) => ({
-      status: response.status,
-      ok: response.ok,
-      data,
-    }));
-  })
-  .then(({ status, ok, data }) => {
-    if (ok) {
-      toast.success("User created successfully")
-      router.push("/admin/user-management")
-    } else {
-      toast.error(data?.error)
-      console.error("Error:", data);
-    }
-  })
-  .catch((error) => console.error(error))
-  .finally(setIsLoading(false));
+    fetch(`${baseUrl}/users`, requestOptions)
+      .then((response) => {
+        return response.json().then((data) => ({
+          status: response.status,
+          ok: response.ok,
+          data,
+        }));
+      })
+      .then(({ status, ok, data }) => {
+        if (ok){
+          toast.success("User created successfully")
+          router.push("/admin/user-management")
+        }else{
+          toast.error(data?.error)
+        }
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
   return (
     <div className="flex flex-col w-full bg-white">
@@ -133,22 +136,23 @@ fetch(`${baseUrl}/users`, requestOptions)
             formData={formData}
             handleChange={(value) => handleChange(value)}
             allCompanies={allCompanies}
-            />
+          />
           <UsersSettingsCard action="create"
-          formData={formData}
-          handleChange={(value) => handleChange(value)}
-          products={products}
-          handleProductsChange={handleProductsChange}
+            formData={formData}
+            handleChange={(value) => handleChange(value)}
+            products={products}
+            handleProductsChange={handleProductsChange}
+            selectedProducts={selectedProducts}
           />
         </div>
-      <div className="flex justify-end mb-5 pr-16">
+        <div className="flex justify-end mb-5 pr-16">
           <div>
             <div className="flex items-center gap-5">
               <Button
                 radius="none"
                 size="sm"
                 className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
-                onClick={()=>router.push("/admin/user-management")}
+                onClick={() => router.push("/admin/user-management")}
               >
                 Cancel
               </Button>
@@ -157,15 +161,16 @@ fetch(`${baseUrl}/users`, requestOptions)
                 size="sm"
                 className="text-white px-5 h-[28px] text-sm bg-btn-primary w-max rounded-[4px]"
                 onPress={onOpen}
-                isDisabled={!formData?.firstName || !formData?.lastName || !formData?.position || !formData?.role || !formData?.email}
+                isLoading={isLoading}
+                isDisabled={!formData?.firstName || !formData?.lastName || !formData?.position || !formData?.role || !formData?.email || isLoading}
               >
                 Send invitation
               </Button>
             </div>
           </div>
+        </div>
       </div>
-      </div>
-        <ConfirmationModal isOpen={isOpen} onOpenChange ={onOpenChange} data={modalData} handleSubmit={handleSubmit} isLoading={isLoading}/>
+      <ConfirmationModal isOpen={isOpen} onOpenChange={onOpenChange} data={modalData} handleSubmit={handleSubmit} isLoading={isLoading} />
     </div>
   );
 };

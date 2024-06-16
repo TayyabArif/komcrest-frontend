@@ -20,7 +20,6 @@ const AddDocument = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
-    debugger;
     getUserDocument();
   }, [isDeleted]);
 

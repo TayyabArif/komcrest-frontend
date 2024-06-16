@@ -44,6 +44,20 @@ const CreatePassword = ({type, isNew}) => {
     }));
   };
   const handleSubmit= async () => {
+    if(isNew) {
+      if (isTermsService) {
+        if(!isTermsAggree) {
+          toast.error("You need to aggree with terms and conditions to proceed ")
+          return
+        }
+      }
+      if (isPrivacyPolicy) {
+        if(!isPrivacyAggree) {
+          toast.error("You need to aggree with Komcrest privacy policy to proceed ")
+          return
+        }
+      }
+    }
     if (formData?.password !== formData?.confirmPassword) {
       toast.error("Password do not match")
       return;
@@ -64,11 +78,21 @@ const requestOptions = {
 };
 
 fetch(`${baseUrl}/users/reset-password`, requestOptions)
-  .then((response) => response.text())
-  .then((result) => {
-    console.log(result)
-    toast.success("Your password has been reset")
-    router.push(`/${type}/login/password-confimation/success`)
+  .then((response) => {
+    return response.json().then((data) => ({
+      status: response.status,
+      ok: response.ok,
+      data,
+    }));
+  })
+  .then(({ status, ok, data }) => {
+    if (ok) {
+      console.log(data)
+      toast.success("Your password has been reset")
+      router.push(`/${type}/login/password-confimation/success`)
+    } else{
+      toast.error(data?.error)
+    }
   })
   .catch((error) => console.error(error));
 
@@ -163,35 +187,36 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
 
           />
           {isNew &&
-            <div>
-            {isTermsService &&
-              <Checkbox isSelected={isTermsAggree} size="md" className="mt-2" classNames={{ label: "mt-0" }} onClick={() => isTermsAggree && setIsTermsAggree(false)}>
-                {" "}
-                I agree to Komcrest’s <a className="underline" onClick={() => {
-                  setIsTermsServiceClick(true)
-                  onOpen()
-                  }}>
-                  Terms of Services
-                </a>
-              </Checkbox>
-            }
-            {isPrivacyPolicy &&
-              <Checkbox isSelected={isPrivacyAggree} size="md" className="mt-2" classNames={{ label: "mt-0" }} onClick={() => isPrivacyAggree && setIsPrivacyAggree(false)}>
-                {" "}
-                I agree to Komcrest’s <a className="underline" onClick={() => {
-                  setIsPrivacyPolicyClick(true)
-                  onOpen()
-                  }}
-                  >Privacy Policy</a>{" "}
-              </Checkbox>
-            }
+            <div className="flex flex-col">
+              {isTermsService &&
+                <Checkbox isSelected={isTermsAggree} onChange={() => setIsTermsAggree(!isTermsAggree)} size="md" className="mt-2" classNames={{ label: "mt-0" }}>
+                  {" "}
+                  I agree to Komcrest’s <a className="underline" onClick={() => {
+                    setIsTermsServiceClick(true)
+                    onOpen()
+                    }}>
+                    Terms of Services
+                  </a>
+                </Checkbox>
+              }
+              {isPrivacyPolicy &&
+                <Checkbox isSelected={isPrivacyAggree} onChange={() => setIsPrivacyAggree(!isPrivacyAggree)} size="md" className="mt-2" classNames={{ label: "mt-0" }}>
+                  {" "}
+                  I agree to Komcrest’s <a className="underline" onClick={() => {
+                    setIsPrivacyPolicyClick(true)
+                    onOpen()
+                    }}
+                    >Privacy Policy</a>{" "}
+                </Checkbox>
+              }
             </div>
           }
           <Button
             radius="sm"
             size="sm"
             className={`${isNew ? "mt-4" :"mt-7"} text-white px-8 text-sm bg-[#4fa82e]`}
-            isDisabled={!formData?.password || !formData?.confirmPassword || isLoading || !formData.isPasswordStrong}
+            isDisabled={!formData?.password || !formData?.confirmPassword || isLoading || !formData.isPasswordStrong
+            }
             isLoading={isLoading}
             onPress={handleSubmit}
           >
