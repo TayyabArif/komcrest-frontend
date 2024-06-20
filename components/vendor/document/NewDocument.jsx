@@ -110,7 +110,8 @@ const NewDocument = () => {
           }
         })
         .catch((error) => console.error(error));
-    } else {
+    } 
+    else {
       requestOptions = {
         method: "POST",
         headers: {
@@ -204,6 +205,19 @@ const NewDocument = () => {
     }
   }, [id]);
 
+  const isDescriptionInvalid = React.useMemo(() => {
+    if (documentData.description === "") return false;
+
+    return documentData.description.length > 100 ? true : false;
+  }, [documentData.description]);
+
+  const isTitleInvalid = React.useMemo(() => {
+    if (documentData.title === "") return false;
+
+    return documentData.title.length > 50 ? true : false;
+  }, [documentData.title]);
+
+
   return (
     <div className="w-[100%]  h-full">
       <div className="w-[80%] mx-auto py-4 mt-[4rem]">
@@ -251,6 +265,9 @@ const NewDocument = () => {
                   variant="bordered"
                   size="sm"
                   name="title"
+                  isInvalid={isTitleInvalid}
+                  color={isTitleInvalid ? "danger" : ""}
+                  errorMessage="Title Should be less than 50 words"
                   value={documentData.title}
                   onChange={handleData}
                 />
@@ -274,6 +291,9 @@ const NewDocument = () => {
                 variant="bordered"
                 labelPlacement="outside"
                 placeholder="Enter your description"
+                isInvalid={isDescriptionInvalid}
+                color={isDescriptionInvalid ? "danger" : ""}
+                errorMessage="Description Should be less than 100 words"
                 className="my-5"
                 name="description"
                 value={documentData.description}
@@ -314,7 +334,7 @@ const NewDocument = () => {
               onClick={SubmitDocument}
               size="sm"
               className="rounded bg-btn-primary text-white"
-              isDisabled={!documentData?.title || !documentData?.description}
+              isDisabled={!documentData?.title || !documentData?.description || isDescriptionInvalid || isTitleInvalid}
             >
               Upload
             </Button>

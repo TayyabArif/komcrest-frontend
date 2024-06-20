@@ -99,7 +99,7 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
             return (
               <div
                 key={index}
-                className="w-[21%] h-[180px] bg-white rounded-lg p-2  flex flex-col justify-between"
+                className="w-[21%] h-[180px] bg-white rounded-lg p-2 px-4 flex flex-col justify-between"
               >
                 <div>
                   <h1 className="text-[17px] font-semibold">{item.title}</h1>
@@ -120,7 +120,7 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
                     }
                   >
                     <PopoverTrigger>
-                      <Settings size={20} className="cursor-pointer" />
+                      <Settings size={20} className="cursor-pointer" color="#2457d7" strokeWidth={2}/>
                     </PopoverTrigger>
                     <PopoverContent>
                       <div className="px-3 py-2 space-y-1">
