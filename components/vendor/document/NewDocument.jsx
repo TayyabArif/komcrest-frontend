@@ -10,15 +10,13 @@ const NewDocument = () => {
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
 
-  const [cookies, setCookie] = useCookies(["myCookie"]);
+  const [cookies] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  console.log("<<<<<<<<<<<,", cookiesData?.companyId);
-
   const [companyProducts, setCompanyProducts] = useState([]);
-
   const router = useRouter();
   const { id } = router.query;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const [dataIsLoaded , setDataIsLoaded] = useState(false)
 
   const [documentData, setDocumentData] = useState({
     title: "",
@@ -57,19 +55,17 @@ const NewDocument = () => {
     }
   };
 
-  const handleCheckboxChange = (index) => {
-    const newCheckBoxData = [...companyProducts];
-    newCheckBoxData[index].check = !newCheckBoxData[index].check;
-    setCompanyProducts(newCheckBoxData);
+  const handleCheckboxChange = (id) => {
+    setDocumentData((prevData) => {
+      const productIds = prevData.productIds.includes(id)
+        ? prevData.productIds.filter((productId) => productId !== id)
+        : [...prevData.productIds, id];
 
-    const selectedProducts = newCheckBoxData
-      .filter((item) => item.check)
-      .map((item) => item.id);
-
-    setDocumentData((prevData) => ({
-      ...prevData,
-      productIds: selectedProducts,
-    }));
+      return {
+        ...prevData,
+        productIds,
+      };
+    });
   };
 
   const SubmitDocument = async () => {
@@ -110,8 +106,7 @@ const NewDocument = () => {
           }
         })
         .catch((error) => console.error(error));
-    } 
-    else {
+    } else {
       requestOptions = {
         method: "POST",
         headers: {
@@ -195,7 +190,11 @@ const NewDocument = () => {
         })
         .then(({ status, ok, data }) => {
           if (ok) {
-            setDocumentData(data);
+            setDocumentData({
+              ...data,
+              productIds: data.Products.map((product) => product.id),
+            });
+            setDataIsLoaded(true)
           } else {
             toast.error(data?.error);
             console.error("Error:", data);
@@ -207,27 +206,24 @@ const NewDocument = () => {
 
   const isDescriptionInvalid = React.useMemo(() => {
     if (documentData.description === "") return false;
-
-    return documentData.description.length > 100 ? true : false;
+    return documentData.description.length > 100;
   }, [documentData.description]);
 
   const isTitleInvalid = React.useMemo(() => {
     if (documentData.title === "") return false;
-
-    return documentData.title.length > 50 ? true : false;
+    return documentData.title.length > 50;
   }, [documentData.title]);
 
-
   return (
-    <div className="w-[100%]  h-full">
+    <div className="w-[100%] h-full">
       <div className="w-[80%] mx-auto py-4 mt-[4rem]">
         <h1 className="font-semibold bg-slate-50 px-4 py-1">Dropzone</h1>
         <div className="px-4 bg-white pb-6">
-          <h1 className="py-1 border-b-2">Add New Documents</h1>
-          <div className=" my-3">
-            <div className="flex pr-4 space-y-3 items-center gap-2">
+          <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[18px]">Add New Documents</h1>
+          <div className="my-3">
+            <div className="flex  space-y-3 items-center gap-2">
               <div className="w-[50%]">
-                <p className="text-[14px] leading-5">
+                <p className="text-[15px] leading-5 2xl:text-[16px]">
                   Drag and drop sections for your file uploads or click and
                   select file to upload to be indexed by Komcrest AI.
                   Alternatively, you can add the link to the document, but it
@@ -241,7 +237,7 @@ const NewDocument = () => {
               <div className="flex-1">
                 <div
                   {...getRootProps()}
-                  className="flex justify-center items-center border-2 w-[] border-dashed border-gray-300 rounded-lg p-10 bg-gray-100 cursor-pointer"
+                  className="flex justify-center items-center border-2  border-dashed border-gray-300 rounded-lg p-10 bg-gray-100 cursor-pointer"
                 >
                   <input {...getInputProps()} />
                   {documentData.file ? (
@@ -257,9 +253,9 @@ const NewDocument = () => {
               </div>
             </div>
 
-            <div className="flex my-2 justify-between">
-              <div className="w-[45%]">
-                <label className="text-[15px]">Title</label>
+            <div className="flex my-2 justify-between gap-4">
+              <div className="w-[50%]">
+                <label className="text-[16px] 2xl:text-[18px]">Title</label>
                 <Input
                   type="text"
                   variant="bordered"
@@ -274,7 +270,7 @@ const NewDocument = () => {
               </div>
 
               <div className="w-[50%]">
-                <label className="text-[15px]">Document link</label>
+                <label className="text-[16px] 2xl:text-[18px]">Document link</label>
                 <Input
                   type="text"
                   variant="bordered"
@@ -285,59 +281,41 @@ const NewDocument = () => {
                 />
               </div>
             </div>
-            <div className="w-[45%]">
+
+            <div className="my-2 w-[49%]">
+              <label className="text-[16px] 2xl:text-[18px]">Description</label>
               <Textarea
-                label="Description"
                 variant="bordered"
-                labelPlacement="outside"
-                placeholder="Enter your description"
+                size="sm"
                 isInvalid={isDescriptionInvalid}
                 color={isDescriptionInvalid ? "danger" : ""}
                 errorMessage="Description Should be less than 100 words"
-                className="my-5"
                 name="description"
                 value={documentData.description}
                 onChange={handleData}
               />
             </div>
             <div>
-              <h1>Select associated product(s)</h1>
-              <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
-                {companyProducts.map((item, index) => (
-                  <Checkbox
-                    key={index}
-                    radius="sm"
-                    isSelected={item.check}
-                    onChange={() => handleCheckboxChange(index)}
-                  >
-                    {item.name}
-                  </Checkbox>
-                ))}
-              </div>
-            </div>
-
-            <div className="w-[50%] px-5 space-y-1"></div>
+          <h1 className="text-[16px] 2xl:text-[18px]">Select associated product(s)</h1>
+          <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
+            {companyProducts.map((item, index) => (
+              <Checkbox
+                key={index}
+                radius="sm"
+                // isSelected={item.check}
+                isSelected={documentData.productIds.includes(item.id)}
+                onChange={() => handleCheckboxChange(item.id)}
+              >
+                {item.name}
+              </Checkbox>
+            ))}
           </div>
-          <div className="text-right">
-            <Button
-              onClick={() => {
-                router.push("/vendor/document");
-              }}
-              color="danger"
-              size="sm"
-              className="bg-red-100 rounded mx-3"
-              variant="light"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={SubmitDocument}
-              size="sm"
-              className="rounded bg-btn-primary text-white"
-              isDisabled={!documentData?.title || !documentData?.description || isDescriptionInvalid || isTitleInvalid}
-            >
-              Upload
-            </Button>
+        </div>
+            <div className="flex justify-end mt-4">
+              <Button color="primary" onPress={SubmitDocument} className="rounded-md">
+                {id ? "Update Document" : "Add Document"}
+              </Button>
+            </div>
           </div>
         </div>
       </div>

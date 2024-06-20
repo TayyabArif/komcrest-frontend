@@ -9,8 +9,8 @@ const DocumentHeader = ({buttonShow}) => {
     <div className="bg-gray-50 py-2">
       <div className="flex justify-between w-[85%] mx-auto">
       <div className="flex flex-col justify-center ">
-        <h1 className="font-semibold">Documents</h1>
-        <p className="text-[14px]">Quickly add common docs to your account.</p>
+        <h1 className="font-semibold text-[18px]">Documents</h1>
+        <p className="text-[15px]">Quickly add common docs to your account.</p>
       </div>
       {
         buttonShow &&

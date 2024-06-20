@@ -45,16 +45,16 @@ const ExampleCard = () => {
             return (
               <div
                 key={index}
-                className="w-[19%] h-[130px] bg-white rounded-lg  my-4 flex flex-col justify-between mx-2"
+                className="w-[19%] h-[135px] bg-white rounded-lg  my-4 flex flex-col justify-between mx-2"
               >
-                <div className=" text-left px-4 py-5">
-                  <h1 className="text-[13px] font-semibold">{item.title}</h1>
+                <div className=" text-left px-4 pt-5 h-full">
+                  <h1 className="text-[14px] font-semibold ">{item.title}</h1>
                 </div>
 
                 <div className="flex justify-between items-center border-t-2 py-2 px-4">
                   <span  onClick={() => {
                 router.push("/vendor/document/AddDocument");
-              }} className="text-[13px] text-blue-600 cursor-pointer">Upload</span>
+              }} className="text-[15px] text-blue-600 cursor-pointer">Upload</span>
                 </div>
               </div>
             );

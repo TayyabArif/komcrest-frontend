@@ -7,18 +7,18 @@ import ConfirmationModal from "@/components/admin/shared/ConfirmationModal";
 import { useDisclosure } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { formatDate } from "../../../../helper";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 
-const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
+const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
   const router = useRouter();
   const [openPopoverIndex, setOpenPopoverIndex] = React.useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [cookies, setCookie] = useCookies(['myCookie']);
+  const [cookies, setCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   const modalData = {
     heading: "Delete Document",
@@ -28,7 +28,7 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
   };
 
   const handleDelete = async () => {
-    const token = cookiesData.token
+    const token = cookiesData.token;
     const requestOptions = {
       method: "DELETE",
       headers: {
@@ -36,10 +36,7 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
       },
       redirect: "follow",
     };
-    fetch(
-      `${baseUrl}/documents/${selectedDocument?.id}`,
-      requestOptions
-    )
+    fetch(`${baseUrl}/documents/${selectedDocument?.id}`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         console.log("$$$$$$$$$", result);
@@ -68,11 +65,13 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
     }
   };
 
-
   const handleDocumentLink = (link) => {
-    const formattedLink = link.startsWith('http://') || link.startsWith('https://') ? link : `https://${link}`;
-    window.open(formattedLink, '_blank');
-};
+    const formattedLink =
+      link.startsWith("http://") || link.startsWith("https://")
+        ? link
+        : `https://${link}`;
+    window.open(formattedLink, "_blank");
+  };
 
   // const handleDownload = async (filePath) => {
   //   const fileUrl = `http://localhost:3001/${filePath}`;
@@ -101,16 +100,21 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
                 key={index}
                 className="w-[21%] h-[180px] bg-white rounded-lg p-2 px-4 flex flex-col justify-between"
               >
-                <div>
-                  <h1 className="text-[17px] font-semibold">{item.title}</h1>
-                  {/* <h2 className="text-[13px] font-semibold">{item.name}</h2> */}
-                  <p className="text-[15px] w-full">{item.description}</p>
+                <div
+                  className=""
+                  style={{
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
+                  }}
+                >
+                  <h1 className="text-[17px] font-semibold 2xl:text-[20px]">{item.title}</h1>
+                  <p className="text-[15px] 2xl:text-[18px]">{item.description}</p>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-[13px]">
-                    DOCX 
-                    <span className="mx-2">{formatDate(item.createdAt)}</span>
+                  <span className="text-[14px] 2xl:text-[16px]">
+                    DOCX
+                    <span className="mx-2 text-[14px] 2xl:text-[16px]">{formatDate(item.createdAt)}</span>
                   </span>
                   <Popover
                     className="rounded-[0px]"
@@ -120,7 +124,12 @@ const DocumentCard = ({ cardData, setIsDeleted  ,isDeleted}) => {
                     }
                   >
                     <PopoverTrigger>
-                      <Settings size={20} className="cursor-pointer" color="#2457d7" strokeWidth={2}/>
+                      <Settings
+                        size={20}
+                        className="cursor-pointer"
+                        color="#2457d7"
+                        strokeWidth={2}
+                      />
                     </PopoverTrigger>
                     <PopoverContent>
                       <div className="px-3 py-2 space-y-1">
