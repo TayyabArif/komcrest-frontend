@@ -25,27 +25,27 @@ const DocumentLayout = ({ children }) => {
           <div className="flex flex-col gap-2">
             <div className="flex gap-1 items-center px-4  bg-gray-100 cursor-pointer" onClick={() => router.push("/vendor/document")}>
               <FileText size={20} />
-              <h1 className="font-normal  py-1">Documents</h1>
+              <h1 className="text-[18px]  py-1">Documents</h1>
             </div>
             <div className="flex gap-1 items-center px-4 cursor-pointer">
               <AlignLeft size={20} />
-              <h1 className="font-normal  py-1">Knowledge</h1>
+              <h1 className="text-[18px]   py-1">Knowledge</h1>
             </div>
 
             <div className="flex gap-1 items-center px-4 cursor-pointer">
               <SquareCheck size={20} />
-              <h1 className="font-normal py-1">Questionnaires</h1>
+              <h1 className="text-[18px]  py-1">Questionnaires</h1>
             </div>
           </div>
           <div className="flex flex-col gap-2 cursor-pointer">
             <div className="flex gap-1 items-center px-4">
               <CircleHelp size={20} />
-              <h1 className="text-lg font-normal  py-1 ">Help Center</h1>
+              <h1 className="text-lg text-[18px]   py-1 ">Help Center</h1>
             </div>
 
             <div className="flex gap-1 items-center px-4 cursor-pointer">
               <Settings size={20} />
-              <h1 className=" font-normal  py-1">Settings</h1>
+              <h1 className=" font-normal text-[18px]  py-1">Settings</h1>
             </div>
           </div>
         </div>
