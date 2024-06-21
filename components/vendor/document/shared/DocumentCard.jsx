@@ -98,7 +98,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
             return (
               <div
                 key={index}
-                className="w-[21%] h-[180px] bg-white rounded-lg p-2 px-4 flex flex-col justify-between"
+                className="w-[21%] h-[200px] bg-white rounded-lg p-2 px-4 flex flex-col justify-between"
               >
                 <div
                   className=""
@@ -107,14 +107,14 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                     overflowWrap: "break-word",
                   }}
                 >
-                  <h1 className="text-[17px] font-semibold 2xl:text-[20px]">{item.title}</h1>
+                  <h1 className="text-[16px] font-semibold 2xl:text-[18px]">{item.title}</h1>
                   <p className="text-[15px] 2xl:text-[18px]">{item.description}</p>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-[14px] 2xl:text-[16px]">
+                  <span className="text-[14px] 2xl:text-[18px]">
                     DOCX
-                    <span className="mx-2 text-[14px] 2xl:text-[16px]">{formatDate(item.createdAt)}</span>
+                    <span className="mx-2 text-[14px] 2xl:text-[18px]">{formatDate(item.createdAt)}</span>
                   </span>
                   <Popover
                     className="rounded-[0px]"
@@ -132,14 +132,14 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                       />
                     </PopoverTrigger>
                     <PopoverContent>
-                      <div className="px-3 py-2 space-y-1">
+                      <div className="px-3 py-2 space-y-1.5">
                         {item.filePath && (
                           <div
                             onClick={() => {
                               handleDownload(item.filePath);
                               setOpenPopoverIndex(null);
                             }}
-                            className="text-small cursor-pointer"
+                            className="text-small cursor-pointer 2xl:text-[18px]"
                           >
                             Download
                           </div>
@@ -151,14 +151,14 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                               handleDocumentLink(item.documentLink);
                               setOpenPopoverIndex(null);
                             }}
-                            className="text-small cursor-pointer"
+                            className="text-small cursor-pointer 2xl:text-[18px]"
                           >
                             Link
                           </div>
                         )}
 
                         <div
-                          className="text-small cursor-pointer"
+                          className="text-small cursor-pointer 2xl:text-[18px]"
                           onClick={() => {
                             router.push(
                               `/vendor/document/AddDocument?id=${item.id}`
@@ -169,7 +169,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                         </div>
 
                         <div
-                          className="text-small text-red-600 cursor-pointer"
+                          className="text-small text-red-600 cursor-pointer 2xl:text-[18px]"
                           onClick={() => {
                             setSelectedDocument(item);
                             onOpen();

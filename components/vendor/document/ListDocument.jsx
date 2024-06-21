@@ -117,7 +117,7 @@ const AddDocument = () => {
               <span className="font-semibold text-[18px] 2xl:text-[20px]">
                 It appears that you haven’t uploaded any documents yet.
               </span>
-              <p className="text-[15px] leading-4 2xl:text-[17px]">
+              <p className="text-[15px] leading-4 2xl:text-[18px]">
                 We encourage you to add key documents that you frequently share
                 with your prospects and clients. We will index them to improve
                 the accuracy of Komcrest Generative AI.
@@ -125,7 +125,7 @@ const AddDocument = () => {
               <Button
                 radius="none"
                 size="sm"
-                className="text-white px-[10px] text-[15px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
+                className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
                 onClick={() => {
                   router.push("/vendor/document/AddDocument");
                 }}
