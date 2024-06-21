@@ -206,7 +206,7 @@ const NewDocument = () => {
 
   const isDescriptionInvalid = React.useMemo(() => {
     if (documentData.description === "") return false;
-    return documentData.description.length > 100;
+    return documentData.description.length > 150;
   }, [documentData.description]);
 
   const isTitleInvalid = React.useMemo(() => {
@@ -255,7 +255,7 @@ const NewDocument = () => {
 
             <div className="flex my-2 mt-4 justify-between gap-4">
               <div className="w-[50%]">
-                <label className="text-[16px] 2xl:text-[20px]">Title</label>
+                <label className="text-[16px] 2xl:text-[18px]">Title(max 50 characters)</label>
                 <Input
                   type="text"
                   variant="bordered"
@@ -263,7 +263,7 @@ const NewDocument = () => {
                   name="title"
                   isInvalid={isTitleInvalid}
                   color={isTitleInvalid ? "danger" : ""}
-                  errorMessage="Title Should be less than 50 words"
+                  errorMessage="Title should be less than 50 characters"
                   value={documentData.title}
                   onChange={handleData}
                 />
@@ -283,13 +283,13 @@ const NewDocument = () => {
             </div>
 
             <div className="my-2 w-[49%]">
-              <label className="text-[16px] 2xl:text-[20px]">Description</label>
+              <label className="text-[16px] 2xl:text-[18px]">Description(max 150 characters)</label>
               <Textarea
                 variant="bordered"
                 size="sm"
                 isInvalid={isDescriptionInvalid}
                 color={isDescriptionInvalid ? "danger" : ""}
-                errorMessage="Description Should be less than 100 words"
+                errorMessage="Description should be less than 150 characters"
                 name="description"
                 value={documentData.description}
                 onChange={handleData}
