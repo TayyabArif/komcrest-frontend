@@ -217,13 +217,13 @@ const NewDocument = () => {
   return (
     <div className="w-[100%] h-full">
       <div className="w-[80%] mx-auto py-4 mt-[4rem]">
-        <h1 className="font-semibold bg-slate-50 px-4 py-1">Dropzone</h1>
+        <h1 className="font-semibold bg-slate-50 px-4 py-1 2xl:text-[20px]">Dropzone</h1>
         <div className="px-4 bg-white pb-6">
-          <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[18px]">Add New Documents</h1>
+          <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[20px]">{id ? "Update Document" :"Add New Document"}</h1>
           <div className="my-3">
             <div className="flex  space-y-3 items-center gap-2">
               <div className="w-[50%]">
-                <p className="text-[15px] leading-5 2xl:text-[16px]">
+                <p className="text-[15px] leading-5 2xl:text-[20px]">
                   Drag and drop sections for your file uploads or click and
                   select file to upload to be indexed by Komcrest AI.
                   Alternatively, you can add the link to the document, but it
@@ -245,7 +245,7 @@ const NewDocument = () => {
                       <p>{documentData.file.name}</p>
                     </div>
                   ) : (
-                    <p className="text-center text-gray-700 font-bold italic">
+                    <p className="text-center text-gray-700 font-bold italic 2xl:text-[20px]">
                       Drop file or click here to upload file
                     </p>
                   )}
@@ -253,9 +253,9 @@ const NewDocument = () => {
               </div>
             </div>
 
-            <div className="flex my-2 justify-between gap-4">
+            <div className="flex my-2 mt-4 justify-between gap-4">
               <div className="w-[50%]">
-                <label className="text-[16px] 2xl:text-[18px]">Title</label>
+                <label className="text-[16px] 2xl:text-[20px]">Title</label>
                 <Input
                   type="text"
                   variant="bordered"
@@ -270,7 +270,7 @@ const NewDocument = () => {
               </div>
 
               <div className="w-[50%]">
-                <label className="text-[16px] 2xl:text-[18px]">Document link</label>
+                <label className="text-[16px] 2xl:text-[20px]">Document link</label>
                 <Input
                   type="text"
                   variant="bordered"
@@ -283,7 +283,7 @@ const NewDocument = () => {
             </div>
 
             <div className="my-2 w-[49%]">
-              <label className="text-[16px] 2xl:text-[18px]">Description</label>
+              <label className="text-[16px] 2xl:text-[20px]">Description</label>
               <Textarea
                 variant="bordered"
                 size="sm"
@@ -296,8 +296,8 @@ const NewDocument = () => {
               />
             </div>
             <div>
-          <h1 className="text-[16px] 2xl:text-[18px]">Select associated product(s)</h1>
-          <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
+          <h1 className="text-[16px] 2xl:text-[20px]">Select associated product(s)</h1>
+          <div className="gap-x-6 gap-y-2 flex flex-wrap my-1 ">
             {companyProducts.map((item, index) => (
               <Checkbox
                 key={index}
@@ -305,14 +305,15 @@ const NewDocument = () => {
                 // isSelected={item.check}
                 isSelected={documentData.productIds.includes(item.id)}
                 onChange={() => handleCheckboxChange(item.id)}
+                className="2xl:text-[20px]"
               >
                 {item.name}
               </Checkbox>
             ))}
           </div>
         </div>
-            <div className="flex justify-end mt-4">
-              <Button color="primary" onPress={SubmitDocument} className="rounded-md">
+            <div className="flex justify-end mt-4 ">
+              <Button color="primary" onPress={SubmitDocument} className="rounded-md 2xl:text-[20px]">
                 {id ? "Update Document" : "Add Document"}
               </Button>
             </div>
