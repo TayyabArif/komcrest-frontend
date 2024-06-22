@@ -4,14 +4,16 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
+import {handleResponse} from "../../../helper"
 
 const NewDocument = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
 
-  const [cookies] = useCookies(["myCookie"]);
+  const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
   const cookiesData = cookies.myCookie;
+  
   const [companyProducts, setCompanyProducts] = useState([]);
   const router = useRouter();
   const { id } = router.query;
@@ -89,12 +91,13 @@ const NewDocument = () => {
       };
 
       fetch(`${baseUrl}/documents/${id}`, requestOptions)
-        .then((response) => {
-          return response.json().then((data) => ({
+        .then( async (response) => {
+          const data = await handleResponse(response, router, cookies, removeCookie);
+          return {
             status: response.status,
             ok: response.ok,
             data,
-          }));
+          };
         })
         .then(({ status, ok, data }) => {
           if (ok) {
@@ -117,15 +120,16 @@ const NewDocument = () => {
       };
 
       fetch(`${baseUrl}/documents`, requestOptions)
-        .then((response) => {
-          console.log(">>>>>>>>>", response);
-          return response.json().then((data) => ({
+        .then( async (response) => {
+          const data = await handleResponse(response, router, cookies, removeCookie);
+          return {
             status: response.status,
             ok: response.ok,
             data,
-          }));
+          };
         })
         .then(({ status, ok, data }) => {
+          
           if (ok) {
             console.log("Success:", data);
             toast.success("Document created successfully");
@@ -172,7 +176,7 @@ const NewDocument = () => {
   useEffect(() => {
     getCompanyProducts();
     if (id) {
-      const token = cookiesData.token;
+      const token = cookiesData?.token;
       const requestOptions = {
         method: "GET",
         headers: {
@@ -181,12 +185,13 @@ const NewDocument = () => {
         redirect: "follow",
       };
       fetch(`${baseUrl}/documents/${id}`, requestOptions)
-        .then((response) => {
-          return response.json().then((data) => ({
+        .then( async (response) => {
+          const data = await handleResponse(response, router, cookies, removeCookie);
+          return {
             status: response.status,
             ok: response.ok,
             data,
-          }));
+          };
         })
         .then(({ status, ok, data }) => {
           if (ok) {
@@ -214,6 +219,15 @@ const NewDocument = () => {
     return documentData.title.length > 50;
   }, [documentData.title]);
 
+
+  function  filePath (filePath){
+    debugger
+    const path = filePath.split("-")
+    return path[1]
+  }
+
+
+  console.log("========",documentData)
   return (
     <div className="w-[100%] h-full">
       <div className="w-[80%] mx-auto py-4 mt-[4rem]">
@@ -240,9 +254,9 @@ const NewDocument = () => {
                   className="flex justify-center items-center border-2  border-dashed border-gray-300 rounded-lg p-10 bg-gray-100 cursor-pointer"
                 >
                   <input {...getInputProps()} />
-                  {documentData.file ? (
+                  {documentData.file || documentData.filePath ? (
                     <div className="mt-2">
-                      <p>{documentData.file.name}</p>
+                      <p>{documentData.file ? documentData.file?.name :  filePath(documentData.filePath)}</p>
                     </div>
                   ) : (
                     <p className="text-center text-gray-700 font-bold italic 2xl:text-[20px]">
