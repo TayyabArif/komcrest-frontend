@@ -22,7 +22,9 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-    font-family: "Aptos" !important;
+    /* font-family: "Aptos" !important; */
+    
+    font-family: 'futura-pt';
 }
 
 @layer utilities {

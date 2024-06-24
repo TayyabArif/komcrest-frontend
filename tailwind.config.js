@@ -21,9 +21,9 @@ module.exports = {
         adminPrimary: "#1c2435",
         "btn-primary": "#2457d7"
       },
-      fontFamily: {
-        sans: ['Aptos', 'ui-sans-serif', 'system-ui'],
-      },
+      // fontFamily: {
+      //   sans: ['Aptos', 'ui-sans-serif', 'system-ui'],
+      // },
     },
   },
   plugins: [nextui()],

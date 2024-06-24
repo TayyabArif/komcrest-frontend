@@ -8,9 +8,12 @@ import {useDisclosure} from "@nextui-org/react";
 import ConfirmationModal from '../../shared/ConfirmationModal';
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 
 
 const UsersTable = ({allUsers, setAllUsers, isDeleted, setIsDeleted}) => {
+  const [cookies] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const router = useRouter();
   const [selectedDecativateUser, setSelectedDecativateUser] = useState(null)
@@ -36,10 +39,12 @@ const UsersTable = ({allUsers, setAllUsers, isDeleted, setIsDeleted}) => {
 const handleDelete = async () => {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-
+  const token = cookiesData.token;
   const requestOptions = {
     method: "DELETE",
-    headers: myHeaders,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     redirect: "follow",
   };
 

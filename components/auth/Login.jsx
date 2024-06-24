@@ -111,7 +111,7 @@ const Login = ({ type }) => {
           type="email"
           placeholder="Email"
           className="mt-6 -ml-1"
-          classNames={{ inputWrapper: "h-[50px]" }}
+          classNames={{ inputWrapper: "h-[50px]", input: "text-base 2xl:text-[18px]", errorMessage: "text-base 2xl:text-[18px]" }}
         />
         <Input
           isRequired
@@ -130,11 +130,11 @@ const Login = ({ type }) => {
             </button>
           }
           type={isVisible ? "text" : "password"}
-          classNames={{ inputWrapper: "h-[50px]" }}
+          classNames={{ inputWrapper: "h-[50px]", input: "text-base 2xl:text-[18px]" }}
           className="mt-4 -ml-1"
         />
         <p
-          className="underline mt-1 cursor-pointer"
+          className="underline mt-1 cursor-pointer text-base 2xl:text-[18px]"
           onClick={() =>
             router.push(`/${type}/login/password-recovery/request`)
           }
@@ -144,7 +144,7 @@ const Login = ({ type }) => {
         <Button
           radius="none"
           size="sm"
-          className="mt-4 text-white px-[45px] text-sm bg-[#4fa82e] w-max rounded-[4px] -ml-1"
+          className="mt-4 text-white px-[45px] text-base 2xl:text-[18px] bg-[#4fa82e] w-max rounded-[4px] -ml-1"
           isDisabled={!formData.email || !formData.password || isLoading}
           isLoading={isLoading}
           onPress={handleSubmit}

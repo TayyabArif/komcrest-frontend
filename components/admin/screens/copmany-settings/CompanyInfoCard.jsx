@@ -5,10 +5,10 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
   const isDomainInvalid = React.useMemo(() => {
     if (formData.companyDomain === "") return false;
   
-    const firstChar = formData.companyDomain.charAt(0);
-    const includesDotCom = formData.companyDomain.includes(".com");
+    const firstChar = formData?.companyDomain?.charAt(0);
+    const includesDotCom = formData?.companyDomain?.includes(".com");
   
-    return firstChar === firstChar.toUpperCase() || includesDotCom;
+    return firstChar === firstChar?.toUpperCase() || includesDotCom;
   }, [formData.companyDomain]);
   return (
     <div className="flex flex-col bg-white shadow-md w-[45%] min-h-[500px] pb-10 mt-12">

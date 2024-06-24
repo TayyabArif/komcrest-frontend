@@ -6,10 +6,14 @@ import DocumentCard from "./shared/DocumentCard";
 import { useRouter } from "next/router";
 import ExampleCard from "./shared/ExampleCard";
 import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
+import {handleResponse} from "../../../helper"
+
 
 const AddDocument = () => {
-  const [cookies, setCookie] = useCookies(["myCookie"]);
+  const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
   const cookiesData = cookies.myCookie;
+  
 
   const router = useRouter();
   const [documentData, setDocumentData] = useState([]);
@@ -36,13 +40,14 @@ const AddDocument = () => {
 
     try {
       const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
-      const data = await response.json();
+      const data = await handleResponse(response, router, cookies,removeCookie);
+      // const data = await response.json();
       if (response.ok) {
         setDocumentData(data);
         setDataIsLoaded(true);
       } else {
         toast.error(data?.error);
-        console.error("Error:", data);
+        
       }
     } catch (error) {
       console.error("Error fetching user documents:", error);

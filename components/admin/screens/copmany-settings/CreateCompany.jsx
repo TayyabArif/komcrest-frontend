@@ -6,6 +6,8 @@ import { useDisclosure } from "@nextui-org/react";
 import ConfirmationModal from "../../shared/ConfirmationModal";
 import { toast } from "react-toastify";
 import { useRouter } from 'next/router';
+import { useCookies } from "react-cookie";
+
 
 const modalData = {
   heading: "Create Company",
@@ -16,6 +18,8 @@ const modalData = {
 const CreateCompany = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [cookies] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
@@ -59,9 +63,11 @@ const CreateCompany = () => {
     }
   };
   const handleSubmit = async () => {
+    const token = cookiesData.token;
     setIsLoading(true)
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
 
     const raw = JSON.stringify({
       name: formData?.companyName,

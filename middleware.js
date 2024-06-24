@@ -1,5 +1,6 @@
 // middleware.js
 import { NextResponse } from 'next/server';
+// import jwt from 'jsonwebtoken';
 
 export function middleware(request) {
   const { cookies } = request;
@@ -40,6 +41,12 @@ export function middleware(request) {
 
       const { token, role, companyType } = cookieValue;
       console.log("Token:", token, "Role:", role, "Company Type:", companyType);
+
+      // jwt.verify(token, "37ce447e87dd15157a1303fd936d5afcf9e12e41d0638770d59a09eddc5756726603c4381c3d78ab327cd3afc4dc02c03ebffe9151affd81856a4b704ac28124", (err, decoded) => {
+      //   if (err) {
+      //     console.log(">>>>>>>>>>>>>>>")
+      //     return NextResponse.redirect(new URL('/vendor/login/access', request.url)); // Redirect on token expiration
+      //   }})
 
       // Define role-based protected routes
       const adminRoutes = ['/admin', '/admin/*'];
