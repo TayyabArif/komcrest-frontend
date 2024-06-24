@@ -6,6 +6,7 @@ import { useDisclosure, CircularProgress } from "@nextui-org/react";
 import ConfirmationModal from "../../shared/ConfirmationModal";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 
 const modalData = {
   heading: "Create Company",
@@ -16,6 +17,8 @@ const modalData = {
 const UpdateCompany = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
+  const [cookies] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
   const [isLoading, setIsLoading] = useState(false)
   const [isCompanyLoading, setIsCompanyLoading] = useState(true)
   const [products, setProducts] = useState([]);
@@ -31,12 +34,15 @@ const UpdateCompany = () => {
   });
   useEffect(() => {
     if (id) {
+      const token = cookiesData.token;
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
       const requestOptions = {
         method: "GET",
-        headers: myHeaders,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         redirect: "follow",
       };
 
@@ -94,9 +100,11 @@ const UpdateCompany = () => {
   };
 
   const handleSubmit = async () => {
+    const token = cookiesData.token;
     setIsLoading(true)
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
 
     const raw = JSON.stringify({
       name: formData?.companyName,

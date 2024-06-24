@@ -6,8 +6,11 @@ import { useDisclosure } from "@nextui-org/react";
 import ConfirmationModal from "../../shared/ConfirmationModal";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 
 const UpdateUser = () => {
+  const [cookies] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
   const [isClick, setClick] = useState(false)
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false)
@@ -79,12 +82,14 @@ const UpdateUser = () => {
     setIsLoading(true)
     const myHeaders = new Headers();
     myHeaders.append("Host", "");
-
+    const token = cookiesData.token;
     const formdata = new FormData();
 
     const requestOptions = {
       method: "GET",
-      headers: myHeaders,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       redirect: "follow",
     };
 
@@ -102,10 +107,12 @@ const UpdateUser = () => {
     if (id) {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
-
+      const token = cookiesData.token;
       const requestOptions = {
         method: "GET",
-        headers: myHeaders,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         redirect: "follow",
       };
 
@@ -132,9 +139,10 @@ const UpdateUser = () => {
   }, [id]);
 
   const handleSubmit = async () => {
+    const token = cookiesData.token;
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
+    myHeaders.append("Authorization", `Bearer ${token}`);
     const raw = JSON.stringify({
       firstName: formData?.firstName,
       lastName: formData?.lastName,

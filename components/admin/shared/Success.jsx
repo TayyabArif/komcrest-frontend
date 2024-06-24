@@ -13,7 +13,7 @@ const Success = ({type, text}) => {
         </p>
         <Button
           size="sm"
-          className="mt-3 text-white px-8 text-sm bg-[#4fa82e] rounded-[6px]"
+          className="mt-3 text-white px-8 text-base 2xl:text-[18px] bg-[#4fa82e] rounded-[6px]"
           onPress={() => router.push(`/${type}/login/access`)}
         >
           Access Komcrest

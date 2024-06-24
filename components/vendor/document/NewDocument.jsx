@@ -269,7 +269,7 @@ const NewDocument = () => {
 
             <div className="flex my-2 mt-4 justify-between gap-4">
               <div className="w-[50%]">
-                <label className="text-[16px] 2xl:text-[18px]">Title(max 50 characters)</label>
+                <label className="text-[16px] 2xl:text-[20px]">Title(max 50 characters)</label>
                 <Input
                   type="text"
                   variant="bordered"
@@ -280,6 +280,9 @@ const NewDocument = () => {
                   errorMessage="Title should be less than 50 characters"
                   value={documentData.title}
                   onChange={handleData}
+                  classNames={{
+                    input: "text-base 2xl:text-[18px]"
+                  }}
                 />
               </div>
 
@@ -292,12 +295,15 @@ const NewDocument = () => {
                   name="documentLink"
                   value={documentData.documentLink}
                   onChange={handleData}
+                  classNames={{
+                    input: "text-base 2xl:text-[18px]"
+                  }}
                 />
               </div>
             </div>
 
             <div className="my-2 w-[49%]">
-              <label className="text-[16px] 2xl:text-[18px]">Description(max 150 characters)</label>
+              <label className="text-[16px] 2xl:text-[20px]">Description(max 150 characters)</label>
               <Textarea
                 variant="bordered"
                 size="sm"
@@ -307,6 +313,9 @@ const NewDocument = () => {
                 name="description"
                 value={documentData.description}
                 onChange={handleData}
+                classNames={{
+                  input: "text-base 2xl:text-[18px]"
+                }}
               />
             </div>
             <div>
@@ -327,7 +336,7 @@ const NewDocument = () => {
           </div>
         </div>
             <div className="flex justify-end mt-4 ">
-              <Button color="primary" onPress={SubmitDocument} className="rounded-md 2xl:text-[20px]">
+              <Button color="primary" onPress={SubmitDocument} className="rounded-md 2xl:text-[20px]" isDisabled={isDescriptionInvalid || isTitleInvalid}>
                 {id ? "Update Document" : "Add Document"}
               </Button>
             </div>

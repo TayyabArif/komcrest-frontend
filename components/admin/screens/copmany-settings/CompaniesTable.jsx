@@ -8,8 +8,7 @@ import {useDisclosure} from "@nextui-org/react";
 import ConfirmationModal from '../../shared/ConfirmationModal';
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
-
-
+import { useCookies } from "react-cookie";
 
 const modalDataDeactivate = {
   heading: "Deactivate Company",
@@ -25,6 +24,8 @@ const modalDataActivate = {
 }
 
 const CompaniesTable = ({allCompanies, setAllCompanies, isDeleted, setIsDeleted}) => {
+  const [cookies] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [selectedDecativateCompany, setSelectedDecativateCompany] = useState("")
   const [updateAction, setupdateAction] = useState("")
@@ -45,15 +46,19 @@ const CompaniesTable = ({allCompanies, setAllCompanies, isDeleted, setIsDeleted}
 };
 
 const handleUpdate = async () => {
+  const token = cookiesData.token;
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", `Bearer ${token}`);
   if (updateAction === "Reactive") {
     const myHeaders = new Headers();
     myHeaders.append("Host", "tenant1.localhost");
 
     const requestOptions = {
       method: "POST",
-      headers: myHeaders,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       redirect: "follow"
     };
 
@@ -79,7 +84,9 @@ const handleUpdate = async () => {
   } else {
     const requestOptions = {
       method: "DELETE",
-      headers: myHeaders,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       redirect: "follow",
     };
   

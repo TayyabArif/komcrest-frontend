@@ -154,7 +154,7 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
             type={isPassowrdVisible ? "text" : "password"}
             placeholder="Create a password"
             className="mt-8"
-            classNames={{ inputWrapper: "h-[50px]" }}
+            classNames={{ inputWrapper: "h-[50px]", input: "text-base 2xl:text-[18px]", errorMessage: "text-base 2xl:text-[18px]" }}
             endContent={
               <button
                 className="focus:outline-none"
@@ -174,7 +174,7 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
             type={isConfirmPassowrdVisible ? "text" : "password"}
             placeholder="confirm password"
             className="mt-5"
-            classNames={{ inputWrapper: "h-[50px]" }}
+            classNames={{ inputWrapper: "h-[50px]", input: "text-base 2xl:text-[18px]" }}
             endContent={
               <button
                 className="focus:outline-none"
@@ -189,9 +189,9 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
           {isNew &&
             <div className="flex flex-col">
               {isTermsService &&
-                <Checkbox isSelected={isTermsAggree} onChange={() => setIsTermsAggree(!isTermsAggree)} size="md" className="mt-2" classNames={{ label: "mt-0" }}>
+                <Checkbox isSelected={isTermsAggree} onChange={() => setIsTermsAggree(!isTermsAggree)} size="md" className="mt-2" classNames={{ label: "mt-0 text-base 2xl:text-[18px]" }}>
                   {" "}
-                  I agree to Komcrest’s <a className="underline" onClick={() => {
+                  I agree to Komcrest’s <a className="underline text-base 2xl:text-[18px]" onClick={() => {
                     setIsTermsServiceClick(true)
                     onOpen()
                     }}>
@@ -200,7 +200,7 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
                 </Checkbox>
               }
               {isPrivacyPolicy &&
-                <Checkbox isSelected={isPrivacyAggree} onChange={() => setIsPrivacyAggree(!isPrivacyAggree)} size="md" className="mt-2" classNames={{ label: "mt-0" }}>
+                <Checkbox isSelected={isPrivacyAggree} onChange={() => setIsPrivacyAggree(!isPrivacyAggree)} size="md" className="mt-2" classNames={{ label: "mt-0 text-base 2xl:text-[18px]" }}>
                   {" "}
                   I agree to Komcrest’s <a className="underline" onClick={() => {
                     setIsPrivacyPolicyClick(true)
@@ -214,7 +214,7 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
           <Button
             radius="sm"
             size="sm"
-            className={`${isNew ? "mt-4" :"mt-7"} text-white px-8 text-sm bg-[#4fa82e]`}
+            className={`${isNew ? "mt-4" :"mt-7"} text-white px-8 text-base 2xl:text-[18px] bg-[#4fa82e]`}
             isDisabled={!formData?.password || !formData?.confirmPassword || isLoading || !formData.isPasswordStrong
             }
             isLoading={isLoading}
@@ -223,7 +223,7 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
             {isNew ? "Register": "Update password"}
           </Button>
           {(!formData.isPasswordStrong && formData?.password.length > 0) && (
-            <p className="text-red-500 text-sm mt-2">
+            <p className="text-red-500 text-base 2xl:text-[18px] mt-2">
                 Password must be at least 8 characters long and include at least one letter, one number, and one special character.
             </p>
           )}

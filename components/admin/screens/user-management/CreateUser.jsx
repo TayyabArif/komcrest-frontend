@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useRouter } from 'next/router';
 import { useDisclosure } from "@nextui-org/react";
 import ConfirmationModal from "../../shared/ConfirmationModal";
+import { useCookies } from "react-cookie";
 
 const modalData = {
   heading: "Create User",
@@ -13,7 +14,8 @@ const modalData = {
   confirmText: "Send invitation"
 }
 const CreateUser = () => {
-
+  const [cookies] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
   const [isClick, setClick] = useState(false)
   const [allCompanies, setAllCompanies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -67,12 +69,14 @@ const CreateUser = () => {
   const getAllCompanies = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Host", "");
-
+    const token = cookiesData.token;
     const formdata = new FormData();
 
     const requestOptions = {
       method: "GET",
-      headers: myHeaders,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       redirect: "follow",
     };
 
@@ -87,9 +91,10 @@ const CreateUser = () => {
 
   const handleSubmit = async () => {
     setIsLoading(true)
+    const token = cookiesData.token;
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
+    myHeaders.append("Authorization", `Bearer ${token}`);
     const raw = JSON.stringify({
       firstName: formData?.firstName,
       lastName: formData?.lastName,

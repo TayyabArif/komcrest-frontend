@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Button, CircularProgress } from "@nextui-org/react";
 import UsersTable from './UsersTable';
 import { useRouter } from 'next/router';
+import { useCookies } from "react-cookie";
 
 const UserManagement = () => {
+  const [cookies] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
   const [allUsers, setAllUsers] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false)
@@ -13,9 +16,13 @@ const UserManagement = () => {
     getAllUsers();
   }, [isDeleted]);
   const getAllUsers = async () => {
+    const token = cookiesData.token;
     setIsLoading(true)
     const requestOptions = {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       redirect: "follow"
     };
 

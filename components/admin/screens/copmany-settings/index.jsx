@@ -3,9 +3,12 @@ import { Button, CircularProgress } from "@nextui-org/react";
 import CompaniesTable from "./CompaniesTable";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 
 const CompanySettings = () => {
   const [allCompanies, setAllCompanies] = useState([])
+  const [cookies] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false)
   const router = useRouter();
@@ -15,6 +18,7 @@ const CompanySettings = () => {
   }, [isDeleted]);
 
   const getAllCompanies = async () => {
+    const token = cookiesData.token;
     setIsLoading(true)
     const myHeaders = new Headers();
     myHeaders.append("Host", "");
@@ -23,7 +27,9 @@ const CompanySettings = () => {
 
     const requestOptions = {
       method: "GET",
-      headers: myHeaders,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       redirect: "follow",
     };
 
