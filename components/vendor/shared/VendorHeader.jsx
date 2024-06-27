@@ -2,7 +2,9 @@ import React from "react";
 import { useRouter } from 'next/router';
 import { Button } from "@nextui-org/react";
 
-const DocumentHeader = ({buttonShow}) => {
+const VendorHeader = ({buttonShow , headerData}) => {
+  debugger
+  console.log("========",headerData)
  
   const router = useRouter()
   return (
@@ -29,4 +31,4 @@ const DocumentHeader = ({buttonShow}) => {
   );
 };
 
-export default DocumentHeader;
+export default VendorHeader;

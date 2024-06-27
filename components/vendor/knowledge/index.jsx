@@ -1,74 +1,20 @@
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import React from 'react'
+import VendorHeader from '../shared/VendorHeader'
 import { Button } from "@nextui-org/react";
-import VendorHeader from "../shared/VendorHeader";
-import DocumentCard from "./shared/DocumentCard";
 import { useRouter } from "next/router";
-import ExampleCard from "./shared/ExampleCard";
-import { useCookies } from "react-cookie";
-import { toast } from "react-toastify";
-import {handleResponse} from "../../../helper"
 
+const KnowledgeHome = () => {
+  const router = useRouter()
 
-const AddDocument = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
-  const cookiesData = cookies.myCookie;
-  
-
-  const router = useRouter();
-  const [documentData, setDocumentData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [dataIsLoaded, setDataIsLoaded] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
-
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-  useEffect(() => {
-    getUserDocument();
-  }, [isDeleted]);
-
-  const getUserDocument = async () => {
-    setIsLoading(true);
-    const token = cookiesData && cookiesData.token;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-
-    try {
-      const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
-      const data = await handleResponse(response, router, cookies,removeCookie);
-      // const data = await response.json();
-      if (response.ok) {
-        setDocumentData(data);
-        setDataIsLoaded(true);
-      } else {
-        toast.error(data?.error);
-        
-      }
-    } catch (error) {
-      console.error("Error fetching user documents:", error);
-    } finally {
-      setIsLoading(false);
+    let headerData = {
+        title:"Knowledge",
+        description1:"Quickly add requirements, questions and answers to your account.",
     }
-  };
-
   return (
     <div>
-      <VendorHeader buttonShow={documentData.length > 0} />
-      {dataIsLoaded &&
-        (documentData.length > 0 ? (
-          <DocumentCard
-            cardData={documentData}
-            setIsDeleted={setIsDeleted}
-            isDeleted={isDeleted}
-          />
-        ) : (
-          <div className="text-center space-y-[3rem] py-7">
-            <div className="text-center w-[36%] mx-auto my-5">
+    <VendorHeader headerData = {headerData} buttonShow={true}/>
+    <div className=" py-7  min-h-[85vh] flex items-center justify-center">
+            <div className="text-center w-[43%] mx-auto my-5">
               <div className="flex justify-center items-center">
                 <svg
                   height="100px"
@@ -110,41 +56,28 @@ const AddDocument = () => {
                     </g>
                   </g>
                 </svg>
-                {/* <Image
-                  src="/document.png"
-                  alt="document"
-                  className="dark:invert"
-                  width={100}
-                  height={24}
-                  priority
-                /> */}
               </div>
-              <span className="font-semibold text-[18px] 2xl:text-[20px]">
-                It appears that you haven’t uploaded any documents yet.
-              </span>
-              <p className="text-[15px] leading-4 2xl:text-[18px]">
-                We encourage you to add key documents that you frequently share
-                with your prospects and clients. We will index them to improve
-                the accuracy of Komcrest Generative AI.
+              <h1 className="font-semibold text-[18px] 2xl:text-[20px] w-[85%] mx-auto">
+              It appears that you haven’t uploaded any requirements, questions and answers yet.
+              </h1>
+              <p className="text-[15px] leading-4 2xl:text-[18px] w-[85%] mx-auto">
+              We encourage you to add key documents that you frequently share with your prospects and clients. We will index them to improve the accuracy of Komcrest AI responses.
+              </p>
+              <p className='my-5'>
+              You don’t know where to start from? Download our list of questions HERE. It will help you shape build up your knowledge base and clarify your roadmap.
               </p>
               <Button
                 radius="none"
                 size="sm"
                 className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
-                onClick={() => {
-                  router.push("/vendor/document/AddDocument");
-                }}
+               onClick={()=>router.push("/vendor/knowledge/UploadQuestions")}
               >
-                Add documents
+                 Add questions and answers 
               </Button>
             </div>
-            <div className="space-y-2">
-              <ExampleCard />
-            </div>
           </div>
-        ))}
     </div>
-  );
-};
+  )
+}
 
-export default AddDocument;
+export default KnowledgeHome
