@@ -17,7 +17,6 @@ export function middleware(request) {
   ];
 
   if (unprotectedRoutes.includes(pathname)) {
-    console.log(">>>>>>>>+++++++")
     return NextResponse.next();
   }
 
@@ -92,5 +91,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/vendor/document' ,'/vendor/document/AddDocument'],
+  matcher: ['/admin/:path*'],
 };
