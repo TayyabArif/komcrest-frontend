@@ -221,13 +221,10 @@ const NewDocument = () => {
 
 
   function  filePath (filePath){
-    debugger
     const path = filePath.split("-")
     return path[1]
   }
 
-
-  console.log("========",documentData)
   return (
     <div className="w-[100%] h-full">
       <div className="w-[80%] mx-auto py-4 mt-[4rem]">

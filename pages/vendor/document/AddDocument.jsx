@@ -1,12 +1,12 @@
 import React from "react";
-import DocumentLayout from "../../../components/vendor/document/DocumentLayout";
+import VendorLayout from "../../../components/vendor/shared/vendorLayout";
 import NewDocument from "@/components/vendor/document/NewDocument";
 
 const document = () => {
   return (
-    <DocumentLayout>
+    <VendorLayout>
       <NewDocument />
-    </DocumentLayout>
+    </VendorLayout>
   );
 };
 

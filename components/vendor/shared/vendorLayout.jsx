@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 
 
-const DocumentLayout = ({ children }) => {
+const VendorLayout = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
   const router = useRouter()
   
@@ -27,7 +27,7 @@ const DocumentLayout = ({ children }) => {
               <FileText size={20} />
               <h1 className="text-[18px] 2xl:text-[20px] py-2">Documents</h1>
             </div>
-            <div className="flex gap-1 items-center 2xl:text-[20px] px-4 cursor-pointer">
+            <div className="flex gap-1 items-center 2xl:text-[20px] px-4 cursor-pointer"  onClick={() => router.push("/vendor/knowledge")}>
               <AlignLeft size={20} />
               <h1 className="text-[18px] 2xl:text-[20px] py-2">Knowledge</h1>
             </div>
@@ -52,7 +52,7 @@ const DocumentLayout = ({ children }) => {
       </div>
       <div className="w-[85%]">
         <div className="py-2 text-right font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]" onClick={handleLogout}><h1>Logout</h1></div>
-       <div className="flex flex-col  bg-[#ebeef2] h-full">
+       <div className="flex flex-col  bg-[#ebeef2] min-h-[95vh]">
         {children}
       </div>
       </div>
@@ -60,4 +60,4 @@ const DocumentLayout = ({ children }) => {
   );
 };
 
-export default DocumentLayout;
+export default VendorLayout;
