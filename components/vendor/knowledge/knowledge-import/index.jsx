@@ -5,7 +5,7 @@ import SelectHeaderRow from "./SelectHeaderRow";
 import { Check, language } from "lucide-react";
 import MatchColum from "./MatchColum";
 import { Button, Checkbox, Select, SelectItem } from "@nextui-org/react";
-import Validate from "./validate";
+import Validate from "./Validate";
 import Completed from "./Completed";
 import { useCookies } from "react-cookie";
 import {handleResponse}  from "../../../../helper/index"
