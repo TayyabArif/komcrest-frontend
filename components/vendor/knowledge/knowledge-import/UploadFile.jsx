@@ -4,27 +4,38 @@ import Dropzone from 'react-dropzone';
 import * as XLSX from 'xlsx';
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import SelectHeaderRow from './SelectHeaderRow';
+import { useRouter } from "next/router";
 
-const UploadFile = ({setExcelData, setStepper, setProgressBar}) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+
+
+const UploadFile = ({ setStepper, setProgressBar ,setKnowledgeData ,knowledgeData}) => {
+  const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   
-    const handleDrop = (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        debugger
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        setExcelData(jsonData);
-        onClose()
-        setStepper(1)
-        setProgressBar(35)
-      };
-      reader.readAsArrayBuffer(file);
+  const handleDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      
+      // Filter out empty rows
+      const filteredData = jsonData.filter(row => row.some(cell => cell !== null && cell !== undefined && cell !== ""));
+      
+      setKnowledgeData({
+        ...knowledgeData,
+        name : file.name,
+        questions : filteredData
+      }) 
+      onClose();
+      setStepper(1);
+      setProgressBar(35);
     };
+    reader.readAsArrayBuffer(file);
+  };
   
     const dropzoneStyle = {
       border: '2px dashed #ccc',
@@ -34,7 +45,7 @@ const UploadFile = ({setExcelData, setStepper, setProgressBar}) => {
     };
    
     return (
-      <div>
+      <div className='space-y-10'>
         <table className="table-auto border-[1px] border-collapse border-gray-400 w-full text-sm">
           <thead>
             <tr className='text-left'>
@@ -59,16 +70,34 @@ const UploadFile = ({setExcelData, setStepper, setProgressBar}) => {
             </tr>
           </tbody>
         </table>
-  
-        <div className='flex justify-center'>
+        <div className='space-y-6'>
+        <div className='w-[34%] mx-auto text-center' >
+             <p className="text-[15px] leading-4 2xl:text-[18px]">
+                       Two columns are required for import: question and answer. Columns don’t need to be in a specific order. You’ll be able to map, rename, or remove columns in the next step.
+                       Upload .xlsx, .xls or .csv file
+              </p>
+          </div>
+        <div className='flex justify-center gap-3'>
+        <Button
+            onClick={() =>
+              router.push("/vendor/knowledge")
+            }
+            radius="none"
+            size="sm"
+            className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-300 w-max rounded-[4px] "
+          >
+            Cancel
+          </Button>
           <Button
             onPress={onOpen}
             radius="none"
             size="sm"
-            className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
+            className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
           >
-            Add documents
+            Upload file
           </Button>
+        </div>
+
         </div>
   
         <Modal isOpen={isOpen} onClose={onClose}>

@@ -1,8 +1,8 @@
 import React from 'react'
 
-const SelectHeaderRow = ({excelData}) => {
-    
-      const thStyle = {
+const Validate = ({knowledgeData}) => {
+
+    const thStyle = {
         border: '1px solid #dddddd',
         textAlign: 'left',
         padding: '4px',
@@ -13,25 +13,24 @@ const SelectHeaderRow = ({excelData}) => {
         textAlign: 'left',
         padding: '4px',
       };
-    
   return (
     <div className='w-full overflow-x-auto'>
         <h1 className='my-2 font-semibold'>Your table - 2021 CAIQ Questionnaire 20210914</h1>
-       {excelData ? (
+       {knowledgeData.questions ? (
           <div>
             <table className='text-sm '  >
               <thead>
                 <tr>
-                  {excelData[0].map((header, index) => (
-                    <th key={index} style={thStyle}>{header}</th>
+                  {knowledgeData?.questions[0]?.map((header, index) => (
+                    <th key={index} style={thStyle} >{header}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {excelData.slice(1).map((row, rowIndex) => (
+                {knowledgeData?.questions.slice(1).map((row, rowIndex) => (
                   <tr key={rowIndex}>
                     {row.map((cell, cellIndex) => (
-                      <td key={cellIndex} style={tdStyle} >{cell}</td>
+                      <td key={cellIndex} style={tdStyle}>{cell}</td>
                     ))}
                   </tr>
                 ))}
@@ -45,4 +44,4 @@ const SelectHeaderRow = ({excelData}) => {
   )
 }
 
-export default SelectHeaderRow
+export default Validate

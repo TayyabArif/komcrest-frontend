@@ -2,17 +2,16 @@ import React from 'react'
 import VendorHeader from '../shared/VendorHeader'
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/router";
+import KnowledgeHeader from "../shared/KnowledgeHeader"
+ 
 
 const KnowledgeHome = () => {
   const router = useRouter()
 
-    let headerData = {
-        title:"Knowledge",
-        description1:"Quickly add requirements, questions and answers to your account.",
-    }
+    
   return (
     <div>
-    <VendorHeader headerData = {headerData} buttonShow={true}/>
+    <KnowledgeHeader  buttonShow={false}/>
     <div className=" py-7  min-h-[85vh] flex items-center justify-center">
             <div className="text-center w-[43%] mx-auto my-5">
               <div className="flex justify-center items-center">
@@ -70,7 +69,7 @@ const KnowledgeHome = () => {
                 radius="none"
                 size="sm"
                 className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
-               onClick={()=>router.push("/vendor/knowledge/UploadQuestions")}
+               onClick={()=>router.push("/vendor/knowledge/Import")}
               >
                  Add questions and answers 
               </Button>

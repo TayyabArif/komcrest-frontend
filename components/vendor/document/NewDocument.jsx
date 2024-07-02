@@ -221,7 +221,6 @@ const NewDocument = () => {
 
 
   function  filePath (filePath){
-    debugger
     const path = filePath.split("-")
     return path[1]
   }

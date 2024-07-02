@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Select, SelectItem ,Checkbox } from "@nextui-org/react";
 
 
-const MatchColum = ({ excelData, setExcelData }) => {
-  const [selectedValues, setSelectedValues] = useState(excelData ? Array(excelData[0].length).fill('') : []);
+const MatchColum = ({ setKnowledgeData ,knowledgeData }) => {
+  const [selectedValues, setSelectedValues] = useState(knowledgeData.questions ? Array(knowledgeData.questions[0]?.length).fill('') : []);
  
 
 
@@ -37,33 +37,41 @@ const MatchColum = ({ excelData, setExcelData }) => {
     newSelectedValues[index] = value;
     setSelectedValues(newSelectedValues);
 
-    let updateData = [...excelData];
+    let updateData = [...knowledgeData.questions];
     const header = updateData[0];
     header[index] = value;
     updateData[0] = header;
-    setExcelData(updateData);
+    setKnowledgeData({
+      ...knowledgeData,
+      questions : updateData
+    }) 
   };
 
+  // const getAvailableOptions = (index) => {
+  //   const selected = selectedValues.filter((value, i) => i !== index);
+  //   return selectOptions.filter(option => !selected.includes(option.label));
+  // };
+
   const getAvailableOptions = (index) => {
-    const selected = selectedValues.filter((value, i) => i !== index);
-    return selectOptions.filter(option => !selected.includes(option.label));
+    const selected = selectedValues.filter((value, i) => i !== index && value !== "Do not map");
+    return selectOptions.filter(option => option.label === "Do no map" || !selected.includes(option.label));
   };
 
   return (
     <div className='  h-full'>
       <h1 className='my-2 font-semibold'>Your table - 2021 CAIQ Questionnaire 20210914</h1>
-      {excelData ? (
+      {knowledgeData.questions ? (
         <div>
           <table className='text-sm'>
             <thead>
               <tr>
-                {excelData[0].map((header, index) => (
+                {knowledgeData.questions[0]?.map((header, index) => (
                   <th key={index} style={{ ...thStyle }} className='w-[220px] h-[30px] '>{header}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {excelData.slice(1, 3).map((row, rowIndex) => (
+              {knowledgeData.questions.slice(1, 3).map((row, rowIndex) => (
                 <tr key={rowIndex}>
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex} style={{ ...tdStyle }}>
@@ -76,7 +84,7 @@ const MatchColum = ({ excelData, setExcelData }) => {
                 <td className='pt-5 font-semibold'>Will mapped with</td>
               </tr>
               <tr>
-                {excelData[0].map((header, index) => (
+                {knowledgeData.questions[0]?.map((header, index) => (
                   <td key={index}>
                     <Select
                       variant="bordered"

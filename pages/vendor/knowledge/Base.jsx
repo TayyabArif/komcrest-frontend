@@ -1,13 +1,13 @@
 import React from 'react'
-import Questions from '@/components/vendor/knowledge/questions'
 import VendorLayout from "../../../components/vendor/shared/vendorLayout";
+import KnowledgeBase from "../../../components/vendor/knowledge/knowledge-base"
 
-const UploadQuestions = () => {
+const Base = () => {
   return (
     <VendorLayout>
-      <Questions />
+        <KnowledgeBase />
     </VendorLayout>
   )
 }
 
-export default UploadQuestions
+export default Base
