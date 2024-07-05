@@ -150,7 +150,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
                           className="py-1 px-2"
                         >
                           {komcrestCategories?.map((item, index) => (
-                              <option value={item?.value}>{item?.text}</option>
+                              <option key={index} value={item?.value}>{item?.text}</option>
                           ))}
                         </select>
                       </td>
