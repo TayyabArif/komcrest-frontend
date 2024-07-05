@@ -31,9 +31,16 @@ const NewQuestion = () => {
     { key: "Security Governance", label: "Security Governance" },
     { key: "Vendor Management", label: "Vendor Management" },
   ];
+
+  const CuratorOption = [
+    { key: "Option1", label: "Option 1" },
+    { key: "Option2", label: "Option 2" },
+  ];
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [companyProducts, setCompanyProducts] = useState([]);
+  const [documentData, setDocumentData] = useState([]);
+  const [CompanyUserData , setCompanyUserData] = useState([])
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
   const { id } = router.query;
@@ -47,7 +54,7 @@ const NewQuestion = () => {
     category: "",
     curator: "",
     language: "",
-    reference: "",
+    documentId: "",
   });
 
   const handleCheckboxChange = (id) => {
@@ -64,7 +71,10 @@ const NewQuestion = () => {
   };
 
   const handleData = (e) => {
+
     const { name, value } = e.target;
+    alert(name)
+    alert(value)
     setNewQuestion((prevData) => ({
       ...prevData,
       [name]: value,
@@ -118,6 +128,8 @@ const NewQuestion = () => {
 
   useEffect(() => {
     getCompanyProducts();
+    getUserDocument();
+    getCompanyUser()
   }, []);
 
   useEffect(() => {
@@ -191,21 +203,112 @@ const NewQuestion = () => {
         })
         .then(({ status, ok, data }) => {
           if (ok) {
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>");
             toast.success("Question updated successfully");
-            router.push("/vendor/knowledge/Base");
+            router.push("/vendor/knowledge");
           } else {
             toast.error(data?.error);
             console.error("Error:", data);
           }
         })
         .catch((error) => console.error(error));
+    }else{
+      {
+       let requestOptions = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: jsonPayload,
+          redirect: "follow",
+        };
+  
+        fetch(`${baseUrl}/questions`, requestOptions)
+          .then( async (response) => {
+            const data = await handleResponse(response, router, cookies, removeCookie);
+            return {
+              status: response.status,
+              ok: response.ok,
+              data,
+            };
+          })
+          .then(({ status, ok, data }) => {
+            if (ok) {
+              console.log("Success:", data);
+              toast.success("Question created successfully");
+              router.push("/vendor/knowledge");
+            } else {
+              toast.error(data?.error || "question not Created");
+              console.error("Error:", data);
+            }
+          })
+          .catch((error) => console.error(error));
+      }
     }
   };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
+
+  const getUserDocument = async () => {
+    const token = cookiesData && cookiesData.token;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
+      const data = await handleResponse(response, router, cookies,removeCookie);
+      if (response.ok) {
+
+        const referenceOptions = data.map(item => ({
+          id: item.id,
+          title: item.title
+      }));
+        setDocumentData(referenceOptions);
+        console.log(">>>>>>,",referenceOptions)
+      } else {
+        toast.error(data?.error);
+        
+      }
+    } catch (error) {
+      console.error("Error fetching user documents:", error);
+    } 
+  };
+
+  const getCompanyUser = async () => {
+    const token = cookiesData && cookiesData.token;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(`${baseUrl}/get-company-users`, requestOptions);
+      const data = await handleResponse(response, router, cookies,removeCookie);
+      if (response.ok) {
+        const curatorOptions = data.map(item => ({
+          id: item.id,
+          name: item.firstName
+      }));
+      setCompanyUserData(curatorOptions);
+        console.log(">>>>>>,",curatorOptions)
+      } else {
+        toast.error(data?.error);
+        
+      }
+    } catch (error) {
+      console.error("Error fetching user documents:", error);
+    } 
+  };
 
   return (
     <div className="w-[100%] h-full">
@@ -329,9 +432,9 @@ const NewQuestion = () => {
                   value={newQuestion.curator}
                   onChange={(e) => handleData(e)}
                 >
-                  {categoryOption?.map((option) => (
-                    <SelectItem key={option.key} value={option.label}>
-                      {option.label}
+                  {CompanyUserData?.map((option) => (
+                    <SelectItem key={option.key} value={option.name}>
+                      {option.name}
                     </SelectItem>
                   ))}
                 </Select>
@@ -354,34 +457,39 @@ const NewQuestion = () => {
 
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">Reference</label>
-                <Input
-                  type="text"
+                <Select
                   variant="bordered"
+                  className="w-full bg-transparent"
                   size="sm"
-                  name="reference"
-                  value={newQuestion.reference}
-                  onChange={handleData}
-                  classNames={{
-                    input: "text-base 2xl:text-[18px]",
-                  }}
-                />
+                  placeholder="Reference"
+                  name="documentId"
+                  value={newQuestion.documentId}
+                  onChange={(e) => handleData(e)}
+                >
+                  {documentData?.map((option) => (
+                    <SelectItem key={option.id} value={option.id}>
+                      {option.title}
+                    </SelectItem>
+                  ))}
+                </Select>
               </div>
             </div>
           </div>
           <div className="flex justify-end mt-4 gap-3">
             <Button
               size="sm"
-              className="rounded-md 2xl:text-[20px] bg-red-200 py-0 text-red-500"
+              className="rounded-md 2xl:text-[20px] bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
+              onClick={()=>router.push("/vendor/knowledge")}
             >
               Cancel
             </Button>
             <Button
               size="sm"
               color="primary"
-              className="rounded-md 2xl:text-[20px]"
+              className="rounded-md 2xl:text-[20px] text-[13px] font-semibold"
               onClick={handleSubmit}
             >
-              {`${id ? "Update" : "Add"}`} Question
+              {`${id ? "Update" : "Add"}`}
             </Button>
           </div>
         </div>

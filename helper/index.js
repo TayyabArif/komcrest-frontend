@@ -17,13 +17,14 @@ export const formatDate = (dateString) => {
   }
 
   export const handleResponse = async (response  ,router, cookies,removeCookie) => {
-   
+     console.log(">>>>>>>>>")
+    //  debugger
     const data = await response.json();
     if (response.ok) {
       return data;
     } else if (response.status === 400) {
       // router.push("/vendor/login/access");
-      console.log(">>>+++++++++++++++")
+      console.log(">>>++")
       removeCookie('myCookie', { path: '/' });
       router.push("/vendor/login/access");
       toast.error(data?.error);

@@ -10,6 +10,7 @@ import Completed from "./Completed";
 import { useCookies } from "react-cookie";
 import {handleResponse}  from "../../../../helper/index"
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 const UploadQuestions = () => {
   const [stepper, setStepper] = useState(0);
@@ -18,12 +19,26 @@ const UploadQuestions = () => {
   const cookiesData = cookies.myCookie;
   const [companyProducts, setCompanyProducts] = useState([]);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const router = useRouter()
+  const [selectedHeader , setSelectedHeader] = useState([])
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const [updateHeader , setUpdateHeader] = useState([]) 
+  const [mappedIndexValue , setMappedIndexValue] = useState([])
+
+
+
   const [knowledgeData, setKnowledgeData] = useState({
     name: "",
     language: "",
     productIds: [],
     questions: [],
   });
+
+  const [updatedData , setUpdatedData] = useState({})
+
+
+
+  const [selectedValues, setSelectedVsalues] = useState(knowledgeData.questions.length > 0 ? knowledgeData.questions[0]  : []);
 
   const language = [
     { key: "French", label: "French" },
@@ -58,12 +73,13 @@ const UploadQuestions = () => {
       redirect: "follow",
     };
     fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
-      .then((response) => {
-        return response.json().then((data) => ({
+      .then( async (response) => {
+        const data = await handleResponse(response, router, cookies, removeCookie);
+        return {
           status: response.status,
           ok: response.ok,
           data,
-        }));
+        };
       })
       .then(({ status, ok, data }) => {
         if (ok) {
@@ -101,32 +117,57 @@ const UploadQuestions = () => {
     getCompanyProducts();
   }, []);
 
+
+  const handleUpdateData = () => { 
+    // const [headers, ...rows] = knowledgeData.questions;
+    const rows = knowledgeData.questions.slice(1);
+    const transformedData = rows.map((row) => {
+      return mappedIndexValue.reduce((acc, header, index) => {
+        if (header) {
+          acc[header.toLowerCase()] = row[index] ? row[index].trim() : "";
+        }
+        return acc;
+      }, {});
+    });
+  
+   
+  // Remove "do no map" key
+    const updatedData =  transformedData.map(question => {
+      const { "do no map": _, ...rest } = question; 
+      return rest;
+    });
+  console.log(">>>>>>>>>>>>>>",updatedData)
+  
+    const newObj = {
+      ...knowledgeData,
+      questions: updatedData,
+    };
+  
+    console.log("Transformed Data:", newObj);
+    setUpdatedData(newObj)
+
+
+    setStepper(stepper + 1);
+      setProgressBar(progressBar + 27);
+  }
+
+  const  gotToMatchColum = () =>{
+    if(selectedHeader.length > 0){
+      setStepper(stepper + 1);
+      setProgressBar(progressBar + 27);
+    }else {
+      toast.error("Select a header row")
+    }
+     
+  }
+
+
   const submitData = () => {
-  // Change the array data format into object
-  const [headers, ...rows] = knowledgeData.questions;
-  const transformedData = rows.map((row) => {
-    return headers.reduce((acc, header, index) => {
-      if (header) {
-        acc[header.toLowerCase()] = row[index] ? row[index].trim() : "";
-      }
-      return acc;
-    }, {});
-  });
+      setStepper(stepper + 1);
+      setProgressBar(progressBar + 27);
+ 
 
-// Remove "do no map" key
-  const updatedData =  transformedData.map(question => {
-    const { "do no map": _, ...rest } = question; 
-    return rest;
-  });
-console.log(">>>>>>>>>>>>>>",updatedData)
-
-  const newObj = {
-    ...knowledgeData,
-    questions: updatedData,
-  };
-
-  console.log("Transformed Data:", newObj);
-  const jsonPayload = JSON.stringify(newObj);
+  const jsonPayload = JSON.stringify(updatedData);
 
   // API call
   const token = cookiesData.token;
@@ -153,6 +194,7 @@ console.log(">>>>>>>>>>>>>>",updatedData)
       if (ok) {
         console.log("Success:", data);
         toast.success("Document created successfully");
+        router.push("/vendor/knowledge")
       } else {
         toast.error(data?.error || "Document not Created");
         console.error("Error:", data);
@@ -161,6 +203,7 @@ console.log(">>>>>>>>>>>>>>",updatedData)
     .catch((error) => console.error(error));
 };
 
+   
 
   return (
     <div className="w-[100%] h-full">
@@ -168,7 +211,7 @@ console.log(">>>>>>>>>>>>>>",updatedData)
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
           {getTitle()}
         </h1>
-        <div className="w-full h-[80vh] bg-white p-6 ">
+        <div className="w-full h-[83vh] bg-white p-6 ">
           <Progress
             aria-label="Loading..."
             value={progressBar}
@@ -192,7 +235,7 @@ console.log(">>>>>>>>>>>>>>",updatedData)
               <h1
                 className={`${
                   stepper == !1 ? "text-blue-600" : ""
-                } font-semibold`}
+                } font-semibold text-[18px] 2xl:text-[20px]`}
               >
                 Uplaod File
               </h1>
@@ -212,7 +255,7 @@ console.log(">>>>>>>>>>>>>>",updatedData)
                   2
                 )}
               </span>
-              <h1>Select header row</h1>
+              <h1 className="text-[18px] 2xl:text-[20px]">Select header row</h1>
             </div>
 
             <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
@@ -227,7 +270,7 @@ console.log(">>>>>>>>>>>>>>",updatedData)
                   3
                 )}
               </span>
-              <h1>Match Columns</h1>
+              <h1 className="text-[18px] 2xl:text-[20px]">Match Columns</h1>
             </div>
 
             <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
@@ -242,10 +285,12 @@ console.log(">>>>>>>>>>>>>>",updatedData)
                   4
                 )}
               </span>
-              <h1>Validate data</h1>
+              <h1 className="text-[18px] 2xl:text-[20px]">Validate data</h1>
             </div>
           </div>
-          <div className="overflow-scroll max-h-[60vh] min-h-[52vh]">
+          {stepper > 0 &&  <h1 className='my-2 font-semibold text-[18px] 2xl:text-[20px]'>Your table - {knowledgeData.name.replace(".xlsx", "")}</h1>}
+        
+          <div className="overflow-scroll max-h-[59vh] min-h-[52vh]">
             {stepper == 0 && (
               <UploadFile
                 setKnowledgeData={setKnowledgeData}
@@ -254,14 +299,26 @@ console.log(">>>>>>>>>>>>>>",updatedData)
                 setProgressBar={setProgressBar}
               />
             )}
-            {stepper == 1 && <SelectHeaderRow knowledgeData={knowledgeData} />}
+            {stepper == 1 && <SelectHeaderRow 
+            knowledgeData={knowledgeData} 
+            setSelectedHeader={setSelectedHeader} 
+            setSelectedRowIndex={setSelectedRowIndex}
+            selectedRowIndex={selectedRowIndex}
+            
+            />}
             {stepper == 2 && (
               <MatchColum
                 setKnowledgeData={setKnowledgeData}
                 knowledgeData={knowledgeData}
+                selectedHeader={selectedHeader}
+                setUpdateHeader={setUpdateHeader}
+                setMappedIndexValue={setMappedIndexValue}
+                mappedIndexValue={mappedIndexValue}
+                updateHeader={updateHeader}
+                
               />
             )}
-            {stepper == 3 && <Validate knowledgeData={knowledgeData} />}
+            {stepper == 3 && <Validate knowledgeData={knowledgeData} questions={updatedData.questions} />}
             {stepper == 4 && <Completed />}
           </div>
 
@@ -273,22 +330,23 @@ console.log(">>>>>>>>>>>>>>",updatedData)
             >
               {stepper == 2 && (
                 <div>
-                  <h1 className="font-semibold">Select associated products</h1>
-                  <div className="gap-x-6 gap-y-2 flex flex-wrap my-1 ">
+                  <h1 className="font-semibold text-[18px] 2xl:text-[20px] mt-3">Select associated products</h1>
+                  <div className="gap-x-6 gap-y-2 flex flex-wrap my-2">
                     {companyProducts.map((item, index) => (
                       <Checkbox
                         key={index}
                         radius="sm"
                         isSelected={knowledgeData.productIds.includes(item.id)}
                         onChange={() => handleCheckboxChange(item.id)}
-                        className="2xl:text-[20px]"
+                        className="2xl:text-[42px]"
+                        classNames={{label: "!rounded-[3px] text-[18px] 2xl:text-[20px]"}}
                       >
                         {item.name}
                       </Checkbox>
                     ))}
                   </div>
                   <div>
-                    <h1 className="font-semibold"> Select Language</h1>
+                    <h1 className="font-semibold text-[18px] 2xl:text-[20px] mb-2"> Select Language</h1>
                     <Select
                       variant="bordered"
                       className="w-full bg-transparent"
@@ -296,6 +354,7 @@ console.log(">>>>>>>>>>>>>>",updatedData)
                       placeholder="Select Language"
                       value={knowledgeData.language}
                       onChange={(e) => handleSelectChange(e.target.value)}
+                      defaultSelectedKeys={knowledgeData ? [knowledgeData.language] : []}
                     >
                       {language.map((option) => (
                         <SelectItem key={option.key} value={option.label}>
@@ -307,7 +366,7 @@ console.log(">>>>>>>>>>>>>>",updatedData)
                 </div>
               )}
 
-              <div>
+              <div className="mt-5">
                 <Button
                   onClick={() => {
                     setStepper(stepper - 1);
@@ -315,23 +374,26 @@ console.log(">>>>>>>>>>>>>>",updatedData)
                   }}
                   radius="none"
                   size="sm"
-                  className=" px-[10px] mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-gray-100 w-max rounded-[4px] "
+                  className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-gray-200 w-max rounded-[4px] "
                 >
                   Back
                 </Button>
                 <Button
                   onClick={() => {
-                    if (stepper < 4) {
-                      setStepper(stepper + 1);
-                      setProgressBar(progressBar + 27);
-                      if (stepper == 3) {
+                        
+                      if(stepper == 1){
+                        gotToMatchColum()
+                      }
+                     else if(stepper == 2){
+                         handleUpdateData()
+                      }else if (stepper == 3) {
                         submitData();
                       }
-                    }
+                    
                   }}
                   radius="none"
                   size="sm"
-                  className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                  className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
                 >
                   {stepper == 3 ? "Confirm" : " Next"}
                 </Button>

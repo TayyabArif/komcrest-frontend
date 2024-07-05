@@ -1,106 +1,83 @@
-// import React from 'react'
+import React, { useState } from 'react';
 
-// const SelectHeaderRow = ({knowledgeData.questions}) => {
-    
-//       const thStyle = {
-//         border: '1px solid #dddddd',
-//         textAlign: 'left',
-//         padding: '4px',
-//       };
-    
-//       const tdStyle = {
-//         border: '1px solid #dddddd',
-//         textAlign: 'left',
-//         padding: '4px',
-//       };
-    
-//   return (
-//     <div className='w-full overflow-x-auto'>
-//         <h1 className='my-2 font-semibold'>Your table - 2021 CAIQ Questionnaire 20210914</h1>
-//        {knowledgeData.questions ? (
-//           <div>
-//             <table className='text-sm'  >
-//               <thead>
-//                 <tr>
-//                   {knowledgeData.questions[0].map((header, index) => (
-//                     <th key={index} style={thStyle}>{header}</th>
-//                   ))}
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {knowledgeData.questions.slice(1).map((row, rowIndex) => (
-//                   <tr key={rowIndex}>
-//                     {row.map((cell, cellIndex) => (
-//                       <td key={cellIndex} style={tdStyle} >{cell}</td>
-//                     ))}
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           </div>
-//         ) : (
-//           <p>No data to display</p>
-//         )}
-//     </div>
-//   )
-// }
+const SelectHeaderRow = ({ knowledgeData, setSelectedHeader, selectedRowIndex, setSelectedRowIndex }) => {
 
-// export default SelectHeaderRow
+  const thStyle = {
+    border: '1px solid #dddddd',
+    textAlign: 'left',
+    padding: '10px',
+    height: '40px',
+  };
 
+  const tdStyle = {
+    border: '1px solid #dddddd',
+    textAlign: 'left',
+    padding: '10px',
+    height: '40px',
+  };
 
+  const handleRadioChange = (row, index) => {
+    setSelectedRowIndex(index);
+    setSelectedHeader(row);
+  };
 
+  const truncate = (str, maxLength) => {
+    if (str.length > maxLength) {
+      return str.slice(0, maxLength) + '...';
+    }
+    return str;
+  };
 
-
-
-import React from 'react'
-
-const SelectHeaderRow = ({knowledgeData}) => {
-    
-      const thStyle = {
-        border: '1px solid #dddddd',
-        textAlign: 'left',
-        padding: '4px',
-      };
-    
-      const tdStyle = {
-        border: '1px solid #dddddd',
-        textAlign: 'left',
-        padding: '4px',
-      };
-    
   return (
     <div className='w-full overflow-x-auto'>
-        <h1 className='my-2 font-semibold'>Your table - 2021 CAIQ Questionnaire 20210914</h1>
-       {knowledgeData.questions ? (
-          <div>
-            <table className='text-sm'  >
-              <thead>
-                <tr>
-                  {knowledgeData.questions[0]?.map((header, index) => (
-                    <th key={index} style={thStyle}>{header}</th>
+      {knowledgeData.questions ? (
+        <div>
+          <table className="text-sm w-full border-collapse">
+            <thead>
+              <tr className='bg-[#ebeef2] text-[18px] 2xl:text-[20px]'>
+                <th style={thStyle}>
+                  <input
+                    type="radio"
+                    name="Selection"
+                    checked={selectedRowIndex === 0}
+                    onChange={() => handleRadioChange(knowledgeData.questions[0], 0)}
+                  />
+                </th>
+                {knowledgeData.questions[0]?.map((header, index) => (
+                  <th key={index} style={thStyle}>{truncate(header, 20)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {knowledgeData.questions.slice(1).map((row, rowIndex) => (
+                <tr key={rowIndex + 1} className={`${rowIndex % 2 === 0 ? 'bg-gray-300 text-[18px] 2xl:text-[20px]' : 'text-[18px] 2xl:text-[20px]'}`}>
+                  <td style={tdStyle}>
+                    <input
+                      type="radio"
+                      name="Selection"
+                      checked={selectedRowIndex === rowIndex + 1}
+                      onChange={() => handleRadioChange(row, rowIndex + 1)}
+                    />
+                  </td>
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex} style={tdStyle} className="py-2 px-4 border">
+                      {truncate(cell, 20)}
+                    </td>
+                  ))}
+                  {/* Add empty cells if the row has fewer columns than the header */}
+                  {Array.from({ length: knowledgeData.questions[0].length - row.length }).map((_, idx) => (
+                    <td key={`empty-${idx}`} style={tdStyle}></td>
                   ))}
                 </tr>
-              </thead>
-              <tbody>
-                {knowledgeData.questions.slice(1).map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
-                      <td key={cellIndex} style={tdStyle} >{cell}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p>No data to display</p>
-        )}
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p className='w-full justify-center text-[18px] 2xl:text-[20px] shadow-md rounded-lg'>No data to display</p>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default SelectHeaderRow
-
-
-
-
+export default SelectHeaderRow;

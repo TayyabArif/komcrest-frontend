@@ -1,47 +1,66 @@
-import React from 'react'
 
-const Validate = ({knowledgeData}) => {
+import React from "react";
 
-    const thStyle = {
-        border: '1px solid #dddddd',
-        textAlign: 'left',
-        padding: '4px',
-      };
-    
-      const tdStyle = {
-        border: '1px solid #dddddd',
-        textAlign: 'left',
-        padding: '4px',
-      };
+const Validate = ({ knowledgeData, questions }) => {
+  const thStyle = {
+    border: "1px solid #dddddd",
+    textAlign: "left",
+    padding: "4px",
+  };
+
+  const tdStyle = {
+    border: "1px solid #dddddd",
+    textAlign: "left",
+    padding: "4px",
+  };
+
+  const truncate = (str, maxLength) => {
+    if (str.length > maxLength) {
+      return str.slice(0, maxLength) + "...";
+    }
+    return str;
+  };
   return (
-    <div className='w-full overflow-x-auto'>
-        <h1 className='my-2 font-semibold'>Your table - 2021 CAIQ Questionnaire 20210914</h1>
-       {knowledgeData.questions ? (
-          <div>
-            <table className='text-sm '  >
-              <thead>
-                <tr>
-                  {knowledgeData?.questions[0]?.map((header, index) => (
-                    <th key={index} style={thStyle} >{header}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {knowledgeData?.questions.slice(1).map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
-                      <td key={cellIndex} style={tdStyle}>{cell}</td>
-                    ))}
-                  </tr>
+    <div className="w-full overflow-x-auto">
+    {questions ? (
+      <div className="overflow-x-auto relative">
+        <table className="min-w-max bg-white border border-gray-300 table-fixed text-sm w-full border-collapse">
+          <thead className="bg-gray-50">
+            <tr className="bg-[#ebeef2] ">
+              {Object.keys(questions[0]).map((header) => (
+                <th
+                  key={header}
+                  className="px-2 py-3 border text-left text-xs text-black font-semibold uppercase tracking-wider text-[18px] 2xl:text-[20px]"
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {questions.map((item, index) => (
+              <tr
+                key={index}
+                className={index % 2 === 0 ? "bg-gray-300" : ""}
+              >
+                {Object.keys(item).map((key) => (
+                  <td
+                    key={key}
+                    className="px-2 py-2 border text-sm font-medium text-gray-900 text-[18px] 2xl:text-[20px]"
+                  >
+                    {truncate(item[key], 30)}
+                  </td>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p>No data to display</p>
-        )}
-    </div>
-  )
-}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <p className="w-full justify-center text-[18px] 2xl:text-[20px] shadow-md rounded-lg">No data to display</p>
+    )}
+  </div>
+  );
+};
 
-export default Validate
+export default Validate;
