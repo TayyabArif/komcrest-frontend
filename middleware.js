@@ -3,10 +3,12 @@ import { NextResponse } from 'next/server';
 // import jwt from 'jsonwebtoken';
 
 export function middleware(request) {
+  console.log(">>>>>>>>>>>>>>>>>>>>>>")
   const { cookies } = request;
   const myCookie = cookies.get('myCookie');
   const { pathname } = request.nextUrl;
 
+  console.log(">>>>>>>")
   // Exclude login and unauthorized routes from protection
   const unprotectedRoutes = [
     '/admin/login',
@@ -91,5 +93,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*',],
 };

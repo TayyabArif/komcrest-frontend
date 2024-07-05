@@ -1,22 +1,22 @@
+
 import React, { useEffect, useState } from 'react';
-import { Select, SelectItem ,Checkbox } from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
 
-
-const MatchColum = ({ setKnowledgeData ,knowledgeData }) => {
-  const [selectedValues, setSelectedValues] = useState(knowledgeData.questions ? Array(knowledgeData.questions[0]?.length).fill('') : []);
- 
-
-
+const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHeader, setMappedIndexValue, mappedIndexValue }) => {
+  const [availableOptions, setAvailableOptions] = useState([]);
+  
   const thStyle = {
     border: '1px solid #dddddd',
     textAlign: 'left',
-    padding: '4px',
+    padding: '10px',
+    height: '40px',
   };
 
   const tdStyle = {
     border: '1px solid #dddddd',
     textAlign: 'left',
-    padding: '4px',
+    padding: '10px',
+    height: '40px',
   };
 
   const selectOptions = [
@@ -31,42 +31,36 @@ const MatchColum = ({ setKnowledgeData ,knowledgeData }) => {
     { key: "Do no map", label: "Do no map" }
   ];
 
-
   const handleSelectChange = (value, index) => {
-    const newSelectedValues = [...selectedValues];
-    newSelectedValues[index] = value;
-    setSelectedValues(newSelectedValues);
-
-    let updateData = [...knowledgeData.questions];
-    const header = updateData[0];
-    header[index] = value;
-    updateData[0] = header;
-    setKnowledgeData({
-      ...knowledgeData,
-      questions : updateData
-    }) 
+    const newArr = [...mappedIndexValue];
+    while (newArr.length <= index) {
+      newArr.push("");
+    }
+    newArr[index] = value;
+    setMappedIndexValue(newArr);
   };
 
-  // const getAvailableOptions = (index) => {
-  //   const selected = selectedValues.filter((value, i) => i !== index);
-  //   return selectOptions.filter(option => !selected.includes(option.label));
-  // };
+  useEffect(() => {
+    const filterOptions = () => {
+      return selectOptions.filter(option => !mappedIndexValue.includes(option.label) || option.key === "Do no map");
+    };
+    setAvailableOptions(filterOptions());
+  }, [mappedIndexValue]);
 
-  const getAvailableOptions = (index) => {
-    const selected = selectedValues.filter((value, i) => i !== index && value !== "Do not map");
-    return selectOptions.filter(option => option.label === "Do no map" || !selected.includes(option.label));
+  const getAvailableOptions = () => {
+    const filterOption = selectOptions.filter(option => !mappedIndexValue.includes(option.key) || option.key === "Do no map");
+    return filterOption;
   };
 
   return (
-    <div className='  h-full'>
-      <h1 className='my-2 font-semibold'>Your table - 2021 CAIQ Questionnaire 20210914</h1>
+    <div className='h-full'>
       {knowledgeData.questions ? (
         <div>
           <table className='text-sm'>
             <thead>
-              <tr>
-                {knowledgeData.questions[0]?.map((header, index) => (
-                  <th key={index} style={{ ...thStyle }} className='w-[220px] h-[30px] '>{header}</th>
+              <tr className='bg-[#ebeef2]'>
+                {selectedHeader?.map((header, index) => (
+                  <th key={index} style={thStyle} className='w-[220px] h-[30px]'>{header}</th>
                 ))}
               </tr>
             </thead>
@@ -74,34 +68,44 @@ const MatchColum = ({ setKnowledgeData ,knowledgeData }) => {
               {knowledgeData.questions.slice(1, 3).map((row, rowIndex) => (
                 <tr key={rowIndex}>
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} style={{ ...tdStyle }}>
+                    <td key={cellIndex} style={tdStyle}>
                       {cell.length > 15 ? `${cell.substring(0, 15)}...` : cell}
                     </td>
+                  ))}
+                  {/* Add empty cells if the row has fewer columns than the header */}
+                  {Array.from({ length: selectedHeader.length - row.length }).map((_, idx) => (
+                    <td key={`empty-${idx}`} style={tdStyle}></td>
                   ))}
                 </tr>
               ))}
               <tr>
-                <td className='pt-5 font-semibold'>Will mapped with</td>
+                <td className='pt-5 font-semibold'>Will be mapped with</td>
               </tr>
               <tr>
-                {knowledgeData.questions[0]?.map((header, index) => (
-                  <td key={index}>
-                    <Select
-                      variant="bordered"
-                      className="w-full bg-transparent"
-                      size="sm"
-                      placeholder="Select"
-                      value={selectedValues[index]}
-                      onChange={(e) => handleSelectChange(e.target.value, index)}
-                    >
-                      {getAvailableOptions(index).map((option) => (
-                        <SelectItem key={option.key} value={option.label}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </Select>
-                  </td>
-                ))}
+                {selectedHeader?.map((header, index) => {
+                  const currentSelectedValue = mappedIndexValue[index];
+                  const defaultKey = selectOptions.find(option => option.label === currentSelectedValue);
+
+                  return (
+                    <td key={index}>
+                      <Select
+                        variant="bordered"
+                        className="w-full bg-transparent"
+                        size="sm"
+                        placeholder="Select"
+                        value={currentSelectedValue}
+                        onChange={(e) => handleSelectChange(e.target.value, index)}
+                        defaultSelectedKeys={defaultKey ? [defaultKey.key] : []}
+                      >
+                        {getAvailableOptions().concat(currentSelectedValue ? [{ key: currentSelectedValue, label: currentSelectedValue }] : []).map((option) => (
+                          <SelectItem key={option.key} value={option.label}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    </td>
+                  );
+                })}
               </tr>
             </tbody>
           </table>
@@ -109,10 +113,8 @@ const MatchColum = ({ setKnowledgeData ,knowledgeData }) => {
       ) : (
         <p>No data to display</p>
       )}
-</div>
-   
+    </div>
   );
 };
 
 export default MatchColum;
-

@@ -62,7 +62,7 @@ const KnowledgeHome = () => {
               <p className="text-[15px] leading-4 2xl:text-[18px] w-[85%] mx-auto">
               We encourage you to add key documents that you frequently share with your prospects and clients. We will index them to improve the accuracy of Komcrest AI responses.
               </p>
-              <p className='my-5'>
+              <p className='my-5 text-[15px] ' >
               You don’t know where to start from? Download our list of questions HERE. It will help you shape build up your knowledge base and clarify your roadmap.
               </p>
               <Button

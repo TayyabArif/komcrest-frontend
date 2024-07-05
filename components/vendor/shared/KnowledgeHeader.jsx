@@ -23,7 +23,8 @@ const KnowledgeHeader = ({buttonShow , headerData}) => {
          radius="none"
          size="sm"
          className="bg-white text-gray-500 border text-sm  2xl:text-[20px] w-max rounded-[4px] my-4 mx-2"
-       
+         onClick={() => {
+          router.push("/vendor/knowledge/Import")}}
        >
          Import question
        </Button>
@@ -32,8 +33,10 @@ const KnowledgeHeader = ({buttonShow , headerData}) => {
          size="sm"
          className="text-white text-sm  2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4"
          onClick={() => {
-         router.push("/vendor/knowledge/Import")}}
+          router.push("/vendor/knowledge/AddQuestion")}}
        >
+       
+      
          Add new question
        </Button>
         </div>
