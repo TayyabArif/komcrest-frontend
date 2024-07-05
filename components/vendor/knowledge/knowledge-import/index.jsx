@@ -119,7 +119,6 @@ const UploadQuestions = () => {
 
 
   const handleUpdateData = () => { 
-    debugger
     // const [headers, ...rows] = knowledgeData.questions;
     const rows = knowledgeData.questions.slice(1);
     const transformedData = rows.map((row) => {
@@ -236,7 +235,7 @@ const UploadQuestions = () => {
               <h1
                 className={`${
                   stepper == !1 ? "text-blue-600" : ""
-                } font-semibold`}
+                } font-semibold text-[18px] 2xl:text-[20px]`}
               >
                 Uplaod File
               </h1>
@@ -256,7 +255,7 @@ const UploadQuestions = () => {
                   2
                 )}
               </span>
-              <h1>Select header row</h1>
+              <h1 className="text-[18px] 2xl:text-[20px]">Select header row</h1>
             </div>
 
             <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
@@ -271,7 +270,7 @@ const UploadQuestions = () => {
                   3
                 )}
               </span>
-              <h1>Match Columns</h1>
+              <h1 className="text-[18px] 2xl:text-[20px]">Match Columns</h1>
             </div>
 
             <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
@@ -286,10 +285,10 @@ const UploadQuestions = () => {
                   4
                 )}
               </span>
-              <h1>Validate data</h1>
+              <h1 className="text-[18px] 2xl:text-[20px]">Validate data</h1>
             </div>
           </div>
-          {stepper > 0 &&  <h1 className='my-2 font-semibold'>Your table - {knowledgeData.name.replace(".xlsx", "")}</h1>}
+          {stepper > 0 &&  <h1 className='my-2 font-semibold text-[18px] 2xl:text-[20px]'>Your table - {knowledgeData.name.replace(".xlsx", "")}</h1>}
         
           <div className="overflow-scroll max-h-[59vh] min-h-[52vh]">
             {stepper == 0 && (
@@ -331,22 +330,23 @@ const UploadQuestions = () => {
             >
               {stepper == 2 && (
                 <div>
-                  <h1 className="font-semibold">Select associated products</h1>
-                  <div className="gap-x-6 gap-y-2 flex flex-wrap my-1 ">
+                  <h1 className="font-semibold text-[18px] 2xl:text-[20px] mt-3">Select associated products</h1>
+                  <div className="gap-x-6 gap-y-2 flex flex-wrap my-2">
                     {companyProducts.map((item, index) => (
                       <Checkbox
                         key={index}
                         radius="sm"
                         isSelected={knowledgeData.productIds.includes(item.id)}
                         onChange={() => handleCheckboxChange(item.id)}
-                        className="2xl:text-[20px]"
+                        className="2xl:text-[42px]"
+                        classNames={{label: "!rounded-[3px] text-[18px] 2xl:text-[20px]"}}
                       >
                         {item.name}
                       </Checkbox>
                     ))}
                   </div>
                   <div>
-                    <h1 className="font-semibold"> Select Language</h1>
+                    <h1 className="font-semibold text-[18px] 2xl:text-[20px] mb-2"> Select Language</h1>
                     <Select
                       variant="bordered"
                       className="w-full bg-transparent"
@@ -374,7 +374,7 @@ const UploadQuestions = () => {
                   }}
                   radius="none"
                   size="sm"
-                  className=" px-[10px] mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-gray-100 w-max rounded-[4px] "
+                  className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-gray-200 w-max rounded-[4px] "
                 >
                   Back
                 </Button>
@@ -393,7 +393,7 @@ const UploadQuestions = () => {
                   }}
                   radius="none"
                   size="sm"
-                  className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                  className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
                 >
                   {stepper == 3 ? "Confirm" : " Next"}
                 </Button>

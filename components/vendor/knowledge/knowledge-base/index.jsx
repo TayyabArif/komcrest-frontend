@@ -11,7 +11,24 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import {formatDate} from "../../../../helper"
 
-const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDeleted ,isDeleted }) => {
+const komcrestCategories = [
+  {value: "Overview", text: "Overview"},
+  {value: "Access Management", text: "Access Management"},
+  {value: "Application & Data Security", text: "Application & Data Security"},
+  {value: "Artificial Intelligence", text: "Artificial Intelligence"},
+  {value: "Cloud Security", text: "Cloud Security"},
+  {value: "Device Management", text: "Device Management"},
+  {value: "Disaster Recovery", text: "Disaster Recovery"},
+  {value: "ESG", text: "ESG"},
+  {value: "Incident Management", text: "Incident Management"},
+  {value: "Legal", text: "Legal"},
+  {value: "Privacy", text: "Privacy"},
+  {value: "Risk and Vulnerability Management", text: "Risk and Vulnerability Management"},
+  {value: "Security Governance", text: "Security Governance"},
+  {value: "Vendor Management", text: "Vendor Management"}
+]
+const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDeleted ,isDeleted, isLoading }) => {
+  console.log("===========", isLoading)
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -67,7 +84,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
           </div>
           <input
             id="default-search"
-            className="block w-full py-[2px] pl-2 text-sm text-gray-900 border border-gray-300 rounded bg-gray-50"
+            className="block w-full !py-[8px] pl-2 text-[18px] 2xl:text-[20px] text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
             placeholder="Search"
           />
         </div>
@@ -75,9 +92,9 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
           <div className="overflow-x-auto relative h-[72vh]">
             <table style={{ width: "100%" }} className="min-w-full bg-white border border-gray-300 ">
               <thead className="bg-gray-200">
-                <tr>
+                <tr className="text-[18px] 2xl:text-[20px]">
                   <th className="py-2 px-4 border border-gray-300 text-left">
-                    <input type="checkbox" />
+                    <input type="checkbox" className=""/>
                   </th>
                   <th className="py-2 px-4 border border-gray-300 text-left">
                     Category
@@ -117,7 +134,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
               <tbody>
                 {questionData.map((document) =>
                   document.questions.map((data, index) => (
-                    <tr key={data.id} className="bg-white">
+                    <tr key={data.id} className="bg-white text-[18px] 2xl:text-[20px]">
                       <td className="py-2 px-4 border border-gray-300">
                         <input type="checkbox" />
                       </td>
@@ -132,17 +149,9 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
                           }
                           className="py-1 px-2"
                         >
-                          <option value="Overview">Overview</option>
-                          <option value="Access Management">
-                            Access Management
-                          </option>
-                          <option value="Application & Data Security">
-                            Application & Data Security
-                          </option>
-                          <option value="Cloud Security">Cloud Security</option>
-                          <option value="Device Management">
-                            Device Management
-                          </option>
+                          {komcrestCategories?.map((item, index) => (
+                              <option value={item?.value}>{item?.text}</option>
+                          ))}
                         </select>
                       </td>
                       <td className="py-2 px-4 border border-gray-300 max-w-xs truncate">
@@ -164,12 +173,12 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
                         {data.curator}
                       </td>
                       <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
-                        Source
+                        {document?.name}
                       </td>
                       <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
                         {formatDate(data.updatedAt)}
                       </td>
-                      <td className="py-2 px-4 border border-gray-300 sticky right-0 bg-white">
+                      <td className="py-2 px-4 border border-gray-300 sticky right-0 bg-white pl-10">
                         <Popover
                           className="rounded-[0px]"
                           isOpen={openPopoverIndex === index}
@@ -186,19 +195,20 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
                             />
                           </PopoverTrigger>
                           <PopoverContent>
-                            <div className="px-3 py-2 space-y-1.5">
+                            <div className="px-3 py-2 space-y-2">
                               <div
-                                className="text-small cursor-pointer 2xl:text-[18px]"
+                                className="text-small cursor-pointer 2xl:text-[20px]"
                                 onClick={() =>
                                   router.push(
                                     `/vendor/knowledge/AddQuestion?id=${data.id}`
                                   )
+                                  // console.log("###############", data?.id)
                                 }
                               >
                                 Update
                               </div>
                               <div
-                                className="text-small text-red-600 cursor-pointer 2xl:text-[18px]"
+                                className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
                                 onClick={() => {
                                   setSelectedQuestion(data);
                                   onOpen();

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import VendorLayout from "../../../components/vendor/shared/vendorLayout";
 import KnowledgeHome from "../../../components/vendor/knowledge";
 import KnowledgeBase from "../../../components/vendor/knowledge/knowledge-base";
+import { Popover, PopoverTrigger, PopoverContent, CircularProgress } from "@nextui-org/react";
 import { useCookies } from "react-cookie";
 import { handleResponse } from "../../../helper";
 import { useRouter } from "next/router";
@@ -34,26 +35,33 @@ const Index = () => {
         setDataLoaded(true);
         console.log("Fetched data:", data);
       } else {
+        setDataLoaded(true);
         toast.error(data?.error);
       }
     } catch (error) {
+      setDataLoaded(true);
       console.error("Error fetching user documents:", error);
     }
   };
 
   useEffect(() => {
     getQuestions();
-  }, [isDeleted ]);
+  }, [isDeleted]);
 
   return (
     <VendorLayout>
-      {dataLoaded && (
+      {dataLoaded ? (
         questionData.length > 0 ? (
-          <KnowledgeBase questionData={questionData} setQuestionData={setQuestionData} setIsDeleted={setIsDeleted} isDeleted ={isDeleted }/>
+          <KnowledgeBase questionData={questionData} setQuestionData={setQuestionData} setIsDeleted={setIsDeleted} isDeleted ={isDeleted } />
         ) : (
           <KnowledgeHome />
         )
-      )}
+      )
+      :
+        <div className='flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen'>
+            <CircularProgress label="Fetching Data..." size="lg" />
+          </div>
+      }
     </VendorLayout>
   );
 }

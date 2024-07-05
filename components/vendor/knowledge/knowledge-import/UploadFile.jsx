@@ -46,7 +46,7 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
     <div className='space-y-10'>
       <table className="table-auto border-[1px] border-collapse border-gray-400 w-full text-sm">
         <thead>
-          <tr className='text-left'>
+          <tr className='text-left text-[18px] 2xl:text-[20px]'>
             <th className="border border-black px-2 py-2">Product</th>
             <th className="border border-black px-2 py-2">Category</th>
             <th className="border border-black px-2 py-2">Question</th>
@@ -57,7 +57,7 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-[#ebeef2]">
+          <tr className="bg-[#ebeef2] text-[18px] 2xl:text-[20px]">
             <td className="border border-black px-2 py-2">Komcrest</td>
             <td className="border border-black px-2 py-2">Organization</td>
             <td className="border border-black px-2 py-2">Do you have a team or resources dedicated to IT Security?</td>
@@ -70,7 +70,7 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
       </table>
       <div className='space-y-6'>
         <div className='w-[34%] mx-auto text-center'>
-          <p className="text-[15px] leading-4 2xl:text-[18px]">
+          <p className="leading-4 text-[18px] 2xl:text-[20px]">
             Two columns are required for import: question and answer. Columns don&apos;t need to be in a specific order. You&apos;ll be able to map, rename, or remove columns in the next step.
             Upload .xlsx, .xls or .csv file
           </p>
@@ -80,7 +80,7 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
             onClick={() => router.push("/vendor/knowledge")}
             radius="none"
             size="sm"
-            className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-300 w-max rounded-[4px]"
+            className="text-white px-3 h-[40px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-300 w-max rounded-[4px]"
           >
             Cancel
           </Button>
@@ -88,18 +88,18 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
             onPress={onOpen}
             radius="none"
             size="sm"
-            className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+            className="text-white px-3 h-[40px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
           >
             Upload file
           </Button>
         </div>
       </div>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size='2xl'>
         <ModalContent>
           <ModalHeader>Upload File</ModalHeader>
           <ModalBody>
-            <p className='font-[600]'>Select the questionnaire you want to index</p>
+            <p className='font-[600] text-[18px] 2xl:text-[20px] mb-2'>Select the questionnaire you want to index</p>
             <Dropzone onDrop={handleDrop} accept=".xlsx, .xls">
               {({ getRootProps, getInputProps }) => (
                 <div {...getRootProps()}  className="flex justify-center items-center border-2  border-dashed border-gray-300 rounded-lg p-7 bg-gray-100 cursor-pointer">
@@ -111,11 +111,11 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
               )}
             </Dropzone>
           </ModalBody>
-          <ModalFooter className='flex items-start justify-start -mt-4'>
-            <Button onClick={onClose} radius="none" size="sm" className="text-red-400 px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-300 w-max rounded-[4px] my-3">
+          <ModalFooter className='flex items-start justify-start -mt-2'>
+            <Button onClick={onClose} radius="none" size="sm" className="text-red-700 px-3 h-[40px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-300 w-max rounded-[4px] my-3">
               Cancel
             </Button>
-            <Button onClick={onClose} radius="none" size="sm" className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-3">
+            <Button onClick={onClose} radius="none" size="sm" className="text-white px-3 h-[40px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-3">
               Upload
             </Button>
           </ModalFooter>

@@ -26,11 +26,11 @@ const Validate = ({ knowledgeData, questions }) => {
       <div className="overflow-x-auto relative">
         <table className="min-w-max bg-white border border-gray-300 table-fixed text-sm w-full border-collapse">
           <thead className="bg-gray-50">
-            <tr className="bg-[#ebeef2]">
+            <tr className="bg-[#ebeef2] ">
               {Object.keys(questions[0]).map((header) => (
                 <th
                   key={header}
-                  className="px-2 py-3 border text-left text-xs text-black font-semibold uppercase tracking-wider"
+                  className="px-2 py-3 border text-left text-xs text-black font-semibold uppercase tracking-wider text-[18px] 2xl:text-[20px]"
                 >
                   {header}
                 </th>
@@ -46,7 +46,7 @@ const Validate = ({ knowledgeData, questions }) => {
                 {Object.keys(item).map((key) => (
                   <td
                     key={key}
-                    className="px-2 py-2 border text-sm font-medium text-gray-900"
+                    className="px-2 py-2 border text-sm font-medium text-gray-900 text-[18px] 2xl:text-[20px]"
                   >
                     {truncate(item[key], 30)}
                   </td>
@@ -57,7 +57,7 @@ const Validate = ({ knowledgeData, questions }) => {
         </table>
       </div>
     ) : (
-      <p className="text-center text-gray-500">No data to display</p>
+      <p className="w-full justify-center text-[18px] 2xl:text-[20px] shadow-md rounded-lg">No data to display</p>
     )}
   </div>
   );

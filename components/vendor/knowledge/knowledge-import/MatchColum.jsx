@@ -60,13 +60,13 @@ const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHea
             <thead>
               <tr className='bg-[#ebeef2]'>
                 {selectedHeader?.map((header, index) => (
-                  <th key={index} style={thStyle} className='w-[220px] h-[30px]'>{header}</th>
+                  <th key={index} style={thStyle} className='w-[220px] h-[30px] text-[18px] 2xl:text-[20px]'>{header}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {knowledgeData.questions.slice(1, 3).map((row, rowIndex) => (
-                <tr key={rowIndex}>
+                <tr key={rowIndex} className='text-[18px] 2xl:text-[20px]'>
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex} style={tdStyle}>
                       {cell.length > 15 ? `${cell.substring(0, 15)}...` : cell}
@@ -79,9 +79,9 @@ const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHea
                 </tr>
               ))}
               <tr>
-                <td className='pt-5 font-semibold'>Will be mapped with</td>
+                <td className='pt-5 pb-2 font-semibold text-[18px] 2xl:text-[20px]'>Will be mapped with</td>
               </tr>
-              <tr>
+              <tr className=''>
                 {selectedHeader?.map((header, index) => {
                   const currentSelectedValue = mappedIndexValue[index];
                   const defaultKey = selectOptions.find(option => option.label === currentSelectedValue);
@@ -90,8 +90,8 @@ const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHea
                     <td key={index}>
                       <Select
                         variant="bordered"
-                        className="w-full bg-transparent"
-                        size="sm"
+                        className="w-full bg-transparent text-[18px] 2xl:text-[20px]"
+                        size="md"
                         placeholder="Select"
                         value={currentSelectedValue}
                         onChange={(e) => handleSelectChange(e.target.value, index)}
@@ -111,7 +111,7 @@ const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHea
           </table>
         </div>
       ) : (
-        <p>No data to display</p>
+        <p className='w-full justify-center text-[18px] 2xl:text-[20px] shadow-md rounded-lg'>No data to display</p>
       )}
     </div>
   );
