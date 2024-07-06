@@ -10,6 +10,9 @@ import { handleResponse } from "../../../../helper";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import {formatDate} from "../../../../helper"
+import { Filter } from 'lucide-react';
+import {Input} from "@nextui-org/react";
+import { Search } from 'lucide-react';
 
 const komcrestCategories = [
   {value: "Overview", text: "Overview"},
@@ -27,8 +30,8 @@ const komcrestCategories = [
   {value: "Security Governance", text: "Security Governance"},
   {value: "Vendor Management", text: "Vendor Management"}
 ]
-const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDeleted ,isDeleted, isLoading }) => {
-  console.log("===========", isLoading)
+const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setDataUpdate ,dataUpdate, isLoading }) => {
+  console.log("+++++++",  questionData)
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -36,6 +39,34 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
+  const [filterData , setFilterData] = useState([])
+
+  const handleSearch = (event) => {
+  
+    // const query = event.target.value.toLowerCase();
+    // // setSearchQuery(query);
+    // const filterData = questionData.map((document) =>
+    //   document.questions.filter(item => {
+    //     // Start with match on category or question
+    //     const categoryStartsWith = item.category?.toLowerCase().startsWith(query);
+    //     const questionStartsWith = item.questions?.some(question => question.question.toLowerCase().startsWith(query));
+  
+    //     return categoryStartsWith || questionStartsWith;
+    //   })
+    // )
+
+
+    // // setQuestionData({
+    // //   ...questionData,
+    // //   questions:filterData
+    // // })
+
+
+
+    // console.log(">>>>>>>>>>",filterData)
+  };
+  
+
 
   const handleDelete = async () => {
     const token = cookiesData.token;
@@ -51,43 +82,70 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
       .then((result) => {
         console.log("$$$$$$$$$", result);
         toast.success("Question deleted successfully");
-        setIsDeleted(!isDeleted);
+        setDataUpdate(!dataUpdate);
       })
       .catch((error) => console.error(error));
   };
 
   const handleKomcrastCategoryChange = (id, value) => {
-    // Your logic to handle Komcrast category change
+    const jsonPayload = JSON.stringify({ komcrestCategory : value});
+    let requestOptions = {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${cookiesData?.token}`,
+        "Content-Type": "application/json"
+      },
+      body: jsonPayload,
+      redirect: "follow",
+    };
+
+    fetch(`${baseUrl}/questions/${id}`, requestOptions)
+      .then(async (response) => {
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          toast.success("Question updated successfully");
+          setDataUpdate(!dataUpdate);
+        } else {
+          toast.error(data?.error);
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => console.error(error));
+  
   };
 
   return (
     <div>
       <KnowledgeHeader buttonShow={true} />
       <div className="w-[86%] mx-auto py-2">
-        <div className="relative w-[22%] my-2">
-          <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-            <svg
-              className="w-3 h-3 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
-            </svg>
-          </div>
-          <input
-            id="default-search"
-            className="block w-full !py-[8px] pl-2 text-[18px] 2xl:text-[20px] text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
-            placeholder="Search"
-          />
-        </div>
+        <div className="flex items-center gap-1 mb-2">
+        <Input
+        onChange={handleSearch}
+        variant="bordered"
+        placeholder="Search"
+        endContent={
+          <Search size={18}/>
+        }
+        type="text"
+        classNames={{inputWrapper: "bg-white rounded-md"}}
+        className="max-w-xs"
+      />
+       
+        <div className="bg-white p-1 border border-gray-300 rounded-[5px] "> <Filter size={26} className="text-gray-500"/></div>
+       
+        </div>    
         {questionData && questionData.length > 0 ? (
           <div className="overflow-x-auto relative h-[72vh]">
             <table style={{ width: "100%" }} className="min-w-full bg-white border border-gray-300 ">
@@ -143,7 +201,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
                       </td>
                       <td className="py-2 px-4 border border-gray-300">
                         <select
-                          value={data.komcrastCategory}
+                          value={data.komcrestCategory}
                           onChange={(e) =>
                             handleKomcrastCategoryChange(data.id, e.target.value)
                           }
@@ -178,7 +236,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded ,setIsDe
                       <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
                         {formatDate(data.updatedAt)}
                       </td>
-                      <td className="py-2 px-4 border border-gray-300 sticky right-0 bg-white pl-10">
+                      <td className="py-2 px-4 border border-gray-300 sticky right-0 bg-white pl-8">
                         <Popover
                           className="rounded-[0px]"
                           isOpen={openPopoverIndex === index}

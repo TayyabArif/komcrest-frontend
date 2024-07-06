@@ -32,10 +32,6 @@ const NewQuestion = () => {
     { key: "Vendor Management", label: "Vendor Management" },
   ];
 
-  const CuratorOption = [
-    { key: "Option1", label: "Option 1" },
-    { key: "Option2", label: "Option 2" },
-  ];
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [companyProducts, setCompanyProducts] = useState([]);
@@ -57,6 +53,13 @@ const NewQuestion = () => {
     documentId: "",
   });
 
+  const language = [
+    { key: "French", label: "French" },
+    { key: "English", label: "English" },
+    { key: "Spanish", label: "Spanish" },
+    { key: "German", label: "German" },
+  ];
+
   const handleCheckboxChange = (id) => {
     setNewQuestion((prevData) => {
       const productIds = prevData.productIds.includes(id)
@@ -73,34 +76,34 @@ const NewQuestion = () => {
   const handleData = (e) => {
 
     const { name, value } = e.target;
-    alert(name)
-    alert(value)
+    console.log("value +++++++++",value)
+    console.log("namemmeeee" , name)
     setNewQuestion((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleDrop = (acceptedFiles) => {
-    const allowedTypes = [
-      "text/plain",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "application/msword",
-      "application/json",
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    ];
+  // const handleDrop = (acceptedFiles) => {
+  //   const allowedTypes = [
+  //     "text/plain",
+  //     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  //     "application/msword",
+  //     "application/json",
+  //     "application/vnd.ms-excel",
+  //     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //   ];
 
-    const file = acceptedFiles[0];
-    if (file && allowedTypes.includes(file.type)) {
-      setNewQuestion((prevData) => ({
-        ...prevData,
-        document: file,
-      }));
-    } else {
-      toast.error("Invalid file type. Please upload a valid file.");
-    }
-  };
+  //   const file = acceptedFiles[0];
+  //   if (file && allowedTypes.includes(file.type)) {
+  //     setNewQuestion((prevData) => ({
+  //       ...prevData,
+  //       document: file,
+  //     }));
+  //   } else {
+  //     toast.error("Invalid file type. Please upload a valid file.");
+  //   }
+  // };
 
   const getCompanyProducts = async () => {
     const token = cookiesData?.token;
@@ -157,6 +160,7 @@ const NewQuestion = () => {
           };
         })
         .then(({ status, ok, data }) => {
+          console.log("========+++++++++",data)
           if (ok) {
             setNewQuestion({
               ...data,
@@ -300,7 +304,7 @@ const NewQuestion = () => {
           name: item.firstName
       }));
       setCompanyUserData(curatorOptions);
-        console.log(">>>>>>,",curatorOptions)
+        console.log("user List,",curatorOptions)
       } else {
         toast.error(data?.error);
         
@@ -318,18 +322,19 @@ const NewQuestion = () => {
             {`${id ? "Update" : "New"}`} Question
           </h1>
           <div className="flex justify-between">
-            <div className=" w-[45%] space-y-3">
-              <div className="mt-2">
+            <div className=" w-[45%] space-y-4">
+              <div className="mt-2 mb-3">
                 <label className="text-[16px] 2xl:text-[20px]">Question</label>
                 <Textarea
                   variant="bordered"
-                  size="sm"
+                  // size="sm"
+                  maxRows={5}
                   placeholder="Type the question here"
                   name="question"
                   value={newQuestion.question}
                   onChange={handleData}
                   classNames={{
-                    input: "text-base 2xl:text-[18px]",
+                    input: "text-base 2xl:text-[18px] h-[150px]",
                   }}
                 />
               </div>
@@ -342,8 +347,9 @@ const NewQuestion = () => {
                   size="sm"
                   placeholder="Select"
                   name="category"
-                  value={newQuestion.category}
+                  // value={newQuestion.category}
                   onChange={(e) => handleData(e)}
+                  defaultSelectedKeys={newQuestion.category ? [newQuestion.key] : []}
                 >
                   {categoryOption?.map((option) => (
                     <SelectItem key={option.key} value={option.label}>
@@ -421,25 +427,6 @@ const NewQuestion = () => {
                   }}
                 />
               </div>
-              <div>
-                <label className="text-[16px] 2xl:text-[20px]">Curator</label>
-                <Select
-                  variant="bordered"
-                  className="w-full bg-transparent"
-                  size="sm"
-                  placeholder="Select"
-                  name="curator"
-                  value={newQuestion.curator}
-                  onChange={(e) => handleData(e)}
-                >
-                  {CompanyUserData?.map((option) => (
-                    <SelectItem key={option.key} value={option.name}>
-                      {option.name}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
-
               <div className="">
                 <label className="text-[16px] 2xl:text-[20px]">Source</label>
                 <Input
@@ -453,6 +440,24 @@ const NewQuestion = () => {
                     input: "text-base 2xl:text-[18px]",
                   }}
                 />
+              </div>
+              <div>
+                <label className="text-[16px] 2xl:text-[20px]">Curator</label>
+                <Select
+                  variant="bordered"
+                  className="w-full bg-transparent"
+                  size="sm"
+                  placeholder="Select"
+                  name="curator"
+                  value={newQuestion.curator}
+                  onChange={(e) => handleData(e)}
+                >
+                  {CompanyUserData?.map((option) => (
+                    <SelectItem key={option.name} value={option.name}>
+                      {option.name}
+                    </SelectItem>
+                  ))}
+                </Select>
               </div>
 
               <div>
@@ -469,6 +474,24 @@ const NewQuestion = () => {
                   {documentData?.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
                       {option.title}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <label className="text-[16px] 2xl:text-[20px]">Language</label>
+                <Select
+                  variant="bordered"
+                  className="w-full bg-transparent"
+                  size="sm"
+                  placeholder="language"
+                  name="language"
+                  value={newQuestion.language}
+                  onChange={(e) => handleData(e)}
+                >
+                  {language?.map((option) => (
+                    <SelectItem key={option.key} value={option.key}>
+                      {option.label}
                     </SelectItem>
                   ))}
                 </Select>

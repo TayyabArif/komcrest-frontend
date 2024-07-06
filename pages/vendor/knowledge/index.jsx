@@ -15,7 +15,7 @@ const Index = () => {
   const cookiesData = cookies.myCookie;
   const [dataLoaded, setDataLoaded] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const [isDeleted , setIsDeleted] = useState(false)
+  const [dataUpdate , setDataUpdate] = useState(false)
 
   const getQuestions = async () => {
     const token = cookiesData && cookiesData.token;
@@ -46,13 +46,13 @@ const Index = () => {
 
   useEffect(() => {
     getQuestions();
-  }, [isDeleted]);
+  }, [dataUpdate]);
 
   return (
     <VendorLayout>
       {dataLoaded ? (
         questionData.length > 0 ? (
-          <KnowledgeBase questionData={questionData} setQuestionData={setQuestionData} setIsDeleted={setIsDeleted} isDeleted ={isDeleted } />
+          <KnowledgeBase questionData={questionData} setQuestionData={setQuestionData} setDataUpdate={setDataUpdate} dataUpdate ={dataUpdate } />
         ) : (
           <KnowledgeHome />
         )
