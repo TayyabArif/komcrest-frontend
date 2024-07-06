@@ -151,7 +151,6 @@ const UploadQuestions = () => {
       questions: updatedData,
     };
     console.log("Transformed Data:", newObj);
-    debugger
     setUpdatedData(newObj)
     setStepper(stepper + 1);
       setProgressBar(progressBar + 27);
@@ -296,7 +295,7 @@ const UploadQuestions = () => {
           </div>
           {stepper > 0 &&  <h1 className='my-2 font-semibold text-[18px] 2xl:text-[20px]'>Your table - {knowledgeData.name.replace(".xlsx", "")}</h1>}
         
-          <div className="overflow-scroll max-h-[58vh] min-h-[45vh]">
+          <div className="overflow-auto max-h-[58vh] min-h-[45vh]">
             {stepper == 0 && (
               <UploadFile
                 setKnowledgeData={setKnowledgeData}
