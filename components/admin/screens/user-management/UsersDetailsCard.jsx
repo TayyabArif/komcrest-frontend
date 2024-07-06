@@ -32,7 +32,7 @@ const id = 50
         name="companyId"
         defaultSelectedKeys={formData.companyId ? [formData.companyId] : []}
       >
-        {allCompanies.map((company) => (
+        {allCompanies.length > 0 && allCompanies.map((company) => (
           <SelectItem key={company.id} value={company.id}   >
             {company.name}
           </SelectItem>

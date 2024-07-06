@@ -132,21 +132,27 @@ const UploadQuestions = () => {
   
    
   // Remove "do no map" key
-    const updatedData =  transformedData.map(question => {
+    let updatedData =  transformedData.map(question => {
       const { "do no map": _, ...rest } = question; 
       return rest;
     });
   console.log(">>>>>>>>>>>>>>",updatedData)
-  
+
+
+  if (!updatedData[0].hasOwnProperty('curator')) {
+    
+    updatedData = updatedData.map(obj => ({
+        ...obj,
+        curator: cookiesData?.userName
+    }));
+}
     const newObj = {
       ...knowledgeData,
       questions: updatedData,
     };
-  
     console.log("Transformed Data:", newObj);
+    debugger
     setUpdatedData(newObj)
-
-
     setStepper(stepper + 1);
       setProgressBar(progressBar + 27);
   }
@@ -290,7 +296,7 @@ const UploadQuestions = () => {
           </div>
           {stepper > 0 &&  <h1 className='my-2 font-semibold text-[18px] 2xl:text-[20px]'>Your table - {knowledgeData.name.replace(".xlsx", "")}</h1>}
         
-          <div className="overflow-scroll max-h-[59vh] min-h-[52vh]">
+          <div className="overflow-scroll max-h-[58vh] min-h-[45vh]">
             {stepper == 0 && (
               <UploadFile
                 setKnowledgeData={setKnowledgeData}

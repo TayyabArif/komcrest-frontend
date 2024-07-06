@@ -68,7 +68,8 @@ const Login = ({ type }) => {
             token: data.token,
             role: data.user.role,
             companyType: data.user?.Company?.companyType,
-            companyId : data.user.companyId
+            companyId : data.user.companyId,
+            userName : data.user.firstName
           };
          
           setCookie('myCookie',  userData, { path: '/' });
