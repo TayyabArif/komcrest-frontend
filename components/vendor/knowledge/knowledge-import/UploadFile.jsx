@@ -6,11 +6,13 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import SelectHeaderRow from './SelectHeaderRow';
 import { useRouter } from "next/router";
 
-const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeData }) => {
+const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeData , setSelectedHeader ,setSelectedRowIndex }) => {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleDrop = (acceptedFiles) => {
+    setSelectedHeader([])
+    setSelectedRowIndex(null)
     const file = acceptedFiles[0];
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -69,8 +71,8 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
         </tbody>
       </table>
       <div className='space-y-6'>
-        <div className='w-[34%] mx-auto text-center'>
-          <p className="leading-4 text-[18px] 2xl:text-[20px]">
+        <div className='w-[37%] mx-auto text-center'>
+          <p className="leading-6 text-[18px] 2xl:text-[20px]">
             Two columns are required for import: question and answer. Columns don&apos;t need to be in a specific order. You&apos;ll be able to map, rename, or remove columns in the next step.
             Upload .xlsx, .xls or .csv file
           </p>

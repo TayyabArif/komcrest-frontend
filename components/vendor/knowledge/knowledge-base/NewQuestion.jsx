@@ -36,8 +36,9 @@ const NewQuestion = () => {
   const cookiesData = cookies.myCookie;
   const [companyProducts, setCompanyProducts] = useState([]);
   const [documentData, setDocumentData] = useState([]);
-  const [CompanyUserData , setCompanyUserData] = useState([])
+  const [CompanyUserData, setCompanyUserData] = useState([]);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const [dataLoaded, setDataIsLoaded] = useState(false);
   const router = useRouter();
   const { id } = router.query;
   const [newQuestion, setNewQuestion] = useState({
@@ -45,9 +46,8 @@ const NewQuestion = () => {
     question: "",
     answer: "",
     productIds: [],
-    source: "",
     roadmap: "",
-    category: "",
+    komcrestCategory: "",
     curator: "",
     language: "",
     documentId: "",
@@ -74,36 +74,14 @@ const NewQuestion = () => {
   };
 
   const handleData = (e) => {
-
     const { name, value } = e.target;
-    console.log("value +++++++++",value)
-    console.log("namemmeeee" , name)
+    console.log("value +++++++++", value);
+    console.log("namemmeeee", name);
     setNewQuestion((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-
-  // const handleDrop = (acceptedFiles) => {
-  //   const allowedTypes = [
-  //     "text/plain",
-  //     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  //     "application/msword",
-  //     "application/json",
-  //     "application/vnd.ms-excel",
-  //     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  //   ];
-
-  //   const file = acceptedFiles[0];
-  //   if (file && allowedTypes.includes(file.type)) {
-  //     setNewQuestion((prevData) => ({
-  //       ...prevData,
-  //       document: file,
-  //     }));
-  //   } else {
-  //     toast.error("Invalid file type. Please upload a valid file.");
-  //   }
-  // };
 
   const getCompanyProducts = async () => {
     const token = cookiesData?.token;
@@ -132,11 +110,13 @@ const NewQuestion = () => {
   useEffect(() => {
     getCompanyProducts();
     getUserDocument();
-    getCompanyUser()
+    getCompanyUser();
   }, []);
 
   useEffect(() => {
+    setDataIsLoaded(true);
     if (id) {
+      setDataIsLoaded(false);
       const token = cookiesData?.token;
       const requestOptions = {
         method: "GET",
@@ -160,7 +140,7 @@ const NewQuestion = () => {
           };
         })
         .then(({ status, ok, data }) => {
-          console.log("========+++++++++",data)
+          console.log("========+++++++++", data);
           if (ok) {
             setNewQuestion({
               ...data,
@@ -185,7 +165,7 @@ const NewQuestion = () => {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: jsonPayload,
         redirect: "follow",
@@ -215,21 +195,26 @@ const NewQuestion = () => {
           }
         })
         .catch((error) => console.error(error));
-    }else{
+    } else {
       {
-       let requestOptions = {
+        let requestOptions = {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           body: jsonPayload,
           redirect: "follow",
         };
-  
+
         fetch(`${baseUrl}/questions`, requestOptions)
-          .then( async (response) => {
-            const data = await handleResponse(response, router, cookies, removeCookie);
+          .then(async (response) => {
+            const data = await handleResponse(
+              response,
+              router,
+              cookies,
+              removeCookie
+            );
             return {
               status: response.status,
               ok: response.ok,
@@ -267,22 +252,25 @@ const NewQuestion = () => {
 
     try {
       const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
-      const data = await handleResponse(response, router, cookies,removeCookie);
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
       if (response.ok) {
-
-        const referenceOptions = data.map(item => ({
+        const referenceOptions = data.map((item) => ({
           id: item.id,
-          title: item.title
-      }));
+          title: item.title,
+        }));
         setDocumentData(referenceOptions);
-        console.log(">>>>>>,",referenceOptions)
+        console.log(">>>>>>,", referenceOptions);
       } else {
         toast.error(data?.error);
-        
       }
     } catch (error) {
       console.error("Error fetching user documents:", error);
-    } 
+    }
   };
 
   const getCompanyUser = async () => {
@@ -296,227 +284,267 @@ const NewQuestion = () => {
     };
 
     try {
-      const response = await fetch(`${baseUrl}/get-company-users`, requestOptions);
-      const data = await handleResponse(response, router, cookies,removeCookie);
+      const response = await fetch(
+        `${baseUrl}/get-company-users`,
+        requestOptions
+      );
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
       if (response.ok) {
-        const curatorOptions = data.map(item => ({
+        const curatorOptions = data.map((item) => ({
           id: item.id,
-          name: item.firstName
-      }));
-      setCompanyUserData(curatorOptions);
-        console.log("user List,",curatorOptions)
+          name: item.firstName,
+        }));
+        setCompanyUserData(curatorOptions);
+        console.log("user List,", curatorOptions);
       } else {
         toast.error(data?.error);
-        
       }
     } catch (error) {
       console.error("Error fetching user documents:", error);
-    } 
+    }
   };
 
   return (
     <div className="w-[100%] h-full">
-      <div className="w-[80%] mx-auto py-4 mt-[4rem]">
-        <div className="px-4 bg-white pb-6">
-          <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[20px] font-semibold">
-            {`${id ? "Update" : "New"}`} Question
-          </h1>
-          <div className="flex justify-between">
-            <div className=" w-[45%] space-y-4">
-              <div className="mt-2 mb-3">
-                <label className="text-[16px] 2xl:text-[20px]">Question</label>
-                <Textarea
-                  variant="bordered"
-                  // size="sm"
-                  maxRows={5}
-                  placeholder="Type the question here"
-                  name="question"
-                  value={newQuestion.question}
-                  onChange={handleData}
-                  classNames={{
-                    input: "text-base 2xl:text-[18px] h-[150px]",
-                  }}
-                />
+      {dataLoaded && (
+        <div className="w-[80%] mx-auto py-4 mt-[4rem]">
+          <div className="px-4 bg-white pb-6">
+            <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[20px] font-semibold">
+              {`${id ? "Update" : "New"}`} Question
+            </h1>
+            <div className="flex justify-between">
+              <div className=" w-[45%] space-y-4">
+                <div className="mt-2 mb-3">
+                  <label className="text-[16px] 2xl:text-[20px]">
+                    Question
+                  </label>
+                  <Textarea
+                    variant="bordered"
+                    // size="sm"
+                    maxRows={5}
+                    placeholder="Type the question here"
+                    name="question"
+                    value={newQuestion.question}
+                    onChange={handleData}
+                    classNames={{
+                      input:
+                        "text-base 2xl:text-[18px] text-[15px] h-[150px] text-gray-500",
+                    }}
+                  />
+                </div>
+                <div>
+                  <label className="text-[16px] 2xl:text-[20px]">
+                    Komcrest Category
+                  </label>
+                  <Select
+                    variant="bordered"
+                    className="w-full bg-transparent text-[15px] "
+                    size="sm"
+                    placeholder="Select"
+                    name="komcrestCategory"
+                    value={newQuestion.komcrestCategory}
+                    onChange={(e) => handleData(e)}
+                    defaultSelectedKeys={
+                      newQuestion.komcrestCategory
+                        ? [newQuestion.komcrestCategory]
+                        : []
+                    }
+                  >
+                    {categoryOption?.map((option) => (
+                      <SelectItem key={option.key} value={option.label}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
+                <div className="my-2">
+                  <label className="text-[16px] 2xl:text-[20px]">
+                    Coverage
+                  </label>
+                  <Input
+                    type="text"
+                    variant="bordered"
+                    placeholder=""
+                    size="sm"
+                    name="coverage"
+                    value={newQuestion.coverage}
+                    onChange={handleData}
+                    classNames={{
+                      input:
+                        "text-base 2xl:text-[18px] text-[15px] text-gray-500",
+                    }}
+                  />
+                </div>
+
+                <div className="">
+                  <label className="text-[16px] 2xl:text-[20px]">Answer</label>
+                  <Textarea
+                    variant="bordered"
+                    size="sm"
+                    placeholder="Type the answer here"
+                    name="answer"
+                    value={newQuestion.answer}
+                    onChange={handleData}
+                    classNames={{
+                      input:
+                        "text-base 2xl:text-[18px] text-[15px] text-gray-500",
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[16px] 2xl:text-[20px]">
+                    Associated Products
+                  </label>
+
+                  <div className="gap-x-6 gap-y-2 flex flex-wrap my-1 ">
+                    {companyProducts?.map((item, index) => (
+                      <Checkbox
+                        key={index}
+                        isSelected={newQuestion.productIds.includes(item.id)}
+                        onChange={() => handleCheckboxChange(item.id)}
+                        className="2xl:text-[20px]"
+                        radius="none"
+                        classNames={{ wrapper: "!rounded-[3px]" }}
+                      >
+                        {item.name}
+                      </Checkbox>
+                    ))}
+                  </div>
+                </div>
               </div>
+              <div className="w-[45%] space-y-3">
+                <div className="my-2">
+                  <label className="text-[16px] 2xl:text-[20px]">Roadmap</label>
+                  <Input
+                    type="text"
+                    variant="bordered"
+                    placeholder="If it is in your roadmap, provide details, e.g. “Q2 2025”"
+                    size="sm"
+                    name="roadmap"
+                    value={newQuestion.roadmap}
+                    onChange={handleData}
+                    classNames={{
+                      input:
+                        "text-base 2xl:text-[18px] text-[15px] text-gray-500",
+                    }}
+                  />
+                </div>
+                {id && (
+                  <div className="">
+                    <label className="text-[16px] 2xl:text-[20px]">
+                      Source
+                    </label>
+                    <Input
+                      type="text"
+                      variant="bordered"
+                      size="sm"
+                      name="source"
+                      value={newQuestion.documentFile?.name}
+                      onChange={handleData}
+                      classNames={{
+                        input:
+                          "text-base 2xl:text-[18px] text-[15px] text-gray-500",
+                      }}
+                    />
+                  </div>
+                )}
 
-              <div>
-                <label className="text-[16px] 2xl:text-[20px]">Category</label>
-                <Select
-                  variant="bordered"
-                  className="w-full bg-transparent"
-                  size="sm"
-                  placeholder="Select"
-                  name="category"
-                  // value={newQuestion.category}
-                  onChange={(e) => handleData(e)}
-                  defaultSelectedKeys={newQuestion.category ? [newQuestion.key] : []}
-                >
-                  {categoryOption?.map((option) => (
-                    <SelectItem key={option.key} value={option.label}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
+                <div>
+                  <label className="text-[16px] 2xl:text-[20px]">Curator</label>
+                  <Select
+                    variant="bordered"
+                    className="w-full bg-transparent text-[15px]"
+                    size="sm"
+                    placeholder="Select"
+                    name="curator"
+                    value={newQuestion.curator}
+                    onChange={(e) => handleData(e)}
+                    defaultSelectedKeys={
+                      newQuestion.curator ? [newQuestion.curator] : []
+                    }
+                  >
+                    {CompanyUserData?.map((option) => (
+                      <SelectItem key={option.name} value={option.name}>
+                        {option.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
 
-              <div className="my-2">
-                <label className="text-[16px] 2xl:text-[20px]">Coverage</label>
-                <Input
-                  type="text"
-                  variant="bordered"
-                  placeholder=""
-                  size="sm"
-                  name="coverage"
-                  value={newQuestion.coverage}
-                  onChange={handleData}
-                  classNames={{
-                    input: "text-base 2xl:text-[18px]",
-                  }}
-                />
-              </div>
-
-              <div className="">
-                <label className="text-[16px] 2xl:text-[20px]">Answer</label>
-                <Textarea
-                  variant="bordered"
-                  size="sm"
-                  placeholder="Type the answer here"
-                  name="answer"
-                  value={newQuestion.answer}
-                  onChange={handleData}
-                  classNames={{
-                    input: "text-base 2xl:text-[18px]",
-                  }}
-                />
-              </div>
-
-              <div>
-                <label className="text-[16px] 2xl:text-[20px]">
-                  Associated Products
-                </label>
-
-                <div className="gap-x-6 gap-y-2 flex flex-wrap my-1 ">
-                  {companyProducts?.map((item, index) => (
-                    <Checkbox
-                      key={index}
-                      isSelected={newQuestion.productIds.includes(item.id)}
-                      onChange={() => handleCheckboxChange(item.id)}
-                      className="2xl:text-[20px]"
-                      radius="none"
-                      classNames={{ wrapper: "!rounded-[3px]" }}
-                    >
-                      {item.name}
-                    </Checkbox>
-                  ))}
+                <div>
+                  <label className="text-[16px] 2xl:text-[20px]">
+                    Reference
+                  </label>
+                  <Select
+                    variant="bordered"
+                    className="w-full bg-transparent text-[15px]"
+                    size="sm"
+                    placeholder="Reference"
+                    name="documentId"
+                    value={newQuestion.documentId}
+                    onChange={(e) => handleData(e)}
+                    defaultSelectedKeys={
+                      newQuestion.documentId ? [newQuestion.documentId] : []
+                    }
+                  >
+                    {documentData?.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        {option.title}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-[16px] 2xl:text-[20px]">
+                    Language
+                  </label>
+                  <Select
+                    variant="bordered"
+                    className="w-full bg-transparent text-[15px]"
+                    size="sm"
+                    placeholder="language"
+                    name="language"
+                    value={newQuestion.language}
+                    onChange={(e) => handleData(e)}
+                    defaultSelectedKeys={
+                      newQuestion.language ? [newQuestion.language] : []
+                    }
+                  >
+                    {language?.map((option) => (
+                      <SelectItem key={option.key} value={option.key}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </Select>
                 </div>
               </div>
             </div>
-            <div className="w-[45%] space-y-3">
-              <div className="my-2">
-                <label className="text-[16px] 2xl:text-[20px]">Roadmap</label>
-                <Input
-                  type="text"
-                  variant="bordered"
-                  placeholder="If it is in your roadmap, provide details, e.g. “Q2 2025”"
-                  size="sm"
-                  name="roadmap"
-                  value={newQuestion.roadmap}
-                  onChange={handleData}
-                  classNames={{
-                    input: "text-base 2xl:text-[18px]",
-                  }}
-                />
-              </div>
-              <div className="">
-                <label className="text-[16px] 2xl:text-[20px]">Source</label>
-                <Input
-                  type="text"
-                  variant="bordered"
-                  size="sm"
-                  name="source"
-                  value={newQuestion.source}
-                  onChange={handleData}
-                  classNames={{
-                    input: "text-base 2xl:text-[18px]",
-                  }}
-                />
-              </div>
-              <div>
-                <label className="text-[16px] 2xl:text-[20px]">Curator</label>
-                <Select
-                  variant="bordered"
-                  className="w-full bg-transparent"
-                  size="sm"
-                  placeholder="Select"
-                  name="curator"
-                  value={newQuestion.curator}
-                  onChange={(e) => handleData(e)}
-                >
-                  {CompanyUserData?.map((option) => (
-                    <SelectItem key={option.name} value={option.name}>
-                      {option.name}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
-
-              <div>
-                <label className="text-[16px] 2xl:text-[20px]">Reference</label>
-                <Select
-                  variant="bordered"
-                  className="w-full bg-transparent"
-                  size="sm"
-                  placeholder="Reference"
-                  name="documentId"
-                  value={newQuestion.documentId}
-                  onChange={(e) => handleData(e)}
-                >
-                  {documentData?.map((option) => (
-                    <SelectItem key={option.id} value={option.id}>
-                      {option.title}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
-              <div>
-                <label className="text-[16px] 2xl:text-[20px]">Language</label>
-                <Select
-                  variant="bordered"
-                  className="w-full bg-transparent"
-                  size="sm"
-                  placeholder="language"
-                  name="language"
-                  value={newQuestion.language}
-                  onChange={(e) => handleData(e)}
-                >
-                  {language?.map((option) => (
-                    <SelectItem key={option.key} value={option.key}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
+            <div className="flex justify-end mt-4 gap-3">
+              <Button
+                size="sm"
+                className="rounded-md 2xl:text-[20px] bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
+                onClick={() => router.push("/vendor/knowledge")}
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                color="primary"
+                className="rounded-md 2xl:text-[20px] text-[13px] font-semibold"
+                onClick={handleSubmit}
+              >
+                {`${id ? "Update" : "Add"}`}
+              </Button>
             </div>
           </div>
-          <div className="flex justify-end mt-4 gap-3">
-            <Button
-              size="sm"
-              className="rounded-md 2xl:text-[20px] bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
-              onClick={()=>router.push("/vendor/knowledge")}
-            >
-              Cancel
-            </Button>
-            <Button
-              size="sm"
-              color="primary"
-              className="rounded-md 2xl:text-[20px] text-[13px] font-semibold"
-              onClick={handleSubmit}
-            >
-              {`${id ? "Update" : "Add"}`}
-            </Button>
-          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
