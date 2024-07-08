@@ -2,10 +2,7 @@ import React from "react";
 import { useRouter } from 'next/router';
 import { Button } from "@nextui-org/react";
 
-const KnowledgeHeader = ({buttonShow , headerData}) => {
-  // debugger
-  console.log("========",headerData)
- 
+const KnowledgeHeader = ({buttonShow , headerData}) => { 
   const router = useRouter()
   return (
     <div className="bg-gray-50 py-2">

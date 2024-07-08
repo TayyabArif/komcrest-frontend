@@ -38,6 +38,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
   const [filterData, setFilterData] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
     setFilterData(questionData);
@@ -46,7 +47,8 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     const filtered = questionData?.filter(question =>
-      question.category?.toLowerCase().includes(value)
+      question.category?.toLowerCase().includes(value) || 
+      question.question?.toLowerCase().includes(value)
     );
     setFilterData(filtered);
   };
@@ -125,6 +127,15 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
       console.error("Error downloading the file", error);
     }
   };
+
+
+  const handleCheckBox = (id) => {
+    setSelectedIds(prevIds => 
+      prevIds.includes(id) 
+        ? prevIds.filter(item => item !== id) 
+        : [...prevIds, id]
+    );
+  }
   
   return (
     <div>
@@ -151,7 +162,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
               <thead className="bg-gray-200">
                 <tr className="text-[18px] 2xl:text-[20px]">
                   <th className="py-2 px-4 border border-gray-300 text-left">
-                    <input type="checkbox" />
+                   
                   </th>
                   <th className="py-2 px-4 border border-gray-300 text-left">
                     Category
@@ -159,13 +170,13 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                   <th className="py-2 px-4 border border-gray-300 text-left">
                     Komcrast Category
                   </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left">
+                  <th className="py-2 px-4 border border-gray-300 text-left !min-w-[500px] ">
                     Question
                   </th>
                   <th className="py-2 px-4 border border-gray-300 text-left">
                     Coverage
                   </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left text-wrap !w-[500px]">
+                  <th className="py-2 px-4 border border-gray-300 text-left text-wrap !min-w-[500px]">
                     Answer
                   </th>
                   <th className="py-2 px-4 border border-gray-300 text-left">
@@ -195,7 +206,10 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                 {filterData?.map((data, index) => (
                   <tr key={data.id} className="bg-white h-[100px] text-[18px] 2xl:text-[20px]">
                     <td className="py-2 px-4 border border-gray-300">
-                      <input type="checkbox" />
+                    <div
+                        onClick={() => handleCheckBox(data.id)}
+                        className={`w-5 h-5 rounded ${selectedIds.includes(data.id) ? 'bg-blue-600' : 'bg-white border-2  border-gray-300'}`}
+                      />
                     </td>
                     <td className="py-2 px-4 border border-gray-300 whitespace-nowrap  text-wrap min-w-[250px] max-w-[550px]">
                       {data.category}
@@ -216,7 +230,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                     <td className="py-2 px-4 border border-gray-300 max-w-xs">
                       {data.question}
                     </td>
-                    <td className="py-2 px-4 border border-gray-300 whitespace-nowrap ">
+                    <td className="py-2 px-4 border border-gray-300 whitespace-rap ">
                       {data.coverage}
                     </td>
                     <td className="py-2 px-4 border border-gray-300 text-wrap min-w-[500px] ">

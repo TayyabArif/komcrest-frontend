@@ -216,12 +216,15 @@ const UploadQuestions = () => {
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
           {getTitle()}
         </h1>
-        <div className="w-full h-[83vh] bg-white p-6 ">
+        <div className="w-full h-[83vh] bg-white p-6">
           <Progress
             aria-label="Loading..."
             value={progressBar}
             className="h-[8px]"
           />
+
+          <div className="flex flex-col justify-between  h-full">
+            <div>
           <div className="my-3 flex gap-2">
             <div className="flex gap-3 items-center flex-1 border py-2 px-2 rounded">
               <span
@@ -295,7 +298,7 @@ const UploadQuestions = () => {
           </div>
           {stepper > 0 &&  <h1 className='my-2 font-semibold text-[18px] 2xl:text-[20px]'>Your table - {knowledgeData.name.replace(".xlsx", "")}</h1>}
         
-          <div className="overflow-auto max-h-[58vh] min-h-[45vh]">
+          <div className="overflow-auto  max-h-[58vh]">
             {stepper == 0 && (
               <UploadFile
                 setKnowledgeData={setKnowledgeData}
@@ -328,15 +331,16 @@ const UploadQuestions = () => {
             {stepper == 3 && <Validate knowledgeData={knowledgeData} questions={updatedData.questions} />}
             {stepper == 4 && <Completed />}
           </div>
-
+          </div>
+     <div>
           {stepper >= 1 && stepper <= 3 && (
             <div
-              className={` flex items-end ${
+              className={` flex items-end  ${
                 stepper == 2 ? "justify-between" : "justify-end"
               } gap-3`}
             >
               {stepper == 2 && (
-                <div>
+                <div className="">
                   <h1 className="font-semibold text-[18px] 2xl:text-[20px] mt-3">Select associated products</h1>
                   <div className="gap-x-6 gap-y-2 flex flex-wrap my-2">
                     {companyProducts.map((item, index) => (
@@ -407,6 +411,8 @@ const UploadQuestions = () => {
               </div>
             </div>
           )}
+          </div>
+          </div>
         </div>
       </div>
     </div>
