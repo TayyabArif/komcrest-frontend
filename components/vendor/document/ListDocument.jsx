@@ -122,7 +122,7 @@ const AddDocument = () => {
               <span className="font-semibold text-[18px] 2xl:text-[20px]">
                 It appears that you haven’t uploaded any documents yet.
               </span>
-              <p className="text-[15px] leading-4 2xl:text-[18px]">
+              <p className="text-[15px] leading-7 2xl:text-[20px] my-1">
                 We encourage you to add key documents that you frequently share
                 with your prospects and clients. We will index them to improve
                 the accuracy of Komcrest Generative AI.

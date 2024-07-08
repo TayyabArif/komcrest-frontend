@@ -14,6 +14,7 @@ const VendorLayout = ({ children }) => {
   function handleLogout(){
     removeCookie('myCookie', { path: '/' }); 
     router.push("/vendor/login/access")
+    localStorage.removeItem("selectedSideBar")
     toast.success("Logout Successfully")
   }
 

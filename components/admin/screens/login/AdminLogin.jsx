@@ -13,7 +13,7 @@ const AdminLogin = () => {
         Eliminate Security Questionnaire complexity thanks to our A.I. powered solution that helps you get customers the exact answers for their security review in no time.
         </p>
       </div>
-      <p className="text-sm">Komcrest 1.1.0.2024</p>
+      <p className="text-sm 2xl:text-[20px]">Komcrest 1.1.0.2024</p>
     </div>
     <div className="w-[70%] flex flex-col justify-center items-center px-10 py-10">
       <Login />

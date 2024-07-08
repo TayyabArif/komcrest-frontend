@@ -48,13 +48,13 @@ const ExampleCard = () => {
                 className="w-[19%] h-[135px] bg-white rounded-lg  my-4 flex flex-col justify-between mx-2"
               >
                 <div className=" text-left px-4 pt-5 h-full">
-                  <h1 className="text-[14px] font-semibold 2xl:text-[18px]">{item.title}</h1>
+                  <h1 className="text-[14px] font-semibold 2xl:text-[20px]">{item.title}</h1>
                 </div>
 
                 <div className="flex justify-between items-center border-t-2 py-2 px-4">
                   <span  onClick={() => {
                 router.push("/vendor/document/AddDocument");
-              }} className="text-[15px] text-blue-600 cursor-pointer 2xl:text-[18px]">Upload</span>
+              }} className="text-[15px] text-blue-600 cursor-pointer 2xl:text-[20px]">Upload</span>
                 </div>
               </div>
             );

@@ -302,6 +302,8 @@ const UploadQuestions = () => {
                 knowledgeData={knowledgeData}
                 setStepper={setStepper}
                 setProgressBar={setProgressBar}
+                setSelectedHeader={setSelectedHeader}
+                setSelectedRowIndex={setSelectedRowIndex}
               />
             )}
             {stepper == 1 && <SelectHeaderRow 

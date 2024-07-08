@@ -234,7 +234,7 @@ const NewDocument = () => {
           <div className="my-3">
             <div className="flex  space-y-3 items-center gap-2">
               <div className="w-[50%]">
-                <p className="text-[15px] leading-5 2xl:text-[20px]">
+                <p className="text-[15px] leading-7 2xl:text-[20px]">
                   Drag and drop sections for your file uploads or click and
                   select file to upload to be indexed by Komcrest AI.
                   Alternatively, you can add the link to the document, but it
@@ -278,7 +278,7 @@ const NewDocument = () => {
                   value={documentData.title}
                   onChange={handleData}
                   classNames={{
-                    input: "text-base 2xl:text-[18px]"
+                    input: "text-base 2xl:text-[20px]"
                   }}
                 />
               </div>
@@ -293,7 +293,7 @@ const NewDocument = () => {
                   value={documentData.documentLink}
                   onChange={handleData}
                   classNames={{
-                    input: "text-base 2xl:text-[18px]"
+                    input: "text-base 2xl:text-[20px]"
                   }}
                 />
               </div>
@@ -311,7 +311,7 @@ const NewDocument = () => {
                 value={documentData.description}
                 onChange={handleData}
                 classNames={{
-                  input: "text-base 2xl:text-[18px]"
+                  input: "text-base 2xl:text-[20px]"
                 }}
               />
             </div>

@@ -56,13 +56,13 @@ const KnowledgeHome = () => {
                   </g>
                 </svg>
               </div>
-              <h1 className="font-semibold text-[18px] 2xl:text-[20px] w-[85%] mx-auto">
+              <h1 className="font-semibold text-[18px] 2xl:text-[20px] w-[85%] mx-auto leading-7 mt-3">
               It appears that you haven’t uploaded any requirements, questions and answers yet.
               </h1>
-              <p className="text-[15px] leading-4 2xl:text-[18px] w-[85%] mx-auto">
+              <p className="text-[15px] leading-7 2xl:text-[20px] w-[85%] mx-auto my-1">
               We encourage you to add key documents that you frequently share with your prospects and clients. We will index them to improve the accuracy of Komcrest AI responses.
               </p>
-              <p className='my-5 text-[15px] ' >
+              <p className='my-4 text-[15px] 2xl:text-[20px] leading-7' >
               You don’t know where to start from? Download our list of questions HERE. It will help you shape build up your knowledge base and clarify your roadmap.
               </p>
               <Button

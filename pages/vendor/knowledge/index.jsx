@@ -28,7 +28,7 @@ const Index = () => {
     };
 
     try {
-      const response = await fetch(`${baseUrl}/document-files`, requestOptions);
+      const response = await fetch(`${baseUrl}/questions`, requestOptions);
       const data = await handleResponse(response, router, cookies, removeCookie);
       if (response.ok) {
         setQuestionData(data);
