@@ -70,12 +70,12 @@ const ForgetPassword = ({ type }) => {
           type="email"
           placeholder="Email"
           className="mt-3 -ml-1"
-          classNames={{ inputWrapper: "h-[40px]", input: "text-base 2xl:text-[18px]" }}
+          classNames={{ inputWrapper: "h-[40px]", input: "text-base 2xl:text-[20px]" }}
         />
         <Button
           radius="none"
           size="sm"
-          className="mt-6 text-white px-[45px] text-base 2xl:text-[18px] bg-[#4fa82e] w-max rounded-[6px] -ml-1"
+          className="mt-6 text-white px-[45px] text-base 2xl:text-[20px] bg-[#4fa82e] w-max rounded-[6px] -ml-1"
           isDisabled={!formData?.email || isLoading}
           isLoading={isLoading}
           onPress={handleSubmit}

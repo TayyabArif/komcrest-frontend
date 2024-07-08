@@ -9,9 +9,10 @@ import { toast } from "react-toastify";
 import VendorHeader from "../../shared/VendorHeader";
 import KnowledgeHeader from "../../shared/KnowledgeHeader";
 import DeleteQuestionModal from "./DeleteQuestionModal";
-import { handleResponse, formatDate } from "../../../../helper";
+import { handleResponse, formatDateWithTime } from "../../../../helper";
 
 const komcrestCategories = [
+  { value: "", text: "Select a Category" },
   { value: "Overview", text: "Overview" },
   { value: "Access Management", text: "Access Management" },
   { value: "Application & Data Security", text: "Application & Data Security" },
@@ -124,7 +125,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
       console.error("Error downloading the file", error);
     }
   };
-
+  
   return (
     <div>
       <KnowledgeHeader buttonShow={true} />
@@ -136,11 +137,12 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
             placeholder="Search"
             endContent={<Search size={18} />}
             type="text"
-            classNames={{ inputWrapper: "bg-white rounded-md" }}
+            classNames={{ inputWrapper: "bg-white rounded-md", input:
+              "2xl:text-[20px] text-[18px]", }}
             className="max-w-xs"
           />
-          <div className="bg-white p-1 border border-gray-300 rounded-[5px]">
-            <Filter size={26} className="text-gray-500" />
+          <div className="bg-white p-1 border border-gray-300 rounded-[5px] shadow-md cursor-pointer">
+            <Filter size={26} className="text-gray-500" color = "#2457d7"/>
           </div>
         </div>
         {questionData && questionData.length > 0 ? (
@@ -239,8 +241,9 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                       {data.documentFile?.name}
                     </td>
                     <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
-                      {formatDate(data.updatedAt)}
+                      {formatDateWithTime(data.updatedAt)}
                     </td>
+
                     <td className="py-2 px-4 border border-gray-300 sticky right-0 bg-white pl-8">
                       <Popover
                         className="rounded-[0px]"

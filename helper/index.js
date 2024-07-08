@@ -16,9 +16,19 @@ export const formatDate = (dateString) => {
     return `${month}-${day}-${year}`;
   }
 
+export function formatDateWithTime(dateString) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true,
+  }).format(new Date(dateString));
+}
+
   export const handleResponse = async (response  ,router, cookies,removeCookie) => {
-     console.log(">>>>>>>>>")
-    //  debugger
     const data = await response.json();
     if (response.ok) {
       return data;

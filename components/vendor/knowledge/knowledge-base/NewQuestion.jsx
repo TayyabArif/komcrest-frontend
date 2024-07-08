@@ -320,7 +320,7 @@ const NewQuestion = () => {
             <div className="flex justify-between">
               <div className=" w-[45%] space-y-4">
                 <div className="mt-2 mb-3">
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-[18px] 2xl:text-[20px]">
                     Question
                   </label>
                   <Textarea
@@ -333,18 +333,18 @@ const NewQuestion = () => {
                     onChange={handleData}
                     classNames={{
                       input:
-                        "text-base 2xl:text-[18px] text-[15px] h-[150px] text-gray-500",
+                        "text-[18px] 2xl:text-[20px] h-[150px] text-gray-500",
                     }}
                   />
                 </div>
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-[18px] 2xl:text-[20px]">
                     Komcrest Category
                   </label>
                   <Select
                     variant="bordered"
-                    className="w-full bg-transparent text-[15px] "
-                    size="sm"
+                    className="w-full bg-transparent text-[20px] "
+                    size="lg"
                     placeholder="Select"
                     name="komcrestCategory"
                     value={newQuestion.komcrestCategory}
@@ -354,6 +354,7 @@ const NewQuestion = () => {
                         ? [newQuestion.komcrestCategory]
                         : []
                     }
+                    classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                   >
                     {categoryOption?.map((option) => (
                       <SelectItem key={option.key} value={option.label}>
@@ -363,7 +364,7 @@ const NewQuestion = () => {
                   </Select>
                 </div>
                 <div className="my-2">
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-[18px] 2xl:text-[20px]">
                     Coverage
                   </label>
                   <Input
@@ -376,13 +377,13 @@ const NewQuestion = () => {
                     onChange={handleData}
                     classNames={{
                       input:
-                        "text-base 2xl:text-[18px] text-[15px] text-gray-500",
+                        "2xl:text-[20px] text-[18px] text-gray-500",
                     }}
                   />
                 </div>
 
                 <div className="">
-                  <label className="text-[16px] 2xl:text-[20px]">Answer</label>
+                  <label className="text-[18px] 2xl:text-[20px]">Answer</label>
                   <Textarea
                     variant="bordered"
                     size="sm"
@@ -392,13 +393,13 @@ const NewQuestion = () => {
                     onChange={handleData}
                     classNames={{
                       input:
-                        "text-base 2xl:text-[18px] text-[15px] text-gray-500",
+                        "2xl:text-[20px] text-[18px] text-gray-500",
                     }}
                   />
                 </div>
 
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-[18px] 2xl:text-[20px]">
                     Associated Products
                   </label>
 
@@ -410,7 +411,7 @@ const NewQuestion = () => {
                         onChange={() => handleCheckboxChange(item.id)}
                         className="2xl:text-[20px]"
                         radius="none"
-                        classNames={{ wrapper: "!rounded-[3px]" }}
+                        classNames={{ wrapper: "!rounded-[3px] " }}
                       >
                         {item.name}
                       </Checkbox>
@@ -420,7 +421,7 @@ const NewQuestion = () => {
               </div>
               <div className="w-[45%] space-y-3">
                 <div className="my-2">
-                  <label className="text-[16px] 2xl:text-[20px]">Roadmap</label>
+                  <label className="text-[18px] 2xl:text-[20px]">Roadmap</label>
                   <Input
                     type="text"
                     variant="bordered"
@@ -431,13 +432,13 @@ const NewQuestion = () => {
                     onChange={handleData}
                     classNames={{
                       input:
-                        "text-base 2xl:text-[18px] text-[15px] text-gray-500",
+                        "2xl:text-[20px] text-[18px] text-gray-500",
                     }}
                   />
                 </div>
                 {id && (
                   <div className="">
-                    <label className="text-[16px] 2xl:text-[20px]">
+                    <label className="text-[18px] 2xl:text-[20px]">
                       Source
                     </label>
                     <Input
@@ -449,14 +450,14 @@ const NewQuestion = () => {
                       onChange={handleData}
                       classNames={{
                         input:
-                          "text-base 2xl:text-[18px] text-[15px] text-gray-500",
+                          "2xl:text-[20px] text-[18px] text-gray-500",
                       }}
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">Curator</label>
+                  <label className="text-[18px] 2xl:text-[20px]">Curator</label>
                   <Select
                     variant="bordered"
                     className="w-full bg-transparent text-[15px]"
@@ -468,6 +469,7 @@ const NewQuestion = () => {
                     defaultSelectedKeys={
                       newQuestion.curator ? [newQuestion.curator] : []
                     }
+                    classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                   >
                     {CompanyUserData?.map((option) => (
                       <SelectItem key={option.name} value={option.name}>
@@ -492,6 +494,7 @@ const NewQuestion = () => {
                     defaultSelectedKeys={
                       newQuestion.documentId ? [newQuestion.documentId] : []
                     }
+                    classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                   >
                     {documentData?.map((option) => (
                       <SelectItem key={option.id} value={option.id}>
@@ -515,6 +518,7 @@ const NewQuestion = () => {
                     defaultSelectedKeys={
                       newQuestion.language ? [newQuestion.language] : []
                     }
+                    classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                   >
                     {language?.map((option) => (
                       <SelectItem key={option.key} value={option.key}>

@@ -72,7 +72,7 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
       </table>
       <div className='space-y-6'>
         <div className='w-[37%] mx-auto text-center'>
-          <p className="leading-6 text-[18px] 2xl:text-[20px]">
+          <p className="leading-7 text-[18px] 2xl:text-[20px]">
             Two columns are required for import: question and answer. Columns don&apos;t need to be in a specific order. You&apos;ll be able to map, rename, or remove columns in the next step.
             Upload .xlsx, .xls or .csv file
           </p>
