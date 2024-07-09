@@ -344,7 +344,7 @@ const NewQuestion = () => {
                   <Select
                     variant="bordered"
                     className="w-full bg-transparent text-[20px] "
-                    size="lg"
+                    size="md"
                     placeholder="Select"
                     name="komcrestCategory"
                     value={newQuestion.komcrestCategory}
@@ -357,7 +357,7 @@ const NewQuestion = () => {
                     classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                   >
                     {categoryOption?.map((option) => (
-                      <SelectItem key={option.key} value={option.label}>
+                      <SelectItem key={option.key} value={option.label} classNames={{title: "text-[18px] 2xl:text-[20px]"}}>
                         {option.label}
                       </SelectItem>
                     ))}
@@ -371,7 +371,7 @@ const NewQuestion = () => {
                     type="text"
                     variant="bordered"
                     placeholder=""
-                    size="sm"
+                    size="md"
                     name="coverage"
                     value={newQuestion.coverage}
                     onChange={handleData}
@@ -409,9 +409,10 @@ const NewQuestion = () => {
                         key={index}
                         isSelected={newQuestion.productIds.includes(item.id)}
                         onChange={() => handleCheckboxChange(item.id)}
-                        className="2xl:text-[20px]"
+                        className="2xl:text-[20px] !text-[50px]"
                         radius="none"
-                        classNames={{ wrapper: "!rounded-[3px] " }}
+                        size="lg"
+                        classNames={{ wrapper: "!rounded-[3px]" }}
                       >
                         {item.name}
                       </Checkbox>
@@ -426,7 +427,7 @@ const NewQuestion = () => {
                     type="text"
                     variant="bordered"
                     placeholder="If it is in your roadmap, provide details, e.g. “Q2 2025”"
-                    size="sm"
+                    size="md"
                     name="roadmap"
                     value={newQuestion.roadmap}
                     onChange={handleData}
@@ -444,7 +445,7 @@ const NewQuestion = () => {
                     <Input
                       type="text"
                       variant="bordered"
-                      size="sm"
+                      size="md"
                       name="source"
                       value={newQuestion.documentFile?.name}
                       onChange={handleData}
@@ -461,7 +462,7 @@ const NewQuestion = () => {
                   <Select
                     variant="bordered"
                     className="w-full bg-transparent text-[15px]"
-                    size="sm"
+                    size="md"
                     placeholder="Select"
                     name="curator"
                     value={newQuestion.curator}
@@ -472,7 +473,7 @@ const NewQuestion = () => {
                     classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                   >
                     {CompanyUserData?.map((option) => (
-                      <SelectItem key={option.name} value={option.name}>
+                      <SelectItem key={option.name} value={option.name} classNames={{title: "text-[18px] 2xl:text-[20px]"}}>
                         {option.name}
                       </SelectItem>
                     ))}
@@ -486,7 +487,7 @@ const NewQuestion = () => {
                   <Select
                     variant="bordered"
                     className="w-full bg-transparent text-[15px]"
-                    size="sm"
+                    size="md"
                     placeholder="Reference"
                     name="documentId"
                     value={newQuestion.documentId}
@@ -497,7 +498,7 @@ const NewQuestion = () => {
                     classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                   >
                     {documentData?.map((option) => (
-                      <SelectItem key={option.id} value={option.id}>
+                      <SelectItem key={option.id} value={option.id} classNames={{title: "text-[18px] 2xl:text-[20px]"}}>
                         {option.title}
                       </SelectItem>
                     ))}
@@ -510,7 +511,7 @@ const NewQuestion = () => {
                   <Select
                     variant="bordered"
                     className="w-full bg-transparent text-[15px]"
-                    size="sm"
+                    size="md"
                     placeholder="language"
                     name="language"
                     value={newQuestion.language}
@@ -521,7 +522,7 @@ const NewQuestion = () => {
                     classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                   >
                     {language?.map((option) => (
-                      <SelectItem key={option.key} value={option.key}>
+                      <SelectItem key={option.key} value={option.key} classNames={{title: "text-[18px] 2xl:text-[20px]"}}>
                         {option.label}
                       </SelectItem>
                     ))}

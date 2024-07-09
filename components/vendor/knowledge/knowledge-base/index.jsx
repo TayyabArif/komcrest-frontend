@@ -167,10 +167,10 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                   <th className="py-2 px-4 border border-gray-300 text-left">
                     Category
                   </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left">
+                  <th className="py-2 px-4 border border-gray-300 text-left !max-w-[320px]">
                     Komcrast Category
                   </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left !min-w-[500px] ">
+                  <th className="py-2 px-4 border border-gray-300 text-left !min-w-[650px]">
                     Question
                   </th>
                   <th className="py-2 px-4 border border-gray-300 text-left">
@@ -214,13 +214,13 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                     <td className="py-2 px-4 border border-gray-300 whitespace-nowrap  text-wrap min-w-[250px] max-w-[550px]">
                       {data.category}
                     </td>
-                    <td className="py-2 px-4 border border-gray-300">
+                    <td className="py-2 px-4 border border-gray-300 max-w-[320px]">
                       <select
                         value={data.komcrestCategory}
                         onChange={(e) =>
                           handleKomcrastCategoryChange(data.id, e.target.value)
                         }
-                        className="py-1 px-2"
+                        className="py-1 px-2 max-w-[250px]"
                       >
                         {komcrestCategories?.map((item, index) => (
                           <option key={index} value={item?.value}>{item?.text}</option>

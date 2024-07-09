@@ -124,7 +124,8 @@ const UploadQuestions = () => {
     const transformedData = rows.map((row) => {
       return mappedIndexValue.reduce((acc, header, index) => {
         if (header) {
-          acc[header.toLowerCase()] = row[index] ? row[index].trim() : "";
+          // acc[header.toLowerCase()] = row[index] ? row[index].trim() : "";
+          acc[header.toLowerCase()] = row[index] && isNaN(row[index]) ? row[index].trim() : "";
         }
         return acc;
       }, {});
