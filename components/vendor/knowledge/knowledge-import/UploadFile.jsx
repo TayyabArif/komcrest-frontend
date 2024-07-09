@@ -62,11 +62,11 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
           <tr className="bg-[#ebeef2] text-[18px] 2xl:text-[20px]">
             <td className="border border-black px-2 py-2">Komcrest</td>
             <td className="border border-black px-2 py-2">Organization</td>
-            <td className="border border-black px-2 py-2">Do you have a team or resources dedicated to IT Security?</td>
+            <td className="border border-black px-2 py-2 leading-7">Do you have a team or resources dedicated to IT Security?</td>
             <td className="border border-black px-2 py-2">Yes</td>
-            <td className="border border-black px-2 py-2">The team is composed of 2 experts dedicated to drive the IT security roadmap. Plan to recruit a dedicated Security Architect</td>
+            <td className="border border-black px-2 py-2 leading-7">The team is composed of 2 experts dedicated to drive the IT security roadmap. Plan to recruit a dedicated Security Architect</td>
             <td className="border border-black px-2 py-2">Q4 2024</td>
-            <td className="border border-black px-2 py-2">Richard Branco</td>
+            <td className="border border-black px-2 py-2 leading-7">Richard Branco</td>
           </tr>
         </tbody>
       </table>

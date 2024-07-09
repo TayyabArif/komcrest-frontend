@@ -3,8 +3,6 @@ import { useRouter } from 'next/router';
 import { Button } from "@nextui-org/react";
 
 const VendorHeader = ({buttonShow , headerData}) => {
-  // debugger
-  console.log("========",headerData)
  
   const router = useRouter()
   return (
