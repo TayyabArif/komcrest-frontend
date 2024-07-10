@@ -270,7 +270,7 @@ const NewDocument = () => {
                 <Input
                   type="text"
                   variant="bordered"
-                  size="sm"
+                  size="md"
                   name="title"
                   isInvalid={isTitleInvalid}
                   color={isTitleInvalid ? "danger" : ""}
@@ -288,7 +288,7 @@ const NewDocument = () => {
                 <Input
                   type="text"
                   variant="bordered"
-                  size="sm"
+                  size="md"
                   name="documentLink"
                   value={documentData.documentLink}
                   onChange={handleData}
@@ -322,18 +322,26 @@ const NewDocument = () => {
               <Checkbox
                 key={index}
                 radius="sm"
+                size="lg"
                 // isSelected={item.check}
                 isSelected={documentData.productIds.includes(item.id)}
                 onChange={() => handleCheckboxChange(item.id)}
-                className="2xl:text-[20px]"
+                className="2xl:text-[20px] text-[18px] "
               >
                 {item.name}
               </Checkbox>
             ))}
           </div>
         </div>
-            <div className="flex justify-end mt-4 ">
-              <Button color="primary" onPress={SubmitDocument} className="rounded-md 2xl:text-[20px]" isDisabled={isDescriptionInvalid || isTitleInvalid}>
+            <div className="flex justify-end mt-4  gap-3">
+            <Button
+               size="md"
+                className="rounded-md 2xl:text-[20px] bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
+                onClick={() => router.push("/vendor/document")}
+              >
+                Cancel
+              </Button>
+              <Button  size="md" color="primary" onPress={SubmitDocument} className="rounded-md 2xl:text-[20px]" isDisabled={isDescriptionInvalid || isTitleInvalid}>
                 {id ? "Update Document" : "Add Document"}
               </Button>
             </div>

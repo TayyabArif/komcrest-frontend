@@ -93,9 +93,10 @@ const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHea
                         value={currentSelectedValue}
                         onChange={(e) => handleSelectChange(e.target.value, index)}
                         defaultSelectedKeys={defaultKey ? [defaultKey.key] : []}
+                        classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                       >
                         {getAvailableOptions().concat(currentSelectedValue ? [{ key: currentSelectedValue, label: currentSelectedValue }] : []).map((option) => (
-                          <SelectItem key={option.key} value={option.label}>
+                          <SelectItem key={option.key} value={option.label} classNames={{title: "text-[18px] 2xl:text-[20px]"}}>
                             {option.label}
                           </SelectItem>
                         ))}

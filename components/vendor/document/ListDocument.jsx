@@ -60,7 +60,7 @@ const AddDocument = () => {
     <div>
       <VendorHeader buttonShow={documentData.length > 0} />
       {dataIsLoaded &&
-        (documentData.length > 0 ? (
+        (documentData.length <= 0 ? (
           <DocumentCard
             cardData={documentData}
             setIsDeleted={setIsDeleted}

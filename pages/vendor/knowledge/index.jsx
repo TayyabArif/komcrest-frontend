@@ -16,6 +16,7 @@ const Index = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [dataUpdate , setDataUpdate] = useState(false)
+  // debugger
 
   const getQuestions = async () => {
     const token = cookiesData && cookiesData.token;
