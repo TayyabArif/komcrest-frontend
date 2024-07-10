@@ -42,7 +42,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
 
   useEffect(() => {
     setFilterData(questionData);
-  }, [dataUpdate]);
+  }, [dataUpdate, questionData]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();

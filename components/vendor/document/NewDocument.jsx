@@ -322,6 +322,7 @@ const NewDocument = () => {
               <Checkbox
                 key={index}
                 radius="sm"
+                size="lg"
                 // isSelected={item.check}
                 isSelected={documentData.productIds.includes(item.id)}
                 onChange={() => handleCheckboxChange(item.id)}

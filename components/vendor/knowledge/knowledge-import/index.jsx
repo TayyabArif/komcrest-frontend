@@ -342,12 +342,14 @@ const UploadQuestions = () => {
             >
               {stepper == 2 && (
                 <div className="">
-                  <h1 className="font-semibold text-[18px] 2xl:text-[20px] mt-3">Select associated products</h1>
-                  <div className="gap-x-6 gap-y-2 flex flex-wrap my-2">
+                  <div className="flex itemx-center gap-4">
+                  <h1 className="font-semibold text-[18px] 2xl:text-[20px]">Select associated products:</h1>
+                  <div className="gap-x-6 gap-y-2 flex flex-wrap">
                     {companyProducts.map((item, index) => (
                       <Checkbox
                         key={index}
-                        radius="sm"
+                        radius="md"
+                        size="lg"
                         isSelected={knowledgeData.productIds.includes(item.id)}
                         onChange={() => handleCheckboxChange(item.id)}
                         className="2xl:text-[42px]"
@@ -357,19 +359,21 @@ const UploadQuestions = () => {
                       </Checkbox>
                     ))}
                   </div>
-                  <div>
-                    <h1 className="font-semibold text-[18px] 2xl:text-[20px] mb-2"> Select Language</h1>
+                  </div>
+                  <div className="flex items-center mt-8 mb-2">
+                    <h1 className="font-semibold text-[18px] 2xl:text-[20px] w-60"> Select Language: </h1>
                     <Select
                       variant="bordered"
                       className="w-full bg-transparent"
-                      size="sm"
+                      size="md"
                       placeholder="Select Language"
                       value={knowledgeData.language}
                       onChange={(e) => handleSelectChange(e.target.value)}
                       defaultSelectedKeys={knowledgeData ? [knowledgeData.language] : []}
+                      classNames={{value: "text-[18px] 2xl:text-[20px]"}}
                     >
                       {language.map((option) => (
-                        <SelectItem key={option.key} value={option.label}>
+                        <SelectItem key={option.key} value={option.label} classNames={{title: "text-[18px] 2xl:text-[20px]"}}>
                           {option.label}
                         </SelectItem>
                       ))}
