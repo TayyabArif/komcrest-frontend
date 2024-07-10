@@ -161,7 +161,7 @@ const handleDelete = async () => {
   }, []);
 
   return (
-    <div className='flex flex-col gap-2 bg-gray-200 pl-20 pr-10 py-3'>
+    <div className='flex flex-col bg-gray-200 gap-2  pl-20 pr-10 py-3 h-full'>
       <Input
         onChange={handleSearch}
         variant="bordered"

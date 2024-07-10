@@ -42,7 +42,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
 
   useEffect(() => {
     setFilterData(questionData);
-  }, []);
+  }, [dataUpdate]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
@@ -182,7 +182,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                   <th className="py-2 px-4 border border-gray-300 text-left">
                     Products
                   </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left">
+                  <th className="py-2 px-4 border border-gray-300 text-left !min-w-[250px]">
                     Roadmap
                   </th>
                   <th className="py-2 px-4 border border-gray-300 text-left w-[50px]">
@@ -197,7 +197,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                   <th className="py-2 px-4 border border-gray-300 text-left">
                     Latest Update
                   </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left sticky right-0 bg-gray-200">
+                  <th className="py-2 px-4 border border-gray-300 text-left sticky right-0 bg-gray-200 outline  outline-gray-300">
                     Actions
                   </th>
                 </tr>
@@ -239,7 +239,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                     <td className="py-2 px-4 border border-gray-300 max-w-xs">
                       {data.Products.map((product) => product.name).join(", ")}
                     </td>
-                    <td className="py-2 px-4 border border-gray-300 max-w-xs">
+                    <td className="py-2 px-4 border border-gray-300 max-w-xs !min-w-[250px]">
                       {data.roadmap}
                     </td>
                     <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
@@ -258,7 +258,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
                       {formatDateWithTime(data.updatedAt)}
                     </td>
 
-                    <td className="py-2 px-4 border border-gray-300 sticky right-0 bg-white pl-8">
+                    <td className="py-2 px-4 border outline  outline-gray-200  sticky z-50 right-0 bg-white pl-8 ">
                       <Popover
                         className="rounded-[0px]"
                         isOpen={openPopoverIndex === index}

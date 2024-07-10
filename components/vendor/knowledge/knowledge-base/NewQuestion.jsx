@@ -386,7 +386,7 @@ const NewQuestion = () => {
                   <label className="text-[18px] 2xl:text-[20px]">Answer</label>
                   <Textarea
                     variant="bordered"
-                    size="sm"
+                    size="md"
                     placeholder="Type the answer here"
                     name="answer"
                     value={newQuestion.answer}
@@ -418,6 +418,7 @@ const NewQuestion = () => {
                       </Checkbox>
                     ))}
                   </div>
+                  
                 </div>
               </div>
               <div className="w-[45%] space-y-3">
@@ -532,16 +533,16 @@ const NewQuestion = () => {
             </div>
             <div className="flex justify-end mt-4 gap-3">
               <Button
-                size="sm"
-                className="rounded-md 2xl:text-[20px] bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
+                size="md"
+                className="rounded-md 2xl:text-[20px] cursor-pointer bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
                 onClick={() => router.push("/vendor/knowledge")}
               >
                 Cancel
               </Button>
               <Button
-                size="sm"
+                size="md"
                 color="primary"
-                className="rounded-md 2xl:text-[20px] text-[13px] font-semibold"
+                className="rounded-md 2xl:text-[20px] cursor-pointer text-[13px] font-semibold"
                 onClick={handleSubmit}
               >
                 {`${id ? "Update" : "Add"}`}

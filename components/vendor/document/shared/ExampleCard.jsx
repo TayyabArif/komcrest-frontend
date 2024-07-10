@@ -45,9 +45,9 @@ const ExampleCard = () => {
             return (
               <div
                 key={index}
-                className="w-[19%] h-[135px] bg-white rounded-lg  my-4 flex flex-col justify-between mx-2"
+                className="w-[20%]  bg-white rounded-lg  my-4 flex flex-col justify-between mx-2"
               >
-                <div className=" text-left px-4 pt-5 h-full">
+                <div className=" text-left px-4 pt-5 h-full py-6">
                   <h1 className="text-[14px] font-semibold 2xl:text-[20px]">{item.title}</h1>
                 </div>
 
