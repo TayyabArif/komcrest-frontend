@@ -326,7 +326,7 @@ const NewDocument = () => {
                 // isSelected={item.check}
                 isSelected={documentData.productIds.includes(item.id)}
                 onChange={() => handleCheckboxChange(item.id)}
-                className="2xl:text-[20px] text-[18px] "
+                className="2xl:text-[20px] text-[16px] "
               >
                 {item.name}
               </Checkbox>

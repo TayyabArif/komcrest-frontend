@@ -34,7 +34,6 @@ export function formatDateWithTime(dateString) {
       return data;
     } else if (response.status === 400) {
       // router.push("/vendor/login/access");
-      console.log(">>>++")
       removeCookie('myCookie', { path: '/' });
       router.push("/vendor/login/access");
       toast.error(data?.error);
@@ -44,3 +43,13 @@ export function formatDateWithTime(dateString) {
     }
   };
   
+
+  export const formatCamelCaseString = (str) => {
+    const words = str.replace(/([A-Z])/g, ' $1');
+    const formattedString = words
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  
+    return formattedString;
+  }
