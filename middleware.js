@@ -19,7 +19,6 @@ export function middleware(request) {
   ];
 
   if (unprotectedRoutes.includes(pathname)) {
-    console.log(">>>>>+++++++++++++")
     return NextResponse.next();
   } else if (myCookie) {
     try {

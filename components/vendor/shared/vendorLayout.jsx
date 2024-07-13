@@ -35,7 +35,7 @@ const VendorLayout = ({ children }) => {
                 localStorage.setItem("selectedSideBar", "documents");
               }}>
               <FileText size={20} />
-              <h1 className="text-[18px] 2xl:text-[20px] py-2">Documents</h1>
+              <h1 className="text-[16px] 2xl:text-[20px] py-2">Documents</h1>
             </div>
             <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "knowledge" ? "bg-gray-200" : ""}`} 
               onClick={() => { 
@@ -43,24 +43,24 @@ const VendorLayout = ({ children }) => {
                 localStorage.setItem("selectedSideBar", "knowledge");
               }}>
               <AlignLeft size={20} />
-              <h1 className="text-[18px] 2xl:text-[20px] py-2">Knowledge</h1>
+              <h1 className="text-[16px] 2xl:text-[20px] py-2">Knowledge</h1>
             </div>
             <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "Questionnaires" ? "bg-gray-200" : ""}`}
               onClick={() => { 
                 localStorage.setItem("selectedSideBar", "Questionnaires");
               }}>
               <SquareCheck size={20} />
-              <h1 className="text-[18px] 2xl:text-[20px] py-2">Questionnaires</h1>
+              <h1 className="text-[16px] 2xl:text-[20px] py-2">Questionnaires</h1>
             </div>
           </div>
           <div className="flex flex-col gap-2 cursor-pointer">
             <div className="flex gap-1 items-center px-4">
               <CircleHelp size={20} />
-              <h1 className="text-lg text-[18px] 2xl:text-[20px] py-2">Help Center</h1>
+              <h1 className="text-lg text-[16px] 2xl:text-[20px] py-2">Help Center</h1>
             </div>
             <div className="flex gap-1 items-center px-4 cursor-pointer">
               <Settings size={20} />
-              <h1 className="font-normal text-[18px] 2xl:text-[20px] py-2">Settings</h1>
+              <h1 className="font-normal text-[16px] 2xl:text-[20px] py-2">Settings</h1>
             </div>
           </div>
         </div>

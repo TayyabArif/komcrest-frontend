@@ -137,9 +137,6 @@ const UploadQuestions = () => {
       const { "do no map": _, ...rest } = question; 
       return rest;
     });
-  console.log(">>>>>>>>>>>>>>",updatedData)
-
-
   if (!updatedData[0].hasOwnProperty('curator')) {
     
     updatedData = updatedData.map(obj => ({
@@ -167,15 +164,12 @@ const UploadQuestions = () => {
      
   }
 
-
-  const submitData = () => {
-      setStepper(stepper + 1);
-      setProgressBar(progressBar + 27);
- 
+const submitData = () => {
+  setStepper(stepper + 1);
+  setProgressBar(progressBar + 27);
 
   const jsonPayload = JSON.stringify(updatedData);
 
-  // API call
   const token = cookiesData.token;
   let requestOptions = {
     method: "POST",
@@ -200,17 +194,25 @@ const UploadQuestions = () => {
       if (ok) {
         console.log("Success:", data);
         toast.success("Document created successfully");
-        router.push("/vendor/knowledge")
+        router.push("/vendor/knowledge");
       } else {
         toast.error(data?.error || "Document not Created");
         console.error("Error:", data);
       }
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      if (error.response) {
+        console.error("API Error:", error.response);
+        toast.error(error.response.data?.error || "An error occurred while creating the document");
+      } else {
+        console.error("Fetch Error:", error);
+        toast.error("The question field cannot be empty");
+        setStepper(0);
+      }
+    });
 };
 
-   
-
+  
   return (
     <div className="w-[100%] h-full">
       <div className="w-[90%] mx-auto py-4 mt-[2rem]">
@@ -244,7 +246,7 @@ const UploadQuestions = () => {
               <h1
                 className={`${
                   stepper == !1 ? "text-blue-600" : ""
-                } font-semibold text-[18px] 2xl:text-[20px]`}
+                } font-semibold text-[16px] 2xl:text-[20px]`}
               >
                 Uplaod File
               </h1>
@@ -264,7 +266,7 @@ const UploadQuestions = () => {
                   2
                 )}
               </span>
-              <h1 className="text-[18px] 2xl:text-[20px]">Select header row</h1>
+              <h1 className="text-[16px] 2xl:text-[20px]">Select header row</h1>
             </div>
 
             <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
@@ -279,7 +281,7 @@ const UploadQuestions = () => {
                   3
                 )}
               </span>
-              <h1 className="text-[18px] 2xl:text-[20px]">Match Columns</h1>
+              <h1 className="text-[16px] 2xl:text-[20px]">Match Columns</h1>
             </div>
 
             <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
@@ -294,10 +296,10 @@ const UploadQuestions = () => {
                   4
                 )}
               </span>
-              <h1 className="text-[18px] 2xl:text-[20px]">Validate data</h1>
+              <h1 className="text-[16px] 2xl:text-[20px]">Validate data</h1>
             </div>
           </div>
-          {stepper > 0 &&  <h1 className='my-2 font-semibold text-[18px] 2xl:text-[20px]'>Your table - {knowledgeData.name.replace(".xlsx", "")}</h1>}
+          {stepper > 0 &&  <h1 className='my-2 font-semibold text-[16px] 2xl:text-[20px]'>Your table - {knowledgeData.name.replace(".xlsx", "")}</h1>}
         
           <div className="overflow-auto  max-h-[58vh]">
             {stepper == 0 && (
@@ -343,7 +345,7 @@ const UploadQuestions = () => {
               {stepper == 2 && (
                 <div className="">
                   <div className="flex itemx-center gap-4">
-                  <h1 className="font-semibold text-[18px] 2xl:text-[20px]">Select associated products:</h1>
+                  <h1 className="font-semibold text-[16px] 2xl:text-[20px]">Select associated products:</h1>
                   <div className="gap-x-6 gap-y-2 flex flex-wrap">
                     {companyProducts.map((item, index) => (
                       <Checkbox
@@ -353,7 +355,7 @@ const UploadQuestions = () => {
                         isSelected={knowledgeData.productIds.includes(item.id)}
                         onChange={() => handleCheckboxChange(item.id)}
                         className="2xl:text-[42px]"
-                        classNames={{label: "!rounded-[3px] text-[18px] 2xl:text-[20px]"}}
+                        classNames={{label: "!rounded-[3px] text-[16px] 2xl:text-[20px]"}}
                       >
                         {item.name}
                       </Checkbox>
@@ -361,7 +363,7 @@ const UploadQuestions = () => {
                   </div>
                   </div>
                   <div className="flex items-center mt-8 mb-2">
-                    <h1 className="font-semibold text-[18px] 2xl:text-[20px] w-60"> Select Language: </h1>
+                    <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-60"> Select Language: </h1>
                     <Select
                       variant="bordered"
                       className="w-full bg-transparent"
@@ -370,10 +372,10 @@ const UploadQuestions = () => {
                       value={knowledgeData.language}
                       onChange={(e) => handleSelectChange(e.target.value)}
                       defaultSelectedKeys={knowledgeData ? [knowledgeData.language] : []}
-                      classNames={{value: "text-[18px] 2xl:text-[20px]"}}
+                      classNames={{value: "text-[16px] 2xl:text-[20px]"}}
                     >
                       {language.map((option) => (
-                        <SelectItem key={option.key} value={option.label} classNames={{title: "text-[18px] 2xl:text-[20px]"}}>
+                        <SelectItem key={option.key} value={option.label} classNames={{title: "text-[16px] 2xl:text-[20px]"}}>
                           {option.label}
                         </SelectItem>
                       ))}

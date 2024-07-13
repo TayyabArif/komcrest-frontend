@@ -2,41 +2,48 @@ import React, { useState, useEffect } from 'react';
 import VendorLayout from "../../../components/vendor/shared/vendorLayout";
 import KnowledgeHome from "../../../components/vendor/knowledge";
 import KnowledgeBase from "../../../components/vendor/knowledge/knowledge-base";
-import { Popover, PopoverTrigger, PopoverContent, CircularProgress } from "@nextui-org/react";
+import { CircularProgress } from "@nextui-org/react";
 import { useCookies } from "react-cookie";
 import { handleResponse } from "../../../helper";
 import { useRouter } from "next/router";
 import { toast } from 'react-toastify';
 
-const Index = () => {
+const Knowledge = () => {
   const router = useRouter();
   const [questionData, setQuestionData] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [dataLoaded, setDataLoaded] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const [dataUpdate , setDataUpdate] = useState(false)
-  // debugger
+  const [dataUpdate, setDataUpdate] = useState(false);
+  const [filters, setFilters] = useState([]);
 
   const getQuestions = async () => {
     const token = cookiesData && cookiesData.token;
+
+    const filterPayload = {
+      filters: filters
+    };
+
     const requestOptions = {
-      method: "GET",
+      method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify(filterPayload),
       redirect: "follow",
     };
 
     try {
-      const response = await fetch(`${baseUrl}/questions`, requestOptions);
+      const response = await fetch(`${baseUrl}/getquestions`, requestOptions);
       const data = await handleResponse(response, router, cookies, removeCookie);
+      setDataLoaded(true);
+
       if (response.ok) {
         setQuestionData(data);
-        setDataLoaded(true);
         console.log("Fetched data:", data);
       } else {
-        setDataLoaded(true);
         toast.error(data?.error);
       }
     } catch (error) {
@@ -47,24 +54,30 @@ const Index = () => {
 
   useEffect(() => {
     getQuestions();
-  }, [dataUpdate]);
+  }, [dataUpdate, filters]);
 
   return (
     <VendorLayout>
       {dataLoaded ? (
-        questionData.length > 0 ? (
-          <KnowledgeBase questionData={questionData} setQuestionData={setQuestionData} setDataUpdate={setDataUpdate} dataUpdate ={dataUpdate } />
+        questionData.length > 0 || filters.length > 0 ? (
+          <KnowledgeBase 
+            questionData={questionData} 
+            setQuestionData={setQuestionData} 
+            setDataUpdate={setDataUpdate} 
+            dataUpdate={dataUpdate} 
+            setFilters={setFilters}
+            filters={filters}
+          />
         ) : (
           <KnowledgeHome />
         )
-      )
-      :
+      ) : (
         <div className='flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen'>
-            <CircularProgress label="Fetching Data..." size="lg" />
-          </div>
-      }
+          <CircularProgress label="Fetching Data..." size="lg" />
+        </div>
+      )}
     </VendorLayout>
   );
 }
 
-export default Index;
+export default Knowledge;

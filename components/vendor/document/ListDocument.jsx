@@ -13,8 +13,6 @@ import {handleResponse} from "../../../helper"
 const AddDocument = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
   const cookiesData = cookies.myCookie;
-  
-
   const router = useRouter();
   const [documentData, setDocumentData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -119,7 +117,7 @@ const AddDocument = () => {
                   priority
                 /> */}
               </div>
-              <span className="font-semibold text-[18px] 2xl:text-[20px]">
+              <span className="font-semibold text-[16px] 2xl:text-[20px]">
                 It appears that you haven’t uploaded any documents yet.
               </span>
               <p className="text-[15px] leading-7 2xl:text-[20px] my-1">

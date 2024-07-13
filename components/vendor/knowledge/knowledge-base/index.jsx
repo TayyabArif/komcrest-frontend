@@ -10,6 +10,9 @@ import VendorHeader from "../../shared/VendorHeader";
 import KnowledgeHeader from "../../shared/KnowledgeHeader";
 import DeleteQuestionModal from "./DeleteQuestionModal";
 import { handleResponse, formatDateWithTime } from "../../../../helper";
+import KnowledgeFilter from "../knowledge-filter";
+import { Checkbox } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 
 const komcrestCategories = [
   { value: "", text: "Select a Category" },
@@ -24,12 +27,24 @@ const komcrestCategories = [
   { value: "Incident Management", text: "Incident Management" },
   { value: "Legal", text: "Legal" },
   { value: "Privacy", text: "Privacy" },
-  { value: "Risk and Vulnerability Management", text: "Risk and Vulnerability Management" },
+  {
+    value: "Risk and Vulnerability Management",
+    text: "Risk and Vulnerability Management",
+  },
   { value: "Security Governance", text: "Security Governance" },
-  { value: "Vendor Management", text: "Vendor Management" }
+  { value: "Vendor Management", text: "Vendor Management" },
 ];
 
-const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setDataUpdate, dataUpdate, isLoading }) => {
+const KnowledgeBase = ({
+  questionData,
+  setQuestionData,
+  setDataIsLoaded,
+  setDataUpdate,
+  dataUpdate,
+  isLoading,
+  setFilters,
+  filters,
+}) => {
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -39,6 +54,10 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
   const router = useRouter();
   const [filterData, setFilterData] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
+  const [bulkDeleted, setBulkDeleted] = useState([]);
+  const [deleteAction, setDeleteAction] = useState("");
+  const [isHeaderChecked, setIsHeaderChecked] = useState(false);
 
   useEffect(() => {
     setFilterData(questionData);
@@ -46,29 +65,12 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
-    const filtered = questionData?.filter(question =>
-      question.category?.toLowerCase().includes(value) || 
-      question.question?.toLowerCase().includes(value)
+    const filtered = questionData?.filter(
+      (question) =>
+        question.category?.toLowerCase().includes(value) ||
+        question.question?.toLowerCase().includes(value)
     );
     setFilterData(filtered);
-  };
-
-  const handleDelete = async () => {
-    const token = cookiesData.token;
-    const requestOptions = {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-    fetch(`${baseUrl}/questions/${selectedQuestion?.id}`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        toast.success("Question deleted successfully");
-        setDataUpdate(!dataUpdate);
-      })
-      .catch((error) => console.error(error));
   };
 
   const handleKomcrastCategoryChange = (id, value) => {
@@ -77,7 +79,7 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
       method: "PUT",
       headers: {
         Authorization: `Bearer ${cookiesData?.token}`,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: jsonPayload,
       redirect: "follow",
@@ -128,187 +130,319 @@ const KnowledgeBase = ({ questionData, setQuestionData, setDataIsLoaded, setData
     }
   };
 
+  const handleCheckboxChange = (id) => {
+    let payload = [...bulkDeleted];
+    if (bulkDeleted.includes(id)) {
+      payload = bulkDeleted.filter((item) => item !== id);
+    } else {
+      payload = [...payload, id];
+    }
+    setBulkDeleted(payload);
+    console.log(">>>>>>>>>>>>", payload);
+  };
 
-  const handleCheckBox = (id) => {
-    setSelectedIds(prevIds => 
-      prevIds.includes(id) 
-        ? prevIds.filter(item => item !== id) 
-        : [...prevIds, id]
-    );
-  }
-  
+  const handleSingleDelete = async () => {
+    const token = cookiesData.token;
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(
+        `${baseUrl}/questions/${selectedQuestion?.id}`,
+        requestOptions
+      );
+      const result = await response.text();
+
+      if (response.ok) {
+        toast.success("Question deleted successfully");
+        setDataUpdate(!dataUpdate);
+      } else {
+        toast.error("Failed to delete the question");
+      }
+
+      console.log(result);
+    } catch (error) {
+      console.error("Error deleting the question:", error);
+      toast.error("An error occurred while deleting the question");
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    const token = cookiesData.token;
+    const requestOptions = {
+      method: "post",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ questionIds: bulkDeleted }),
+      redirect: "follow",
+    };
+    fetch(`${baseUrl}/bulk-delete`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        toast.success("Questions deleted successfully");
+        setDataUpdate(!dataUpdate);
+        setBulkDeleted([]);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const handleDelete = () => {
+    if (deleteAction == "single") {
+      handleSingleDelete();
+    } else {
+      handleBulkDelete();
+    }
+  };
+
+  const handleHeaderCheckboxChange = () => {
+    if (isHeaderChecked) {
+      setBulkDeleted([]);
+      setIsHeaderChecked(false);
+    } else {
+      const allIds = filterData.map((data) => data.id);
+      setBulkDeleted(allIds);
+      setIsHeaderChecked(true);
+    }
+  };
+
   return (
     <div>
       <KnowledgeHeader buttonShow={true} />
       <div className="w-[86%] mx-auto py-2">
-        <div className="flex items-center gap-1 mb-2">
-          <Input
-            onChange={handleSearch}
-            variant="bordered"
-            placeholder="Search"
-            endContent={<Search size={18} />}
-            type="text"
-            classNames={{ inputWrapper: "bg-white rounded-md", input:
-              "2xl:text-[20px] text-[18px]", }}
-            className="max-w-xs"
-          />
-          <div className="bg-white p-1 border border-gray-300 rounded-[5px] shadow-md cursor-pointer">
-            <Filter size={26} className="text-gray-500" color = "#2457d7"/>
-          </div>
-        </div>
-        {questionData && questionData.length > 0 ? (
-          <div className="overflow-x-auto relative h-[72vh]">
-            <table style={{ width: "100%" }} className="min-w-full bg-white border border-gray-300">
-              <thead className="bg-gray-200">
-                <tr className="text-[18px] 2xl:text-[20px]">
-                  <th className="py-2 px-4 border border-gray-300 text-left">
-                   
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left">
-                    Category
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left !max-w-[320px]">
-                    Komcrast Category
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left !min-w-[650px]">
-                    Question
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left">
-                    Coverage
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left text-wrap !min-w-[500px]">
-                    Answer
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left">
-                    Products
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left !min-w-[250px]">
-                    Roadmap
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left w-[50px]">
-                    Curator
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left">
-                    Reference
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left">
-                    Source
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left">
-                    Latest Update
-                  </th>
-                  <th className="py-2 px-4 border border-gray-300 text-left sticky right-0 bg-gray-200 outline  outline-gray-300">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filterData?.map((data, index) => (
-                  <tr key={data.id} className="bg-white h-[100px] text-[18px] 2xl:text-[20px]">
-                    <td className="py-2 px-4 border border-gray-300">
-                    <div
-                        onClick={() => handleCheckBox(data.id)}
-                        className={`w-5 h-5 rounded ${selectedIds.includes(data.id) ? 'bg-blue-600' : 'bg-white border-2  border-gray-300'}`}
-                      />
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 whitespace-nowrap  text-wrap min-w-[250px] max-w-[550px]">
-                      {data.category}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 max-w-[320px]">
-                      <select
-                        value={data.komcrestCategory}
-                        onChange={(e) =>
-                          handleKomcrastCategoryChange(data.id, e.target.value)
-                        }
-                        className="py-1 px-2 max-w-[250px]"
-                      >
-                        {komcrestCategories?.map((item, index) => (
-                          <option key={index} value={item?.value}>{item?.text}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 max-w-xs">
-                      {data.question}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 whitespace-rap ">
-                      {data.coverage}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 text-wrap min-w-[500px] ">
-                      {data.answer}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 max-w-xs">
-                      {data.Products.map((product) => product.name).join(", ")}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 max-w-xs !min-w-[250px]">
-                      {data.roadmap}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
-                      {data.curator}
-                    </td>
-                    <td
-                      className="py-2 px-4 border border-gray-300 whitespace-nowrap text-blue-600 cursor-pointer"
-                      onClick={() => handleFileDownload(data.document?.filePath)}
-                    >
-                      {data.document?.title}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
-                      {data.documentFile?.name}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
-                      {formatDateWithTime(data.updatedAt)}
-                    </td>
-
-                    <td className="py-2 px-4 border outline  outline-gray-200  sticky z-50 right-0 bg-white pl-8 ">
-                      <Popover
-                        className="rounded-[0px]"
-                        isOpen={openPopoverIndex === index}
-                        onOpenChange={(open) =>
-                          setOpenPopoverIndex(open ? index : null)
-                        }
-                      >
-                        <PopoverTrigger>
-                          <FilePenLine
-                            size={20}
-                            className="cursor-pointer"
-                            color="#2457d7"
-                            strokeWidth={2}
-                          />
-                        </PopoverTrigger>
-                        <PopoverContent>
-                          <div className="px-3 py-2 space-y-2">
-                            <div
-                              className="text-small cursor-pointer 2xl:text-[20px]"
-                              onClick={() =>
-                                router.push(
-                                  `/vendor/knowledge/AddQuestion?id=${data.id}`
-                                )
-                              }
-                            >
-                              Update
-                            </div>
-                            <div
-                              className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
-                              onClick={() => {
-                                setSelectedQuestion(data);
-                                onOpen();
-                                setOpenPopoverIndex(null);
-                              }}
-                            >
-                              Delete
-                            </div>
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <DeleteQuestionModal
-              isOpen={isOpen}
-              onOpenChange={onOpenChange}
-              handleSubmit={handleDelete}
+        <div className="flex justify-between">
+          <div className="flex items-center gap-1 mb-2">
+            <Input
+              onChange={handleSearch}
+              variant="bordered"
+              placeholder="Search"
+              endContent={<Search size={18} />}
+              type="text"
+              classNames={{
+                inputWrapper: "bg-white rounded-md",
+                input: "2xl:text-[20px] text-[16px]",
+              }}
+              className="max-w-xs"
             />
+            <div
+              className="bg-white p-1 border border-gray-300 rounded-[5px] shadow-md cursor-pointer"
+              onClick={() => setShowFilter(!showFilter)}
+            >
+              <Filter size={26} className="text-gray-500" color="#2457d7" />
+            </div>
+          </div>
+          {bulkDeleted.length > 0 && (
+            <Button
+              size="md"
+              className="rounded-md 2xl:text-[20px] text-red-600 bg-red-200 cursor-pointer text-[13px] font-semibold"
+              onClick={() => {
+                onOpen();
+                setDeleteAction("bulk");
+              }}
+            >
+              Delete knowledges
+            </Button>
+          )}
+        </div>
+        {(questionData && questionData.length > 0) || filters.length > 0 ? (
+          <div className="flex gap-2 cursor-pointer ">
+            {showFilter && (
+              <div className="w-[25%]">
+                <KnowledgeFilter
+                  setShowFilter={setShowFilter}
+                  setFilters={setFilters}
+                  filters={filters}
+                />
+              </div>
+            )}
+
+            <div className="w-[100%] overflow-x-auto relative h-[72vh] flex">
+              <table
+                style={{ width: "100%" }}
+                className="min-w-full bg-white border border-gray-300 "
+              >
+                <thead className="bg-gray-200">
+                  <tr className="text-[16px] 2xl:text-[20px]">
+                    <th className="py-2 px-4 border border-gray-300 text-left">
+                      <Checkbox
+                        isSelected={isHeaderChecked}
+                        onChange={handleHeaderCheckboxChange}
+                        className="2xl:text-[20px] !text-[50px]"
+                        radius="none"
+                        size="lg"
+                        classNames={{ wrapper: "!rounded-[3px]" }}
+                      />
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left">
+                      Category
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left !max-w-[320px]">
+                      Komcrest Domain
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left !min-w-[650px]">
+                      Question
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left">
+                      Coverage
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left text-wrap !min-w-[500px]">
+                      Answer
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left !min-w-[250px]">
+                      Products
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left !min-w-[250px]">
+                      Roadmap
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left w-[50px]">
+                      Curator
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left">
+                      Reference
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left">
+                      Source
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left">
+                      Latest Update
+                    </th>
+                    <th className="py-2 px-4 border border-gray-300 text-left sticky right-0 bg-gray-200 outline outline-gray-300">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+  {filterData.length > 0 ? (
+    filterData.map((data, index) => (
+      <tr
+        key={data.id}
+        className="bg-white h-[100px] text-[16px] 2xl:text-[20px]"
+      >
+        <td className="py-2 px-4 border border-gray-300">
+          <Checkbox
+            isSelected={bulkDeleted.includes(data.id)}
+            onChange={() => handleCheckboxChange(data.id)}
+            className="2xl:text-[20px] !text-[50px]"
+            radius="none"
+            size="lg"
+            classNames={{ wrapper: "!rounded-[3px]" }}
+          />
+        </td>
+        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+          {data.category}
+        </td>
+        <td className="py-2 px-4 border border-gray-300 !max-w-[320px]">
+          <select
+            value={data.komcrestCategory}
+            onChange={(e) =>
+              handleKomcrastCategoryChange(data.id, e.target.value)
+            }
+            className="py-1 px-2 max-w-[250px]"
+          >
+            {komcrestCategories?.map((item, index) => (
+              <option key={index} value={item?.value}>
+                {item?.text}
+              </option>
+            ))}
+          </select>
+        </td>
+        <td className="py-2 px-4 border border-gray-300 max-w-xs">
+          {data.question}
+        </td>
+        <td className="py-2 px-4 border border-gray-300 whitespace-rap">
+          {data.coverage}
+        </td>
+        <td className="py-2 px-4 border border-gray-300 text-wrap min-w-[500px]">
+          {data.answer}
+        </td>
+        <td className="py-2 px-4 border border-gray-300 max-w-xs">
+          {data.Products.map((product) => product.name).join(", ")}
+        </td>
+        <td className="py-2 px-4 border border-gray-300 max-w-xs !min-w-[250px]">
+          {data.roadmap}
+        </td>
+        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+          {data.curator}
+        </td>
+        <td
+          className="py-2 px-4 border border-gray-300 whitespace-nowrap text-blue-600 cursor-pointer"
+          onClick={() => handleFileDownload(data.document?.filePath)}
+        >
+          {data.document?.title}
+        </td>
+        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
+          {data.documentFile?.name}
+        </td>
+        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
+          {formatDateWithTime(data.updatedAt)}
+        </td>
+        <td className="py-2 px-4 border outline outline-gray-200 sticky z-50 right-0 bg-white pl-8">
+          <Popover
+            className="rounded-[0px]"
+            isOpen={openPopoverIndex === index}
+            onOpenChange={(open) =>
+              setOpenPopoverIndex(open ? index : null)
+            }
+          >
+            <PopoverTrigger>
+              <FilePenLine
+                size={20}
+                className="cursor-pointer"
+                color="#2457d7"
+                strokeWidth={2}
+              />
+            </PopoverTrigger>
+            <PopoverContent>
+              <div className="px-3 py-2 space-y-2">
+                <div
+                  className="text-small cursor-pointer 2xl:text-[20px]"
+                  onClick={() =>
+                    router.push(
+                      `/vendor/knowledge/AddQuestion?id=${data.id}`
+                    )
+                  }
+                >
+                  Update
+                </div>
+                <div
+                  className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
+                  onClick={() => {
+                    setSelectedQuestion(data);
+                    onOpen();
+                    setOpenPopoverIndex(null);
+                    setDeleteAction("single");
+                  }}
+                >
+                  Delete
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="5" className="py-2 px-4 text-center text-gray-500">
+        No data match for this filter
+      </td>
+    </tr>
+  )}
+</tbody>
+
+              </table>
+              <DeleteQuestionModal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                handleSubmit={handleDelete}
+              />
+            </div>
           </div>
         ) : (
           <p>No data to display</p>

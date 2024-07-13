@@ -56,7 +56,7 @@ const KnowledgeHome = () => {
                   </g>
                 </svg>
               </div>
-              <h1 className="font-semibold text-[18px] 2xl:text-[20px] w-[85%] mx-auto leading-7 mt-3">
+              <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-[85%] mx-auto leading-7 mt-3">
               It appears that you haven’t uploaded any requirements, questions and answers yet.
               </h1>
               <p className="text-[15px] leading-7 2xl:text-[20px] w-[85%] mx-auto my-1">
