@@ -18,6 +18,7 @@ const Knowledge = () => {
   const [dataUpdate, setDataUpdate] = useState(false);
   const [filters, setFilters] = useState([]);
 
+
   const getQuestions = async () => {
     const token = cookiesData && cookiesData.token;
 
@@ -67,6 +68,7 @@ const Knowledge = () => {
             dataUpdate={dataUpdate} 
             setFilters={setFilters}
             filters={filters}
+            dataLoaded={dataLoaded}
           />
         ) : (
           <KnowledgeHome />
@@ -81,3 +83,4 @@ const Knowledge = () => {
 }
 
 export default Knowledge;
+
