@@ -13,6 +13,7 @@ import { handleResponse, formatDateWithTime } from "../../../../helper";
 import KnowledgeFilter from "../knowledge-filter";
 import { Checkbox } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
+import { CircularProgress } from "@nextui-org/react";
 
 const komcrestCategories = [
   { value: "", text: "Select a Category" },
@@ -37,13 +38,11 @@ const komcrestCategories = [
 
 const KnowledgeBase = ({
   questionData,
-  setQuestionData,
-  setDataIsLoaded,
   setDataUpdate,
   dataUpdate,
-  isLoading,
   setFilters,
   filters,
+  dataLoaded,
 }) => {
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -58,9 +57,11 @@ const KnowledgeBase = ({
   const [bulkDeleted, setBulkDeleted] = useState([]);
   const [deleteAction, setDeleteAction] = useState("");
   const [isHeaderChecked, setIsHeaderChecked] = useState(false);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     setFilterData(questionData);
+    setShow(true);
   }, [dataUpdate, questionData]);
 
   const handleSearch = (event) => {
@@ -189,6 +190,7 @@ const KnowledgeBase = ({
         toast.success("Questions deleted successfully");
         setDataUpdate(!dataUpdate);
         setBulkDeleted([]);
+        setFilters([])
       })
       .catch((error) => console.error(error));
   };
@@ -236,6 +238,11 @@ const KnowledgeBase = ({
             >
               <Filter size={26} className="text-gray-500" color="#2457d7" />
             </div>
+            {filters.some(filter => filter.value.length > 0) &&  !showFilter &&(
+              <button onClick={()=>{setFilters([]);}} className="px-2 py-1 rounded-full border text-blue-700 border-blue-700 border-dashed text-nowrap">
+                Clear filter
+              </button>
+            )}
           </div>
           {bulkDeleted.length > 0 && (
             <Button
@@ -258,10 +265,12 @@ const KnowledgeBase = ({
                   setShowFilter={setShowFilter}
                   setFilters={setFilters}
                   filters={filters}
+                  setShow={setShow}
+                  komcrestCategories={komcrestCategories}
+                  questionData={questionData}
                 />
               </div>
             )}
-
             <div className="w-[100%] overflow-x-auto relative h-[72vh] flex">
               <table
                 style={{ width: "100%" }}
@@ -318,124 +327,135 @@ const KnowledgeBase = ({
                   </tr>
                 </thead>
                 <tbody>
-  {filterData.length > 0 ? (
-    filterData.map((data, index) => (
-      <tr
-        key={data.id}
-        className="bg-white h-[100px] text-[16px] 2xl:text-[20px]"
-      >
-        <td className="py-2 px-4 border border-gray-300">
-          <Checkbox
-            isSelected={bulkDeleted.includes(data.id)}
-            onChange={() => handleCheckboxChange(data.id)}
-            className="2xl:text-[20px] !text-[50px]"
-            radius="none"
-            size="lg"
-            classNames={{ wrapper: "!rounded-[3px]" }}
-          />
-        </td>
-        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
-          {data.category}
-        </td>
-        <td className="py-2 px-4 border border-gray-300 !max-w-[320px]">
-          <select
-            value={data.komcrestCategory}
-            onChange={(e) =>
-              handleKomcrastCategoryChange(data.id, e.target.value)
-            }
-            className="py-1 px-2 max-w-[250px]"
-          >
-            {komcrestCategories?.map((item, index) => (
-              <option key={index} value={item?.value}>
-                {item?.text}
-              </option>
-            ))}
-          </select>
-        </td>
-        <td className="py-2 px-4 border border-gray-300 max-w-xs">
-          {data.question}
-        </td>
-        <td className="py-2 px-4 border border-gray-300 whitespace-rap">
-          {data.coverage}
-        </td>
-        <td className="py-2 px-4 border border-gray-300 text-wrap min-w-[500px]">
-          {data.answer}
-        </td>
-        <td className="py-2 px-4 border border-gray-300 max-w-xs">
-          {data.Products.map((product) => product.name).join(", ")}
-        </td>
-        <td className="py-2 px-4 border border-gray-300 max-w-xs !min-w-[250px]">
-          {data.roadmap}
-        </td>
-        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
-          {data.curator}
-        </td>
-        <td
-          className="py-2 px-4 border border-gray-300 whitespace-nowrap text-blue-600 cursor-pointer"
-          onClick={() => handleFileDownload(data.document?.filePath)}
-        >
-          {data.document?.title}
-        </td>
-        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
-          {data.documentFile?.name}
-        </td>
-        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
-          {formatDateWithTime(data.updatedAt)}
-        </td>
-        <td className="py-2 px-4 border outline outline-gray-200 sticky z-50 right-0 bg-white pl-8">
-          <Popover
-            className="rounded-[0px]"
-            isOpen={openPopoverIndex === index}
-            onOpenChange={(open) =>
-              setOpenPopoverIndex(open ? index : null)
-            }
-          >
-            <PopoverTrigger>
-              <FilePenLine
-                size={20}
-                className="cursor-pointer"
-                color="#2457d7"
-                strokeWidth={2}
-              />
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className="px-3 py-2 space-y-2">
-                <div
-                  className="text-small cursor-pointer 2xl:text-[20px]"
-                  onClick={() =>
-                    router.push(
-                      `/vendor/knowledge/AddQuestion?id=${data.id}`
-                    )
-                  }
-                >
-                  Update
-                </div>
-                <div
-                  className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
-                  onClick={() => {
-                    setSelectedQuestion(data);
-                    onOpen();
-                    setOpenPopoverIndex(null);
-                    setDeleteAction("single");
-                  }}
-                >
-                  Delete
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan="5" className="py-2 px-4 text-center text-gray-500">
-        No data match for this filter
-      </td>
-    </tr>
-  )}
-</tbody>
-
+                  {filterData?.length > 0 ? (
+                    filterData.map((data, index) => (
+                      <tr
+                        key={data.id}
+                        className="bg-white h-[100px] text-[16px] 2xl:text-[20px]"
+                      >
+                        <td className="py-2 px-4 border border-gray-300">
+                          <Checkbox
+                            isSelected={bulkDeleted.includes(data.id)}
+                            onChange={() => handleCheckboxChange(data.id)}
+                            className="2xl:text-[20px] !text-[50px]"
+                            radius="none"
+                            size="lg"
+                            classNames={{ wrapper: "!rounded-[3px]" }}
+                          />
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+                          {data.category}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 !max-w-[320px]">
+                          <select
+                            value={data.komcrestCategory}
+                            onChange={(e) =>
+                              handleKomcrastCategoryChange(
+                                data.id,
+                                e.target.value
+                              )
+                            }
+                            className="py-1 px-2 max-w-[250px]"
+                          >
+                            {komcrestCategories?.map((item, index) => (
+                              <option key={index} value={item?.value}>
+                                {item?.text}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 max-w-xs">
+                          {data.question}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 whitespace-rap">
+                          {data.coverage}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 text-wrap min-w-[500px]">
+                          {data.answer}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 max-w-xs">
+                          {data.Products.map((product) => product.name).join(
+                            ", "
+                          )}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 max-w-xs !min-w-[250px]">
+                          {data.roadmap}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+                          {data.curator}
+                        </td>
+                        <td
+                          className="py-2 px-4 border border-gray-300 whitespace-nowrap text-blue-600 cursor-pointer"
+                          onClick={() =>
+                            handleFileDownload(data.document?.filePath)
+                          }
+                        >
+                          {data.document?.title}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
+                          {data.documentFile?.name}
+                        </td>
+                        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
+                          {formatDateWithTime(data.updatedAt)}
+                        </td>
+                        <td className="py-2 px-4 border outline outline-gray-200 sticky z-50 right-0 bg-white pl-8">
+                          <Popover
+                            className="rounded-[0px]"
+                            isOpen={openPopoverIndex === index}
+                            onOpenChange={(open) =>
+                              setOpenPopoverIndex(open ? index : null)
+                            }
+                          >
+                            <PopoverTrigger>
+                              <FilePenLine
+                                size={20}
+                                className="cursor-pointer"
+                                color="#2457d7"
+                                strokeWidth={2}
+                              />
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <div className="px-3 py-2 space-y-2">
+                                <div
+                                  className="text-small cursor-pointer 2xl:text-[20px]"
+                                  onClick={() =>
+                                    router.push(
+                                      `/vendor/knowledge/AddQuestion?id=${data.id}`
+                                    )
+                                  }
+                                >
+                                  Update
+                                </div>
+                                <div
+                                  className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
+                                  onClick={() => {
+                                    setSelectedQuestion(data);
+                                    onOpen();
+                                    setOpenPopoverIndex(null);
+                                    setDeleteAction("single");
+                                  }}
+                                >
+                                  Delete
+                                </div>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="5.5"
+                        className="py-2 px-4 text-center text-gray-500"
+                      >
+                        {/* {!show
+                          ? "Loading...."
+                          : " No data match for this filter"} */}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
               </table>
               <DeleteQuestionModal
                 isOpen={isOpen}

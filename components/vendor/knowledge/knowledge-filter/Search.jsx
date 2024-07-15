@@ -7,7 +7,7 @@ const Search = ({ selectedValues, handleFilterChange, removeFilterValue }) => {
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && searchValue.trim() !== '') {
-      handleFilterChange("Question", searchValue.trim());
+      handleFilterChange(e.target.value.trim());
       setSearchValue('');
     }
   };
@@ -32,7 +32,7 @@ const Search = ({ selectedValues, handleFilterChange, removeFilterValue }) => {
           />
         </div>
         <div>
-          {selectedValues.map((value, index) => (
+          {selectedValues?.map((value, index) => (
             <div key={index} className="flex justify-between p-2 px-5 items-center border-b-2">
               <span>{value}</span>
               <X size={16} onClick={() => removeFilterValue(index)} />
