@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useRef } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import { FilePenLine, Filter, Search } from "lucide-react";
 import { Input } from "@nextui-org/react";
@@ -58,10 +58,92 @@ const KnowledgeBase = ({
   const [deleteAction, setDeleteAction] = useState("");
   const [isHeaderChecked, setIsHeaderChecked] = useState(false);
   const [show, setShow] = useState(false);
+  const [companyProducts, setCompanyProducts] = useState([]);
+  const [documentData, setDocumentData] = useState([]);
+  const [DocumentFile , setDocumentFile] = useState([])
+  const childRef = useRef();
+  const triggerFunction = useRef(null);
+
+  const handleClearFilter = () => {
+    if (triggerFunction.current) {
+      triggerFunction.current();
+    }
+  };
+
+
+  const getCompanyProducts = async () => {
+    const token = cookiesData?.token;
+    const companyId = cookiesData?.companyId;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+    fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+            const products = data?.Products.map((item) => ({
+                value: item.id,
+                text: item.name,
+              }));
+          setCompanyProducts(products);
+          console.log("Products:", products);
+        } else {
+          toast.error(data?.error);
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
+    const getUserDocument = async () => {
+    const token = cookiesData && cookiesData.token;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+    try {
+      const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
+      if (response.ok) {
+        const referenceOptions = data.map((item) => ({
+          value: item.id,
+          text: item.title,
+        }));
+        setDocumentData(referenceOptions);
+      } else {
+        toast.error(data?.error);
+      }
+    } catch (error) {
+      console.error("Error fetching user documents:", error);
+    }
+  };
+
+
+
 
   useEffect(() => {
     setFilterData(questionData);
     setShow(true);
+    getCompanyProducts()
+    getUserDocument()
+
+    if(DocumentFile.length == 0 ){
+      const DocumentFileData = Array.from(new Map(questionData.map(item => [item.documentFile.id, { value: item.documentFile.id, text: item.documentFile.name }])).values());
+      setDocumentFile(DocumentFileData)
+    }
+   
   }, [dataUpdate, questionData]);
 
   const handleSearch = (event) => {
@@ -239,7 +321,7 @@ const KnowledgeBase = ({
               <Filter size={26} className="text-gray-500" color="#2457d7" />
             </div>
             {filters.some(filter => filter.value.length > 0) &&  !showFilter &&(
-              <button onClick={()=>{setFilters([]);}} className="px-2 py-1 rounded-full border text-blue-700 border-blue-700 border-dashed text-nowrap">
+              <button   onClick={handleClearFilter} className="px-2 py-1 rounded-full border text-blue-700 border-blue-700 border-dashed text-nowrap">
                 Clear filter
               </button>
             )}
@@ -268,6 +350,11 @@ const KnowledgeBase = ({
                   setShow={setShow}
                   komcrestCategories={komcrestCategories}
                   questionData={questionData}
+                  companyProducts={companyProducts}
+                  documentData={documentData}
+                  DocumentFile={DocumentFile}
+                
+                  triggerFunction={triggerFunction}
                 />
               </div>
             )}
@@ -276,7 +363,7 @@ const KnowledgeBase = ({
                 style={{ width: "100%" }}
                 className="min-w-full bg-white border border-gray-300 "
               >
-                <thead className="bg-gray-200">
+                <thead className="bg-gray-200 sticky top-0 z-10">
                   <tr className="text-[16px] 2xl:text-[20px]">
                     <th className="py-2 px-4 border border-gray-300 text-left">
                       <Checkbox
@@ -321,7 +408,7 @@ const KnowledgeBase = ({
                     <th className="py-2 px-4 border border-gray-300 text-left">
                       Latest Update
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left sticky right-0 bg-gray-200 outline outline-gray-300">
+                    <th className=" px-4 border border-gray-300 text-left sticky  -right-1 bg-gray-200 outline-1 outline-gray-100">
                       Actions
                     </th>
                   </tr>
@@ -398,7 +485,7 @@ const KnowledgeBase = ({
                         <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
                           {formatDateWithTime(data.updatedAt)}
                         </td>
-                        <td className="py-2 px-4 border outline outline-gray-200 sticky z-50 right-0 bg-white pl-8">
+                        <td className=" border outline-gray-100 outline  sticky  -right-1 bg-white pl-8">
                           <Popover
                             className="rounded-[0px]"
                             isOpen={openPopoverIndex === index}
@@ -446,12 +533,12 @@ const KnowledgeBase = ({
                   ) : (
                     <tr>
                       <td
-                        colSpan="5.5"
-                        className="py-2 px-4 text-center text-gray-500"
+                        colSpan={show ? "5" : "6"}
+                        className="py-2 px-4 text-center text-gray-500 text-18px"
                       >
-                        {/* {!show
+                        {!show
                           ? "Loading...."
-                          : " No data match for this filter"} */}
+                          : " No data match for this filter"}
                       </td>
                     </tr>
                   )}
@@ -473,3 +560,4 @@ const KnowledgeBase = ({
 };
 
 export default KnowledgeBase;
+
