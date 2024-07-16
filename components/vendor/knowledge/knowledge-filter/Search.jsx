@@ -33,7 +33,7 @@ const Search = ({ selectedValues, handleFilterChange, removeFilterValue }) => {
         </div>
         <div>
           {selectedValues?.map((value, index) => (
-            <div key={index} className="flex justify-between p-2 px-5 items-center border-b-2">
+            <div key={index} className="flex justify-between p-2 px-5 items-center border-b-2 2xl:text-[20px] text-[16px]">
               <span>{value}</span>
               <X size={16} onClick={() => removeFilterValue(index)} />
             </div>
