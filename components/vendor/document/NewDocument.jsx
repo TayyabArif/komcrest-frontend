@@ -4,25 +4,34 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
-import {handleResponse} from "../../../helper"
+import { handleResponse } from "../../../helper";
+import { Select, SelectItem } from "@nextui-org/react";
+
+const language = [
+  { key: "French", label: "French" },
+  { key: "English", label: "English" },
+  { key: "Spanish", label: "Spanish" },
+  { key: "German", label: "German" },
+];
 
 const NewDocument = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
 
-  const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
+  const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  
+
   const [companyProducts, setCompanyProducts] = useState([]);
   const router = useRouter();
   const { id } = router.query;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const [dataIsLoaded , setDataIsLoaded] = useState(false)
+  const [dataIsLoaded, setDataIsLoaded] = useState(false);
 
   const [documentData, setDocumentData] = useState({
     title: "",
     description: "",
+    language,
     file: null,
     productIds: [],
     documentLink: "",
@@ -77,6 +86,7 @@ const NewDocument = () => {
     formData.append("file", documentData.file);
     formData.append("productIds", JSON.stringify(documentData.productIds));
     formData.append("documentLink", documentData.documentLink);
+    formData.append("language", documentData.language);
 
     const token = cookiesData.token;
     let requestOptions;
@@ -91,8 +101,13 @@ const NewDocument = () => {
       };
 
       fetch(`${baseUrl}/documents/${id}`, requestOptions)
-        .then( async (response) => {
-          const data = await handleResponse(response, router, cookies, removeCookie);
+        .then(async (response) => {
+          const data = await handleResponse(
+            response,
+            router,
+            cookies,
+            removeCookie
+          );
           return {
             status: response.status,
             ok: response.ok,
@@ -120,8 +135,13 @@ const NewDocument = () => {
       };
 
       fetch(`${baseUrl}/documents`, requestOptions)
-        .then( async (response) => {
-          const data = await handleResponse(response, router, cookies, removeCookie);
+        .then(async (response) => {
+          const data = await handleResponse(
+            response,
+            router,
+            cookies,
+            removeCookie
+          );
           return {
             status: response.status,
             ok: response.ok,
@@ -129,7 +149,6 @@ const NewDocument = () => {
           };
         })
         .then(({ status, ok, data }) => {
-          
           if (ok) {
             console.log("Success:", data);
             toast.success("Document created successfully");
@@ -185,8 +204,13 @@ const NewDocument = () => {
         redirect: "follow",
       };
       fetch(`${baseUrl}/documents/${id}`, requestOptions)
-        .then( async (response) => {
-          const data = await handleResponse(response, router, cookies, removeCookie);
+        .then(async (response) => {
+          const data = await handleResponse(
+            response,
+            router,
+            cookies,
+            removeCookie
+          );
           return {
             status: response.status,
             ok: response.ok,
@@ -199,7 +223,7 @@ const NewDocument = () => {
               ...data,
               productIds: data.Products.map((product) => product.id),
             });
-            setDataIsLoaded(true)
+            setDataIsLoaded(true);
           } else {
             toast.error(data?.error);
             console.error("Error:", data);
@@ -219,18 +243,21 @@ const NewDocument = () => {
     return documentData.title.length > 50;
   }, [documentData.title]);
 
-
-  function  filePath (filePath){
-    const path = filePath.split("-")
-    return path[1]
+  function filePath(filePath) {
+    const path = filePath.split("-");
+    return path[1];
   }
 
   return (
     <div className="w-[100%] h-full">
       <div className="w-[80%] mx-auto py-4 mt-[4rem]">
-        <h1 className="font-semibold bg-slate-50 px-4 py-1 2xl:text-[20px]">Dropzone</h1>
+        <h1 className="font-semibold bg-slate-50 px-4 py-1 2xl:text-[20px]">
+          Dropzone
+        </h1>
         <div className="px-4 bg-white pb-6">
-          <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[20px]">{id ? "Update Document" :"Add New Document"}</h1>
+          <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[20px]">
+            {id ? "Update Document" : "Add New Document"}
+          </h1>
           <div className="my-3">
             <div className="flex  space-y-3 items-center gap-2">
               <div className="w-[50%]">
@@ -253,7 +280,11 @@ const NewDocument = () => {
                   <input {...getInputProps()} />
                   {documentData.file || documentData.filePath ? (
                     <div className="mt-2">
-                      <p>{documentData.file ? documentData.file?.name :  filePath(documentData.filePath)}</p>
+                      <p>
+                        {documentData.file
+                          ? documentData.file?.name
+                          : filePath(documentData.filePath)}
+                      </p>
                     </div>
                   ) : (
                     <p className="text-center text-gray-700 font-bold italic 2xl:text-[20px]">
@@ -266,82 +297,128 @@ const NewDocument = () => {
 
             <div className="flex my-2 mt-4 justify-between gap-4">
               <div className="w-[50%]">
-                <label className="text-[16px] 2xl:text-[20px]">Title(max 50 characters)</label>
+                <label className="text-[16px] 2xl:text-[20px]">
+                  Title(max 50 characters)
+                </label>
                 <Input
                   type="text"
                   variant="bordered"
                   size="md"
                   name="title"
+                  radius="sm"
                   isInvalid={isTitleInvalid}
                   color={isTitleInvalid ? "danger" : ""}
                   errorMessage="Title should be less than 50 characters"
                   value={documentData.title}
                   onChange={handleData}
                   classNames={{
-                    input: "text-base 2xl:text-[20px]"
+                    input: "text-base 2xl:text-[20px]",
                   }}
                 />
               </div>
 
               <div className="w-[50%]">
-                <label className="text-[16px] 2xl:text-[20px]">Document link</label>
+                <label className="text-[16px] 2xl:text-[20px]">
+                  Document link
+                </label>
                 <Input
                   type="text"
                   variant="bordered"
                   size="md"
+                  radius="sm"
                   name="documentLink"
                   value={documentData.documentLink}
                   onChange={handleData}
                   classNames={{
-                    input: "text-base 2xl:text-[20px]"
+                    input: "text-base 2xl:text-[20px]",
                   }}
                 />
               </div>
             </div>
-
-            <div className="my-2 w-[49%]">
-              <label className="text-[16px] 2xl:text-[20px]">Description(max 150 characters)</label>
-              <Textarea
-                variant="bordered"
-                size="sm"
-                isInvalid={isDescriptionInvalid}
-                color={isDescriptionInvalid ? "danger" : ""}
-                errorMessage="Description should be less than 150 characters"
-                name="description"
-                value={documentData.description}
-                onChange={handleData}
-                classNames={{
-                  input: "text-base 2xl:text-[20px]"
-                }}
-              />
+            <div className="flex gap-5">
+              <div className="my-2 w-[49%]">
+                <label className="text-[16px] 2xl:text-[20px]">
+                  Description(max 150 characters)
+                </label>
+                <Textarea
+                  variant="bordered"
+                  size="sm"
+                  radius="sm"
+                  isInvalid={isDescriptionInvalid}
+                  color={isDescriptionInvalid ? "danger" : ""}
+                  errorMessage="Description should be less than 150 characters"
+                  name="description"
+                  value={documentData.description}
+                  onChange={handleData}
+                  classNames={{
+                    input: "text-base 2xl:text-[20px]",
+                  }}
+                />
+              </div>
+              <div className="flex-1 mt-2">
+                <label className="text-[16px] 2xl:text-[20px]">Language</label>
+                <Select
+                  variant="bordered"
+                  className="w-full bg-transparent text-[15px]"
+                  size="md"
+                  radius="sm"
+                  placeholder="language"
+                  name="language"
+                  value={documentData.language}
+                  onChange={handleData}
+                  defaultSelectedKeys={
+                    documentData.language ? [documentData.language] : []
+                  }
+                  classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                >
+                  {language?.map((option) => (
+                    <SelectItem
+                      key={option.key}
+                      value={option.key}
+                      classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </div>
             </div>
+
             <div>
-          <h1 className="text-[16px] 2xl:text-[20px]">Select associated product(s)</h1>
-          <div className="gap-x-6 gap-y-2 flex flex-wrap my-1 ">
-            {companyProducts.map((item, index) => (
-              <Checkbox
-                key={index}
-                radius="sm"
-                size="lg"
-                // isSelected={item.check}
-                isSelected={documentData.productIds.includes(item.id)}
-                onChange={() => handleCheckboxChange(item.id)}
-                className="2xl:text-[20px] text-[16px] "
-              >
-                {item.name}
-              </Checkbox>
-            ))}
-          </div>
-        </div>
+              <h1 className="text-[16px] 2xl:text-[20px]">
+                Select associated product(s)
+              </h1>
+              <div className="gap-x-6 gap-y-2 flex flex-wrap my-1 ">
+                {companyProducts.map((item, index) => (
+                  <Checkbox
+                    key={index}
+                    radius="sm"
+                    size="lg"
+                    // isSelected={item.check}
+                    isSelected={documentData.productIds.includes(item.id)}
+                    onChange={() => handleCheckboxChange(item.id)}
+                    className="2xl:text-[20px] text-[16px] "
+                  >
+                    {item.name}
+                  </Checkbox>
+                ))}
+              </div>
+            </div>
             <div className="flex justify-end mt-4  gap-3">
-            <Button
-               size="md"
+              <Button
+                size="md"
                 className="rounded-md 2xl:text-[20px] bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
                 onClick={() => router.push("/vendor/document")}
               >
                 Cancel
               </Button>
-              <Button  size="md" color="primary" onPress={SubmitDocument} className="rounded-md 2xl:text-[20px]" isDisabled={isDescriptionInvalid || isTitleInvalid}>
+              <Button
+                size="md"
+                color="primary"
+                onPress={SubmitDocument}
+                className="rounded-md 2xl:text-[20px]"
+                isDisabled={isDescriptionInvalid || isTitleInvalid}
+              >
                 {id ? "Update Document" : "Add Document"}
               </Button>
             </div>
