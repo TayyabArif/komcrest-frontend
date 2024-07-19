@@ -37,6 +37,22 @@ const VendorLayout = ({ children }) => {
               <FileText size={20} />
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Documents</h1>
             </div>
+            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "onlineResource" ? "bg-gray-200" : ""}`} 
+              onClick={() => { 
+                router.push("/vendor/onlineResource");
+                localStorage.setItem("selectedSideBar", "onlineResource");
+              }}>
+              <AlignLeft size={20} />
+              <h1 className="text-[16px] 2xl:text-[20px] py-2">Online Resource</h1>
+            </div>
+
+
+
+
+
+
+
+
             <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "knowledge" ? "bg-gray-200" : ""}`} 
               onClick={() => { 
                 router.push("/vendor/knowledge");

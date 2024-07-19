@@ -36,6 +36,11 @@ const komcrestCategories = [
   { value: "Vendor Management", text: "Vendor Management" },
 ];
 
+const headerData ={
+  title:"Knowledge",
+  desc1 :"Quickly add requirements, questions and answers to your account. ",
+  desc2:"They will be used by Komcrest AI to automatically provide the best answer to your future questions."
+}
 const KnowledgeBase = ({
   questionData,
   setDataUpdate,
@@ -298,7 +303,7 @@ const KnowledgeBase = ({
 
   return (
     <div>
-      <KnowledgeHeader buttonShow={true} />
+      <KnowledgeHeader buttonShow={true} headerData={headerData}/>
       <div className="w-[86%] mx-auto py-2">
         <div className="flex justify-between">
           <div className="flex items-center gap-1 mb-2">
@@ -363,7 +368,7 @@ const KnowledgeBase = ({
                 style={{ width: "100%" }}
                 className="min-w-full bg-white border border-gray-300 "
               >
-                <thead className="bg-gray-200 sticky top-0 z-10">
+                <thead className="bg-gray-200 sticky -top-1 z-30">
                   <tr className="text-[16px] 2xl:text-[20px]">
                     <th className="py-2 px-4 border border-gray-300 text-left">
                       <Checkbox
@@ -408,7 +413,7 @@ const KnowledgeBase = ({
                     <th className="py-2 px-4 border border-gray-300 text-left">
                       Latest Update
                     </th>
-                    <th className=" px-4 border border-gray-300 text-left sticky  -right-1 bg-gray-200 outline-1 outline-gray-100">
+                    <th className=" px-4 border-[1px] border-gray-300 text-left sticky  -right-1 bg-gray-200 outline outline-[#D1D5DB]/[.90]">
                       Actions
                     </th>
                   </tr>

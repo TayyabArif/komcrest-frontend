@@ -94,6 +94,17 @@ const KnowledgeFilter = ({ triggerFunction, setShowFilter, setFilters, filters, 
     }
   };
 
+  const getEntries = () => {
+    let totalEntries ;
+    if (isSelected) {
+      totalEntries = filters.filter((item)=> item.name == selectedOne)[0].value.length
+    } else {
+      totalEntries = filters.filter((item)=> item.value.length > 0).length
+    }
+
+    return totalEntries
+  }
+
   const removeFilterValue = (index) => {
     setFilters((prevFilters) => {
       const updatedFilters = [...prevFilters];
@@ -183,7 +194,11 @@ const KnowledgeFilter = ({ triggerFunction, setShowFilter, setFilters, filters, 
     <div className="w-full h-full bg-white flex flex-col justify-between">
       <div className="text-[18px]">
         <div className="flex justify-between p-5 items-center border-b-2">
+<<<<<<< Updated upstream
           <h1 className="2xl:text-[22px] text-[16px]">Filters</h1>
+=======
+          <h1 className="2xl:text-[20px] text-[16px] font-bold ">Filter</h1>
+>>>>>>> Stashed changes
           <X
             className="size-[16px] cursor-pointer"
             color="#2457d7"
@@ -226,9 +241,9 @@ const KnowledgeFilter = ({ triggerFunction, setShowFilter, setFilters, filters, 
                 <h1 className="2xl:text-[20px] text-[16px] font-bold">
                   {data.name}
                 </h1>
-                <div className="flex gap-5 ">
+                <div className="flex gap-3 ">
                   {filters.find((filter) => filter.name === data.value)?.value.length > 0 ? (
-                    <Circle size={15} strokeWidth={4} color="#2457d7" />
+                    <Circle size={15} strokeWidth={4} color="#2457d7" className="w-[25px]" />
                   ) : (
                     ""
                   )}
@@ -241,7 +256,8 @@ const KnowledgeFilter = ({ triggerFunction, setShowFilter, setFilters, filters, 
           )}
         </div>
       </div>
-      <div className="flex gap-2 p-5 items-center border-t-2">
+      <div className="flex flex-col gap-2 p-5  border-t-2">
+        <h1>Entries {getEntries()}</h1>
         <button
           className="border rounded-md border-gray-300 px-3 py-1 text-gray-500 2xl:text-[20px] text-[16px]"
           onClick={() => handleClearAll()}
