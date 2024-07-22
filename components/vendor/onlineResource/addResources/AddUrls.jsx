@@ -78,4 +78,6 @@ const AddUrls = forwardRef(({ onSubmit, formData }, ref) => {
   );
 });
 
+
+AddUrls.displayName = "AddUrls";
 export default AddUrls;
