@@ -7,6 +7,7 @@ import { Select, SelectItem } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { handleResponse } from "../../../../helper";
+import { Tooltip } from "@nextui-org/tooltip";
 
 const NewQuestion = () => {
   const categoryOption = [
@@ -42,7 +43,7 @@ const NewQuestion = () => {
   const router = useRouter();
   const { id } = router.query;
   const token = cookiesData?.token;
-  const [isAiGenerating , setIsAiGenerating ] = useState(false)
+  const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [newQuestion, setNewQuestion] = useState({
     coverage: "",
     question: "",
@@ -77,8 +78,6 @@ const NewQuestion = () => {
 
   const handleData = (e) => {
     const { name, value } = e.target;
-    console.log("value +++++++++", value);
-    console.log("namemmeeee", name);
     setNewQuestion((prevData) => ({
       ...prevData,
       [name]: value,
@@ -311,63 +310,66 @@ const NewQuestion = () => {
   };
 
   const generateAIAnswer = async () => {
-
-    if(newQuestion.question){
-      setIsAiGenerating(true)
-      let jsonPayload = JSON.stringify({ 
-        question : newQuestion.question,
-        coverage : newQuestion.coverage
-      
+    if (
+      newQuestion.question &&
+      newQuestion.coverage &&
+      newQuestion.answer &&
+      newQuestion.komcrestCategory
+    ) {
+      setIsAiGenerating(true);
+      let jsonPayload = JSON.stringify({
+        question: newQuestion.question,
+        coverage: newQuestion.coverage,
+        answer: newQuestion.answer,
+        komcrestCategory: newQuestion.komcrestCategory,
       });
-        let requestOptions = {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: jsonPayload,
-          redirect: "follow",
-        };
-  
-       await fetch(`${baseUrl}/questions/generate-answer`, requestOptions)
-          .then(async (response) => {
-            const data = await handleResponse(
-              response,
-              router,
-              cookies,
-              removeCookie
-            );
-            return {
-              status: response.status,
-              ok: response.ok,
-              data,
-            };
-          })
-          .then(({ status, ok, data }) => {
-            if (ok) {
-              console.log("Success:", data);
-              setNewQuestion({
-                ...newQuestion,
-                answer: data
-              });
-            } else {
-              toast.error(data?.error || "question not Created");
-              console.error("Error:", data);
-            }
-            setIsAiGenerating(false)
-          })
-          .catch((error) => console.error(error));
+      let requestOptions = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: jsonPayload,
+        redirect: "follow",
+      };
+
+      await fetch(`${baseUrl}/questions/generate-answer`, requestOptions)
+        .then(async (response) => {
+          const data = await handleResponse(
+            response,
+            router,
+            cookies,
+            removeCookie
+          );
+          return {
+            status: response.status,
+            ok: response.ok,
+            data,
+          };
+        })
+        .then(({ status, ok, data }) => {
+          if (ok) {
+            console.log("Success:", data);
+            setNewQuestion({
+              ...newQuestion,
+              answer: data,
+            });
+          } else {
+            alert("ok");
+            toast.error(data?.error || "question not Created");
+            console.error("Error:", data);
+          }
+          setIsAiGenerating(false);
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("Answer not Created");
+          setIsAiGenerating(false);
+        });
+    } else {
+      toast.error("Kindly first add question");
     }
-    else{
-      toast.error("Kindly first add question")
-    }
-
-
-
-
-  
-    
-  }
+  };
 
   return (
     <div className="w-[100%] h-full">
@@ -399,7 +401,7 @@ const NewQuestion = () => {
                 </div>
                 <div>
                   <label className="text-[16px] 2xl:text-[20px]">
-                  Komcrest Domain
+                    Komcrest Domain
                   </label>
                   <Select
                     variant="bordered"
@@ -414,10 +416,14 @@ const NewQuestion = () => {
                         ? [newQuestion.komcrestCategory]
                         : []
                     }
-                    classNames={{value: "text-[16px] 2xl:text-[20px]"}}
+                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
                   >
                     {categoryOption?.map((option) => (
-                      <SelectItem key={option.key} value={option.label} classNames={{title: "text-[16px] 2xl:text-[20px]"}}>
+                      <SelectItem
+                        key={option.key}
+                        value={option.label}
+                        classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                      >
                         {option.label}
                       </SelectItem>
                     ))}
@@ -436,24 +442,36 @@ const NewQuestion = () => {
                     value={newQuestion.coverage}
                     onChange={handleData}
                     classNames={{
-                      input:
-                        "2xl:text-[20px] text-[16px] text-gray-500",
+                      input: "2xl:text-[20px] text-[16px] text-gray-500",
                     }}
                   />
                 </div>
 
                 <div className="">
                   <div className="flex justify-between items-end">
-                  <label className="text-[16px] 2xl:text-[20px]">Answer</label>
-                  <Button
-                   onClick={generateAIAnswer} 
-                size="sm"
-                color="primary"
-                className="rounded-md 2xl:text-[18px] cursor-pointer  text-[16px] font-semibold  mb-1"
-              >
-                {isAiGenerating ? "Generating..." : "Generate"}
-              </Button>
-              </div>
+                    <label className="text-[16px] 2xl:text-[20px]">
+                      Answer
+                    </label>
+
+                    <Tooltip className="bg-gray-100 w-[150px] " content="Question, Answer, Komcrest Domain, Compliance, is required">
+                      <div>
+                        <Button
+                          onClick={generateAIAnswer}
+                          size="sm"
+                          color="primary"
+                          isDisabled={
+                            !newQuestion.question ||
+                            !newQuestion.coverage ||
+                            !newQuestion.answer ||
+                            !newQuestion.komcrestCategory
+                          }
+                          className="rounded-md 2xl:text-[18px] cursor-pointer text-[16px] font-semibold mb-1"
+                        >
+                          {isAiGenerating ? "Improving..." : "Improve"}
+                        </Button>
+                      </div>
+                    </Tooltip>
+                  </div>
                   <Textarea
                     variant="bordered"
                     size="md"
@@ -462,8 +480,7 @@ const NewQuestion = () => {
                     value={newQuestion.answer}
                     onChange={handleData}
                     classNames={{
-                      input:
-                        "2xl:text-[20px] text-[16px] text-gray-500",
+                      input: "2xl:text-[20px] text-[16px] text-gray-500",
                     }}
                   />
                 </div>
@@ -488,7 +505,6 @@ const NewQuestion = () => {
                       </Checkbox>
                     ))}
                   </div>
-                  
                 </div>
               </div>
               <div className="w-[45%] space-y-3">
@@ -503,8 +519,7 @@ const NewQuestion = () => {
                     value={newQuestion.roadmap}
                     onChange={handleData}
                     classNames={{
-                      input:
-                        "2xl:text-[20px] text-[16px] text-gray-500",
+                      input: "2xl:text-[20px] text-[16px] text-gray-500",
                     }}
                   />
                 </div>
@@ -521,8 +536,7 @@ const NewQuestion = () => {
                       value={newQuestion.documentFile?.name}
                       onChange={handleData}
                       classNames={{
-                        input:
-                          "2xl:text-[20px] text-[16px] text-gray-500",
+                        input: "2xl:text-[20px] text-[16px] text-gray-500",
                       }}
                     />
                   </div>
@@ -541,10 +555,14 @@ const NewQuestion = () => {
                     defaultSelectedKeys={
                       newQuestion.curator ? [newQuestion.curator] : []
                     }
-                    classNames={{value: "text-[16px] 2xl:text-[20px]"}}
+                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
                   >
                     {CompanyUserData?.map((option) => (
-                      <SelectItem key={option.name} value={option.name} classNames={{title: "text-[16px] 2xl:text-[20px]"}}>
+                      <SelectItem
+                        key={option.name}
+                        value={option.name}
+                        classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                      >
                         {option.name}
                       </SelectItem>
                     ))}
@@ -566,10 +584,14 @@ const NewQuestion = () => {
                     defaultSelectedKeys={
                       newQuestion.documentId ? [newQuestion.documentId] : []
                     }
-                    classNames={{value: "text-[16px] 2xl:text-[20px]"}}
+                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
                   >
                     {documentData?.map((option) => (
-                      <SelectItem key={option.id} value={option.id} classNames={{title: "text-[16px] 2xl:text-[20px]"}}>
+                      <SelectItem
+                        key={option.id}
+                        value={option.id}
+                        classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                      >
                         {option.title}
                       </SelectItem>
                     ))}
@@ -590,10 +612,14 @@ const NewQuestion = () => {
                     defaultSelectedKeys={
                       newQuestion.language ? [newQuestion.language] : []
                     }
-                    classNames={{value: "text-[16px] 2xl:text-[20px]"}}
+                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
                   >
                     {language?.map((option) => (
-                      <SelectItem key={option.key} value={option.key} classNames={{title: "text-[16px] 2xl:text-[20px]"}}>
+                      <SelectItem
+                        key={option.key}
+                        value={option.key}
+                        classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                      >
                         {option.label}
                       </SelectItem>
                     ))}

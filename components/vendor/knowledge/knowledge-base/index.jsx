@@ -145,8 +145,8 @@ const KnowledgeBase = ({
       const DocumentFileData = Array.from(
         new Map(
           questionData.map((item) => [
-            item.documentFile.id,
-            { value: item.documentFile.id, text: item.documentFile.name },
+            item.documentFile?.id,
+            { value: item.documentFile?.id, text: item.documentFile?.name },
           ])
         ).values()
       );
