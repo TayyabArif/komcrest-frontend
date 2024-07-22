@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Progress } from "@nextui-org/react";
-import { Check, language } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Progress, Button, Checkbox, Select, SelectItem } from "@nextui-org/react";
+import { Check } from "lucide-react";
 import AddUrls from "./AddUrls";
 import IndexContent from "./IndexContent";
 import ReviewContent from "./ReviewContent";
 import ValidateData from "./ValidateData";
-
-import { Button, Checkbox, Select, SelectItem } from "@nextui-org/react";
 import { useCookies } from "react-cookie";
-import {handleResponse}  from "../../../../helper/index"
+import { handleResponse } from "../../../../helper/index";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
@@ -18,11 +16,20 @@ const AddResource = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [companyProducts, setCompanyProducts] = useState([]);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const router = useRouter()
- 
+  const [knowledgeData, setKnowledgeData] = useState({
+    productIds: [],
+    language: "",
+  });
+  const [formData, setFormData] = useState({
+    links: [{ url: "", title: "" }],
+  });
 
-  const language = [
+  const formRef = useRef(null);
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const router = useRouter();
+
+  const languageOptions = [
     { key: "French", label: "French" },
     { key: "English", label: "English" },
     { key: "Spanish", label: "Spanish" },
@@ -39,14 +46,16 @@ const AddResource = () => {
         return "Match your columns with ours so we can index your content properly";
       case 3:
       case 4:
-        return " Validate your data so that it can be properly indexed for our Komcrest AI";
+        return "Validate your data so that it can be properly indexed for our Komcrest AI";
+      default:
+        return "";
     }
   }
 
   const getCompanyProducts = async () => {
     const token = cookiesData?.token;
     const companyId = cookiesData?.companyId;
-    // debugger
+
     const requestOptions = {
       method: "GET",
       headers: {
@@ -55,7 +64,7 @@ const AddResource = () => {
       redirect: "follow",
     };
     fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
-      .then( async (response) => {
+      .then(async (response) => {
         const data = await handleResponse(response, router, cookies, removeCookie);
         return {
           status: response.status,
@@ -66,7 +75,6 @@ const AddResource = () => {
       .then(({ status, ok, data }) => {
         if (ok) {
           setCompanyProducts(data?.Products);
-          console.log(">>>>>>>", data?.Products);
         } else {
           toast.error(data?.error);
           console.error("Error:", data);
@@ -75,32 +83,45 @@ const AddResource = () => {
       .catch((error) => console.error(error));
   };
 
-  const handleCheckboxChange = (id) => {
-    setKnowledgeData((prevData) => {
-      const productIds = prevData.productIds.includes(id)
-        ? prevData.productIds.filter((productId) => productId !== id)
-        : [...prevData.productIds, id];
-
-      return {
-        ...prevData,
-        productIds,
-      };
-    });
-  };
-
-  const handleSelectChange = (value) => {
-    setKnowledgeData({
-      ...knowledgeData,
-      language: value,
-    });
-  };
-
   useEffect(() => {
     getCompanyProducts();
   }, []);
 
+  const handleNextClick = () => {
+    if (stepper === 0) {
+      formRef.current.requestSubmit(); // Trigger form submission
+    }
+    if (stepper < 3) {
+      setStepper(stepper + 1);
+      setProgressBar(progressBar + 27);
+    }
+  };
 
-  
+  const handleCancelClick = () => {
+    if (stepper > 0) {
+      setStepper(stepper - 1);
+      setProgressBar(progressBar - 27);
+    }
+  };
+
+  const handleFormSubmit = (data) => {
+    setFormData(data);
+    console.log("Form Data: ", data);
+  };
+
+  const handleCheckboxChange = (id) => {
+    setKnowledgeData((prev) => ({
+      ...prev,
+      productIds: prev.productIds.includes(id)
+        ? prev.productIds.filter((pid) => pid !== id)
+        : [...prev.productIds, id],
+    }));
+  };
+
+  const handleSelectChange = (value) => {
+    setKnowledgeData((prev) => ({ ...prev, language: value }));
+  };
+
   return (
     <div className="w-[100%] h-full">
       <div className="w-[90%] mx-auto py-4 mt-[2rem]">
@@ -108,189 +129,111 @@ const AddResource = () => {
           {getTitle()}
         </h1>
         <div className="w-full h-[83vh] bg-white p-6">
-          <Progress
-            aria-label="Loading..."
-            value={progressBar}
-            className="h-[8px]"
-          />
+          <Progress aria-label="Loading..." value={progressBar} className="h-[8px]" />
 
-          <div className="flex flex-col justify-between  h-full">
+          <div className="flex flex-col justify-between h-full">
             <div>
-          <div className="my-3 flex gap-2">
-            <div className="flex gap-3 items-center flex-1 border py-2 px-2 rounded">
-              <span
-                className={`${
-                  stepper == 1 || stepper > 1
-                    ? "bg-blue-600  "
-                    : "border-blue-600"
-                } border-blue-600 flex items-center justify-center rounded-full  w-[25px] h-[25px] text-center border-2 `}
-              >
-                {stepper == 1 || stepper > 1 ? (
-                  <Check className="text-white font-bold size-65" />
-                ) : (
-                  1
-                )}
-              </span>
-              <h1
-                className={`${
-                  stepper == !1 ? "text-blue-600" : ""
-                } font-semibold text-[16px] 2xl:text-[20px]`}
-              >
-                Add URLs
-
-              </h1>
-            </div>
-
-            <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
-              <span
-                className={`${
-                  stepper == 2 || stepper > 2
-                    ? "bg-blue-600"
-                    : "border-blue-600"
-                } border-blue-600 flex items-center justify-center rounded-full  w-[25px] h-[25px] text-center border-2`}
-              >
-                {stepper == 2 || stepper > 2 ? (
-                  <Check className="text-white font-bold size-65" />
-                ) : (
-                  2
-                )}
-              </span>
-              <h1 className="text-[16px] 2xl:text-[20px]">Index content</h1>
-            </div>
-
-            <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
-              <span
-                className={`${
-                  stepper == 3 || stepper > 3 ? "bg-blue-600" : ""
-                } border-blue-600 flex items-center justify-center rounded-full  w-[25px] h-[25px] text-center border-2 `}
-              >
-                {stepper == 3 || stepper > 3 ? (
-                  <Check className="text-white font-bold size-65" />
-                ) : (
-                  3
-                )}
-              </span>
-              <h1 className="text-[16px] 2xl:text-[20px]">Review content</h1>
-            </div>
-
-            <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
-              <span
-                className={`${
-                  stepper == 4 || stepper > 4 ? "bg-blue-600" : ""
-                } border-blue-600 flex items-center justify-center rounded-full  w-[25px] h-[25px] text-center border-2 `}
-              >
-                {stepper == 4 || stepper > 4 ? (
-                  <Check className="text-white font-bold size-65" />
-                ) : (
-                  4
-                )}
-              </span>
-              <h1 className="text-[16px] 2xl:text-[20px]">Validate data</h1>
-            </div>
-          </div>
-          <div className="overflow-auto  max-h-[58vh]">
-            {stepper == 0 && (
-              <AddUrls
-               
-              />
-            )}
-            {stepper == 1 && <IndexContent 
-            
-            />}
-            {stepper == 2 && (
-              <ReviewContent
-        
-                
-              />
-            )}
-            {stepper == 3 && <ValidateData />}
-            
-          </div>
-          </div>
-     <div>
-          {stepper >= 0 && stepper <= 3 && (
-            <div
-              className={` flex items-end  ${
-                stepper == 2 ? "justify-between" : "justify-end"
-              } gap-3`}
-            >
-              {stepper == 2 && (
-                <div className="">
-                  <div className="flex itemx-center gap-4">
-                  <h1 className="font-semibold text-[16px] 2xl:text-[20px]">Select associated products:</h1>
-                  <div className="gap-x-6 gap-y-2 flex flex-wrap">
-                    {companyProducts.map((item, index) => (
-                      <Checkbox
-                        key={index}
-                        radius="md"
-                        size="lg"
-                        isSelected={knowledgeData.productIds.includes(item.id)}
-                        onChange={() => handleCheckboxChange(item.id)}
-                        className="2xl:text-[42px]"
-                        classNames={{label: "!rounded-[3px] text-[16px] 2xl:text-[20px]"}}
-                      >
-                        {item.name}
-                      </Checkbox>
-                    ))}
-                  </div>
-                  </div>
-                  <div className="flex items-center mt-8 mb-2">
-                    <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-60"> Select Language: </h1>
-                    <Select
-                      variant="bordered"
-                      className="w-full bg-transparent"
-                      size="md"
-                      placeholder="Select Language"
-                      value={knowledgeData.language}
-                      onChange={(e) => handleSelectChange(e.target.value)}
-                      defaultSelectedKeys={knowledgeData ? [knowledgeData.language] : []}
-                      classNames={{value: "text-[16px] 2xl:text-[20px]"}}
+              <div className="my-3 flex gap-2">
+                {["Add URLs", "Index content", "Review content", "Validate data"].map((title, index) => (
+                  <div key={index} className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
+                    <span
+                      className={`${
+                        stepper >= index + 1 ? "bg-blue-600" : "border-blue-600"
+                      } border-blue-600 flex items-center justify-center rounded-full w-[25px] h-[25px] text-center border-2`}
                     >
-                      {language.map((option) => (
-                        <SelectItem key={option.key} value={option.label} classNames={{title: "text-[16px] 2xl:text-[20px]"}}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </Select>
+                      {stepper >= index + 1 ? (
+                        <Check className="text-white font-bold size-65" />
+                      ) : (
+                        index + 1
+                      )}
+                    </span>
+                    <h1 className={`text-[16px] 2xl:text-[20px] ${stepper === index ? "text-blue-600" : ""}`}>
+                      {title}
+                    </h1>
+                  </div>
+                ))}
+              </div>
+              <div className="overflow-auto max-h-[58vh]">
+                {stepper === 0 && <AddUrls ref={formRef} onSubmit={handleFormSubmit} formData={formData} />}
+                {stepper === 1 && <IndexContent formData={formData}/>}
+                {stepper === 2 && <ReviewContent formData={formData}/>}
+                {stepper === 3 && <ValidateData />}
+              </div>
+            </div>
+            <div>
+              {stepper >= 0 && stepper <= 3 && (
+                <div className={`flex items-end ${stepper === 2 ? "justify-between" : "justify-end"} gap-3`}>
+                  {stepper === 2 && (
+                    <div className="space-y-2">
+                       <div className=" mt-8 mb-2">
+                        <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-60">
+                          Select Language:
+                        </h1>
+                        <Select
+                          variant="bordered"
+                          className="w-1/2 bg-transparent"
+                          size="md"
+                          placeholder="Select Language"
+                          value={knowledgeData.language}
+                          onChange={(e) => handleSelectChange(e.target.value)}
+                          defaultSelectedKeys={knowledgeData ? [knowledgeData.language] : []}
+                          classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                        >
+                          {languageOptions.map((option) => (
+                            <SelectItem
+                              key={option.key}
+                              value={option.label}
+                              classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                            >
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </Select>
+                      </div>
+                      <div className="flex itemx-center gap-4">
+                        <h1 className="font-semibold text-[16px] 2xl:text-[20px]">
+                          Select associated products:
+                        </h1>
+                        <div className="gap-x-6 gap-y-2 flex flex-wrap">
+                          {companyProducts.map((item, index) => (
+                            <Checkbox
+                              key={index}
+                              radius="md"
+                              size="lg"
+                              isSelected={knowledgeData.productIds.includes(item.id)}
+                              onChange={() => handleCheckboxChange(item.id)}
+                              className="2xl:text-[42px]"
+                              classNames={{ label: "!rounded-[3px] text-[16px] 2xl:text-[20px]" }}
+                            >
+                              {item.name}
+                            </Checkbox>
+                          ))}
+                        </div>
+                      </div>
+                     
+                    </div>
+                  )}
+                  <div className="mt-5">
+                    <Button
+                      onClick={handleCancelClick}
+                      radius="none"
+                      size="sm"
+                      className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-gray-200 w-max rounded-[4px]"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleNextClick}
+                      radius="none"
+                      size="sm"
+                      className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                    >
+                      {stepper === 3 ? "Confirm" : "Next"}
+                    </Button>
                   </div>
                 </div>
               )}
-
-              <div className="mt-5">
-                <Button
-                  onClick={() => {
-                    setStepper(stepper - 1);
-                    setProgressBar(progressBar - 27);
-                  }}
-                  radius="none"
-                  size="sm"
-                  className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-gray-200 w-max rounded-[4px] "
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                        
-                    //   if(stepper == 0){
-                    //     gotToMatchColum()
-                    //   }
-                    //  else if(stepper == 2){
-                    //      handleUpdateData()
-                    //   }else if (stepper == 3) {
-                    //     submitData();
-                    //   }
-                    
-                  }}
-                  radius="none"
-                  size="sm"
-                  className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
-                >
-                  {stepper == 3 ? "Confirm" : " Next"}
-                </Button>
-              </div>
             </div>
-          )}
-          </div>
           </div>
         </div>
       </div>
@@ -299,6 +242,3 @@ const AddResource = () => {
 };
 
 export default AddResource;
-
-
-

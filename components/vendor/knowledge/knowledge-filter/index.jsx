@@ -13,7 +13,7 @@ const filterHeader = [
     { name: "Category", value: "category" },
     { name: "komcrest Domain", value: "komcrestCategory" },
     { name: "Question", value: "question" },
-    { name: "Coverage", value: "coverage" },
+    { name: "Compliance", value: "coverage" },
     { name: "Answer", value: "answer" },
     { name: "Products", value: "Products" },
     { name: "Curator", value: "curator" },

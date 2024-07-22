@@ -8,9 +8,9 @@ const KnowledgeHeader = ({buttonShow , headerData}) => {
     <div className="bg-gray-50 py-2">
       <div className="flex justify-between  w-[85%] mx-auto">
       <div className="leading-7">
-        <h1 className="font-semibold text-[15px] 2xl:text-[25px] mb-4">{headerData.title}</h1>
-        <p className="text-[16px] 2xl:text-[20px]">{headerData.desc1}</p>
-        <p className="text-[15px] 2xl:text-[20px] mt-1">{headerData.desc2}</p>
+        <h1 className="font-semibold text-[15px] 2xl:text-[25px] mb-4">{headerData?.title}</h1>
+        <p className="text-[16px] 2xl:text-[20px]">{headerData?.desc1}</p>
+        <p className="text-[15px] 2xl:text-[20px] mt-1">{headerData?.desc2}</p>
       </div>
       <div>
       {

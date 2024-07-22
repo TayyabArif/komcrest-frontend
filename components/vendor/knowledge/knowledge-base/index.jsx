@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import { FilePenLine, Filter, Search } from "lucide-react";
 import { Input } from "@nextui-org/react";
@@ -36,11 +36,12 @@ const komcrestCategories = [
   { value: "Vendor Management", text: "Vendor Management" },
 ];
 
-const headerData ={
-  title:"Knowledge",
-  desc1 :"Quickly add requirements, questions and answers to your account. ",
-  desc2:"They will be used by Komcrest AI to automatically provide the best answer to your future questions."
-}
+const headerData = {
+  title: "Knowledge",
+  desc1: "Quickly add requirements, questions and answers to your account. ",
+  desc2:
+    "They will be used by Komcrest AI to automatically provide the best answer to your future questions.",
+};
 const KnowledgeBase = ({
   questionData,
   setDataUpdate,
@@ -65,7 +66,7 @@ const KnowledgeBase = ({
   const [show, setShow] = useState(false);
   const [companyProducts, setCompanyProducts] = useState([]);
   const [documentData, setDocumentData] = useState([]);
-  const [DocumentFile , setDocumentFile] = useState([])
+  const [DocumentFile, setDocumentFile] = useState([]);
   const childRef = useRef();
   const triggerFunction = useRef(null);
 
@@ -74,7 +75,6 @@ const KnowledgeBase = ({
       triggerFunction.current();
     }
   };
-
 
   const getCompanyProducts = async () => {
     const token = cookiesData?.token;
@@ -90,10 +90,10 @@ const KnowledgeBase = ({
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-            const products = data?.Products.map((item) => ({
-                value: item.id,
-                text: item.name,
-              }));
+          const products = data?.Products.map((item) => ({
+            value: item.id,
+            text: item.name,
+          }));
           setCompanyProducts(products);
           console.log("Products:", products);
         } else {
@@ -104,7 +104,7 @@ const KnowledgeBase = ({
       .catch((error) => console.error(error));
   };
 
-    const getUserDocument = async () => {
+  const getUserDocument = async () => {
     const token = cookiesData && cookiesData.token;
     const requestOptions = {
       method: "GET",
@@ -135,20 +135,23 @@ const KnowledgeBase = ({
     }
   };
 
-
-
-
   useEffect(() => {
     setFilterData(questionData);
     setShow(true);
-    getCompanyProducts()
-    getUserDocument()
+    getCompanyProducts();
+    getUserDocument();
 
-    if(DocumentFile.length == 0 ){
-      const DocumentFileData = Array.from(new Map(questionData.map(item => [item.documentFile.id, { value: item.documentFile.id, text: item.documentFile.name }])).values());
-      setDocumentFile(DocumentFileData)
+    if (DocumentFile.length == 0) {
+      const DocumentFileData = Array.from(
+        new Map(
+          questionData.map((item) => [
+            item.documentFile.id,
+            { value: item.documentFile.id, text: item.documentFile.name },
+          ])
+        ).values()
+      );
+      setDocumentFile(DocumentFileData);
     }
-   
   }, [dataUpdate, questionData]);
 
   const handleSearch = (event) => {
@@ -277,7 +280,7 @@ const KnowledgeBase = ({
         toast.success("Questions deleted successfully");
         setDataUpdate(!dataUpdate);
         setBulkDeleted([]);
-        setFilters([])
+        setFilters([]);
       })
       .catch((error) => console.error(error));
   };
@@ -303,7 +306,7 @@ const KnowledgeBase = ({
 
   return (
     <div>
-      <KnowledgeHeader buttonShow={true} headerData={headerData}/>
+      <KnowledgeHeader buttonShow={true} headerData={headerData} />
       <div className="w-[86%] mx-auto py-2">
         <div className="flex justify-between">
           <div className="flex items-center gap-1 mb-2">
@@ -325,11 +328,15 @@ const KnowledgeBase = ({
             >
               <Filter size={26} className="text-gray-500" color="#2457d7" />
             </div>
-            {filters.some(filter => filter.value.length > 0) &&  !showFilter &&(
-              <button   onClick={handleClearFilter} className="px-2 py-1 rounded-full border text-blue-700 border-blue-700 border-dashed text-nowrap">
-                Clear filter
-              </button>
-            )}
+            {filters.some((filter) => filter.value.length > 0) &&
+              !showFilter && (
+                <button
+                  onClick={handleClearFilter}
+                  className="px-2 py-1 rounded-full border text-blue-700 border-blue-700 border-dashed text-nowrap"
+                >
+                  Clear filter
+                </button>
+              )}
           </div>
           {bulkDeleted.length > 0 && (
             <Button
@@ -358,7 +365,6 @@ const KnowledgeBase = ({
                   companyProducts={companyProducts}
                   documentData={documentData}
                   DocumentFile={DocumentFile}
-                
                   triggerFunction={triggerFunction}
                 />
               </div>
@@ -390,7 +396,7 @@ const KnowledgeBase = ({
                       Question
                     </th>
                     <th className="py-2 px-4 border border-gray-300 text-left">
-                      Coverage
+                      Compliance
                     </th>
                     <th className="py-2 px-4 border border-gray-300 text-left text-wrap !min-w-[500px]">
                       Answer
@@ -413,7 +419,10 @@ const KnowledgeBase = ({
                     <th className="py-2 px-4 border border-gray-300 text-left">
                       Latest Update
                     </th>
-                    <th className=" px-4 border-[1px] border-gray-300 text-left sticky  -right-1 bg-gray-200 outline outline-[#D1D5DB]/[.90]">
+                    <th
+                      className="px-4 border-[1px]  outline outline-[#d1cece] text-left sticky -right-1 bg-gray-200"
+                      style={{ outlineWidth: "1px" }}
+                    >
                       Actions
                     </th>
                   </tr>
@@ -490,7 +499,10 @@ const KnowledgeBase = ({
                         <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
                           {formatDateWithTime(data.updatedAt)}
                         </td>
-                        <td className=" border outline-gray-100 outline  sticky  -right-1 bg-white pl-8">
+                        <td
+                          className="outline border outline-[#e9e6e6] sticky -right-1 bg-white pl-8"
+                          style={{ outlineWidth: "1px" }}
+                        >
                           <Popover
                             className="rounded-[0px]"
                             isOpen={openPopoverIndex === index}
@@ -565,4 +577,3 @@ const KnowledgeBase = ({
 };
 
 export default KnowledgeBase;
-
