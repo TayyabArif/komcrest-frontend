@@ -41,6 +41,8 @@ const NewQuestion = () => {
   const [dataLoaded, setDataIsLoaded] = useState(false);
   const router = useRouter();
   const { id } = router.query;
+  const token = cookiesData?.token;
+  const [isAiGenerating , setIsAiGenerating ] = useState(false)
   const [newQuestion, setNewQuestion] = useState({
     coverage: "",
     question: "",
@@ -158,7 +160,6 @@ const NewQuestion = () => {
 
   const handleSubmit = () => {
     console.log(newQuestion);
-    const token = cookiesData?.token;
     const jsonPayload = JSON.stringify(newQuestion);
     if (id) {
       let requestOptions = {
@@ -309,6 +310,65 @@ const NewQuestion = () => {
     }
   };
 
+  const generateAIAnswer = async () => {
+
+    if(newQuestion.question){
+      setIsAiGenerating(true)
+      let jsonPayload = JSON.stringify({ 
+        question : newQuestion.question,
+        coverage : newQuestion.coverage
+      
+      });
+        let requestOptions = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: jsonPayload,
+          redirect: "follow",
+        };
+  
+       await fetch(`${baseUrl}/questions/generate-answer`, requestOptions)
+          .then(async (response) => {
+            const data = await handleResponse(
+              response,
+              router,
+              cookies,
+              removeCookie
+            );
+            return {
+              status: response.status,
+              ok: response.ok,
+              data,
+            };
+          })
+          .then(({ status, ok, data }) => {
+            if (ok) {
+              console.log("Success:", data);
+              setNewQuestion({
+                ...newQuestion,
+                answer: data
+              });
+            } else {
+              toast.error(data?.error || "question not Created");
+              console.error("Error:", data);
+            }
+            setIsAiGenerating(false)
+          })
+          .catch((error) => console.error(error));
+    }
+    else{
+      toast.error("Kindly first add question")
+    }
+
+
+
+
+  
+    
+  }
+
   return (
     <div className="w-[100%] h-full">
       {dataLoaded && (
@@ -365,7 +425,7 @@ const NewQuestion = () => {
                 </div>
                 <div className="my-2">
                   <label className="text-[16px] 2xl:text-[20px]">
-                    Coverage
+                    Compliance
                   </label>
                   <Input
                     type="text"
@@ -383,7 +443,17 @@ const NewQuestion = () => {
                 </div>
 
                 <div className="">
+                  <div className="flex justify-between items-end">
                   <label className="text-[16px] 2xl:text-[20px]">Answer</label>
+                  <Button
+                   onClick={generateAIAnswer} 
+                size="sm"
+                color="primary"
+                className="rounded-md 2xl:text-[18px] cursor-pointer  text-[16px] font-semibold  mb-1"
+              >
+                {isAiGenerating ? "Generating..." : "Generate"}
+              </Button>
+              </div>
                   <Textarea
                     variant="bordered"
                     size="md"

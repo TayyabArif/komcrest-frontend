@@ -26,7 +26,7 @@ const NewDocument = () => {
   const router = useRouter();
   const { id } = router.query;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const [dataIsLoaded, setDataIsLoaded] = useState(false);
+  const [dataIsLoaded, setDataIsLoaded] = useState(true);
 
   const [documentData, setDocumentData] = useState({
     title: "",
@@ -195,6 +195,7 @@ const NewDocument = () => {
   useEffect(() => {
     getCompanyProducts();
     if (id) {
+      setDataIsLoaded(false);
       const token = cookiesData?.token;
       const requestOptions = {
         method: "GET",
@@ -254,7 +255,7 @@ const NewDocument = () => {
         <h1 className="font-semibold bg-slate-50 px-4 py-1 2xl:text-[20px]">
           Dropzone
         </h1>
-        <div className="px-4 bg-white pb-6">
+        {dataIsLoaded &&  <div className="px-4 bg-white pb-6">
           <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[20px]">
             {id ? "Update Document" : "Add New Document"}
           </h1>
@@ -364,10 +365,10 @@ const NewDocument = () => {
                   radius="sm"
                   placeholder="language"
                   name="language"
-                  value={documentData.language}
+                  value={documentData?.language}
                   onChange={handleData}
                   defaultSelectedKeys={
-                    documentData.language ? [documentData.language] : []
+                    documentData?.language ? [documentData?.language] : []
                   }
                   classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
                 >
@@ -423,7 +424,8 @@ const NewDocument = () => {
               </Button>
             </div>
           </div>
-        </div>
+        </div>}
+       
       </div>
     </div>
   );
