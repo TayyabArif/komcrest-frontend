@@ -34,16 +34,15 @@ const NewQuestion = () => {
   ];
 
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
+  const [company, setCompany] = useState("")
   const cookiesData = cookies.myCookie;
-  const getSubdomain = () => {
+  useEffect(() => {
     const hostname = window.location.hostname;
     const parts = hostname.split('.');
     if (parts.length >= 2) {
-      return parts[0];
+      setCompany(parts[0])
     }
-    return null;
-  };
-  const subdomain = getSubdomain();
+  }, [])
   const [companyProducts, setCompanyProducts] = useState([]);
   const [documentData, setDocumentData] = useState([]);
   const [CompanyUserData, setCompanyUserData] = useState([]);
@@ -150,7 +149,6 @@ const NewQuestion = () => {
           };
         })
         .then(({ status, ok, data }) => {
-          console.log("========+++++++++", data);
           if (ok) {
             setNewQuestion({
               ...data,
@@ -328,7 +326,7 @@ const NewQuestion = () => {
         coverage: newQuestion.coverage,
         answer: newQuestion.answer,
         komcrestCategory: newQuestion.komcrestCategory,
-        company: subdomain
+        company: company
       });
       let requestOptions = {
         method: "POST",
