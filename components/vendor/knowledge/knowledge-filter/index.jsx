@@ -95,11 +95,15 @@ const KnowledgeFilter = ({ triggerFunction, setShowFilter, setFilters, filters, 
   };
 
   const getEntries = () => {
-    let totalEntries ;
+    let totalEntries = 0;
     if (isSelected) {
       totalEntries = filters.filter((item)=> item.name == selectedOne)[0].value.length
     } else {
-      totalEntries = filters.filter((item)=> item.value.length > 0).length
+      console.log("filtersfilters",filters)
+      filters.forEach(obj => {
+        const valueLength = obj.value.length;
+        totalEntries += valueLength;
+    })
     }
 
     return totalEntries
@@ -119,9 +123,6 @@ const KnowledgeFilter = ({ triggerFunction, setShowFilter, setFilters, filters, 
       updatedFilters[filterIndex].value = updatedFilters[filterIndex].value.filter(
         (_, i) => i !== index
       );
-
-
-      console.log(">>>>>>>>>>>>>>>>>",filters)
       return updatedFilters;
     });
   };

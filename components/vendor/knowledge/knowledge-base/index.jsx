@@ -145,8 +145,8 @@ const KnowledgeBase = ({
       const DocumentFileData = Array.from(
         new Map(
           questionData.map((item) => [
-            item.documentFile.id,
-            { value: item.documentFile.id, text: item.documentFile.name },
+            item.documentFile?.id,
+            { value: item.documentFile?.id, text: item.documentFile?.name },
           ])
         ).values()
       );
@@ -420,7 +420,7 @@ const KnowledgeBase = ({
                       Latest Update
                     </th>
                     <th
-                      className="px-4 border-[1px]  outline outline-[#d1cece] text-left sticky -right-1 bg-gray-200"
+                      className="px-4  border-[1px] pr-7  outline outline-[#d1cece] text-left sticky -right-[1px] bg-gray-200"
                       style={{ outlineWidth: "1px" }}
                     >
                       Actions
@@ -500,7 +500,7 @@ const KnowledgeBase = ({
                           {formatDateWithTime(data.updatedAt)}
                         </td>
                         <td
-                          className="outline border outline-[#e9e6e6] sticky -right-1 bg-white pl-8"
+                          className="outline border outline-[#e9e6e6] sticky -right-[1px] bg-white pl-8"
                           style={{ outlineWidth: "1px" }}
                         >
                           <Popover
