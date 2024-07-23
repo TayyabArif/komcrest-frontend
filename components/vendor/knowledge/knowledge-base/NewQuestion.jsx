@@ -35,6 +35,15 @@ const NewQuestion = () => {
 
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
+  const getSubdomain = () => {
+    const hostname = window.location.hostname;
+    const parts = hostname.split('.');
+    if (parts.length >= 2) {
+      return parts[0];
+    }
+    return null;
+  };
+  const subdomain = getSubdomain();
   const [companyProducts, setCompanyProducts] = useState([]);
   const [documentData, setDocumentData] = useState([]);
   const [CompanyUserData, setCompanyUserData] = useState([]);
@@ -311,10 +320,7 @@ const NewQuestion = () => {
 
   const generateAIAnswer = async () => {
     if (
-      newQuestion.question &&
-      newQuestion.coverage &&
-      newQuestion.answer &&
-      newQuestion.komcrestCategory
+      newQuestion.question
     ) {
       setIsAiGenerating(true);
       let jsonPayload = JSON.stringify({
@@ -322,6 +328,7 @@ const NewQuestion = () => {
         coverage: newQuestion.coverage,
         answer: newQuestion.answer,
         komcrestCategory: newQuestion.komcrestCategory,
+        company: subdomain
       });
       let requestOptions = {
         method: "POST",
@@ -367,7 +374,7 @@ const NewQuestion = () => {
           setIsAiGenerating(false);
         });
     } else {
-      toast.error("Kindly first add question");
+      toast.error("An existing question is require to get your answer improved");
     }
   };
 
@@ -453,24 +460,24 @@ const NewQuestion = () => {
                       Answer
                     </label>
 
-                    <Tooltip className="bg-gray-100 w-[150px] " content="Question, Answer, Komcrest Domain, Compliance, is required">
+                    {/* <Tooltip className="bg-gray-100 w-[150px] " content="Question, Answer, Komcrest Domain, Compliance, is required"> */}
                       <div>
                         <Button
                           onClick={generateAIAnswer}
                           size="sm"
                           color="primary"
-                          isDisabled={
-                            !newQuestion.question ||
-                            !newQuestion.coverage ||
-                            !newQuestion.answer ||
-                            !newQuestion.komcrestCategory
-                          }
+                          // isDisabled={
+                          //   !newQuestion.question ||
+                          //   !newQuestion.coverage ||
+                          //   !newQuestion.answer ||
+                          //   !newQuestion.komcrestCategory
+                          // }
                           className="rounded-md 2xl:text-[18px] cursor-pointer text-[16px] font-semibold mb-1"
                         >
                           {isAiGenerating ? "Improving..." : "Improve"}
                         </Button>
                       </div>
-                    </Tooltip>
+                    {/* </Tooltip> */}
                   </div>
                   <Textarea
                     variant="bordered"
