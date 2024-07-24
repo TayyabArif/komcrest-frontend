@@ -7,7 +7,13 @@ import { toast } from "react-toastify";
 const VendorLayout = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
   const router = useRouter();
-  const [selectedItem, setSelectedItem] = useState("documents");
+  const route  = router.route;
+  const [selectedItem, setSelectedItem] = useState("");
+  useEffect(() => {
+    const parts = route.split('/');
+    const segment = parts[2];
+    setSelectedItem(segment)
+  }, [route])
   
   function handleLogout() {
     removeCookie('myCookie', { path: '/' }); 
@@ -15,11 +21,6 @@ const VendorLayout = ({ children }) => {
     localStorage.removeItem("selectedSideBar");
     toast.success("Logout Successfully");
   }
-
-  useEffect(() => {
-    const item = localStorage.getItem("selectedSideBar");
-    if (item) setSelectedItem(item);
-  }, []);
   
   return (
     <div className="flex w-full min-h-screen">
@@ -29,39 +30,30 @@ const VendorLayout = ({ children }) => {
         </p>
         <div className="flex flex-col justify-between h-[92vh]">
           <div className="flex flex-col gap-2">
-            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "documents" ? "bg-gray-200" : ""}`} 
+            <div className={`flex gap-1 items-center px-4 py-1 cursor-pointer ${selectedItem === "document" ? "bg-[#2457d7] text-white shadow-md rounded" : "hover:bg-gray-200 hover:shadow-md"}`} 
               onClick={() => { 
                 router.push("/vendor/document");
-                localStorage.setItem("selectedSideBar", "documents");
-              }}>
+              }}
+              >
               <FileText size={20} />
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Documents</h1>
             </div>
-            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "onlineResource" ? "bg-gray-200" : ""}`} 
+            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "onlineResource" ? "bg-[#2457d7] text-white shadow-md" : "hover:bg-gray-200 hover:shadow-md"}`} 
               onClick={() => { 
                 router.push("/vendor/onlineResource");
-                localStorage.setItem("selectedSideBar", "onlineResource");
               }}>
               <AlignLeft size={20} />
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Online Resource</h1>
             </div>
 
-
-
-
-
-
-
-
-            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "knowledge" ? "bg-gray-200" : ""}`} 
+            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "knowledge" ? "bg-[#2457d7] text-white shadow-md" : "hover:bg-gray-200 hover:shadow-md"}`} 
               onClick={() => { 
                 router.push("/vendor/knowledge");
-                localStorage.setItem("selectedSideBar", "knowledge");
               }}>
               <AlignLeft size={20} />
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Knowledge</h1>
             </div>
-            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "Questionnaires" ? "bg-gray-200" : ""}`}
+            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "Questionnaires" ? "bg-[#2457d7] text-white shadow-md" : "hover:bg-gray-200 hover:shadow-md"}`}
               onClick={() => { 
                 localStorage.setItem("selectedSideBar", "Questionnaires");
               }}>
