@@ -12,6 +12,7 @@ import { useDropzone } from "react-dropzone";
 import Dropzone from "react-dropzone";
 import { Select, SelectItem } from "@nextui-org/react";
 import FileUploadModal from "../../shared/FileUploadModal";
+import { handleDownload } from "@/helper";
 
 const ReviewContent = ({
   resourceData,
@@ -29,15 +30,7 @@ const ReviewContent = ({
     { key: "manual", label: "Manual" },
   ];
 
-  const handleDownload = (filePath) => {
-    const link = document.createElement("a");
-    link.href = `http://localhost:3001/files/${filePath.split("/").pop()}`; // Replace with your actual file URL
-    link.download = `${filePath.split("/").pop()}`; // Replace with the actual file name
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
+ 
   const handleFileData = (file) => {
     console.log(">>>>>>>>>>>", file);
     setResourceData((prevData) => ({
