@@ -153,7 +153,9 @@ const OnlineResourceComponent = () => {
                   </td>
 
                   <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">
-                   
+                  {item.Products.map((product) => product.name).join(
+                            ", "
+                          )}
                   </td>
                   <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">
                     {formatDateWithTime(item.updatedAt)}

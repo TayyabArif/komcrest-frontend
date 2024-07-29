@@ -172,7 +172,9 @@ const UpdateComponent = () => {
 
       // Add additional data
       formData.append("language", onlineResource.language);
-      // formData.append("productIds", JSON.stringify(resourceData.productIds));
+      onlineResource.productIds.forEach(id => {
+        formData.append("productIds[]", id);
+      });
 
       // Add file if exists
       if (onlineResource.file) {

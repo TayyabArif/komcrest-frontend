@@ -1,14 +1,19 @@
-import React from 'react'
+import React from "react";
 
-const ValidateData = ({resourceData}) => {
-  // debugger
+const ValidateData = ({ resourceData, companyProducts }) => {
+  console.log("resourceDataresourceDataresourceData", resourceData);
+  const getNameById = (id) => {
+    const product = companyProducts.find((item) => item.id === id);
+    return product ? product.name : "Unknown";
+  };
+
   return (
-   <div className="overflow-x-auto mt-10">
+    <div className="overflow-x-auto mt-10">
       <table className="min-w-full block md:table">
         <thead className="block md:table-header-group">
           <tr className="border md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
             <th className="p-2 font-bold py-3 border border-[#b8b6b6] text-left block md:table-cell">
-              Title 
+              Title
             </th>
             <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
               URL
@@ -39,7 +44,7 @@ const ValidateData = ({resourceData}) => {
                     <span>Click to download Docx file</span>
                     <span
                       className="text-blue-500 hover:underline cursor-pointer"
-                      onClick={()=>handleDownload(item.file)}
+                      onClick={() => handleDownload(item.file)}
                     >
                       {item.title}
                     </span>
@@ -48,18 +53,26 @@ const ValidateData = ({resourceData}) => {
                   "Docx file not available"
                 )}
               </td>
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
-               produncts 1 , produncts 1 , produncts 1 
+
+              <td className="p-2 border border-[#b8b6b6] text-left md:table-cell py-3 flex">
+                {resourceData.productIds?.map((id, index) => {
+                  return (
+                    <span key={id} className="px-1">
+                      {getNameById(id)}
+                      {index < resourceData.productIds.length - 1 && ","}
+                    </span>
+                  );
+                })}
               </td>
               <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
-              {item.indexing}
+                {item.indexing}
               </td>
             </tr>
           ))}
         </tbody>
-      </table>  
+      </table>
     </div>
-  )
-}
+  );
+};
 
-export default ValidateData
+export default ValidateData;

@@ -154,6 +154,8 @@ const AddResource = () => {
   };
 
   const updateRecords = async () => {
+
+
     try {
       const updatePromises = resourceData.resources?.map(record => {
         const formData = new FormData();
@@ -168,13 +170,16 @@ const AddResource = () => {
   
         // Add additional data
         formData.append("language", resourceData.language);
-        // formData.append("productIds", JSON.stringify(resourceData.productIds));
+        resourceData.productIds.forEach(id => {
+          formData.append("productIds[]", id);
+        });
   
         // Add file if exists
         if (record.file) {
           formData.append("file", record.file);
         }
-  
+
+        
         const requestOptions = {
           method: "PUT",
           headers: {
@@ -282,7 +287,7 @@ const AddResource = () => {
                 />}
                 {stepper === 1 && <IndexContent resourceData={resourceData}/>}
                 {stepper === 2 && <ReviewContent resourceData={resourceData} setResourceData={setResourceData} handleSelectChange={handleSelectChange}/>}
-                {stepper === 3 && <ValidateData resourceData={resourceData} />}
+                {stepper === 3 && <ValidateData resourceData={resourceData} companyProducts={companyProducts}/>}
                 {stepper === 4 && <Completed  />}
               </div>
             </div>
