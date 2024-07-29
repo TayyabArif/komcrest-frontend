@@ -1,6 +1,6 @@
 
 import { useRouter } from 'next/router';
-import { useCookies } from 'react-cookie'; // Assuming you're using react-cookie for managing cookies
+import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';
 
 

@@ -9,6 +9,7 @@ import { useCookies } from "react-cookie";
 import { handleResponse } from "../../../../helper/index";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import Completed from "../../shared/Completed"
 
 const AddResource = () => {
   const [stepper, setStepper] = useState(0);
@@ -16,15 +17,14 @@ const AddResource = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [companyProducts, setCompanyProducts] = useState([]);
-  const [knowledgeData, setKnowledgeData] = useState({
-    productIds: [],
-    language: "",
+  const token = cookiesData?.token;
+  const companyId = cookiesData?.companyId;
+  const [allResources , setResources] = useState([{ url: "", title: "" }])
+  const [resourceData, setResourceData] = useState({
+    language:"",
+    productIds:[],
+    resources:[]
   });
-  const [formData, setFormData] = useState({
-    links: [{ url: "", title: "" }],
-  });
-
-  const formRef = useRef(null);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
@@ -53,8 +53,7 @@ const AddResource = () => {
   }
 
   const getCompanyProducts = async () => {
-    const token = cookiesData?.token;
-    const companyId = cookiesData?.companyId;
+   
 
     const requestOptions = {
       method: "GET",
@@ -89,11 +88,12 @@ const AddResource = () => {
 
   const handleNextClick = () => {
     if (stepper === 0) {
-      formRef.current.requestSubmit(); // Trigger form submission
-    }
-    if (stepper < 3) {
+      handleUrlSubmit()
+    }else if (stepper === 1 || stepper === 2) {
       setStepper(stepper + 1);
       setProgressBar(progressBar + 27);
+    }else if(stepper === 3){
+      updateRecords()
     }
   };
 
@@ -104,13 +104,117 @@ const AddResource = () => {
     }
   };
 
-  const handleFormSubmit = (data) => {
-    setFormData(data);
-    console.log("Form Data: ", data);
+  const handleUrlSubmit = () => {
+    let updateData = allResources.filter(item => item.url !== "" || item.title !== "");
+    const jsonPayload = JSON.stringify(updateData);
+    console.log("Form Data: ", updateData);
+   
+ 
+      let requestOptions = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: jsonPayload,
+        redirect: "follow",
+      };
+
+      fetch(`${baseUrl}/resources`, requestOptions)
+        .then(async (response) => {
+          const data = await handleResponse(
+            response,
+            router,
+            cookies,
+            removeCookie
+          );
+          return {
+            status: response.status,
+            ok: response.ok,
+            data,
+          };
+        })
+        .then(({ status, ok, data }) => {
+          if (ok) {
+           data.forEach((item, index) => {
+              item.indexing = "Manual";
+          });
+          setResourceData((prevState) => ({
+            ...prevState,
+            resources: data,
+          }));
+            toast.success("ddedee");
+            setStepper(stepper + 1);
+           setProgressBar(progressBar + 27);
+          } else {
+            console.error("Error:", data);
+          }
+        })
+        .catch((error) => console.error(error));
   };
 
+  const updateRecords = async () => {
+    try {
+      const updatePromises = resourceData.resources?.map(record => {
+        const formData = new FormData();
+  
+        // Add record data
+        formData.append("id", record.id);
+        formData.append("url", record.url);
+        formData.append("title", record.title);
+        formData.append("status", record.status);
+        formData.append("error", record.error);
+        formData.append("indexing", record.indexing);
+  
+        // Add additional data
+        formData.append("language", resourceData.language);
+        // formData.append("productIds", JSON.stringify(resourceData.productIds));
+  
+        // Add file if exists
+        if (record.file) {
+          formData.append("file", record.file);
+        }
+  
+        const requestOptions = {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+          redirect: "follow",
+        };
+  
+        return fetch(`${baseUrl}/resources`, requestOptions)
+          .then(async (response) => {
+            const data = await handleResponse(response, router, cookies, removeCookie);
+            return {
+              status: response.status,
+              ok: response.ok,
+              data,
+            };
+          });
+      });
+  
+      const results = await Promise.all(updatePromises);
+  
+      results.forEach(({ status, ok, data }) => {
+        if (ok) {
+          setStepper(stepper + 1);
+          setProgressBar(progressBar + 27);
+          router.push("/vendor/onlineResource")
+        } else {
+          toast.error(data?.error);
+          console.error("Error:", data);
+        }
+      });
+    } catch (error) {
+      console.error("Error updating records:", error);
+    }
+  };
+  
+
   const handleCheckboxChange = (id) => {
-    setKnowledgeData((prev) => ({
+    setResourceData((prev) => ({
       ...prev,
       productIds: prev.productIds.includes(id)
         ? prev.productIds.filter((pid) => pid !== id)
@@ -118,9 +222,26 @@ const AddResource = () => {
     }));
   };
 
-  const handleSelectChange = (value) => {
-    setKnowledgeData((prev) => ({ ...prev, language: value }));
-  };
+  const handleSelectChange = (property, value, index ) => {
+    if(property == "language") {
+      setResourceData(prevData => ({
+        ...prevData,
+        language: value}));
+    }else if(property == "indexing"){
+      setResourceData(prevData => ({
+        ...prevData,
+        resources: prevData.resources.map((item, idx) =>
+          idx === index ? { ...item, [property]: value } : item
+        )
+      }));
+    }
+
+
+
+
+
+   
+  }
 
   return (
     <div className="w-[100%] h-full">
@@ -154,10 +275,15 @@ const AddResource = () => {
                 ))}
               </div>
               <div className="overflow-auto max-h-[58vh]">
-                {stepper === 0 && <AddUrls ref={formRef} onSubmit={handleFormSubmit} formData={formData} />}
-                {stepper === 1 && <IndexContent formData={formData}/>}
-                {stepper === 2 && <ReviewContent formData={formData}/>}
-                {stepper === 3 && <ValidateData />}
+                {stepper === 0 && <AddUrls
+                setResources={setResources}
+                allResources={allResources}
+                
+                />}
+                {stepper === 1 && <IndexContent resourceData={resourceData}/>}
+                {stepper === 2 && <ReviewContent resourceData={resourceData} setResourceData={setResourceData} handleSelectChange={handleSelectChange}/>}
+                {stepper === 3 && <ValidateData resourceData={resourceData} />}
+                {stepper === 4 && <Completed  />}
               </div>
             </div>
             <div>
@@ -174,9 +300,10 @@ const AddResource = () => {
                           className="w-1/2 bg-transparent"
                           size="md"
                           placeholder="Select Language"
-                          value={knowledgeData.language}
-                          onChange={(e) => handleSelectChange(e.target.value)}
-                          defaultSelectedKeys={knowledgeData ? [knowledgeData.language] : []}
+                          value={resourceData.language}
+                          onChange={(e) =>
+                            handleSelectChange("language",e.target.value)}
+                          defaultSelectedKeys={resourceData.language ? [resourceData.language] : []}
                           classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
                         >
                           {languageOptions.map((option) => (
@@ -200,7 +327,7 @@ const AddResource = () => {
                               key={index}
                               radius="md"
                               size="lg"
-                              isSelected={knowledgeData.productIds.includes(item.id)}
+                              isSelected={resourceData.productIds.includes(item.id)}
                               onChange={() => handleCheckboxChange(item.id)}
                               className="2xl:text-[42px]"
                               classNames={{ label: "!rounded-[3px] text-[16px] 2xl:text-[20px]" }}

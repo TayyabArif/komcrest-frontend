@@ -8,7 +8,6 @@ import KnowledgeHeader from "../shared/KnowledgeHeader"
 const ResourceHome = () => {
   const router = useRouter()
 
-    
   return (
    
     <div className=" py-7  min-h-[85vh] flex items-center justify-center">
@@ -66,9 +65,9 @@ const ResourceHome = () => {
                 radius="none"
                 size="sm"
                 className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
-               onClick={()=>router.push("/vendor/knowledge/Import")}
+               onClick={()=>router.push("/vendor/onlineResource/addResources")}
               >
-                 Add questions and answers 
+                Add online sources
               </Button>
             </div>
           </div>
