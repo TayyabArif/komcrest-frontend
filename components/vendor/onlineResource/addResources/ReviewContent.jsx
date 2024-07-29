@@ -13,8 +13,12 @@ import Dropzone from "react-dropzone";
 import { Select, SelectItem } from "@nextui-org/react";
 import FileUploadModal from "../../shared/FileUploadModal";
 
-const ReviewContent = ({ resourceData , setResourceData ,handleSelectChange }) => {
-  const [selectedIndex , setSelectedIndex] = useState(null)
+const ReviewContent = ({
+  resourceData,
+  setResourceData,
+  handleSelectChange,
+}) => {
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const reIndexationMethods = [
@@ -26,24 +30,25 @@ const ReviewContent = ({ resourceData , setResourceData ,handleSelectChange }) =
   ];
 
   const handleDownload = (filePath) => {
-    const link = document.createElement('a');
-    link.href = `http://localhost:3001/files/${filePath.split('/').pop()}`; // Replace with your actual file URL
-    link.download = `${filePath.split('/').pop()}`; // Replace with the actual file name
+    const link = document.createElement("a");
+    link.href = `http://localhost:3001/files/${filePath.split("/").pop()}`; // Replace with your actual file URL
+    link.download = `${filePath.split("/").pop()}`; // Replace with the actual file name
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   const handleFileData = (file) => {
-    setResourceData(prevData => ({
+    console.log(">>>>>>>>>>>", file);
+    setResourceData((prevData) => ({
       ...prevData,
       resources: prevData.resources.map((item, idx) =>
-        idx === selectedIndex ? { ...item, file : file } : item
-      )
+        idx === selectedIndex ? { ...item, file: file } : item
+      ),
     }));
 
-    onClose()
-  }
+    onClose();
+  };
 
   return (
     <div className="overflow-x-auto mt-10">
@@ -51,7 +56,7 @@ const ReviewContent = ({ resourceData , setResourceData ,handleSelectChange }) =
         <thead className="block md:table-header-group">
           <tr className="border md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
             <th className="p-2 font-bold py-3 border border-[#b8b6b6] text-left block md:table-cell">
-              Title 
+              Title
             </th>
             <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
               URL
@@ -82,9 +87,11 @@ const ReviewContent = ({ resourceData , setResourceData ,handleSelectChange }) =
                     <span>Click to download Docx file</span>
                     <span
                       className="text-blue-500 hover:underline cursor-pointer"
-                      onClick={()=>handleDownload(item.file)}
+                      onClick={() => handleDownload(item.file)}
                     >
-                      {item.file?.split("/").pop()}
+                      {typeof item.file === "object" && item.file !== null
+                        ? item.file.name
+                        : item.file?.split("/").pop() || "No file"}
                     </span>
                   </div>
                 ) : (
@@ -93,23 +100,21 @@ const ReviewContent = ({ resourceData , setResourceData ,handleSelectChange }) =
               </td>
               <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
                 <button
-                  onClick={()=>{onOpen() ,setSelectedIndex(index)}}
+                  onClick={() => {
+                    onOpen(), setSelectedIndex(index);
+                  }}
                   className="bg-gray-300 px-4 py-2 rounded"
                 >
                   Upload docx file
                 </button>
               </td>
               <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
-                <select className="py-1 px-2 w-[90%]"
-                value={item.indexing}
-                 onChange={(e) =>
-                  handleSelectChange(
-                    "indexing",
-                    e.target.value,
-                    index,
-                  )
-                }
-                
+                <select
+                  className="py-1 px-2 w-[90%]"
+                  value={item.indexing}
+                  onChange={(e) =>
+                    handleSelectChange("indexing", e.target.value, index)
+                  }
                 >
                   {reIndexationMethods?.map((item, index) => (
                     <option key={index} value={item?.label}>
@@ -122,7 +127,12 @@ const ReviewContent = ({ resourceData , setResourceData ,handleSelectChange }) =
           ))}
         </tbody>
       </table>
-      <FileUploadModal isOpen={isOpen} onOpen={onOpen} onClose ={onClose} handleFileData={handleFileData}/>
+      <FileUploadModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        handleFileData={handleFileData}
+      />
       {/* <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalContent>
           <ModalHeader>Upload File</ModalHeader>
