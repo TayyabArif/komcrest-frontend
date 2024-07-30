@@ -931,10 +931,22 @@ const UpdateComponent = () => {
                     <Button
                       radius="none"
                       size="sm"
-                      className="text-white text-sm 2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4"
+                      isDisabled={IsIndexing}
+                      className={`text-white text-sm 2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4 ${IsIndexing ? "bg-gray-500" : "bg-btn-primary"}`}
                       onClick={reIndexation}
                     >
                       {IsIndexing ? "Indexing..." : " Start Indexation"}
+                    </Button>
+                  )}
+                  {onlineResource.indexing === "Manual" && (
+                    <Button
+                      radius="none"
+                      size="sm"
+                      isDisabled={true}
+                      className="text-white text-sm 2xl:text-[20px] bg-gray-500 cursor-not-allowed w-max rounded-[4px] my-4"
+                      onClick={reIndexation}
+                    >
+                      {IsIndexing ? "Indexing..." : "Upload New Resource"}
                     </Button>
                   )}
                 </div>
