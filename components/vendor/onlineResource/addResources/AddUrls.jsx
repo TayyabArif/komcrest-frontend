@@ -41,6 +41,9 @@ const AddUrls = ({ allResources, setResources }) => {
                 size="md"
                 name="url"
                 onChange={(e) => handleData(e, index)}
+                classNames={{
+                  input: "2xl:text-[20px] text-[16px] text-gray-500",
+                }}
                 value={field.url}
               />
             </div>
@@ -56,6 +59,9 @@ const AddUrls = ({ allResources, setResources }) => {
                 placeholder="E.g. Security"
                 name="title"
                 onChange={(e) => handleData(e, index)}
+                classNames={{
+                  input: "2xl:text-[20px] text-[16px] text-gray-500",
+                }}
                 value={field.title}
               />
             </div>

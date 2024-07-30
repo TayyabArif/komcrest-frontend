@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import KnowledgeHeader from "../shared/KnowledgeHeader";
 import ResourceHome from "./ResourceHome";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent, CircularProgress } from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/react";
 import { FilePenLine } from "lucide-react";
 import DeleteModal from "../shared/DeleteModal";
@@ -32,8 +32,10 @@ const OnlineResourceComponent = () => {
   const [onlineResourceData, setOnlineResourceData] = useState([]);
   const [selectedId, setSelectedId] = useState("");
   const [dataUpdate, setDataUpdate] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getAllResourceData = async () => {
+    setIsLoading(true)
     const token = cookiesData && cookiesData.token;
     const requestOptions = {
       method: "GET",
@@ -56,7 +58,9 @@ const OnlineResourceComponent = () => {
       } else {
         toast.error(data?.error);
       }
+      setIsLoading(false)
     } catch (error) {
+      setIsLoading(false)
       console.error("Error fetching user documents:", error);
     }
   };
@@ -97,6 +101,12 @@ const OnlineResourceComponent = () => {
   };
 
   return (
+    <>
+    {isLoading ? 
+     <div className='flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen'>
+        <CircularProgress label="Fetching Resources..." size="lg"/>
+      </div>
+    :
     <div>
       <KnowledgeHeader headerData={headerData} buttonShow={onlineResourceData.length > 0 ? true : false} />
       {onlineResourceData.length > 0 ? (
@@ -221,6 +231,8 @@ const OnlineResourceComponent = () => {
         <ResourceHome />
       )}
     </div>
+    }
+    </>
   );
 };
 

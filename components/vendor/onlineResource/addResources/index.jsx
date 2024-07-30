@@ -143,7 +143,6 @@ const AddResource = () => {
             ...prevState,
             resources: data,
           }));
-            toast.success("ddedee");
             setStepper(stepper + 1);
            setProgressBar(progressBar + 27);
           } else {

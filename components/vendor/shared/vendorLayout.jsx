@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AlignLeft, FileText, SquareCheck, CircleHelp, Settings } from "lucide-react";
+import { AlignLeft, FileText, SquareCheck, CircleHelp, Settings , Building2} from "lucide-react";
 import { useCookies } from 'react-cookie';
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -42,7 +42,7 @@ const VendorLayout = ({ children }) => {
               onClick={() => { 
                 router.push("/vendor/onlineResource");
               }}>
-              <AlignLeft size={20} />
+              <Building2 size={20} />
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Online Resource</h1>
             </div>
 

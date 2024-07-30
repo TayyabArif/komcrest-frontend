@@ -708,6 +708,7 @@ const UpdateComponent = () => {
       );
 
       if (response.ok) {
+        toast.success("Re-indexation is complete and your file is updated. You can downlod and check File Content")
         setOnlineResource((prevData) => ({
           ...prevData,
           file: data.file,
@@ -798,8 +799,8 @@ const UpdateComponent = () => {
                       >
                         <input {...getInputProps()} />
                         <p className="text-center text-blue-700 font-bold italic 2xl:text-[20px] ">
-                          {onlineResource.indexing == "Manual" ||
-                  onlineResource.indexing == "On demand" ||
+                          {(onlineResource.indexing == "Manual" ||
+                  onlineResource.indexing == "On demand") &&
                  (
 
                     <div
@@ -869,14 +870,14 @@ const UpdateComponent = () => {
               <div className="w-[45%] space-y-4 pt-3">
                 <div>
                   <label className="text-[16px] 2xl:text-[20px]">
-                    Last Indexation Date {onlineResource.updatedAt}
+                    Last Indexation Date
                   </label>
                   <div className="">
                     <input
                       type="date"
                       value={
-                        onlineResource.updatedAt
-                          ? new Date(onlineResource.updatedAt)
+                        onlineResource?.updatedAt
+                          ? new Date(onlineResource?.updatedAt)
                               .toISOString()
                               .split("T")[0]
                           : ""
