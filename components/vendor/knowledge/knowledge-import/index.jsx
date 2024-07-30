@@ -6,7 +6,7 @@ import { Check, language } from "lucide-react";
 import MatchColum from "./MatchColum";
 import { Button, Checkbox, Select, SelectItem } from "@nextui-org/react";
 import Validate from "./Validate";
-import Completed from "./Completed";
+import Completed from "../../shared/Completed";
 import { useCookies } from "react-cookie";
 import {handleResponse}  from "../../../../helper/index"
 import { toast } from "react-toastify";

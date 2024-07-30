@@ -1,28 +1,34 @@
-import React, { forwardRef } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import React, { useState } from "react";
 import { Input } from "@nextui-org/react";
 import { Plus, X } from "lucide-react";
 
-const AddUrls = forwardRef(({ onSubmit, formData }, ref) => {
-  const { register, control, handleSubmit, reset } = useForm({
-    defaultValues: formData,
-  });
+const AddUrls = ({ allResources, setResources }) => {
+  const [urlData, setUrlData] = useState({ url: "", title: "" });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "links",
-  });
+  const handleData = (e, index) => {
+    const { name, value } = e.target;
+    const newResources = [...allResources];
+    newResources[index][name] = value;
+    setResources(newResources);
+  };
 
-  const handleFormSubmit = (data) => {
-    onSubmit(data);
-    reset(data);
+  const addResource = () => {
+    setResources([
+      ...allResources,
+      { url: "", title: "" }
+    ]);
+  };
+
+  const removeResource = (index) => {
+    const newResources = allResources.filter((_, i) => i !== index);
+    setResources(newResources);
   };
 
   return (
-    <form ref={ref} onSubmit={handleSubmit(handleFormSubmit)}>
+    <form>
       <div className="space-y-3 w-[80%] ml-10 mt-10">
-        {fields.map((field, index) => (
-          <div key={field.id} className="flex gap-3 items-end">
+        {allResources.map((field, index) => (
+          <div key={index} className="flex gap-3 items-end">
             <div className="w-[50%] space-y-1">
               {index === 0 && (
                 <label className="text-[16px] 2xl:text-[20px]">URL</label>
@@ -30,11 +36,15 @@ const AddUrls = forwardRef(({ onSubmit, formData }, ref) => {
               <Input
                 type="text"
                 variant="bordered"
-                placeholder="E.g. www.komcret.com/security"
+                placeholder="E.g. www.example.com/security"
                 radius="sm"
                 size="md"
-                {...register(`links.${index}.url`)}
-                defaultValue={field.url}
+                name="url"
+                onChange={(e) => handleData(e, index)}
+                classNames={{
+                  input: "2xl:text-[20px] text-[16px] text-gray-500",
+                }}
+                value={field.url}
               />
             </div>
             <div className="w-[50%] space-y-1">
@@ -47,15 +57,19 @@ const AddUrls = forwardRef(({ onSubmit, formData }, ref) => {
                 radius="sm"
                 size="md"
                 placeholder="E.g. Security"
-                {...register(`links.${index}.title`)}
-                defaultValue={field.title}
+                name="title"
+                onChange={(e) => handleData(e, index)}
+                classNames={{
+                  input: "2xl:text-[20px] text-[16px] text-gray-500",
+                }}
+                value={field.title}
               />
             </div>
             <div className="w-[30px]">
-              {index === fields.length - 1 ? (
+              {index === allResources.length - 1 ? (
                 <button
                   type="button"
-                  onClick={() => append({ url: "", title: "" })}
+                  onClick={addResource}
                   className="text-blue-700"
                 >
                   <Plus size={35} strokeWidth={5} />
@@ -63,7 +77,7 @@ const AddUrls = forwardRef(({ onSubmit, formData }, ref) => {
               ) : (
                 <button
                   type="button"
-                  onClick={() => remove(index)}
+                  onClick={() => removeResource(index)}
                   className="text-red-500 text-2xl"
                 >
                   <X size={35} strokeWidth={5} />
@@ -72,12 +86,10 @@ const AddUrls = forwardRef(({ onSubmit, formData }, ref) => {
             </div>
           </div>
         ))}
-        <button type="submit" className="hidden">Submit</button>
       </div>
     </form>
   );
-});
-
+};
 
 AddUrls.displayName = "AddUrls";
 export default AddUrls;

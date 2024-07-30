@@ -10,7 +10,7 @@ import {
 import { X } from 'lucide-react';
 import { CircleX } from 'lucide-react';
 
-const DeleteQuestionModal = ({ isOpen, onOpenChange, data, handleSubmit, name, isLoading }) => {
+const DeleteModal = ({ isOpen, onOpenChange, data, handleSubmit, name, isLoading ,deleteModalContent }) => {
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
@@ -18,7 +18,7 @@ const DeleteQuestionModal = ({ isOpen, onOpenChange, data, handleSubmit, name, i
           <>
             <ModalBody className="py-12 flex flex-col justify-center items-center gap-5">
                 <X size={60}  color="#e09696" strokeWidth="5"/>
-              <p className="text-base 2xl:text-[20px] font-semibold">Are you sure to delete Knowledge?</p>
+              <p className="text-base 2xl:text-[20px] font-semibold">{deleteModalContent}</p>
              
               <div className="space-x-10">
                 <Button
@@ -50,4 +50,4 @@ const DeleteQuestionModal = ({ isOpen, onOpenChange, data, handleSubmit, name, i
   );
 };
 
-export default DeleteQuestionModal;
+export default DeleteModal;

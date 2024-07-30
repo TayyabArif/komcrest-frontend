@@ -1,6 +1,7 @@
 import React from 'react'
 
-const IndexContent = ({formData}) => {
+const IndexContent = ({resourceData}) => {
+  // debugger
   return (
     <div className="overflow-x-auto mt-10">
     <table className="min-w-full  block md:table ">
@@ -18,11 +19,11 @@ const IndexContent = ({formData}) => {
         </tr>
       </thead>
       <tbody className="block md:table-row-group">
-        {formData.links?.map((item, index) => (
+        {resourceData?.resources?.map((item, index) => (
           <tr key={index} className="bg-white">
              <td className="p-2 border border-[#b8b6b6]  text-left block md:table-cell py-3">{item.title}</td>
             <td className="p-2 border border-[#b8b6b6]  text-left block md:table-cell py-3">{item.url}</td>
-            <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">Accessing link</td>
+            <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">{item.status}</td>
           </tr>
         ))}
       </tbody>

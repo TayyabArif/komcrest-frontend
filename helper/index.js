@@ -1,6 +1,6 @@
 
 import { useRouter } from 'next/router';
-import { useCookies } from 'react-cookie'; // Assuming you're using react-cookie for managing cookies
+import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';
 
 
@@ -53,3 +53,15 @@ export function formatDateWithTime(dateString) {
   
     return formattedString;
   }
+
+  export  const handleDownload = (filePath) => {
+    if (typeof filePath === "string"){
+      const link = document.createElement("a");
+      link.href = `http://localhost:3001/files/${filePath?.split("/").pop()}`; 
+      link.download = `${filePath.split("/").pop()}`; 
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+   
+  };

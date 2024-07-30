@@ -8,12 +8,12 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import VendorHeader from "../../shared/VendorHeader";
 import KnowledgeHeader from "../../shared/KnowledgeHeader";
-import DeleteQuestionModal from "./DeleteQuestionModal";
 import { handleResponse, formatDateWithTime } from "../../../../helper";
 import KnowledgeFilter from "../knowledge-filter";
 import { Checkbox } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { CircularProgress } from "@nextui-org/react";
+import DeleteModal from "../../shared/DeleteModal";
 
 const komcrestCategories = [
   { value: "", text: "Select a Category" },
@@ -36,12 +36,8 @@ const komcrestCategories = [
   { value: "Vendor Management", text: "Vendor Management" },
 ];
 
-const headerData = {
-  title: "Knowledge",
-  desc1: "Quickly add requirements, questions and answers to your account. ",
-  desc2:
-    "They will be used by Komcrest AI to automatically provide the best answer to your future questions.",
-};
+const deleteModalContent = "Are you sure to delete knowledge?"
+
 const KnowledgeBase = ({
   questionData,
   setDataUpdate,
@@ -305,8 +301,7 @@ const KnowledgeBase = ({
   };
 
   return (
-    <div>
-      <KnowledgeHeader buttonShow={true} headerData={headerData} />
+    
       <div className="w-[86%] mx-auto py-2">
         <div className="flex justify-between">
           <div className="flex items-center gap-1 mb-2">
@@ -420,7 +415,7 @@ const KnowledgeBase = ({
                       Latest Update
                     </th>
                     <th
-                      className="px-4  border-[1px] pr-7  outline outline-[#d1cece] text-left sticky -right-[1px] bg-gray-200"
+                      className="px-4    pr-7 border-b-0  outline outline-[#d1cece] text-left sticky -right-[1px] bg-gray-200"
                       style={{ outlineWidth: "1px" }}
                     >
                       Actions
@@ -561,10 +556,11 @@ const KnowledgeBase = ({
                   )}
                 </tbody>
               </table>
-              <DeleteQuestionModal
+              <DeleteModal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 handleSubmit={handleDelete}
+                deleteModalContent ={deleteModalContent }
               />
             </div>
           </div>
@@ -572,7 +568,6 @@ const KnowledgeBase = ({
           <p>No data to display</p>
         )}
       </div>
-    </div>
   );
 };
 
