@@ -153,10 +153,11 @@ const AddResource = () => {
   };
 
   const updateRecords = async () => {
-
-
     try {
-      const updatePromises = resourceData.resources?.map(record => {
+      setStepper(stepper + 1);
+      setProgressBar(progressBar + 27);
+      await new Promise((resolve) => setTimeout(resolve, 2000)); 
+      const updatePromises = resourceData.resources?.map((record) => {
         const formData = new FormData();
   
         // Add record data
@@ -169,7 +170,7 @@ const AddResource = () => {
   
         // Add additional data
         formData.append("language", resourceData.language);
-        resourceData.productIds.forEach(id => {
+        resourceData.productIds.forEach((id) => {
           formData.append("productIds[]", id);
         });
   
@@ -177,8 +178,7 @@ const AddResource = () => {
         if (record.file) {
           formData.append("file", record.file);
         }
-
-        
+  
         const requestOptions = {
           method: "PUT",
           headers: {
@@ -203,20 +203,20 @@ const AddResource = () => {
   
       results.forEach(({ status, ok, data }) => {
         if (ok) {
-          setStepper(stepper + 1);
-          setProgressBar(progressBar + 27);
-          router.push("/vendor/onlineResource")
+          // Handle successful update
         } else {
           toast.error(data?.error);
           console.error("Error:", data);
         }
       });
+  
+      router.push("/vendor/onlineResource");
     } catch (error) {
       console.error("Error updating records:", error);
     }
   };
   
-
+  
   const handleCheckboxChange = (id) => {
     setResourceData((prev) => ({
       ...prev,
