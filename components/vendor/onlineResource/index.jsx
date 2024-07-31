@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { formatDateWithTime } from "../../../helper";
 
 const headerData = {
-  title: "Online sources",
+  title: "Online resources",
   desc1: "Seamlessly integrate external information into your account.",
   desc2:
     "This ensures that Komcrest AI draws upon the most up-to-date and pertinent answers when addressing your questions.",
@@ -114,7 +114,7 @@ const OnlineResourceComponent = () => {
           <table className="min-w-full border-collapse block md:table">
             <thead className="block md:table-header-group">
               <tr className="border text-[16px] 2xl:text-[20px] border-gray-300 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
-                <th className="bg-gray-200 p-1  font-bold md:border md:border-gray-300 block md:table-cell">
+                <th className="bg-gray-200  px-2 font-bold md:border md:border-gray-300 text-left block md:table-cell">
                   Title
                 </th>
                 <th className="bg-gray-200 p-1  font-bold md:border md:border-gray-300 block md:table-cell">
@@ -150,7 +150,7 @@ const OnlineResourceComponent = () => {
                     {item.url}
                   </td>
 
-                  <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+                  <td className="p-2 border md:border-gray-300  text-left block md:table-cell py-3">
                     {item.file ? (
                       <div className="flex flex-col">
                         <span className="text-blue-500 hover:underline cursor-pointer">
@@ -167,7 +167,7 @@ const OnlineResourceComponent = () => {
                             ", "
                           )}
                   </td>
-                  <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">
+                  <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell ">
                     {formatDateWithTime(item.updatedAt)}
                   </td>
                   <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">

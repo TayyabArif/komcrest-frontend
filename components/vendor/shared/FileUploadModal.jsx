@@ -10,12 +10,18 @@ import {
   } from "@nextui-org/react";
   import { useDropzone } from "react-dropzone";
 import Dropzone from "react-dropzone";
+import { toast } from 'react-toastify';
 
-const FileUploadModal = ({ isOpen ,onClose ,handleFileData}) => {
+const FileUploadModal = ({ isOpen ,onClose ,handleFileData ,allowedFileTypes }) => {
     const [file , setFile] = useState({})
     const handleDrop = (acceptedFiles) => {
-       setFile(acceptedFiles[0]);
-    }
+      const uploadedFile = acceptedFiles[0];
+      if (uploadedFile && allowedFileTypes.includes(uploadedFile.type)) {
+          setFile(uploadedFile);
+      } else {
+          toast.error('Invalid file type. Only .docx and .txt files are allowed.');
+      }
+  }
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
     <ModalContent>
