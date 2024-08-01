@@ -57,7 +57,7 @@ export function formatDateWithTime(dateString) {
   export  const handleDownload = (filePath) => {
     if (typeof filePath === "string"){
       const link = document.createElement("a");
-      link.href = `http://localhost:3001/files/${filePath?.split("/").pop()}`; 
+      link.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${filePath?.split("/").pop()}`; 
       link.download = `${filePath.split("/").pop()}`; 
       document.body.appendChild(link);
       link.click();

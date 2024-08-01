@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 
 const useSocket = () => {
   const [socket, setSocket] = useState(null);
-const url = "http://localhost:3001"
+const url = process.env.NEXT_PUBLIC_BACKEND_URL
   useEffect(() => {
     if (url) {
       const socketInstance = io(url, {
