@@ -18,7 +18,7 @@ const UploadQuestions = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [companyProducts, setCompanyProducts] = useState([]);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter()
   const [selectedHeader , setSelectedHeader] = useState([])
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);

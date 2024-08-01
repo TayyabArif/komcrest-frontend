@@ -28,7 +28,7 @@ const OnlineResourceComponent = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const router = useRouter();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [onlineResourceData, setOnlineResourceData] = useState([]);
   const [selectedId, setSelectedId] = useState("");
   const [dataUpdate, setDataUpdate] = useState(false);

@@ -18,7 +18,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
   const [cookies, setCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const modalData = {
     heading: "Delete Document",

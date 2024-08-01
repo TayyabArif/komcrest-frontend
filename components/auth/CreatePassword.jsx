@@ -28,7 +28,7 @@ const CreatePassword = ({type, isNew}) => {
   const [isPrivacyAggree, setIsPrivacyAggree] = useState(false);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const router = useRouter();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const { token } = router.query;
   const [formData, setFormData] = useState({
     password: "",

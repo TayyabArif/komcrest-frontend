@@ -38,7 +38,7 @@ const UpdateComponent = () => {
   const [companyProducts, setCompanyProducts] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
   const { id } = router.query;
   const token = cookiesData?.token;

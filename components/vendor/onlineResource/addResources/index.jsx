@@ -27,7 +27,7 @@ const AddResource = () => {
   const [companyProducts, setCompanyProducts] = useState([]);
   const token = cookiesData?.token;
   const companyId = cookiesData?.companyId;
-  const [allResources, setAllResources] = useState([{ url: "", title: "" }]);
+  const [allResources, setAllResources] = useState([{ url: "", title: "" , status:"pending"}]);
   const [errors, setErrors] = useState([]);
   const [resourceData, setResourceData] = useState({
     language: "",
@@ -35,7 +35,7 @@ const AddResource = () => {
     resources: [],
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
   const socket = useSocket(baseUrl);
 
@@ -115,6 +115,10 @@ const AddResource = () => {
   const handleNextClick = () => {
     if (stepper === 0) {
       const newUrlData = allResources.slice(0, allResources.length - 1);
+      setResourceData({
+        ...resourceData, 
+        resources : []
+      })
       if (validateResources() && newUrlData.length > 0) {
         handleUrlSubmit(newUrlData);
       }
@@ -143,52 +147,14 @@ const AddResource = () => {
     }
   };
 
-  // const handleUrlSubmit = (newUrlData) => {
-  //   const jsonPayload = JSON.stringify(newUrlData);
-  //   // console.log("Form Data: ", updateData);
-  //   let requestOptions = {
-  //     method: "POST",
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: jsonPayload,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`${baseUrl}/resources`, requestOptions)
-  //     .then(async (response) => {
-  //       const data = await handleResponse(
-  //         response,
-  //         router,
-  //         cookies,
-  //         removeCookie
-  //       );
-  //       return {
-  //         status: response.status,
-  //         ok: response.ok,
-  //         data,
-  //       };
-  //     })
-  //     .then(({ status, ok, data }) => {
-  //       if (ok) {
-  //         data.forEach((item, index) => {
-  //           item.indexing = "Manual";
-  //         });
-  //         setResourceData((prevState) => ({
-  //           ...prevState,
-  //           resources: data,
-  //         }));
-  //         setStepper(stepper + 1);
-  //         setProgressBar(progressBar + 27);
-  //       } else {
-  //         console.error("Error:", data);
-  //       }
-  //     })
-  //     .catch((error) => console.error(error));
-  // };
-
+ 
   const handleUrlSubmit = (newUrlData) => {
+    // setResourceData({
+    //   ...resourceData,
+    //   resources : newUrlData
+    // })
+
+    // debugger
     const jsonPayload = JSON.stringify(newUrlData);
     setStepper(stepper + 1);
     setProgressBar(progressBar + 27);

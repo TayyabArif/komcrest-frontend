@@ -23,7 +23,7 @@ const CreateUser = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([])
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",

@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 const ForgetPassword = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const [formData, setFormData] = useState({
     email: "",
   })

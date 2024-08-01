@@ -19,7 +19,7 @@ const UpdateUser = () => {
   const router = useRouter();
   const [products, setProducts] = useState([]);
   const { id } = router.query;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
