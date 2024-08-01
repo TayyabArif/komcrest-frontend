@@ -11,7 +11,7 @@ const UserManagement = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false)
   const router = useRouter();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   useEffect(() => {
     getAllUsers();
   }, [isDeleted]);

@@ -22,7 +22,7 @@ const UpdateCompany = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isCompanyLoading, setIsCompanyLoading] = useState(true)
   const [products, setProducts] = useState([]);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const { id } = router.query;
   const [formData, setFormData] = useState({
     companyName: "",

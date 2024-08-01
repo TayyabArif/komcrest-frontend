@@ -54,17 +54,21 @@ export function formatDateWithTime(dateString) {
     return formattedString;
   }
 
-  export  const handleDownload = (filePath) => {
-    if (typeof filePath === "string"){
-      const link = document.createElement("a");
-      link.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${filePath?.split("/").pop()}`; 
-      link.download = `${filePath.split("/").pop()}`; 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+  export const handleDownload = (filePath) => {
+    if (typeof filePath === "string") {
+        const fileName = filePath.split("/").pop();
+        const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${fileName}`;
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } else {
+        alert('Invalid file path.');
     }
-   
-  };
+};
+
 
   export const urlPattern = new RegExp(
     "^(https?:\\/\\/)" + // Protocol

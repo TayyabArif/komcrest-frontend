@@ -25,7 +25,7 @@ const NewDocument = () => {
   const [companyProducts, setCompanyProducts] = useState([]);
   const router = useRouter();
   const { id } = router.query;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
 
   const [documentData, setDocumentData] = useState({

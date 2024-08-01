@@ -22,7 +22,7 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
       toast.error("Please fill fields before adding a new url.");
       return;
     }
-    const newResources = [...allResources, { url: "", title: "" }];
+    const newResources = [...allResources, { url: "", title: "" ,status:"Pending" }];
     setAllResources(newResources);
   };
   const removeResource = (index) => {
@@ -91,9 +91,9 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
                 <button
                   type="button"
                   onClick={addResource}
-                  className="text-blue-700"
+                  className="bg-blue-700 px-2 py-1 text-[16px] cursor-pointer text-white rounded-md"
                 >
-                  <Plus size={35} strokeWidth={5} />
+                 Add
                 </button>
               ) : (
                 <button

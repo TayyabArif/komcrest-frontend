@@ -18,7 +18,7 @@ const UsersTable = ({allUsers, setAllUsers, isDeleted, setIsDeleted}) => {
   const router = useRouter();
   const [selectedDecativateUser, setSelectedDecativateUser] = useState(null)
   const [filteredUsers, setFilteredUsers] = useState(allUsers);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   let modalData = {
     heading: "Deactivate user",
     desc: " Are you sure you want to deactivate user? The user will no long be able to login to komcrest.",

@@ -31,7 +31,7 @@ const CompaniesTable = ({allCompanies, setAllCompanies, isDeleted, setIsDeleted}
   const [updateAction, setupdateAction] = useState("")
   const router = useRouter();
   const [filteredCompanies, setFilteredCompanies] = useState(allCompanies);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
 
   useEffect(() => {

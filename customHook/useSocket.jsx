@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 
 const useSocket = () => {
   const [socket, setSocket] = useState(null);
-const url = process.env.NEXT_PUBLIC_BACKEND_URL
+const url = process.env.NEXT_PUBLIC_BACKEND_URL.split('/api')[0]
   useEffect(() => {
     if (url) {
       const socketInstance = io(url, {

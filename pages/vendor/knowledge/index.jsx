@@ -26,7 +26,7 @@ const Knowledge = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [dataLoaded, setDataLoaded] = useState(false);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [dataUpdate, setDataUpdate] = useState(false);
   const [filters, setFilters] = useState([]);
 

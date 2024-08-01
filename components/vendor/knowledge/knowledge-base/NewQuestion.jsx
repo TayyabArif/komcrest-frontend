@@ -46,7 +46,7 @@ const NewQuestion = () => {
   const [companyProducts, setCompanyProducts] = useState([]);
   const [documentData, setDocumentData] = useState([]);
   const [CompanyUserData, setCompanyUserData] = useState([]);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [dataLoaded, setDataIsLoaded] = useState(false);
   const router = useRouter();
   const { id } = router.query;
