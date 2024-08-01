@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Progress, Button, Checkbox, Select, SelectItem } from "@nextui-org/react";
+import {
+  Progress,
+  Button,
+  Checkbox,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
 import { Check } from "lucide-react";
 import AddUrls from "./AddUrls";
 import IndexContent from "./IndexContent";
@@ -9,7 +15,9 @@ import { useCookies } from "react-cookie";
 import { handleResponse } from "../../../../helper/index";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import Completed from "../../shared/Completed"
+import Completed from "../../shared/Completed";
+import { urlPattern } from "../../../../helper/index";
+import useSocket from "@/customHook/useSocket";
 
 const AddResource = () => {
   const [stepper, setStepper] = useState(0);
@@ -19,15 +27,17 @@ const AddResource = () => {
   const [companyProducts, setCompanyProducts] = useState([]);
   const token = cookiesData?.token;
   const companyId = cookiesData?.companyId;
-  const [allResources , setResources] = useState([{ url: "", title: "" }])
+  const [allResources, setAllResources] = useState([{ url: "", title: "" }]);
+  const [errors, setErrors] = useState([]);
   const [resourceData, setResourceData] = useState({
-    language:"",
-    productIds:[],
-    resources:[]
+    language: "",
+    productIds: [],
+    resources: [],
   });
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
+  const socket = useSocket(baseUrl);
 
   const languageOptions = [
     { key: "French", label: "French" },
@@ -53,8 +63,6 @@ const AddResource = () => {
   }
 
   const getCompanyProducts = async () => {
-   
-
     const requestOptions = {
       method: "GET",
       headers: {
@@ -64,7 +72,12 @@ const AddResource = () => {
     };
     fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
       .then(async (response) => {
-        const data = await handleResponse(response, router, cookies, removeCookie);
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
         return {
           status: response.status,
           ok: response.ok,
@@ -86,14 +99,38 @@ const AddResource = () => {
     getCompanyProducts();
   }, []);
 
+  const validateResources = () => {
+    const newErrors = [];
+    allResources.slice(0, -1).forEach((item, index) => {
+      const error = {};
+      if (!urlPattern.test(item.url)) {
+        error.url = "Invalid URL";
+      }
+      newErrors[index] = error;
+    });
+    setErrors(newErrors);
+    return newErrors.every((error) => !Object.keys(error).length);
+  };
+
   const handleNextClick = () => {
     if (stepper === 0) {
-      handleUrlSubmit()
-    }else if (stepper === 1 || stepper === 2) {
+      const newUrlData = allResources.slice(0, allResources.length - 1);
+      if (validateResources() && newUrlData.length > 0) {
+        handleUrlSubmit(newUrlData);
+      }
+    } else if (stepper === 1 ) {
       setStepper(stepper + 1);
       setProgressBar(progressBar + 27);
-    }else if(stepper === 3){
-      updateRecords()
+    } else if (stepper === 2) {
+      if( resourceData.language !== "" && resourceData.productIds.length > 0){
+        setStepper(stepper + 1);
+        setProgressBar(progressBar + 27);
+      }else{
+      toast.error("Language or Products are missing")
+      }
+     
+    }else if (stepper === 3) {
+      updateRecords();
     }
   };
 
@@ -101,64 +138,104 @@ const AddResource = () => {
     if (stepper > 0) {
       setStepper(stepper - 1);
       setProgressBar(progressBar - 27);
+    }else{
+      router.push("/vendor/onlineResource")
     }
   };
 
-  const handleUrlSubmit = () => {
-    let updateData = allResources.filter(item => item.url !== "" || item.title !== "");
-    const jsonPayload = JSON.stringify(updateData);
-    console.log("Form Data: ", updateData);
-   
- 
-      let requestOptions = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: jsonPayload,
-        redirect: "follow",
-      };
+  // const handleUrlSubmit = (newUrlData) => {
+  //   const jsonPayload = JSON.stringify(newUrlData);
+  //   // console.log("Form Data: ", updateData);
+  //   let requestOptions = {
+  //     method: "POST",
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: jsonPayload,
+  //     redirect: "follow",
+  //   };
 
-      fetch(`${baseUrl}/resources`, requestOptions)
-        .then(async (response) => {
-          const data = await handleResponse(
-            response,
-            router,
-            cookies,
-            removeCookie
-          );
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
-           data.forEach((item, index) => {
-              item.indexing = "Manual";
+  //   fetch(`${baseUrl}/resources`, requestOptions)
+  //     .then(async (response) => {
+  //       const data = await handleResponse(
+  //         response,
+  //         router,
+  //         cookies,
+  //         removeCookie
+  //       );
+  //       return {
+  //         status: response.status,
+  //         ok: response.ok,
+  //         data,
+  //       };
+  //     })
+  //     .then(({ status, ok, data }) => {
+  //       if (ok) {
+  //         data.forEach((item, index) => {
+  //           item.indexing = "Manual";
+  //         });
+  //         setResourceData((prevState) => ({
+  //           ...prevState,
+  //           resources: data,
+  //         }));
+  //         setStepper(stepper + 1);
+  //         setProgressBar(progressBar + 27);
+  //       } else {
+  //         console.error("Error:", data);
+  //       }
+  //     })
+  //     .catch((error) => console.error(error));
+  // };
+
+  const handleUrlSubmit = (newUrlData) => {
+    const jsonPayload = JSON.stringify(newUrlData);
+    setStepper(stepper + 1);
+    setProgressBar(progressBar + 27);
+
+    let requestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: jsonPayload,
+      redirect: "follow",
+    };
+
+    fetch(`${baseUrl}/resources`, requestOptions)
+      .then(async (response) => {
+        const data = await response.json();
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          data.forEach((item) => {
+            item.indexing = "Manual";
           });
           setResourceData((prevState) => ({
             ...prevState,
             resources: data,
           }));
-            setStepper(stepper + 1);
-           setProgressBar(progressBar + 27);
-          } else {
-            console.error("Error:", data);
-          }
-        })
-        .catch((error) => console.error(error));
+        } else {
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => console.error(error));
   };
 
   const updateRecords = async () => {
-
-
     try {
-      const updatePromises = resourceData.resources?.map(record => {
+      setStepper(stepper + 1);
+      setProgressBar(progressBar + 27);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const updatePromises = resourceData.resources?.map((record) => {
         const formData = new FormData();
-  
+
         // Add record data
         formData.append("id", record.id);
         formData.append("url", record.url);
@@ -166,19 +243,18 @@ const AddResource = () => {
         formData.append("status", record.status);
         formData.append("error", record.error);
         formData.append("indexing", record.indexing);
-  
+
         // Add additional data
         formData.append("language", resourceData.language);
-        resourceData.productIds.forEach(id => {
+        resourceData.productIds.forEach((id) => {
           formData.append("productIds[]", id);
         });
-  
+
         // Add file if exists
         if (record.file) {
           formData.append("file", record.file);
         }
 
-        
         const requestOptions = {
           method: "PUT",
           headers: {
@@ -187,35 +263,40 @@ const AddResource = () => {
           body: formData,
           redirect: "follow",
         };
-  
-        return fetch(`${baseUrl}/resources`, requestOptions)
-          .then(async (response) => {
-            const data = await handleResponse(response, router, cookies, removeCookie);
+
+        return fetch(`${baseUrl}/resources`, requestOptions).then(
+          async (response) => {
+            const data = await handleResponse(
+              response,
+              router,
+              cookies,
+              removeCookie
+            );
             return {
               status: response.status,
               ok: response.ok,
               data,
             };
-          });
+          }
+        );
       });
-  
+
       const results = await Promise.all(updatePromises);
-  
+
       results.forEach(({ status, ok, data }) => {
         if (ok) {
-          setStepper(stepper + 1);
-          setProgressBar(progressBar + 27);
-          router.push("/vendor/onlineResource")
+          // Handle successful update
         } else {
           toast.error(data?.error);
           console.error("Error:", data);
         }
       });
+
+      router.push("/vendor/onlineResource");
     } catch (error) {
       console.error("Error updating records:", error);
     }
   };
-  
 
   const handleCheckboxChange = (id) => {
     setResourceData((prev) => ({
@@ -226,26 +307,21 @@ const AddResource = () => {
     }));
   };
 
-  const handleSelectChange = (property, value, index ) => {
-    if(property == "language") {
-      setResourceData(prevData => ({
+  const handleSelectChange = (property, value, index) => {
+    if (property == "language") {
+      setResourceData((prevData) => ({
         ...prevData,
-        language: value}));
-    }else if(property == "indexing"){
-      setResourceData(prevData => ({
+        language: value,
+      }));
+    } else if (property == "indexing") {
+      setResourceData((prevData) => ({
         ...prevData,
         resources: prevData.resources.map((item, idx) =>
           idx === index ? { ...item, [property]: value } : item
-        )
+        ),
       }));
     }
-
-
-
-
-
-   
-  }
+  };
 
   return (
     <div className="w-[100%] h-full">
@@ -254,13 +330,25 @@ const AddResource = () => {
           {getTitle()}
         </h1>
         <div className="w-full h-[83vh] bg-white p-6">
-          <Progress aria-label="Loading..." value={progressBar} className="h-[8px]" />
+          <Progress
+            aria-label="Loading..."
+            value={progressBar}
+            className="h-[8px]"
+          />
 
           <div className="flex flex-col justify-between h-full">
             <div>
               <div className="my-3 flex gap-2">
-                {["Add URLs", "Index content", "Review content", "Validate data"].map((title, index) => (
-                  <div key={index} className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
+                {[
+                  "Add URLs",
+                  "Index content",
+                  "Review content",
+                  "Validate data",
+                ].map((title, index) => (
+                  <div
+                    key={index}
+                    className="flex gap-3 items-center flex-1 border py-1 px-2 rounded"
+                  >
                     <span
                       className={`${
                         stepper >= index + 1 ? "bg-blue-600" : "border-blue-600"
@@ -272,30 +360,52 @@ const AddResource = () => {
                         index + 1
                       )}
                     </span>
-                    <h1 className={`text-[16px] 2xl:text-[20px] ${stepper === index ? "text-blue-600" : ""}`}>
+                    <h1
+                      className={`text-[16px] 2xl:text-[20px] ${
+                        stepper === index ? "text-blue-600" : ""
+                      }`}
+                    >
                       {title}
                     </h1>
                   </div>
                 ))}
               </div>
               <div className="overflow-auto max-h-[58vh]">
-                {stepper === 0 && <AddUrls
-                setResources={setResources}
-                allResources={allResources}
-                
-                />}
-                {stepper === 1 && <IndexContent resourceData={resourceData}/>}
-                {stepper === 2 && <ReviewContent resourceData={resourceData} setResourceData={setResourceData} handleSelectChange={handleSelectChange}/>}
-                {stepper === 3 && <ValidateData resourceData={resourceData} companyProducts={companyProducts}/>}
-                {stepper === 4 && <Completed  />}
+                {stepper === 0 && (
+                  <AddUrls
+                    setAllResources={setAllResources}
+                    allResources={allResources}
+                    errors={errors}
+                    setResourceData={setResourceData}
+                  />
+                )}
+                {stepper === 1 && <IndexContent resourceData={resourceData}  setResourceData={setResourceData}/>}
+                {stepper === 2 && (
+                  <ReviewContent
+                    resourceData={resourceData}
+                    setResourceData={setResourceData}
+                    handleSelectChange={handleSelectChange}
+                  />
+                )}
+                {stepper === 3 && (
+                  <ValidateData
+                    resourceData={resourceData}
+                    companyProducts={companyProducts}
+                  />
+                )}
+                {stepper === 4 && <Completed />}
               </div>
             </div>
             <div>
               {stepper >= 0 && stepper <= 3 && (
-                <div className={`flex items-end ${stepper === 2 ? "justify-between" : "justify-end"} gap-3`}>
+                <div
+                  className={`flex items-end ${
+                    stepper === 2 ? "justify-between" : "justify-end"
+                  } gap-3`}
+                >
                   {stepper === 2 && (
                     <div className="space-y-2">
-                       <div className=" mt-8 mb-2">
+                      <div className=" mt-8 mb-2">
                         <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-60">
                           Select Language:
                         </h1>
@@ -306,15 +416,20 @@ const AddResource = () => {
                           placeholder="Select Language"
                           value={resourceData.language}
                           onChange={(e) =>
-                            handleSelectChange("language",e.target.value)}
-                          defaultSelectedKeys={resourceData.language ? [resourceData.language] : []}
+                            handleSelectChange("language", e.target.value)
+                          }
+                          defaultSelectedKeys={
+                            resourceData.language ? [resourceData.language] : []
+                          }
                           classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
                         >
                           {languageOptions.map((option) => (
                             <SelectItem
                               key={option.key}
                               value={option.label}
-                              classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                              classNames={{
+                                title: "text-[16px] 2xl:text-[20px]",
+                              }}
                             >
                               {option.label}
                             </SelectItem>
@@ -331,17 +446,21 @@ const AddResource = () => {
                               key={index}
                               radius="md"
                               size="lg"
-                              isSelected={resourceData.productIds.includes(item.id)}
+                              isSelected={resourceData.productIds.includes(
+                                item.id
+                              )}
                               onChange={() => handleCheckboxChange(item.id)}
                               className="2xl:text-[42px]"
-                              classNames={{ label: "!rounded-[3px] text-[16px] 2xl:text-[20px]" }}
+                              classNames={{
+                                label:
+                                  "!rounded-[3px] text-[16px] 2xl:text-[20px]",
+                              }}
                             >
                               {item.name}
                             </Checkbox>
                           ))}
                         </div>
                       </div>
-                     
                     </div>
                   )}
                   <div className="mt-5">
