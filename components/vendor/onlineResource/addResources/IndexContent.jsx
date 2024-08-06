@@ -11,7 +11,7 @@ const IndexContent = ({ resourceData, setResourceData }) => {
         console.log("Received status update:", statusUpdate); // Log received data
 
         setResourceData((prevState) => {
-          // Check if the resource already exists
+
           const resourceIndex = prevState.resources.findIndex(
             (resource) => resource.id === statusUpdate.id
           );

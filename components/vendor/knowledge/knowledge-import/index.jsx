@@ -333,7 +333,7 @@ const submitData = () => {
               />
             )}
             {stepper == 3 && <Validate knowledgeData={knowledgeData} questions={updatedData.questions} />}
-            {stepper == 4 && <Completed />}
+            {stepper == 4 && <Completed  content="Importing questions and answers"/>}
           </div>
           </div>
      <div>

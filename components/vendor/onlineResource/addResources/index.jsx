@@ -99,18 +99,7 @@ const AddResource = () => {
     getCompanyProducts();
   }, []);
 
-  const validateResources = () => {
-    const newErrors = [];
-    allResources.slice(0, -1).forEach((item, index) => {
-      const error = {};
-      if (!urlPattern.test(item.url)) {
-        error.url = "Invalid URL";
-      }
-      newErrors[index] = error;
-    });
-    setErrors(newErrors);
-    return newErrors.every((error) => !Object.keys(error).length);
-  };
+  
 
   const handleNextClick = () => {
     if (stepper === 0) {
@@ -119,7 +108,7 @@ const AddResource = () => {
         ...resourceData, 
         resources : []
       })
-      if (validateResources() && newUrlData.length > 0) {
+      if (newUrlData.length > 0) {
         handleUrlSubmit(newUrlData);
       }
     } else if (stepper === 1 ) {
@@ -359,7 +348,7 @@ const AddResource = () => {
                     companyProducts={companyProducts}
                   />
                 )}
-                {stepper === 4 && <Completed />}
+                {stepper === 4 && <Completed  content="Importing online resources"/>}
               </div>
             </div>
             <div>

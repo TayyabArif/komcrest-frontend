@@ -366,9 +366,24 @@ const UpdateComponent = () => {
                   />
                 </div>
                 <div className="flex-1">
+                  <div className="flex justify-between">
                   <label className="text-[16px] 2xl:text-[20px]">
                     Docx file
                   </label>
+                  <Button
+                          
+                          size="sm"
+                          color="primary"
+                          className="rounded-md 2xl:text-[18px] cursor-pointer text-[16px] font-semibold mb-1"
+                          onClick={() =>
+                            handleDownload(onlineResource.file)
+                          }
+                        >
+                          DownLoad File
+                        </Button>
+
+                        </div>
+                  
                   <Dropzone onDrop={handleDrop}>
                     {({ getRootProps, getInputProps }) => (
                       <div
@@ -377,17 +392,6 @@ const UpdateComponent = () => {
                       >
                         <input {...getInputProps()} />
                         <p className="text-center text-blue-700 font-bold italic 2xl:text-[20px] ">
-                          {(onlineResource.indexing == "Manual" ||
-                            onlineResource.indexing == "On demand") && (
-                            <div
-                              className="text-gray-700"
-                              onClick={() =>
-                                handleDownload(onlineResource.file)
-                              }
-                            >
-                              Click here to download File
-                            </div>
-                          )}
                           {typeof onlineResource.file === "object" &&
                           onlineResource.file !== null
                             ? onlineResource.file.name
