@@ -3,6 +3,8 @@ import { Input } from "@nextui-org/react";
 import { Plus, X } from "lucide-react";
 import { toast } from "react-toastify";
 import useSocket from "@/customHook/useSocket";
+import { urlPattern } from "../../../../helper/index";
+import {Button} from "@nextui-org/react";
 
 const AddUrls = ({ allResources, setAllResources, errors }) => {
 
@@ -21,9 +23,14 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
     if (!lastResource.url || !lastResource.title) {
       toast.error("Please fill fields before adding a new url.");
       return;
+    }else if (!urlPattern.test(lastResource.url)) {
+      toast.error("Invalid Url")
+    }else {
+      const newResources = [...allResources, { url: "", title: "" ,status:"Pending" }];
+      setAllResources(newResources);
+
     }
-    const newResources = [...allResources, { url: "", title: "" ,status:"Pending" }];
-    setAllResources(newResources);
+  
   };
   const removeResource = (index) => {
     const newResources = allResources.filter((_, i) => i !== index);
@@ -45,20 +52,16 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
                 type="text"
                 variant="bordered"
                 placeholder="E.g. www.example.com/security"
+                isDisabled={index !== allResources.length - 1 } 
                 radius="sm"
                 size="md"
                 name="url"
                 onChange={(e) => handleData(e, index)}
                 classNames={{
-                  input: `2xl:text-[20px] text-[16px] text-gray-800 ${
-                    errors[index]?.url ? "border-red-500" : ""
-                  }`,
+                  input: "2xl:text-[20px] text-[16px] text-gray-800 ",
                 }}
                 value={field.url}
               />
-              {errors[index]?.url && (
-                <p className="text-red-500 text-md">{errors[index].url}</p>
-              )}
               </div>
             </div>
             <div className="w-[50%] space-y-1 ">
@@ -71,30 +74,28 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
                 variant="bordered"
                 radius="sm"
                 size="md"
+                isDisabled={index !== allResources.length - 1 } 
                 placeholder="E.g. Security"
                 name="title"
                 onChange={(e) => handleData(e, index)}
                 classNames={{
-                  input: `2xl:text-[20px] text-[16px] text-gray-800 ${
-                    errors[index]?.title ? "border-red-500" : ""
-                  }`,
+                  input: "2xl:text-[20px] text-[16px] text-gray-800 ",
                 }}
                 value={field.title}
               />
-              {errors[index]?.title && (
-                <p className="text-red-500 text-md">{errors[index].title}</p>
-              )}
+              
                </div>
             </div>
             <div className="w-[30px] h-[55px]">
               {index === allResources.length - 1 ? (
-                <button
-                  type="button"
-                  onClick={addResource}
-                  className="bg-blue-700 px-2 py-1 text-[16px] cursor-pointer text-white rounded-md"
-                >
+                 <Button
+                 onClick={addResource}
+                 radius="none"
+                 size="sm"
+                 className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+               >
                  Add
-                </button>
+               </Button>
               ) : (
                 <button
                   type="button"

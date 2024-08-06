@@ -30,6 +30,10 @@ const AdminLayout = ({children}) => {
             localStorage.setItem("selectedSideBar", "user")
             router.push("/admin/user-management")
             }}>User Management</p>
+              <p className={`text-lg font-normal ${selectedItem === "prompts" ? "text-white" : "text-gray-400"} cursor-pointer`}   onClick={() =>{
+            localStorage.setItem("selectedSideBar", "prompts")
+            router.push("/admin/prompts")
+            }}>Prompts</p>
         </div>
       </div>
       <div className="w-[85%]">
