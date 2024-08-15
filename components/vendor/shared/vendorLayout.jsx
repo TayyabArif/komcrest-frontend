@@ -44,7 +44,7 @@ const VendorLayout = ({ children }) => {
                 router.push("/vendor/onlineResource");
               }}>
               <MonitorDown size={20}/>
-              <h1 className="text-[16px] 2xl:text-[20px] py-2">Online Resource</h1>
+              <h1 className="text-[16px] 2xl:text-[20px] py-2">Online Resources</h1>
             </div>
 
             <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "knowledge" ? "bg-[#2457d7] text-white shadow-md" : "hover:bg-gray-200 hover:shadow-md"}`} 
@@ -54,9 +54,9 @@ const VendorLayout = ({ children }) => {
               <AlignLeft size={20} />
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Knowledge</h1>
             </div>
-            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "Questionnaires" ? "bg-[#2457d7] text-white shadow-md" : "hover:bg-gray-200 hover:shadow-md"}`}
+            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "questionnaires" ? "bg-[#2457d7] text-white shadow-md" : "hover:bg-gray-200 hover:shadow-md"}`}
               onClick={() => { 
-                localStorage.setItem("selectedSideBar", "Questionnaires");
+                router.push("/vendor/questionnaires");
               }}>
               <SquareCheck size={20} />
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Questionnaires</h1>

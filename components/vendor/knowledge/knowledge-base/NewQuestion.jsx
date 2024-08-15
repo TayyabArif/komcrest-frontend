@@ -8,6 +8,7 @@ import { Checkbox } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { handleResponse } from "../../../../helper";
 import { Tooltip } from "@nextui-org/tooltip";
+import { useMyContext } from "@/context"; 
 
 const NewQuestion = () => {
   const categoryOption = [
@@ -36,6 +37,7 @@ const NewQuestion = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const [company, setCompany] = useState("")
   const cookiesData = cookies.myCookie;
+  const { companyUserData } = useMyContext();
   useEffect(() => {
     const hostname = window.location.hostname;
     const parts = hostname.split('.');
@@ -45,7 +47,7 @@ const NewQuestion = () => {
   }, [])
   const [companyProducts, setCompanyProducts] = useState([]);
   const [documentData, setDocumentData] = useState([]);
-  const [CompanyUserData, setCompanyUserData] = useState([]);
+  // const [CompanyUserData, setCompanyUserData] = useState([]);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [dataLoaded, setDataIsLoaded] = useState(false);
   const router = useRouter();
@@ -119,7 +121,6 @@ const NewQuestion = () => {
   useEffect(() => {
     getCompanyProducts();
     getUserDocument();
-    getCompanyUser();
   }, []);
 
   useEffect(() => {
@@ -272,42 +273,6 @@ const NewQuestion = () => {
         }));
         setDocumentData(referenceOptions);
         console.log(">>>>>>,", referenceOptions);
-      } else {
-        toast.error(data?.error);
-      }
-    } catch (error) {
-      console.error("Error fetching user documents:", error);
-    }
-  };
-
-  const getCompanyUser = async () => {
-    const token = cookiesData && cookiesData.token;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-
-    try {
-      const response = await fetch(
-        `${baseUrl}/get-company-users`,
-        requestOptions
-      );
-      const data = await handleResponse(
-        response,
-        router,
-        cookies,
-        removeCookie
-      );
-      if (response.ok) {
-        const curatorOptions = data.map((item) => ({
-          id: item.id,
-          name: item.firstName,
-        }));
-        setCompanyUserData(curatorOptions);
-        console.log("user List,", curatorOptions);
       } else {
         toast.error(data?.error);
       }
@@ -562,13 +527,13 @@ const NewQuestion = () => {
                     }
                     classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
                   >
-                    {CompanyUserData?.map((option) => (
+                    {companyUserData?.map((option) => (
                       <SelectItem
-                        key={option.name}
-                        value={option.name}
+                        key={option.label}
+                        value={option.label}
                         classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
                       >
-                        {option.name}
+                        {option.label}
                       </SelectItem>
                     ))}
                   </Select>

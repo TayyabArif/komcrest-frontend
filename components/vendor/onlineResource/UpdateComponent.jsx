@@ -368,7 +368,7 @@ const UpdateComponent = () => {
                 <div className="flex-1">
                   <div className="flex justify-between">
                   <label className="text-[16px] 2xl:text-[20px]">
-                    Docx file
+                  Indexation file
                   </label>
                   <Button
                           
@@ -379,7 +379,7 @@ const UpdateComponent = () => {
                             handleDownload(onlineResource.file)
                           }
                         >
-                          DownLoad File
+                          Download File
                         </Button>
 
                         </div>

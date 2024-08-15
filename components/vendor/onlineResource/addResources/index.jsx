@@ -110,6 +110,8 @@ const AddResource = () => {
       })
       if (newUrlData.length > 0) {
         handleUrlSubmit(newUrlData);
+      }else{
+        toast.error("URL must be added to go to the next step")
       }
     } else if (stepper === 1 ) {
       setStepper(stepper + 1);
