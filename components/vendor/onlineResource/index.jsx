@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import KnowledgeHeader from "../shared/KnowledgeHeader";
 import ResourceHome from "./ResourceHome";
-import { Popover, PopoverTrigger, PopoverContent, CircularProgress } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent, CircularProgress ,Checkbox ,Button} from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/react";
 import { FilePenLine } from "lucide-react";
 import DeleteModal from "../shared/DeleteModal";
@@ -34,6 +34,9 @@ const OnlineResourceComponent = () => {
   const [selectedId, setSelectedId] = useState("");
   const [dataUpdate, setDataUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isHeaderChecked, setIsHeaderChecked] = useState(false);
+  const [bulkDeleted, setBulkDeleted] = useState([]);
+  const [deleteAction, setDeleteAction] = useState("");
 
   const getAllResourceData = async () => {
     setIsLoading(true)
@@ -70,7 +73,7 @@ const OnlineResourceComponent = () => {
     getAllResourceData();
   }, [dataUpdate]);
 
-  const handleDelete = async () => {
+  const handleSingleDelete = async () => {
     const token = cookiesData.token;
     const requestOptions = {
       method: "DELETE",
@@ -101,6 +104,57 @@ const OnlineResourceComponent = () => {
     }
   };
 
+  const handleBulkDelete = async () => {
+    const token = cookiesData.token;
+    const requestOptions = {
+      method: "post",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids: bulkDeleted }),
+      redirect: "follow",
+    };
+    fetch(`${baseUrl}/resource/delete`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        toast.success("Online Resources deleted successfully");
+        setDataUpdate(!dataUpdate);
+        setBulkDeleted([]);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const handleDelete = () => {
+    if (deleteAction == "single") {
+      handleSingleDelete();
+    } else {
+      handleBulkDelete();
+    }
+  };
+
+  const handleCheckboxChange = (id) => {
+    let payload = [...bulkDeleted];
+    if (bulkDeleted.includes(id)) {
+      payload = bulkDeleted.filter((item) => item !== id);
+    } else {
+      payload = [...payload, id];
+    }
+    setBulkDeleted(payload);
+    console.log(">>>>>>>>>>>>", payload);
+  };
+
+  const handleHeaderCheckboxChange = () => {
+    if (isHeaderChecked) {
+      setBulkDeleted([]);
+      setIsHeaderChecked(false);
+    } else {
+      const allIds = onlineResourceData.map((data) => data.id);
+      setBulkDeleted(allIds);
+      setIsHeaderChecked(true);
+    }
+  };
+
   return (
     <>
     {isLoading ? 
@@ -112,9 +166,34 @@ const OnlineResourceComponent = () => {
       <KnowledgeHeader headerData={headerData} buttonShow={onlineResourceData.length > 0 ? true : false} />
       {onlineResourceData.length > 0 ? (
         <div className=" w-[85%] mx-auto overflow-x-auto h-[78vh] mt-10">
-          <table className="min-w-full border-collapse block md:table">
-            <thead className="block md:table-header-group sticky -top-1 z-30">
-              <tr className="border text-[16px] 2xl:text-[20px] border-gray-300 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
+          <div className="flex justify-end h-[40px]">
+          {bulkDeleted.length > 0 && (
+            <Button
+              size="md"
+              className="rounded-md 2xl:text-[20px] cursor-pointer text-red-600 bg-transparent  text-[13px] font-semibold"
+              onClick={() => {
+                onOpen();
+                setDeleteAction("bulk");
+              }}
+            >
+              Clear Selection
+            </Button>
+          )}
+          </div>
+          <div className="w-[100%] overflow-x-auto relative h-[77vh]">
+          <table className="">
+            <thead className="block md:table-header-group sticky -top-1 z-30 ">
+              <tr className="border text-[16px] 2xl:text-[20px] border-gray-300">
+              <th className="py-2 px-4 border border-gray-300 text-left bg-gray-200">
+                      <Checkbox
+                        isSelected={isHeaderChecked}
+                        onChange={handleHeaderCheckboxChange}
+                        className="2xl:text-[20px] !text-[50px]"
+                        radius="none"
+                        size="lg"
+                        classNames={{ wrapper: "!rounded-[3px]" }}
+                      />
+                    </th>
                 <th className="bg-gray-200  px-2 font-bold md:border md:border-gray-300 text-left block md:table-cell min-w-[250px]">
                   Title
                 </th>
@@ -144,6 +223,18 @@ const OnlineResourceComponent = () => {
                   key={index}
                   className="bg-white border border-gray-300 md:border-none block md:table-row text-[16px] 2xl:text-[20px]"
                 >
+                  <td className="py-2 px-4 border border-gray-300">
+                          <Checkbox
+                            isSelected={bulkDeleted.includes(item.id)}
+                            onChange={() => handleCheckboxChange(item.id)}
+                            className="2xl:text-[20px] !text-[50px]"
+                            radius="none"
+                            size="lg"
+                            classNames={{ wrapper: "!rounded-[3px]" }}
+                          />
+                        </td>
+                        
+                  
                   <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">
                     {item.title}
                   </td>
@@ -179,7 +270,7 @@ const OnlineResourceComponent = () => {
                   </td>
                   <td className="md:border md:border-gray-300  md:table-cell pl-[20px]">
                     <Popover
-                      className="rounded-[0px] bg-yellow-300"
+                      className="rounded-[0px]"
                       isOpen={openPopoverIndex === index}
                       onOpenChange={(open) =>
                         setOpenPopoverIndex(open ? index : null)
@@ -212,6 +303,7 @@ const OnlineResourceComponent = () => {
                               setSelectedId(item.id);
                               onOpen();
                               setOpenPopoverIndex(null);
+                              setDeleteAction("single");
                             }}
                           >
                             Delete
@@ -224,6 +316,7 @@ const OnlineResourceComponent = () => {
               ))}
             </tbody>
           </table>
+          </div>
           <DeleteModal
             isOpen={isOpen}
             onOpenChange={onOpenChange}

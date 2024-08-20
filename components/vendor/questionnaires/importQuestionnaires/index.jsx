@@ -17,7 +17,7 @@ import SelectHeader from "./SelectHeader";
 import SelectQuestion from "./SelectQuestion";
 import ValidateData from "./ValidateData";
 
-const Import = () => {
+const Import = ({setImportSuccessfully}) => {
   const [stepper, setStepper] = useState(0);
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -191,68 +191,86 @@ const Import = () => {
   
     // Now you can use the payload, e.g., send it to an API
     
-      const jsonPayload = JSON.stringify(payload);
-      const token = cookiesData.token;
-      let requestOptions = {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: jsonPayload,
-        redirect: "follow",
-      };
+      // const jsonPayload = JSON.stringify(payload);
+      // const token = cookiesData.token;
+      // let requestOptions = {
+      //   method: "POST",
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      //   body: jsonPayload,
+      //   redirect: "follow",
+      // };
     
-      fetch(`${baseUrl}/questionnaires`, requestOptions)
-        .then(async (response) => {
-          const data = await handleResponse(response, router, cookies, removeCookie);
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
-            console.log("Success:", data);
-            toast.success("Questionnaires created successfully");
-          } else {
-            toast.error(data?.error || "Questionnaires not Created");
-            console.error("Error:", data);
-          }
-        })
-        .catch((error) => {
-          if (error.response) {
-            console.error("API Error:", error.response);
-            toast.error(error.response.data?.error || "An error occurred while creating the document");
-          } 
-        });
-  
+      // fetch(`${baseUrl}/questionnaires`, requestOptions)
+      //   .then(async (response) => {
+      //     const data = await handleResponse(response, router, cookies, removeCookie);
+      //     return {
+      //       status: response.status,
+      //       ok: response.ok,
+      //       data,
+      //     };
+      //   })
+      //   .then(({ status, ok, data }) => {
+      //     if (ok) {
+      //       console.log("Success:", data);
+      //       toast.success("Questionnaires created successfully");
+      //       setImportSuccessfully(true)
+            
+      //     } else {
+      //       toast.error(data?.error || "Questionnaires not Created");
+      //       console.error("Error:", data);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     if (error.response) {
+      //       console.error("API Error:", error.response);
+      //       toast.error(error.response.data?.error || "An error occurred while creating the document");
+      //     } 
+      //   });
 
+      const jsonPayload = JSON.stringify(payload);
+const token = cookiesData.token;
 
+let requestOptions = {
+  method: "POST",
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  },
+  body: jsonPayload,
+  redirect: "follow",
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Introduce a 2-second delay before making the API call
+setTimeout(() => {
+  fetch(`${baseUrl}/questionnaires`, requestOptions)
+    .then(async (response) => {
+      const data = await handleResponse(response, router, cookies, removeCookie);
+      return {
+        status: response.status,
+        ok: response.ok,
+        data,
+      };
+    })
+    .then(({ status, ok, data }) => {
+      if (ok) {
+        console.log("Success:", data);
+        toast.success("Questionnaires created successfully");
+        setImportSuccessfully(true);
+      } else {
+        toast.error(data?.error || "Questionnaires not Created");
+        console.error("Error:", data);
+      }
+    })
+    .catch((error) => {
+      if (error.response) {
+        console.error("API Error:", error.response);
+        toast.error(error.response.data?.error || "An error occurred while creating the document");
+      }
+    });
+}, 2000); // 2-second delay
 
 
 

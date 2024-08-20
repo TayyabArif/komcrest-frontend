@@ -85,7 +85,7 @@ const ValidateData = ({ excelFile, columnMapping }) => {
 
       {/* Only show the selected table */}
       {visibleTable && (
-        <div key={visibleTable} className="mb-8 overflow-auto  h-[50vh]">
+        <div key={visibleTable} className="mb-8 overflow-auto  h-[47vh]">
           <table className="min-w-full border-collapse border mb-4">
             <thead className="bg-gray-200">
               <tr className='text-[16px] 2xl:text-[20px]'>
