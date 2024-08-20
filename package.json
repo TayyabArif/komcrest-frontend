@@ -21,6 +21,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.52.1",
+    "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
     "socket.io-client": "^4.7.5",
     "xlsx": "^0.18.5"

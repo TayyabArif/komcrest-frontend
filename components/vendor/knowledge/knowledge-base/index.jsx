@@ -336,13 +336,13 @@ const KnowledgeBase = ({
           {bulkDeleted.length > 0 && (
             <Button
               size="md"
-              className="rounded-md 2xl:text-[20px] text-red-600 bg-red-200 cursor-pointer text-[13px] font-semibold"
+              className="rounded-md 2xl:text-[20px] cursor-pointer text-red-600 bg-transparent  text-[13px] font-semibold"
               onClick={() => {
                 onOpen();
                 setDeleteAction("bulk");
               }}
             >
-              Delete knowledges
+              Clear Selection
             </Button>
           )}
         </div>
@@ -364,7 +364,7 @@ const KnowledgeBase = ({
                 />
               </div>
             )}
-            <div className="w-[100%] overflow-x-auto relative h-[72vh] flex">
+            <div className="w-[100%] overflow-x-auto relative h-[77vh] flex">
               <table
                 style={{ width: "100%" }}
                 className="min-w-full bg-white border border-gray-300 "
@@ -495,7 +495,7 @@ const KnowledgeBase = ({
                           {formatDateWithTime(data.updatedAt)}
                         </td>
                         <td
-                          className="outline border outline-[#e9e6e6] sticky -right-[1px] bg-white pl-8"
+                          className="outline border outline-[#e9e6e6] sticky -right-[1px]  pl-9 bg-white"
                           style={{ outlineWidth: "1px" }}
                         >
                           <Popover
@@ -507,7 +507,7 @@ const KnowledgeBase = ({
                           >
                             <PopoverTrigger>
                               <FilePenLine
-                                size={20}
+                                size={25}
                                 className="cursor-pointer"
                                 color="#2457d7"
                                 strokeWidth={2}

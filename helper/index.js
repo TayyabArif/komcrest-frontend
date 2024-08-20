@@ -79,3 +79,32 @@ export function formatDateWithTime(dateString) {
       "(\\#[-a-z\\d_]*)?$",
     "i"
   );
+
+ export const multipleSelectStyle = {
+    control: (provided) => ({
+      ...provided,
+      borderRadius: "0.80rem",
+      border: "2.2px solid #E5E7EB",
+      fontSize: "18px",
+    }),
+    multiValue: (provided) => ({
+      ...provided,
+      backgroundColor: "#2457D7",
+      borderRadius: "1rem",
+      padding: "0px 2px",
+      color: "white",
+    }),
+    multiValueLabel: (provided) => ({
+      ...provided,
+      color: "white",
+    }),
+    multiValueRemove: (provided) => ({
+      ...provided,
+      color: "white",
+      ":hover": {
+        backgroundColor: "#2457D7",
+        borderRadius: "1rem",
+        color: "white",
+      },
+    }),
+  };
