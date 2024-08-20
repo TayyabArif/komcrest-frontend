@@ -58,9 +58,8 @@ const Questionnaires = () => {
         </div>
         <div className="my-3 flex gap-2">
           {steps.map((data, index) => (
-            <div className=" flex-1 ">
+            <div key={index} className=" flex-1 ">
               <div
-                key={index}
                 className="flex gap-3 items-center border-2 py-[6px] px-2 rounded-lg bg-white"
               >
                 <span
