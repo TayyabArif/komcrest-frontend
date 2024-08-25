@@ -14,17 +14,10 @@ import { multipleSelectStyle } from "@/helper";
 import { toast } from "react-toastify";
 import * as XLSX from 'xlsx';
 import { useMyContext } from "@/context"; 
+import { questionnaireTypeList } from "@/constants";
 
-
-
-const questionnaireTypeList = [
-  { id: "RFP", label: "RFP" },
-  { id: "RFI", label: "RFI" },
-  { id: "Security Assessment", label: "Security Assessment" },
-];
 
 const Add = ({
-  companyProducts,
   importQuestionnaires,
   setImportQuestionnaire,
   setExcelFile,
@@ -32,7 +25,7 @@ const Add = ({
   errors,
   setErrors
 }) => {
-  const { companyUserData } = useMyContext();
+  const { companyUserData ,companyProducts } = useMyContext();
   const [companyUserDataOptions ,setCompanyUserDataOptions] = useState([])
   const [dataLoaded , setDataIsLoaded] = useState(false)
 
@@ -334,7 +327,7 @@ const Add = ({
             options={companyUserData}
             styles={multipleSelectStyle}
             name="collaborators"
-            value={companyUserDataOptions.filter(option => importQuestionnaires.collaborators.includes(option.value))}
+            value={companyUserData.filter(option => importQuestionnaires.collaborators.includes(option.value))}
             onChange={handleMultipleSelect}
           />
         </div>
@@ -346,7 +339,7 @@ const Add = ({
             isMulti
             options={companyUserData}
             name="assignees"
-            value={companyUserDataOptions.filter(option => importQuestionnaires.assignees.includes(option.value))}
+            value={companyUserData.filter(option => importQuestionnaires.assignees.includes(option.value))}
             onChange={handleMultipleSelect}
             styles={multipleSelectStyle}
           />

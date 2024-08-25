@@ -22,7 +22,6 @@ const Import = ({setImportSuccessfully}) => {
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  const [companyProducts, setCompanyProducts] = useState([]);
   const token = cookiesData?.token;
   const companyId = cookiesData?.companyId;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -42,7 +41,7 @@ const Import = ({setImportSuccessfully}) => {
     assignees: [],
     returnDate: "23-05-24",
     fileName: "",
-    Questionnaires: []
+    Questionnaires: [],
   });
 
   function getTitle() {
@@ -61,45 +60,6 @@ const Import = ({setImportSuccessfully}) => {
     }
   }
 
-  const getCompanyProducts = async () => {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-    fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
-      .then(async (response) => {
-        const data = await handleResponse(
-          response,
-          router,
-          cookies,
-          removeCookie
-        );
-        return {
-          status: response.status,
-          ok: response.ok,
-          data,
-        };
-      })
-      .then(({ status, ok, data }) => {
-        if (ok) {
-          setCompanyProducts(data?.Products);
-        } else {
-          toast.error(data?.error);
-          console.error("Error:", data);
-        }
-      })
-      .catch((error) => console.error(error));
-  };
-
-  useEffect(() => {
-    getCompanyProducts();
-  }, [importQuestionnaires]);
-
-
-
   const firstStepValidation = () => {
     const newErrors = {};
     if (!importQuestionnaires.fileName) {
@@ -111,7 +71,7 @@ const Import = ({setImportSuccessfully}) => {
     if (!importQuestionnaires.language) {
       newErrors.language = "Language is required";
     }
-   
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -120,10 +80,11 @@ const Import = ({setImportSuccessfully}) => {
     if (Object.keys(columnMapping).length === 0) {
       return false;
     }
-  
-    return Object.values(columnMapping).every(value => Object.keys(value).length === 2);
+
+    return Object.values(columnMapping).every(
+      (value) => Object.keys(value).length === 2
+    );
   };
- 
 
   const handleNextClick = () => {
     if (stepper === 0 && firstStepValidation()) {
@@ -137,7 +98,10 @@ const Import = ({setImportSuccessfully}) => {
         toast.error("Please select headers row for each sheet");
       }
     } else if (stepper === 2) {
-      if (checkValuesLength() && Object.keys(columnMapping).length === Object.keys(selectedRows).length) {
+      if (
+        checkValuesLength() &&
+        Object.keys(columnMapping).length === Object.keys(selectedRows).length
+      ) {
         setStepper(stepper + 1);
         setProgressBar(progressBar + 27);
       } else {
@@ -151,11 +115,11 @@ const Import = ({setImportSuccessfully}) => {
         const rows = excelFile[key];
         const headers = rows[0];
         const dataRows = rows.slice(1);
-  
-        transformedData[key] = dataRows.map(row => {
+
+        transformedData[key] = dataRows.map((row) => {
           let obj = {};
           const mapping = columnMapping[key]; // Get the column mapping for the current key
-  
+
           row.forEach((value, index) => {
             const mappedHeader = mapping[index]; // Get the mapped header index
             if (mappedHeader) {
@@ -165,117 +129,83 @@ const Import = ({setImportSuccessfully}) => {
           return obj;
         });
       }
-      submitQuestions(transformedData)
-    } 
+      submitQuestions(transformedData);
+    }
   };
-  
+
   const submitQuestions = (transformedData) => {
-    // convert object data in array of object 
-      let result = [];
-      for (const [sheetTag, questions] of Object.entries(transformedData)) {
-          questions.forEach((item) => {
-              let newObj = {
-                  Category: item.Category,
-                  Question: item.Question,
-                  sheetTag: sheetTag
-              };
-  
-              // Push the new object into the result array
-              result.push(newObj);
-          });
-  };
+    // convert object data in array of object
+    let result = [];
+    for (const [sheetTag, questions] of Object.entries(transformedData)) {
+      questions.forEach((item) => {
+        let newObj = {
+          Category: item.Category,
+          Question: item.Question,
+          sheetTag: sheetTag,
+        };
+
+        // Push the new object into the result array
+        result.push(newObj);
+      });
+    }
     const payload = {
-      ...importQuestionnaires, 
-      Questionnaires: result
+      ...importQuestionnaires,
+      Questionnaires: result,
     };
-  
-    // Now you can use the payload, e.g., send it to an API
-    
-      // const jsonPayload = JSON.stringify(payload);
-      // const token = cookiesData.token;
-      // let requestOptions = {
-      //   method: "POST",
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: jsonPayload,
-      //   redirect: "follow",
-      // };
-    
-      // fetch(`${baseUrl}/questionnaires`, requestOptions)
-      //   .then(async (response) => {
-      //     const data = await handleResponse(response, router, cookies, removeCookie);
-      //     return {
-      //       status: response.status,
-      //       ok: response.ok,
-      //       data,
-      //     };
-      //   })
-      //   .then(({ status, ok, data }) => {
-      //     if (ok) {
-      //       console.log("Success:", data);
-      //       toast.success("Questionnaires created successfully");
-      //       setImportSuccessfully(true)
-            
-      //     } else {
-      //       toast.error(data?.error || "Questionnaires not Created");
-      //       console.error("Error:", data);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     if (error.response) {
-      //       console.error("API Error:", error.response);
-      //       toast.error(error.response.data?.error || "An error occurred while creating the document");
-      //     } 
-      //   });
 
-      const jsonPayload = JSON.stringify(payload);
-const token = cookiesData.token;
+    console.log(">>>>LLLLLL",payload.Questionnaires.length)
 
-let requestOptions = {
-  method: "POST",
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  },
-  body: jsonPayload,
-  redirect: "follow",
-};
+    const jsonPayload = JSON.stringify(payload);
+    const token = cookiesData.token;
 
-// Introduce a 2-second delay before making the API call
-setTimeout(() => {
-  fetch(`${baseUrl}/questionnaires`, requestOptions)
-    .then(async (response) => {
-      const data = await handleResponse(response, router, cookies, removeCookie);
-      return {
-        status: response.status,
-        ok: response.ok,
-        data,
-      };
-    })
-    .then(({ status, ok, data }) => {
-      if (ok) {
-        console.log("Success:", data);
-        toast.success("Questionnaires created successfully");
-        setImportSuccessfully(true);
-      } else {
-        toast.error(data?.error || "Questionnaires not Created");
-        console.error("Error:", data);
-      }
-    })
-    .catch((error) => {
-      if (error.response) {
-        console.error("API Error:", error.response);
-        toast.error(error.response.data?.error || "An error occurred while creating the document");
-      }
-    });
-}, 2000); // 2-second delay
+    let requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: jsonPayload,
+      redirect: "follow",
+    };
 
-
-
+    // Introduce a 2-second delay before making the API call
+    setTimeout(() => {
+      setImportSuccessfully(true)
+      fetch(`${baseUrl}/questionnaires`, requestOptions)
+        .then(async (response) => {
+          const data = await handleResponse(
+            response,
+            router,
+            cookies,
+            removeCookie
+          );
+          return {
+            status: response.status,
+            ok: response.ok,
+            data,
+          };
+        })
+        .then(({ status, ok, data }) => {
+          if (ok) {
+            console.log("Success:", data);
+            toast.success("Questionnaires created successfully");
+            router.push(`/vendor/questionnaires/view?id=${data?.questionnaire?.id}`)
+          } else {
+            toast.error(data?.error || "Questionnaires not Created");
+            console.error("Error:", data);
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error("API Error:", error.response);
+            toast.error(
+              error.response.data?.error ||
+                "An error occurred while creating the document"
+            );
+          }
+        });
+    }, 2000); // 2-second delay
   };
-
 
   const handleCancelClick = () => {
     if (stepper > 0) {
@@ -335,7 +265,6 @@ setTimeout(() => {
             <div className="overflow-auto h-[60vh]">
               {stepper === 0 && (
                 <Add
-                  companyProducts={companyProducts}
                   importQuestionnaires={importQuestionnaires}
                   setImportQuestionnaire={setImportQuestionnaire}
                   setExcelFile={setExcelFile}
@@ -366,9 +295,7 @@ setTimeout(() => {
                   excelFile={excelFile}
                 />
               )}
-              {stepper === 4 && (
-                <Completed content="Importing 76 questions" />
-              )}
+              {stepper === 4 && <Completed content="Importing 76 questions" />}
             </div>
             <div>
               <div className="flex justify-end">
