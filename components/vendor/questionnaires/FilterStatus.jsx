@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import QuestionnairCard from "./QuestionnairCard";
 
-const FilterStatus = ({ data, title, stepsContent, setDataUpdate}) => {
+const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireProgressBar}) => {
   return (
     <div className="w-full h-[60vh] ">
       <div className=" flex-1  space-y-4">
@@ -15,7 +15,7 @@ const FilterStatus = ({ data, title, stepsContent, setDataUpdate}) => {
         </div>
         {data?.length > 0 ? (
           data.map((data ,index) => {
-            return <QuestionnairCard data={data} index={index} setDataUpdate={setDataUpdate}/>;
+            return <QuestionnairCard data={data} index={index} setDataUpdate={setDataUpdate} />;
           })
         ) : (
           <h1 className="px-2">{stepsContent}</h1>

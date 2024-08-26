@@ -26,6 +26,7 @@ const Questionnaires = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [dataUpdate , setDataUpdate] = useState(false)
   const [questionnaireList , setQuestionnaireList] = useState([])
+  const [questionnaireProgressBar ,setQuestionnaireProgressBar] = useState({})
 
   
   const fetchAllQuestionnaires = async () => {
@@ -48,7 +49,6 @@ const Questionnaires = () => {
       );
       if (response.ok) {
         setQuestionnaireList(data.questionnaires);
-        
         console.log(">>>>>>>>>>>>>>>",data.questionnaires)
       } else {
         toast.error(data?.error);
@@ -83,16 +83,16 @@ const Questionnaires = () => {
         </div>
         {filterValue == "progress" ? (
           <div className="flex gap-3">
-          <FilterStatus title="To Process" data={filterStatus("To Process")} stepsContent={QuestionnaireStepsContent.process} setDataUpdate={setDataUpdate}/>
-          <FilterStatus title="Started" data={filterStatus("Started")} stepsContent={QuestionnaireStepsContent.Started}  setDataUpdate={setDataUpdate}/>
-          <FilterStatus title="For Review" data={filterStatus("For Review")} stepsContent={QuestionnaireStepsContent.Review} setDataUpdate={setDataUpdate}/>
-          <FilterStatus title="Approved" data={filterStatus("Approved")} stepsContent={QuestionnaireStepsContent.Approved} setDataUpdate={setDataUpdate}/>
+          <FilterStatus title="To Process" data={filterStatus("To Process")} stepsContent={QuestionnaireStepsContent.process} setDataUpdate={setDataUpdate} />
+          <FilterStatus title="Started" data={filterStatus("Started")} stepsContent={QuestionnaireStepsContent.Started}  setDataUpdate={setDataUpdate} />
+          <FilterStatus title="For Review" data={filterStatus("For Review")} stepsContent={QuestionnaireStepsContent.Review} setDataUpdate={setDataUpdate} />
+          <FilterStatus title="Approved" data={filterStatus("Approved")} stepsContent={QuestionnaireStepsContent.Approved} setDataUpdate={setDataUpdate} />
         </div>
         ): 
         <div className="flex flex-wrap gap-5">
           {filterStatus("Completed")?.map((data)=>{
             return(
-              <QuestionnairCard data={data} setDataUpdate={setDataUpdate} dataUpdate={dataUpdate}/>
+              <QuestionnairCard  data={data} setDataUpdate={setDataUpdate} dataUpdate={dataUpdate}/>
             )
           })}
         </div>

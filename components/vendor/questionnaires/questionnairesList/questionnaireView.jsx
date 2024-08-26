@@ -40,6 +40,8 @@ const QuestionnairesView = () => {
   const [answerIsUpdate , setAnswerIsUpdate] = useState(false)
   
 
+
+
   const fetchQuestionnaire = async () => {
     const token = cookiesData && cookiesData.token;
     const requestOptions = {
@@ -62,24 +64,9 @@ const QuestionnairesView = () => {
         removeCookie
       );
       if (response.ok) {
-        // setQuestionnaireData(data.questionnaire);
-
         setCurrentStatus(data.questionnaire.status);
-
-        // dummmy data added
-        let questionnaireData = data.questionnaire;
-
-        // questionnaireData.questionnaireRecords =
-        //   questionnaireData.questionnaireRecords.map((record) => {
-        //     record.compliance = ["Yes", "No", "Partial"][
-        //       Math.floor(Math.random() * 3)
-        //     ]; // Randomly select a compliance value
-        //     record.confidenceScore = [6, 7, 8][Math.floor(Math.random() * 3)]; // Randomly select a confidence score
-        //     return record;
-        //   });
-
         setQuestionnaireData(data?.questionnaire);
-        console.log("data::::::", questionnaireData);
+        
       } else {
         toast.error(data?.error);
       }
