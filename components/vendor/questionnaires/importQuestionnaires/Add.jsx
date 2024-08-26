@@ -271,7 +271,7 @@ const Add = ({
 
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
-            Last Indexation Date
+          Date to return the questionnaire to the client or prospect
           </label>
           <div className="">
             <input
