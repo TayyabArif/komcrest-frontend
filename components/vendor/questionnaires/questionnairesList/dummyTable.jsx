@@ -105,7 +105,7 @@ const data = [
   },
 ];
 
-const QuestionnairesList = () => {
+const DummyQuestionnairesList = () => {
     const [showHistory ,setShowHistory] = useState(true)
   return (
     <div>
@@ -202,11 +202,10 @@ const QuestionnairesList = () => {
             </tbody>
           </table>
         </div>
-        {showHistory &&  <div className="w-[35%] h-[80vh] overflow-auto"><History /></div>}
         </div>
       </div>
     </div>
   );
 };
 
-export default QuestionnairesList;
+export default DummyQuestionnairesList;

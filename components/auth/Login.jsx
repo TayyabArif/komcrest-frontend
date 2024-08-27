@@ -6,6 +6,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { useCookies } from 'react-cookie';
+import { useMyContext } from "@/context";
 
 
 
@@ -16,6 +17,7 @@ const Login = ({ type }) => {
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+  const { setDataUpdated ,dataUpdated } = useMyContext();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [formData, setFormData] = useState({
@@ -73,6 +75,7 @@ const Login = ({ type }) => {
           };
          
           setCookie('myCookie',  userData, { path: '/' });
+          setDataUpdated(!dataUpdated)
           console.log("Success:", data);
           if (data?.user?.Company?.companyType === "vendor") {
             router.push("/vendor/document");

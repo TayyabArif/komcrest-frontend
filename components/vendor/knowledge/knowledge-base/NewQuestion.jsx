@@ -325,7 +325,6 @@ const NewQuestion = () => {
               answer: data,
             });
           } else {
-            alert("ok");
             toast.error(data?.error || "question not Created");
             console.error("Error:", data);
           }

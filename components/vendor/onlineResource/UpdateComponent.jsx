@@ -233,7 +233,6 @@ const UpdateComponent = () => {
       );
 
       if (response.ok) {
-        debugger
         toast.success(
           "Re-indexation is complete and your file is updated. You can download and check File Content"
         );

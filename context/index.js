@@ -13,15 +13,22 @@ export const MyProvider = ({ children }) => {
     const cookiesData = cookies.myCookie;
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     const router = useRouter();
+    const companyId = cookiesData?.companyId;
     const token = cookiesData && cookiesData.token;
+    const [dataUpdated ,setDataUpdated] = useState(false)
 
    // all states
     const [companyUserData, setCompanyUserData] = useState([]);
+    const [companyProducts, setCompanyProducts] = useState([]);
 
 
   useEffect(()=>{
-    getCompanyUser()
-  },[])
+    if(token){
+      getCompanyUser()
+      getCompanyProducts()
+    }
+   
+  },[dataUpdated])
 
   const getCompanyUser = async () => {
     const requestOptions = {
@@ -58,8 +65,41 @@ export const MyProvider = ({ children }) => {
     }
   };
 
+  const getCompanyProducts = async () => {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+    fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
+      .then(async (response) => {
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          setCompanyProducts(data?.Products);
+        } else {
+          toast.error(data?.error);
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
   return (
-    <MyContext.Provider value={{ companyUserData }}>
+    <MyContext.Provider value={{ companyUserData ,companyProducts ,setDataUpdated ,dataUpdated }}>
       {children}
     </MyContext.Provider>
   );
