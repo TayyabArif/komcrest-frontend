@@ -90,9 +90,9 @@ const Questionnaires = () => {
         </div>
         ): 
         <div className="flex flex-wrap gap-5">
-          {filterStatus("Completed")?.map((data)=>{
+          {filterStatus("Completed")?.map((data, index)=>{
             return(
-              <QuestionnairCard  data={data} setDataUpdate={setDataUpdate} dataUpdate={dataUpdate}/>
+              <QuestionnairCard  key={index} data={data} setDataUpdate={setDataUpdate} dataUpdate={dataUpdate}/>
             )
           })}
         </div>
