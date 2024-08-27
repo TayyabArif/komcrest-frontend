@@ -90,7 +90,6 @@ const UpdateQuestionnaires = () => {
   const handleData = (e) => {
     const { name, value } = e.target;
     if(name == "returnDate"){
-      alert(typeof value)
       const formattedDate = format(parse(value, 'yyyy-MM-dd', new Date()), 'dd-MM-yy');
       setQuestionnaireData((prevState) => ({
         ...prevState,

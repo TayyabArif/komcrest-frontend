@@ -243,7 +243,6 @@ const QuestionnairesView = () => {
           toast.success(data.message);
           setDataUpdate(!dataUpdate);
           if (property == "answer") {
-            alert(id);
             let newArr = bulkSelected.filter((item) => item !== id[0]);
             console.log("bulkSelected.bulkSelected.", bulkSelected);
             console.log("bulkSelected.bulkSelected.", newArr);
@@ -515,8 +514,8 @@ const QuestionnairesView = () => {
                         ) : null}
                       </div>
                       <textarea
-                        disabled={ (!updateMultipleAnswer(item.id)) ||
-                          ((selectedId !== item.id) && answerIsUpdate)}
+                        disabled={ (updateMultipleAnswer(item.id)) ||
+                          ((selectedId !== item.id)) }
                         onChange={(e) => handleChange(index, e.target.value)} // Pass index and new value to handleChange
                         value={item.answer}
                         className="w-full bg-transparent h-[150px]"

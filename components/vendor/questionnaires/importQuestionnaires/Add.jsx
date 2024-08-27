@@ -90,9 +90,7 @@ const Add = ({
     const { name, value } = e.target;
     
     if(name == "returnDate"){
-      alert(typeof value)
       const formattedDate = format(parse(value, 'yyyy-MM-dd', new Date()), 'dd-MM-yy');
-      alert(formattedDate)
       setImportQuestionnaire((prevState) => ({
         ...prevState,
         [name]: formattedDate,
@@ -285,6 +283,7 @@ const Add = ({
             Date to return the questionnaire to the client or prospect
           </label>
           <div className="">
+            {importQuestionnaires.returnDate}
           <input
           type="date"
           id="dateInput"
