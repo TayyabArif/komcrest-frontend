@@ -12,10 +12,11 @@ import { languageOptions } from "@/constants";
 import Select from "react-select";
 import { multipleSelectStyle } from "@/helper";
 import { toast } from "react-toastify";
-import * as XLSX from 'xlsx';
-import { useMyContext } from "@/context"; 
+import * as XLSX from "xlsx";
+import { useMyContext } from "@/context";
 import { questionnaireTypeList } from "@/constants";
-
+import { format, parse } from 'date-fns';
+import { Vault } from "lucide-react";
 
 const Add = ({
   importQuestionnaires,
@@ -23,31 +24,31 @@ const Add = ({
   setExcelFile,
   excelFile,
   errors,
-  setErrors
+  setErrors,
 }) => {
-  const { companyUserData ,companyProducts } = useMyContext();
-  const [companyUserDataOptions ,setCompanyUserDataOptions] = useState([])
-  const [dataLoaded , setDataIsLoaded] = useState(false)
+  const { companyUserData, companyProducts } = useMyContext();
+  const [companyUserDataOptions, setCompanyUserDataOptions] = useState([]);
+  const [dataLoaded, setDataIsLoaded] = useState(false);
 
   const allowedFileTypes = [
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel
-    "text/csv" // CSV
+    "text/csv", // CSV
   ];
 
   const handleDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
     setImportQuestionnaire({
       ...importQuestionnaires,
-      fileName:file.name
-    })
+      fileName: file.name,
+    });
 
     const reader = new FileReader();
     reader.onload = (e) => {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: "array" });
-    
+
       const sheetsData = {};
-    
+
       workbook.SheetNames.forEach((sheetName) => {
         const sheet = workbook.Sheets[sheetName];
         let sheetData = XLSX.utils.sheet_to_json(sheet, {
@@ -55,44 +56,54 @@ const Add = ({
           defval: "", // Default value for empty cells
           blankrows: false, // Skip blank rows
         });
-    
+
         // Filter out empty rows
         sheetData = sheetData.filter((row) => row.some((cell) => cell !== ""));
-    
+
         // Filter out empty columns
         if (sheetData.length > 0) {
-          const nonEmptyCols = sheetData[0].map((_, colIndex) => 
+          const nonEmptyCols = sheetData[0].map((_, colIndex) =>
             sheetData.some((row) => row[colIndex] !== "")
           );
           sheetData = sheetData.map((row) =>
             row.filter((_, colIndex) => nonEmptyCols[colIndex])
           );
         }
-    
+
         sheetsData[sheetName] = sheetData;
       });
-    
+
       setExcelFile(sheetsData);
 
       if (errors.fileName) {
         setErrors({
           ...errors,
-          fileName : "",
+          fileName: "",
         });
       }
     };
-    
+
     reader.readAsArrayBuffer(file);
-    
   };
 
   const handleData = (e) => {
     const { name, value } = e.target;
-    setImportQuestionnaire((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-
+    
+    if(name == "returnDate"){
+      alert(typeof value)
+      const formattedDate = format(parse(value, 'yyyy-MM-dd', new Date()), 'dd-MM-yy');
+      alert(formattedDate)
+      setImportQuestionnaire((prevState) => ({
+        ...prevState,
+        [name]: formattedDate,
+      }));
+    }else{
+      setImportQuestionnaire((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+   
 
     if (errors[name]) {
       setErrors({
@@ -100,7 +111,6 @@ const Add = ({
         [name]: "",
       });
     }
-
   };
 
   const handleCheckboxChange = (property, id) => {
@@ -132,9 +142,11 @@ const Add = ({
 
   const handleMultipleSelect = (selectedOptions, actionMeta) => {
     const { name } = actionMeta;
-    setImportQuestionnaire(prevState => ({
+    setImportQuestionnaire((prevState) => ({
       ...prevState,
-      [name]: selectedOptions ? selectedOptions.map(option => option.value) : []
+      [name]: selectedOptions
+        ? selectedOptions.map((option) => option.value)
+        : [],
     }));
 
     if (errors[name]) {
@@ -146,9 +158,7 @@ const Add = ({
   };
 
   return (
-
-  
-      <div className="flex justify-between ">
+    <div className="flex justify-between ">
       <div className="w-[45%] space-y-6 ">
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
@@ -166,7 +176,9 @@ const Add = ({
               input: "2xl:text-[20px] text-[16px] text-gray-500",
             }}
           />
-             {errors.customerName && <p className="text-red-500">{errors.customerName}</p>}
+          {errors.customerName && (
+            <p className="text-red-500">{errors.customerName}</p>
+          )}
         </div>
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
@@ -218,10 +230,10 @@ const Add = ({
               >
                 <input {...getInputProps()} />
                 <p className="text-center text-blue-700 font-bold italic 2xl:text-[20px]">
-        {importQuestionnaires.fileName
-          ? importQuestionnaires.fileName
-          : "Drop file or click here to upload Excel or CSV file"}
-      </p>
+                  {importQuestionnaires.fileName
+                    ? importQuestionnaires.fileName
+                    : "Drop file or click here to upload Excel or CSV file"}
+                </p>
               </div>
             )}
           </Dropzone>
@@ -264,30 +276,26 @@ const Add = ({
                 {item.name}
               </Checkbox>
             ))}
-            
           </div>
           {errors.products && <p className="text-red-500">{errors.products}</p>}
         </div>
 
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
-          Date to return the questionnaire to the client or prospect
+            Date to return the questionnaire to the client or prospect
           </label>
           <div className="">
-            <input
-              type="date"
-              // value={
-              //   onlineResource?.updatedAt
-              //     ? new Date(onlineResource?.updatedAt)
-              //         .toISOString()
-              //         .split("T")[0]
-              //     : ""
-              // }
-              className="border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
-              readOnly
-            />
+          <input
+          type="date"
+          id="dateInput"
+          value={importQuestionnaires.returnDate}
+          name="returnDate"
+          onChange={handleData}
+          className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
+        />
           </div>
         </div>
+        
         <div>
           <label className="text-[16px] 2xl:text-[20px]">Language</label>
           <SingleSelect
@@ -327,7 +335,9 @@ const Add = ({
             options={companyUserData}
             styles={multipleSelectStyle}
             name="collaborators"
-            value={companyUserData.filter(option => importQuestionnaires.collaborators.includes(option.value))}
+            value={companyUserData.filter((option) =>
+              importQuestionnaires.collaborators.includes(option.value)
+            )}
             onChange={handleMultipleSelect}
           />
         </div>
@@ -339,15 +349,15 @@ const Add = ({
             isMulti
             options={companyUserData}
             name="assignees"
-            value={companyUserData.filter(option => importQuestionnaires.assignees.includes(option.value))}
+            value={companyUserData.filter((option) =>
+              importQuestionnaires.assignees.includes(option.value)
+            )}
             onChange={handleMultipleSelect}
             styles={multipleSelectStyle}
           />
         </div>
       </div>
     </div>
-   
-    
   );
 };
 

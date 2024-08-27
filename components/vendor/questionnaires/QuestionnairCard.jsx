@@ -9,6 +9,7 @@ import FilterStatus from "./FilterStatus";
 import DeleteModal from "../shared/DeleteModal";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { formatDateWithTime } from '@/helper';
 
 
 const deleteModalContent = "Are you sure to delete this Questionnaires?";
@@ -46,7 +47,6 @@ const QuestionnairCard = ({data ,index ,setDataUpdate  }) => {
     
       // Set the calculated counts and percentages in the state
       setQuestionnaireProgressBar(statusPercentages);
-      debugger;
     }, [data]);
     
     
@@ -89,13 +89,13 @@ const QuestionnairCard = ({data ,index ,setDataUpdate  }) => {
 
       <div className=" text-gray-500">
         <div>
-          <span className="font-bold  text-black"> Creation date </span>{data?.createdAt}
+          <span className="font-bold  text-black"> Creation date </span>{formatDateWithTime (data?.createdAt)}
         </div>
         <div>By {data?.customerName}</div>
       </div>
 
       <div>
-        <span className="font-bold  text-black"> Last Update </span> {data?.updatedAt}
+        <span className="font-bold  text-black"> Last Update </span> {formatDateWithTime (data?.updatedAt)}
       </div>
       <div>By Richard Branco</div>
 

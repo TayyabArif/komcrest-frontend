@@ -18,6 +18,9 @@ import { questionnaireTypeList } from "@/constants";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import { handleResponse } from "../../../helper";
+import { parseISO, format, parse } from 'date-fns';
+
+
 
 const UpdateQuestionnaires = () => {
   const { companyUserData, companyProducts } = useMyContext();
@@ -27,8 +30,6 @@ const UpdateQuestionnaires = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-
 
   const fetchQuestionnaire = async () => {
     const token = cookiesData && cookiesData.token;
@@ -52,23 +53,25 @@ const UpdateQuestionnaires = () => {
         removeCookie
       );
       if (response.ok) {
-     
-
         let transformData = {
           customerName: data.questionnaire.customerName,
           customerDomain: data.questionnaire.customerDomain,
           questionnaireType: data.questionnaire.questionnaireType,
           description: data.questionnaire.description,
-          productIds:data.questionnaire.products.map(product => product.id),
+          productIds: data.questionnaire.products.map((product) => product.id),
           language: data.questionnaire.language,
-          collaborators: data.questionnaire.collaborators.map(collaborator => collaborator.id),
-          assignees: data.questionnaire.assignees.map(assignee => assignee.id),
-          // returnDate: data.questionnaire.returnDate,
-          returnDate: "23-05-24" ,
+          collaborators: data.questionnaire.collaborators.map(
+            (collaborator) => collaborator.id
+          ),
+          assignees: data.questionnaire.assignees.map(
+            (assignee) => assignee.id
+          ),
+          returnDate: "23-05-24",
+          // returnDate: format(parseISO(data.questionnaire.returnDate), 'yyyy-MM-dd'),
           fileName: data.questionnaire.fileName,
         };
 
-        console.log("data::::::",)
+        console.log("data::::::");
         setQuestionnaireData(transformData);
       } else {
         toast.error(data?.error);
@@ -79,17 +82,27 @@ const UpdateQuestionnaires = () => {
   };
 
   useEffect(() => {
-    if(id){
+    if (id) {
       fetchQuestionnaire();
     }
   }, [id]);
 
   const handleData = (e) => {
     const { name, value } = e.target;
-    setQuestionnaireData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    if(name == "returnDate"){
+      alert(typeof value)
+      const formattedDate = format(parse(value, 'yyyy-MM-dd', new Date()), 'dd-MM-yy');
+      setQuestionnaireData((prevState) => ({
+        ...prevState,
+        [name]: formattedDate,
+      }));
+    }else{
+      setQuestionnaireData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+   
   };
 
   const handleCheckboxChange = (property, id) => {
@@ -110,38 +123,41 @@ const UpdateQuestionnaires = () => {
         };
       });
     }
-
   };
-
 
   const handleMultipleSelect = (selectedOptions, actionMeta) => {
     const { name } = actionMeta;
-    setQuestionnaireData(prevState => ({
+    setQuestionnaireData((prevState) => ({
       ...prevState,
-      [name]: selectedOptions ? selectedOptions.map(option => option.value) : []
+      [name]: selectedOptions
+        ? selectedOptions.map((option) => option.value)
+        : [],
     }));
   };
 
+  const questionnaireUpdated = () => {
+    console.log("questionnaireDataquestionnaireData", questionnaireData);
+    const jsonPayload = JSON.stringify(questionnaireData);
+    const token = cookiesData.token;
 
-const questionnaireUpdated = () => {
-  console.log("questionnaireDataquestionnaireData",questionnaireData)
-  const jsonPayload = JSON.stringify(questionnaireData);
-  const token = cookiesData.token;
-  
-  let requestOptions = {
-    method: "PUT",
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: jsonPayload,
-    redirect: "follow",
-  };
+    let requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: jsonPayload,
+      redirect: "follow",
+    };
 
-  
     fetch(`${baseUrl}/questionnaires/${id}`, requestOptions)
       .then(async (response) => {
-        const data = await handleResponse(response, router, cookies, removeCookie);
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
         return {
           status: response.status,
           ok: response.ok,
@@ -151,7 +167,7 @@ const questionnaireUpdated = () => {
       .then(({ status, ok, data }) => {
         if (ok) {
           toast.success(data.message);
-          router.push("/vendor/questionnaires")
+          router.push("/vendor/questionnaires");
         } else {
           toast.error(data?.error || "Questionnaires not Updated");
           console.error("Error:", data);
@@ -160,19 +176,20 @@ const questionnaireUpdated = () => {
       .catch((error) => {
         if (error.response) {
           console.error("API Error:", error.response);
-          toast.error(error.response.data?.error || "An error occurred while Updated Questionnaires");
+          toast.error(
+            error.response.data?.error ||
+              "An error occurred while Updated Questionnaires"
+          );
         }
       });
-}
-
-
+  };
 
   return (
     <div className="w-[100%] h-full">
       <div className="w-[90%] mx-auto py-4 mt-[4rem]">
-      <h1 className="py-2 px-4 bg-[#F6F7F9] text-[16px] 2xl:text-[20px] font-bold">
-      Update questionnaire information
-            </h1>
+        <h1 className="py-2 px-4 bg-[#F6F7F9] text-[16px] 2xl:text-[20px] font-bold">
+          Update questionnaire information
+        </h1>
         <div className="px-4 bg-white py-10">
           <div className="flex justify-between pb-10">
             <div className="w-[45%] space-y-6 ">
@@ -218,7 +235,9 @@ const questionnaireUpdated = () => {
                   {questionnaireTypeList?.map((item, index) => (
                     <Checkbox
                       key={index}
-                      isSelected={questionnaireData.questionnaireType === item.id}
+                      isSelected={
+                        questionnaireData.questionnaireType === item.id
+                      }
                       onChange={() => handleCheckboxChange("type", item.id)}
                       className="2xl:text-[20px] !text-[50px]"
                       name="indexationMethod"
@@ -258,37 +277,35 @@ const questionnaireUpdated = () => {
                 </label>
                 <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
                   {companyProducts?.map((item, index) => (
-              <Checkbox
-                key={index}
-                isSelected={questionnaireData.productIds?.includes(item.id)}
-                onChange={() => handleCheckboxChange("products", item.id)}
-                className="2xl:text-[20px] !text-[50px]"
-                radius="none"
-                size="lg"
-                classNames={{ wrapper: "!rounded-[3px]" }}
-              >
-                {item.name}
-              </Checkbox>
-            ))}
+                    <Checkbox
+                      key={index}
+                      isSelected={questionnaireData.productIds?.includes(
+                        item.id
+                      )}
+                      onChange={() => handleCheckboxChange("products", item.id)}
+                      className="2xl:text-[20px] !text-[50px]"
+                      radius="none"
+                      size="lg"
+                      classNames={{ wrapper: "!rounded-[3px]" }}
+                    >
+                      {item.name}
+                    </Checkbox>
+                  ))}
                 </div>
               </div>
 
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">
-                Date to return the questionnaire to the client or prospect
+                  Date to return the questionnaire to the client or prospect{questionnaireData.returnDate}
                 </label>
                 <div className="">
                   <input
                     type="date"
-                    // value={
-                    //   onlineResource?.updatedAt
-                    //     ? new Date(onlineResource?.updatedAt)
-                    //         .toISOString()
-                    //         .split("T")[0]
-                    //     : ""
-                    // }
-                    className="border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
-                    readOnly
+                    id="dateInput"
+                    value={questionnaireData.returnDate}
+                    name="returnDate"
+                    onChange={handleData}
+                    className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
                   />
                 </div>
               </div>
@@ -329,7 +346,9 @@ const questionnaireUpdated = () => {
                   options={companyUserData}
                   styles={multipleSelectStyle}
                   name="collaborators"
-                  value={companyUserData.filter(option => questionnaireData.collaborators?.includes(option.value))}
+                  value={companyUserData.filter((option) =>
+                    questionnaireData.collaborators?.includes(option.value)
+                  )}
                   onChange={handleMultipleSelect}
                 />
               </div>
@@ -341,7 +360,9 @@ const questionnaireUpdated = () => {
                   isMulti
                   options={companyUserData}
                   name="assignees"
-                  value={companyUserData.filter(option => questionnaireData.assignees?.includes(option.value))}
+                  value={companyUserData.filter((option) =>
+                    questionnaireData.assignees?.includes(option.value)
+                  )}
                   onChange={handleMultipleSelect}
                   styles={multipleSelectStyle}
                 />
@@ -352,6 +373,7 @@ const questionnaireUpdated = () => {
             <Button
               size="md"
               className="rounded-md 2xl:text-[20px] cursor-pointer bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
+              onClick={()=>router.push("/vendor/questionnaires")}
             >
               Cancel
             </Button>

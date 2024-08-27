@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.3.6",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.2.6",
     "js-cookie": "^3.0.5",
@@ -20,7 +21,7 @@
     "react-cookie": "^7.1.4",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
-    "react-hook-form": "^7.52.1",
+    "react-hook-form": "^7.53.0",
     "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
     "socket.io-client": "^4.7.5",

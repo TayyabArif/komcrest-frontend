@@ -37,10 +37,7 @@ const QuestionnairesView = () => {
   const [isHeaderChecked, setIsHeaderChecked] = useState(false);
   const [deleteAction, setDeleteAction] = useState("");
   const [questionnaireData, setQuestionnaireData] = useState({});
-  const [answerIsUpdate , setAnswerIsUpdate] = useState(false)
-  
-
-
+  const [answerIsUpdate, setAnswerIsUpdate] = useState(false);
 
   const fetchQuestionnaire = async () => {
     const token = cookiesData && cookiesData.token;
@@ -66,7 +63,7 @@ const QuestionnairesView = () => {
       if (response.ok) {
         setCurrentStatus(data.questionnaire.status);
         setQuestionnaireData(data?.questionnaire);
-        
+        console.log(">>>>>>>>>>>>>>>>>::::::::::::::::::", data?.questionnaire);
       } else {
         toast.error(data?.error);
       }
@@ -76,7 +73,7 @@ const QuestionnairesView = () => {
   };
 
   useEffect(() => {
-    if(id){
+    if (id) {
       fetchQuestionnaire();
     }
   }, [id, dataUpdate]);
@@ -190,19 +187,29 @@ const QuestionnairesView = () => {
     }
   };
 
-  const UpdateRecord = (id,property,data) => {
+  const updateMultipleAnswer = (id) => {
+    const isAnyRecordSelected = bulkSelected.includes(id);
+
+    return isAnyRecordSelected;
+  };
+
+  const UpdateRecord = (id, property, data) => {
+    console.log(id);
     let value;
-    if(property == "answer"){
-       value= questionnaireData?.questionnaireRecords[data].answer;
-    }else if(property == "status"){
-        value = data
+    if (property == "answer") {
+      value = questionnaireData?.questionnaireRecords[data].answer;
+    } else if (property == "status") {
+      value = data;
+    } else if (property == "compliance") {
+      value = data;
     }
 
     const updatedData = {
-      field:property,
-      value:value,
-      eventType:`${property}Changed`
-  }
+      ids: id,
+      field: property,
+      value: value,
+      eventType: `${property}Changed`,
+    };
 
     const jsonPayload = JSON.stringify(updatedData);
     const token = cookiesData.token;
@@ -217,7 +224,7 @@ const QuestionnairesView = () => {
       redirect: "follow",
     };
 
-    fetch(`${baseUrl}/questionnairerecord/update/${id}`, requestOptions)
+    fetch(`${baseUrl}/questionnairerecord/update`, requestOptions)
       .then(async (response) => {
         const data = await handleResponse(
           response,
@@ -234,8 +241,16 @@ const QuestionnairesView = () => {
       .then(({ status, ok, data }) => {
         if (ok) {
           toast.success(data.message);
-          setSelectedId("");
-          setDataUpdate(!dataUpdate)
+          setDataUpdate(!dataUpdate);
+          if (property == "answer") {
+            alert(id);
+            let newArr = bulkSelected.filter((item) => item !== id[0]);
+            console.log("bulkSelected.bulkSelected.", bulkSelected);
+            console.log("bulkSelected.bulkSelected.", newArr);
+            setBulkSelected(newArr);
+          } else {
+            setBulkSelected([]);
+          }
         } else {
           toast.error(data?.error || "Question not Updated");
           console.error("Error:", data);
@@ -252,18 +267,19 @@ const QuestionnairesView = () => {
       });
   };
 
-  const reRunForAnswer = (id) => {
+  const reRunForAnswer = (ids) => {
     const token = cookiesData.token;
     let requestOptions = {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({ ids }),
       redirect: "follow",
     };
 
-    fetch(`${baseUrl}/questionnaires/regenerate-answer/${id}`, requestOptions)
+    fetch(`${baseUrl}/questionnaires/regenerate-answer`, requestOptions)
       .then(async (response) => {
         const data = await handleResponse(
           response,
@@ -280,7 +296,7 @@ const QuestionnairesView = () => {
       .then(({ status, ok, data }) => {
         if (ok) {
           toast.success(data.message);
-          setDataUpdate(!dataUpdate)
+          setDataUpdate(!dataUpdate);
         } else {
           toast.error(data?.error || "Answer not Updated");
           console.error("Error:", data);
@@ -295,11 +311,14 @@ const QuestionnairesView = () => {
           );
         }
       });
-  }
+  };
 
   return (
     <div>
-      <QuestionnairsListHeader currentStatus={currentStatus} questionnaireData={questionnaireData}/>
+      <QuestionnairsListHeader
+        currentStatus={currentStatus}
+        questionnaireData={questionnaireData}
+      />
       <div className="w-[86%] mx-auto">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-1 my-2">
@@ -331,8 +350,14 @@ const QuestionnairesView = () => {
               >
                 Clear Selection
               </h1>
-              <Check size={20} />
-              <TriangleAlert size={20} />
+              <Check
+                size={20}
+                onClick={() => UpdateRecord(bulkSelected, "status", "approved")}
+              />
+              <TriangleAlert
+                size={20}
+                onClick={() => UpdateRecord(bulkSelected, "status", "Flagged")}
+              />
               <Popover
                 className="rounded-[0px]"
                 // isOpen={openPopoverIndex === index}
@@ -346,12 +371,17 @@ const QuestionnairesView = () => {
                 <PopoverContent>
                   <div className="px-3 py-2  space-y-1.5">
                     <div
-                      
-                      className="text-md cursor-pointer "
+                      className="text-md cursor-pointer"
+                      onClick={() => {
+                        setAnswerIsUpdate(true);
+                      }}
                     >
                       Improve answer
                     </div>
-                    <div className="text-md cursor-pointer">
+                    <div className="text-md cursor-pointer"
+                     onClick={() => {
+                      reRunForAnswer(bulkSelected);
+                    }}>
                       Re-run AI for compliance & answer
                     </div>
                     <div className="text-md cursor-pointer">
@@ -359,11 +389,10 @@ const QuestionnairesView = () => {
                     </div>
                     <div
                       className="text-md cursor-pointer"
-                      // onClick={() => {
-                      //   setSelectedId(item.id);
-                      //   notifyDisclosure.onOpen();
-                      //   setOpenPopoverIndex(null);
-                      // }}
+                      onClick={() => {
+                        notifyDisclosure.onOpen();
+                        setOpenPopoverIndex(null);
+                      }}
                     >
                       Notify for help
                     </div>
@@ -435,11 +464,12 @@ const QuestionnairesView = () => {
                     <td className="px-4 py-2 text-center border w-[70px]">
                       <div
                         className={`h-5 w-5 mx-auto rounded-full cursor-pointer border ${
-                          item.status === "Flagged" ? "bg-yellow-500" : 
-                          item.status === "Approve" ? "bg-green-600" : 
-                          "bg-blue-600"
+                          item.status === "Flagged"
+                            ? "bg-yellow-500"
+                            : item.status === "approved"
+                            ? "bg-green-600"
+                            : "bg-blue-600"
                         }`}
-                        
                       ></div>
                     </td>
                     <td className="px-4 py-2 border  w-[500px]">
@@ -449,6 +479,9 @@ const QuestionnairesView = () => {
                       <p className="text-[12px] italic text-left">A.I</p>
                       <select
                         value={item.compliance}
+                        onChange={(e) =>
+                          UpdateRecord([item.id], "compliance", e.target.value)
+                        }
                         className="w-[150px]  text-[18px]  rounded-lg pr-3 p-[5px]"
                       >
                         <option value="" disabled>
@@ -466,51 +499,65 @@ const QuestionnairesView = () => {
                           : ""
                       }`}
                     >
-                      <div className="text-[12px] flex justify-between">
-                        <p className=" italic text-left">A.I</p>
-                        {selectedId == item.id && answerIsUpdate &&(
+                      <div className={`text-[12px] flex  my-2 ${item.generatedBy == "AI" ? "justify-between" : "justify-end"}`}>
+                        {item.generatedBy == "AI" && <p className=" italic text-left">A.I</p>}
+                        
+                        {(updateMultipleAnswer(item.id) && answerIsUpdate) ||
+                        (selectedId === item.id && answerIsUpdate) ? (
                           <p
                             onClick={() => {
-                              UpdateRecord( item.id,"answer", index);
+                              UpdateRecord([item.id], "answer", index);
                             }}
-                            className="bg-blue-500 cursor-pointer rounded-sm px-2 py-1 text-white"
+                            className="bg-blue-500 cursor-pointer rounded-sm px-2 py-1  text-white"
                           >
                             Update
                           </p>
-                        )}
+                        ) : null}
                       </div>
                       <textarea
-                        disabled={selectedId !== item.id}
+                        disabled={ (!updateMultipleAnswer(item.id)) ||
+                          ((selectedId !== item.id) && answerIsUpdate)}
                         onChange={(e) => handleChange(index, e.target.value)} // Pass index and new value to handleChange
                         value={item.answer}
-                        className="w-full bg-transparent h-[100px]"
+                        className="w-full bg-transparent h-[150px]"
                       />
                     </td>
                     <td className="px-4 py-2 text-center border w-[100px]">
                       <div className="inline-flex space-x-2 text-[#A5A5A5]">
-                        <Check size={17}
-                        style={{ strokeWidth: 3 }}
-                        className={`${item.status == "Approve" ? "text-green-700" : ""}`}
-                        
-                        onClick={()=>{
-                          // setSelectedId(item.id);
-                          UpdateRecord( item.id ,"status" , "Approve")
-                         
-                          }}/>
-                        <TriangleAlert size={17}
-                         style={{ strokeWidth: 3 }}
-                         className={`${item.status == "Flagged" ? "text-yellow-500" : ""}`}
-                          onClick={()=>{
-                          // setSelectedId(item.id);
-                          UpdateRecord(item.id ,"status" ,"Flagged")}}
-                          />
+                        <Check
+                          size={17}
+                          style={{ strokeWidth: 3 }}
+                          className={`${
+                            item.status == "approved" ? "text-green-700" : ""
+                          }`}
+                          onClick={() => {
+                            // setSelectedId(item.id);
+                            UpdateRecord([item.id], "status", "approved");
+                          }}
+                        />
+                        <TriangleAlert
+                          size={17}
+                          style={{ strokeWidth: 3 }}
+                          className={`${
+                            item.status == "Flagged" ? "text-yellow-500" : ""
+                          }`}
+                          onClick={() => {
+                            // setSelectedId(item.id);
+                            UpdateRecord([item.id], "status", "Flagged");
+                          }}
+                        />
                         <Eye
                           size={17}
-                          className={`${selectedId == item.id ? "text-blue-600":""}`}
+                          className={`${
+                            selectedId == item.id && showHistory
+                              ? "text-blue-600"
+                              : ""
+                          }`}
                           style={{ strokeWidth: 3 }}
                           onClick={() => {
-                            setSelectedId(item.id)
-                            setShowHistory(true)}}
+                            setSelectedId(item.id);
+                            setShowHistory(true);
+                          }}
                         />
 
                         <Popover
@@ -521,25 +568,25 @@ const QuestionnairesView = () => {
                           }
                         >
                           <PopoverTrigger>
-                            <FilePenLine size={17}  style={{ strokeWidth: 3 }}/>
+                            <FilePenLine size={17} style={{ strokeWidth: 3 }} />
                           </PopoverTrigger>
                           <PopoverContent>
                             <div className="px-3 py-2  space-y-1.5">
                               <div
                                 onClick={() => {
                                   setSelectedId(item.id);
-                                  setAnswerIsUpdate(true)
+                                  setAnswerIsUpdate(true);
                                 }}
                                 className="text-md cursor-pointer "
                               >
                                 Improve answer
                               </div>
-                              <div className="text-md cursor-pointer"
-                              onClick={()=>{
-                                setOpenPopoverIndex(null);
-                                reRunForAnswer(item.id)
-                              }}
-                              
+                              <div
+                                className="text-md cursor-pointer"
+                                onClick={() => {
+                                  setOpenPopoverIndex(null);
+                                  reRunForAnswer([item.id]);
+                                }}
                               >
                                 Re-run AI for compliance & answer
                               </div>
@@ -549,7 +596,7 @@ const QuestionnairesView = () => {
                               <div
                                 className="text-md cursor-pointer"
                                 onClick={() => {
-                                  setSelectedId(item.id);
+                                  setBulkSelected([...bulkSelected, item.id]);
                                   notifyDisclosure.onOpen();
                                   setOpenPopoverIndex(null);
                                 }}
@@ -579,7 +626,11 @@ const QuestionnairesView = () => {
           </div>
           {showHistory && (
             <div className="w-[35%] h-[80vh] overflow-auto">
-              <History selectedId={selectedId} setShowHistory={setShowHistory} setSelectedId={setSelectedId}/>
+              <History
+                selectedId={selectedId}
+                setShowHistory={setShowHistory}
+                setSelectedId={setSelectedId}
+              />
             </div>
           )}
         </div>
@@ -587,6 +638,8 @@ const QuestionnairesView = () => {
       <NotifyModal
         isOpen={notifyDisclosure.isOpen}
         onOpenChange={notifyDisclosure.onOpenChange}
+        bulkSelected={bulkSelected}
+        setBulkSelected={setBulkSelected}
       />
 
       <DeleteModal
