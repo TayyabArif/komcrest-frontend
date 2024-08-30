@@ -168,7 +168,7 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
         </div>
         <div>
           <div className="flex items-center gap-3">
-            <select onChange={(e)=>questionnaireUpdated(e.target.value)}  value={currentStatus} className="w-[150px]  bg-[#D8D8D8] text-[18px] border rounded-lg pr-3 p-[5px]">
+            <select onChange={(e)=>questionnaireUpdated(e.target.value)}  value={currentStatus} className="w-[150px]  bg-[#D8D8D8] text-[18px] 2xl:text-[20px] border rounded-lg pr-3 p-[5px]">
               <option  disabled>Change Status</option>
               <option value="To Process">To Process</option>
               <option value="Started">Started</option>

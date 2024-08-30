@@ -59,13 +59,13 @@ const NotifyModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="lg">
       <ModalContent>
         <ModalBody className="py-12 flex flex-col justify-center items-center gap-5">
-          <p className="text-base font-semibold">
+          <p className="text-[18px] 2xl:text-[20px] font-semibold">
             Who do you want to notify to review this question?
           </p>
-          <div className="w-full">
+          <div className="w-full text-[18px] 2xl:text-[20px]">
             <Select
               isMulti
               options={companyUserData} // Ensure this array has {value, label} format
@@ -76,7 +76,7 @@ const NotifyModal = ({
           </div>
           <div className="space-x-10">
             <Button
-              className="bg-[#f5c8d1] text-[#c51317]  font-bold w-max"
+              className="bg-[#f5c8d1] text-[#c51317]  font-bold w-max text-[18px] 2xl:text-[20px]"
               onPress={onOpenChange}
               size="sm"
               onClick={()=>setBulkSelected([])}
@@ -84,7 +84,7 @@ const NotifyModal = ({
               Cancel
             </Button>
             <Button
-              className="bg-primary text-white w-max"
+              className="bg-primary text-white w-max text-[18px] 2xl:text-[20px]"
               size="sm"
               onPress={() => {
                 onOpenChange();

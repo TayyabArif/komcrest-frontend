@@ -3,6 +3,7 @@ import { AlignLeft, FileText, SquareCheck, CircleHelp, Settings ,MonitorDown, Bu
 import { useCookies } from 'react-cookie';
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { Button } from "@nextui-org/react";
 
 
 const VendorLayout = ({ children }) => {
@@ -75,8 +76,16 @@ const VendorLayout = ({ children }) => {
         </div>
       </div>
       <div className="ml-[15%] w-[85%]">
-        <div className="py-2 text-right font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]" onClick={handleLogout}>
-          <h1>Logout</h1>
+        <div className="py-2 text-right font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
+          {/* <h1>Logout</h1> */}
+          <Button
+          radius="none"
+          size="sm"
+          className="text-white px-[20px] text-sm bg-[#dc2626] w-max rounded-[4px] 2xl:text-[20px]"
+          onPress={handleLogout}
+        >
+          Logout
+        </Button>
         </div>
         <div className="flex flex-col bg-[#ebeef2] min-h-[95vh] overflow-auto">
           {children}

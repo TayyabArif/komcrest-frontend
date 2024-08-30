@@ -248,9 +248,10 @@ const QuestionnairesView = () => {
       .then(({ status, ok, data }) => {
         if (ok) {
           if( statusValue == "Flagged"){
-            alert("okkkkkk")
-            toast.warning(data.message);
-          }else{
+            toast.warning(`Selected Question/s move to "Require Attention"`);
+          } else if ( statusValue == "approved") {
+            toast.success(`Selected Question/s Validated by user`);
+          } else{
             toast.success(data.message);
           }
           setDataUpdate(!dataUpdate);
@@ -420,9 +421,6 @@ const QuestionnairesView = () => {
                         >
                           Re-run AI for compliance & answer
                         </div>
-                        <div className="text-md cursor-pointer">
-                          Push to knowledge base
-                        </div>
                         <div
                           className="text-md cursor-pointer"
                           onClick={() => {
@@ -472,7 +470,8 @@ const QuestionnairesView = () => {
                         />
                       </th>
                       <th className="px-4 py-2 text-left text-gray-600 border">
-                        Status {selectedId}
+                        {/* Status {selectedId} */}
+                        Status
                       </th>
                       <th className="px-4 py-2 text-left text-gray-600 border">
                         Question
@@ -522,7 +521,7 @@ const QuestionnairesView = () => {
                           </td>
                           <td className=" py-2 items-center ">
                             <div className="w-[90%] mx-auto">
-                            <p className="text-[12px] italic text-left">A.I</p>
+                            <p className="text-[12px] italic text-left pl-1">A.I</p>
                             <select
                               value={item.compliance}
                               onChange={(e) =>
@@ -532,7 +531,7 @@ const QuestionnairesView = () => {
                                   e.target.value
                                 )
                               }
-                              className="w-full  text-[18px]  rounded-lg "
+                              className="w-full  text-[18px] 2xl:text-[20px] rounded-lg "
                             >
                               <option value="" disabled>
                                 Select
@@ -580,13 +579,13 @@ const QuestionnairesView = () => {
                               }}
                              
                               value={item.answer}
-                              className={`w-full  h-[150px] rounded-md ${
+                              className={`w-full  h-[150px] rounded-md focus:outline-none focus:ring-2 focus:px-2  ${item.status == "approved" ? "focus:ring-green-700" : item.status == "Flagged" ? "focus:ring-yellow-500" : "focus-blue-500"} ${
                                 (updateMultipleAnswer(item.id) &&
                                   answerIsUpdate) ||
                                 (selectedId === item.id && answerIsUpdate)
-                                  ? "border-2 border-gray-500 bg-[#F9FAFB]"
+                                  ? ""
                                   : "bg-transparent"
-                              }`}
+                              } `}
                             />
 
                             <div
@@ -599,7 +598,7 @@ const QuestionnairesView = () => {
                                   onClick={() => {
                                     UpdateRecord([item.id], "answer", index);
                                   }}
-                                  className="bg-blue-500 cursor-pointer rounded-sm px-2 py-1  text-white"
+                                  className={`${item.status == "approved" ? "bg-green-700" : item.status == "Flagged" ? "bg-yellow-500" : "bg-blue-500"}  cursor-pointer rounded-sm px-2 py-1  text-white`}
                                 >
                                   Update
                                 </p>
@@ -679,9 +678,6 @@ const QuestionnairesView = () => {
                                       }}
                                     >
                                       Re-run AI for compliance & answer
-                                    </div>
-                                    <div className="text-md cursor-pointer">
-                                      Push to knowledge base
                                     </div>
                                     <div
                                       className="text-md cursor-pointer"

@@ -63,3 +63,15 @@ body {
   animation-duration: 2s; /* Adjust the duration as needed */
 }
 
+textarea::-webkit-scrollbar {
+  display: none;
+}
+
+textarea {
+  scrollbar-width: none; /* For Firefox */
+}
+
+textarea {
+  overflow: auto; /* Enable scrolling */
+}
+
