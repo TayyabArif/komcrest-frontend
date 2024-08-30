@@ -104,8 +104,8 @@ const Questionnaires = () => {
         <div className="flex flex-wrap gap-5">
           {filterStatus("Completed")?.map((data, index)=>{
             return(
-              <DndProvider backend={HTML5Backend}>
-              <QuestionnairCard  key={index} data={data} setDataUpdate={setDataUpdate} dataUpdate={dataUpdate}/>
+              <DndProvider key={index} backend={HTML5Backend}>
+              <QuestionnairCard  data={data} setDataUpdate={setDataUpdate} dataUpdate={dataUpdate}/>
               </DndProvider>
             )
           })}
