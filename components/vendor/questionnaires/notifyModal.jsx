@@ -76,14 +76,16 @@ const NotifyModal = ({
           </div>
           <div className="space-x-10">
             <Button
-              className="text-white bg-primary font-bold w-max"
+              className="bg-[#f5c8d1] text-[#c51317]  font-bold w-max"
               onPress={onOpenChange}
+              size="sm"
               onClick={()=>setBulkSelected([])}
             >
               Cancel
             </Button>
             <Button
-              className="bg-[#f5c8d1] text-[#c51317] w-max"
+              className="bg-primary text-white w-max"
+              size="sm"
               onPress={() => {
                 onOpenChange();
                 handleSubmit();

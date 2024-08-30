@@ -20,7 +20,7 @@ const knowledgeData = [
   ];
 const KnowledgeHistory = () => {
   return (
-    <div className="max-w-md mx-auto   flex flex-col gap-5 overflow-scroll mt-7">
+    <div className="max-w-md mx-auto   flex flex-col gap-5 overflow-scroll ">
       {knowledgeData.map((item, index) => (
         <div key={index} className="bg-[#FFFFFF] rounded-md p-4 space-y-3">
           <p className="font-bold">Question: <span className="font-normal">{item.question}</span></p>

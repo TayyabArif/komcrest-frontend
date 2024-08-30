@@ -18,8 +18,7 @@ const documentReferences = [
 
 const DocumentHistory = () => {
   return (
-    <div className="max-w-md mx-auto bg-bg-[#FFFFFF] ">
-    <h2 className="text-lg font-bold mb-4">Document references</h2>
+    <div className="max-w-md mx-auto bg-bg-[#FFFFFF]">
     {documentReferences.map((doc, index) => (
       <div key={index} className="bg-white shadow-md rounded-md p-4 mb-4">
         <a href="#" className="text-blue-600 font-bold block mb-1">{doc.title}</a>

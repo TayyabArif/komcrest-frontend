@@ -85,7 +85,7 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
 
       {/* Table for the selected sheet */}
       {visibleTable && excelFile[visibleTable] && (
-        <div>
+        <div className='h-[56vh] overflow-auto '>
           <table className="min-w-full mb-4">
             <thead className="bg-gray-200">
               <tr className='text-[16px] 2xl:text-[20px]'>

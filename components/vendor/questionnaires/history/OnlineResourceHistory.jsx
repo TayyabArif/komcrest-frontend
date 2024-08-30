@@ -22,7 +22,6 @@ const OnlineResourceHistoryData = [
 const OnlineResourceHistory = () => {
   return (
     <div className="max-w-md mx-auto bg-bg-[#FFFFFF] ">
-    <h2 className="text-lg font-bold mb-4">Document references</h2>
     {OnlineResourceHistoryData?.map((doc, index) => (
       <div key={index} className="bg-white shadow-md space-y-5 rounded-md py-2 px-4 mb-4">
        

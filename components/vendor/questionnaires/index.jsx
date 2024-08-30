@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import KnowledgeHeader from "../shared/KnowledgeHeader";
-import { useDisclosure} from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import { handleResponse } from "../../../helper";
 import FilterStatus from "./FilterStatus";
 import QuestionnairCard from "./QuestionnairCard";
 import { QuestionnaireStepsContent } from "@/constants";
+import { CircularProgress} from "@nextui-org/react";
+
+import { DndProvider, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+// import DragCard from "./DragCard" 
 
 const headerData = {
   title: "Questionnaires",
@@ -27,6 +31,8 @@ const Questionnaires = () => {
   const [dataUpdate , setDataUpdate] = useState(false)
   const [questionnaireList , setQuestionnaireList] = useState([])
   const [questionnaireProgressBar ,setQuestionnaireProgressBar] = useState({})
+  const [dataLoaded , setDataLoaded] = useState(false)
+
 
   
   const fetchAllQuestionnaires = async () => {
@@ -49,7 +55,7 @@ const Questionnaires = () => {
       );
       if (response.ok) {
         setQuestionnaireList(data.questionnaires);
-        console.log(">>>>>>>>>>>>>>>",data.questionnaires)
+        setDataLoaded(true)
       } else {
         toast.error(data?.error);
       }
@@ -70,6 +76,8 @@ const Questionnaires = () => {
   };
 
   return (
+    <>
+  {dataLoaded ? (
     <div>
       <KnowledgeHeader headerData={headerData} buttonShow={true} />
       <div className="w-[86%] mx-auto py-2 px-2">
@@ -82,17 +90,23 @@ const Questionnaires = () => {
           onClick={()=>setFilterValue("completed")}>Completed</h1>
         </div>
         {filterValue == "progress" ? (
+         
           <div className="flex gap-3">
+          <DndProvider backend={HTML5Backend}>
           <FilterStatus title="To Process" data={filterStatus("To Process")} stepsContent={QuestionnaireStepsContent.process} setDataUpdate={setDataUpdate} />
           <FilterStatus title="Started" data={filterStatus("Started")} stepsContent={QuestionnaireStepsContent.Started}  setDataUpdate={setDataUpdate} />
           <FilterStatus title="For Review" data={filterStatus("For Review")} stepsContent={QuestionnaireStepsContent.Review} setDataUpdate={setDataUpdate} />
           <FilterStatus title="Approved" data={filterStatus("Approved")} stepsContent={QuestionnaireStepsContent.Approved} setDataUpdate={setDataUpdate} />
+          </DndProvider>
         </div>
+       
         ): 
         <div className="flex flex-wrap gap-5">
           {filterStatus("Completed")?.map((data, index)=>{
             return(
+              <DndProvider backend={HTML5Backend}>
               <QuestionnairCard  key={index} data={data} setDataUpdate={setDataUpdate} dataUpdate={dataUpdate}/>
+              </DndProvider>
             )
           })}
         </div>
@@ -100,6 +114,12 @@ const Questionnaires = () => {
         
       </div>
     </div>
+  ):
+  <div className='flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen'>
+    <CircularProgress label="Fetching Questionnaires..." size="lg" />
+  </div>}
+    
+    </>
   );
 };
 
