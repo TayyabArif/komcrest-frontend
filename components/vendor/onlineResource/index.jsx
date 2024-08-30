@@ -176,7 +176,7 @@ const OnlineResourceComponent = () => {
                 setDeleteAction("bulk");
               }}
             >
-              Clear Selection
+              Delete Selection
             </Button>
           )}
           </div>

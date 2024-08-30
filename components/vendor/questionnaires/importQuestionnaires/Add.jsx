@@ -88,22 +88,11 @@ const Add = ({
 
   const handleData = (e) => {
     const { name, value } = e.target;
-    
-    if(name == "returnDate"){
-      alert(typeof value)
-      const formattedDate = format(parse(value, 'yyyy-MM-dd', new Date()), 'dd-MM-yy');
-      alert(formattedDate)
-      setImportQuestionnaire((prevState) => ({
-        ...prevState,
-        [name]: formattedDate,
-      }));
-    }else{
       setImportQuestionnaire((prevState) => ({
         ...prevState,
         [name]: value,
       }));
-    }
-   
+    
 
     if (errors[name]) {
       setErrors({
@@ -294,6 +283,7 @@ const Add = ({
           className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
         />
           </div>
+          {errors.returnDate && <p className="text-red-500">{errors.returnDate}</p>}
         </div>
         
         <div>

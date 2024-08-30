@@ -342,7 +342,7 @@ const KnowledgeBase = ({
                 setDeleteAction("bulk");
               }}
             >
-              Clear Selection
+              Delete Selection
             </Button>
           )}
         </div>

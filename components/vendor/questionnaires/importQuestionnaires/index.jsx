@@ -30,6 +30,7 @@ const Import = ({setImportSuccessfully}) => {
   const [selectedRows, setSelectedRows] = useState({});
   const [columnMapping, setColumnMapping] = useState({});
   const [errors, setErrors] = useState({});
+  const [totalCount ,setTotalCount] = useState("")
   const [importQuestionnaires, setImportQuestionnaire] = useState({
     customerName: "",
     customerDomain: "",
@@ -43,7 +44,6 @@ const Import = ({setImportSuccessfully}) => {
     fileName: "",
     Questionnaires: [],
   });
-debugger
   function getTitle() {
     switch (stepper) {
       case 0:
@@ -70,6 +70,9 @@ debugger
     }
     if (!importQuestionnaires.language) {
       newErrors.language = "Language is required";
+    }
+    if (!importQuestionnaires.returnDate) {
+      newErrors.returnDate = "Return Date is required";
     }
 
     setErrors(newErrors);
@@ -153,7 +156,7 @@ debugger
       Questionnaires: result,
     };
 
-    console.log(">>>>LLLLLL",payload.Questionnaires.length)
+   setTotalCount(payload.Questionnaires.length)
 
     const jsonPayload = JSON.stringify(payload);
     const token = cookiesData.token;
@@ -189,7 +192,8 @@ debugger
           if (ok) {
             console.log("Success:", data);
             toast.success("Questionnaires created successfully");
-            router.push(`/vendor/questionnaires/view?id=${data?.questionnaire?.id}`)
+            localStorage.setItem('QuestionnaireId',(data?.questionnaire?.id));
+            router.push(`/vendor/questionnaires/view?name=${data?.questionnaire?.customerName}`)
           } else {
             toast.error(data?.error || "Questionnaires not Created");
             console.error("Error:", data);
@@ -212,7 +216,7 @@ debugger
       setStepper(stepper - 1);
       setProgressBar(progressBar - 27);
     } else {
-      router.push("/vendor/onlineResource");
+      router.push("/vendor/questionnaires");
     }
   };
 
@@ -222,14 +226,14 @@ debugger
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
           {getTitle()}
         </h1>
-        <div className="w-full h-[80vh] bg-white p-6">
+        <div className="w-full h-auto bg-white p-6">
           <Progress
             aria-label="Loading..."
             value={progressBar}
             className="h-[8px]"
           />
 
-          <div className=" space-y-7 h-full">
+          <div className=" space-y-0 h-full">
             <div className="my-3 flex gap-2">
               {[
                 "Add questionnaire",
@@ -262,7 +266,8 @@ debugger
                 </div>
               ))}
             </div>
-            <div className="overflow-auto h-[60vh]">
+            <div className="">
+            { stepper > 0 && stepper < 4 && <h1 className='font-semibold text-[16px] 2xl:text-[20px]'>{importQuestionnaires?.customerName} - {importQuestionnaires?.fileName?.replace(".xlsx", "")}</h1>}
               {stepper === 0 && (
                 <Add
                   importQuestionnaires={importQuestionnaires}
@@ -295,10 +300,10 @@ debugger
                   excelFile={excelFile}
                 />
               )}
-              {stepper === 4 && <Completed content="Importing 76 questions" />}
+              {stepper === 4 && <Completed content={`Importing ${totalCount} questions`} />}
             </div>
-            <div>
-              <div className="flex justify-end">
+            
+              <div className="flex justify-end ">
                 <Button
                   onClick={handleCancelClick}
                   radius="none"
@@ -316,7 +321,7 @@ debugger
                   {stepper === 3 ? "Confirm" : "Next"}
                 </Button>
               </div>
-            </div>
+            
           </div>
         </div>
       </div>

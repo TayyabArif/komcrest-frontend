@@ -85,9 +85,9 @@ const ValidateData = ({ excelFile, columnMapping }) => {
 
       {/* Only show the selected table */}
       {visibleTable && (
-        <div key={visibleTable} className="mb-8 overflow-auto  h-[47vh]">
+        <div key={visibleTable} className="mb-8 overflow-auto  h-[50vh]">
           <table className="min-w-full border-collapse border mb-4">
-            <thead className="bg-gray-200">
+            <thead className="bg-gray-200 sticky -top-1 z-10">
               <tr className='text-[16px] 2xl:text-[20px]'>
                 <th className="border p-2 text-left">Select rows to remove</th>
                 {getMappedData(visibleTable).headers.map((header, index) => (

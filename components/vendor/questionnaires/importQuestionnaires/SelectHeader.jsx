@@ -69,7 +69,7 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows}
             ))}
           </div>
           {selectedSheet && excelFile[selectedSheet] && (
-            <div className="overflow-auto h-[60vh]">
+            <div className="h-[56vh] overflow-auto">
               <table className="min-w-full border-collapse border">
                 <thead className="bg-[#F6F7F9] sticky -top-1 z-10">
                   <tr className='text-[16px] 2xl:text-[20px]'>

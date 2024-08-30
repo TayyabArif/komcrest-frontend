@@ -20,6 +20,7 @@ export const MyProvider = ({ children }) => {
    // all states
     const [companyUserData, setCompanyUserData] = useState([]);
     const [companyProducts, setCompanyProducts] = useState([]);
+  
 
 
   useEffect(()=>{
@@ -99,7 +100,7 @@ export const MyProvider = ({ children }) => {
   };
 
   return (
-    <MyContext.Provider value={{ companyUserData ,companyProducts ,setDataUpdated ,dataUpdated }}>
+    <MyContext.Provider value={{ companyUserData ,companyProducts ,setDataUpdated ,dataUpdated , }}>
       {children}
     </MyContext.Provider>
   );

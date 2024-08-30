@@ -66,7 +66,7 @@ const UpdateQuestionnaires = () => {
           assignees: data.questionnaire.assignees.map(
             (assignee) => assignee.id
           ),
-          returnDate: "23-05-24",
+          returnDate: data?.questionnaire?.returnDate?.split('T')[0],
           // returnDate: format(parseISO(data.questionnaire.returnDate), 'yyyy-MM-dd'),
           fileName: data.questionnaire.fileName,
         };
@@ -89,20 +89,11 @@ const UpdateQuestionnaires = () => {
 
   const handleData = (e) => {
     const { name, value } = e.target;
-    if(name == "returnDate"){
-      alert(typeof value)
-      const formattedDate = format(parse(value, 'yyyy-MM-dd', new Date()), 'dd-MM-yy');
-      setQuestionnaireData((prevState) => ({
-        ...prevState,
-        [name]: formattedDate,
-      }));
-    }else{
+   
       setQuestionnaireData((prevState) => ({
         ...prevState,
         [name]: value,
-      }));
-    }
-   
+      })) 
   };
 
   const handleCheckboxChange = (property, id) => {
@@ -296,7 +287,7 @@ const UpdateQuestionnaires = () => {
 
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">
-                  Date to return the questionnaire to the client or prospect{questionnaireData.returnDate}
+                  Date to return the questionnaire to the client or prospect
                 </label>
                 <div className="">
                   <input
