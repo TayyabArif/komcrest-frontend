@@ -24,7 +24,6 @@ import { useMyContext } from "@/context";
 const deleteModalContent = "Are you sure to delete Questions";
 
 const QuestionnairesView = () => {
-  debugger;
   const router = useRouter();
   const [showHistory, setShowHistory] = useState(false);
   let id;
@@ -202,7 +201,7 @@ const QuestionnairesView = () => {
   };
 
   const UpdateRecord = (id, property, data) => {
-    console.log(id);
+    let statusValue = data
     let value;
     if (property == "answer") {
       value = questionnaireData?.questionnaireRecords[data].answer;
@@ -248,12 +247,18 @@ const QuestionnairesView = () => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          toast.success(data.message);
+          if( statusValue == "Flagged"){
+            alert("okkkkkk")
+            toast.warning(data.message);
+          }else{
+            toast.success(data.message);
+          }
           setDataUpdate(!dataUpdate);
           if (property == "answer") {
             let newArr = bulkSelected.filter((item) => item !== id[0]);
             setBulkSelected(newArr);
             setSelectedId("");
+            setAnswerIsUpdate(false)
           } else {
             setBulkSelected([]);
           }
@@ -485,7 +490,7 @@ const QuestionnairesView = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {questionnaireData?.questionnaireRecords?.map(
+                    {questionnaireData?.questionnaireRecords?.sort((a,b) => a.id - b.id)?.map(
                       (item, index) => (
                         <tr
                           key={index}
@@ -515,7 +520,8 @@ const QuestionnairesView = () => {
                           <td className="px-4 py-2 border  w-[500px]">
                             {item.question}
                           </td>
-                          <td className="px-4 py-2 text-center border w-[100px]">
+                          <td className=" py-2 items-center ">
+                            <div className="w-[90%] mx-auto">
                             <p className="text-[12px] italic text-left">A.I</p>
                             <select
                               value={item.compliance}
@@ -526,7 +532,7 @@ const QuestionnairesView = () => {
                                   e.target.value
                                 )
                               }
-                              className="w-[150px]  text-[18px]  rounded-lg pr-3 p-[5px]"
+                              className="w-full  text-[18px]  rounded-lg "
                             >
                               <option value="" disabled>
                                 Select
@@ -535,8 +541,10 @@ const QuestionnairesView = () => {
                               <option value="No">No</option>
                               <option value="Partial">Partial</option>
                             </select>
+                            </div>
                           </td>
                           <td
+                          
                             className={`px-4 py-2  border ${
                               item.confidence < 7
                                 ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
@@ -556,14 +564,21 @@ const QuestionnairesView = () => {
                             </div>
                             <textarea
                               disabled={
-                                updateMultipleAnswer(item.id) !== true &&
-                                answerIsUpdate === true &&
-                                selectedId !== item.id &&
-                                answerIsUpdate === true
+                                updateMultipleAnswer(item.id) === true &&
+                                answerIsUpdate === true 
+                                
                               }
                               onChange={(e) =>
                                 handleChange(index, e.target.value)
                               }
+                              onClick={() => {
+                                if(bulkSelected.length == 0 ){
+                                  setSelectedId(item.id);
+                                  setAnswerIsUpdate(true);
+                                }
+                               
+                              }}
+                             
                               value={item.answer}
                               className={`w-full  h-[150px] rounded-md ${
                                 (updateMultipleAnswer(item.id) &&

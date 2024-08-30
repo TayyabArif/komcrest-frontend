@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@nextui-org/react";
 import { Settings } from "lucide-react";
 import { useRouter } from "next/router";
@@ -16,13 +16,17 @@ import { ArrowRight } from 'lucide-react';
 const deleteModalContent = "Are you sure to delete this Questionnaires?";
 const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdate}) => {  
   const router = useRouter();
-  const { id } = router.query;
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [dropDownOpen ,setDropDownOpen] = useState(false)
 
+  let id ;
+
+  useEffect(()=>{
+    id = id = localStorage.getItem("QuestionnaireId");
+  })
   const questionnaireUpdated = (value) => {
     const jsonPayload = JSON.stringify({
       status : value
