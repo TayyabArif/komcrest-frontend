@@ -165,9 +165,7 @@ const Add = ({
               input: "2xl:text-[20px] text-[16px] text-gray-500",
             }}
           />
-          {errors.customerName && (
-            <p className="text-red-500">{errors.customerName}</p>
-          )}
+          {errors.customerName && <p className="text-red-500">{errors.customerName}</p>}
         </div>
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
@@ -185,6 +183,7 @@ const Add = ({
               input: "2xl:text-[20px] text-[16px] text-gray-500",
             }}
           />
+            {errors.customerDomain && <p className="text-red-500">{errors.customerDomain}</p>}
         </div>
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
@@ -205,7 +204,9 @@ const Add = ({
                 {item.label}
               </Checkbox>
             ))}
+
           </div>
+          {errors.questionnaireType && <p className="text-red-500">{errors.questionnaireType}</p>}
         </div>
         <div className="flex-1">
           <label className="text-[16px] 2xl:text-[20px]">

@@ -67,8 +67,6 @@ const ComplianceOptions = [
 const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filters, setShow ,komcrestCategories ,questionData ,companyProducts ,documentData , DocumentFile}) => {
   const [selectedOne, setSelectedOne] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-
-debugger
   const childFunction = () => {
     handleClearAll()
   };
@@ -90,7 +88,7 @@ debugger
       const isSpecialFilter = [ "status","compliance"].includes(filterType);
       let updatedFilters = [...prevFilters];
       const filterIndex = updatedFilters.findIndex((filter) => filter.name === filterType);
-  debugger
+  
       if (filterIndex === -1) {
         return prevFilters;
       }

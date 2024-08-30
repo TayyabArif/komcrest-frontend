@@ -74,6 +74,15 @@ const Import = ({setImportSuccessfully}) => {
     if (!importQuestionnaires.returnDate) {
       newErrors.returnDate = "Return Date is required";
     }
+    if (!importQuestionnaires.customerName) {
+      newErrors.customerName = "Customer Name is required";
+    }
+    if (!importQuestionnaires.customerDomain) {
+      newErrors.customerDomain = "Customer Domain is required";
+    }
+    if (!importQuestionnaires.questionnaireType) {
+      newErrors.questionnaireType = "Questionnaire Type is required";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
