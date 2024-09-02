@@ -81,7 +81,7 @@ const VendorLayout = ({ children }) => {
           <Button
           radius="none"
           size="sm"
-          className="text-white px-[20px] text-sm bg-[#dc2626] w-max rounded-[4px] 2xl:text-[20px]"
+          className=" px-[20px] text-sm bg-[#D8D8D8] w-max rounded-[4px] 2xl:text-[20px]"
           onPress={handleLogout}
         >
           Logout

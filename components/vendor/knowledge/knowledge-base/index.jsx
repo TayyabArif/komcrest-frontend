@@ -427,7 +427,7 @@ const KnowledgeBase = ({
                     filterData.map((data, index) => (
                       <tr
                         key={data.id}
-                        className="bg-white h-[100px] text-[16px] 2xl:text-[20px]"
+                        className={` h-[100px] text-[16px] 2xl:text-[20px] ${index % 2 === 0 ? 'bg-gray-100':"bg-white"}`}
                       >
                         <td className="py-2 px-4 border border-gray-300">
                           <Checkbox
@@ -442,7 +442,7 @@ const KnowledgeBase = ({
                         <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
                           {data.category}
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 !max-w-[320px]">
+                        <td className="py-2 px-4 border border-gray-300 bg-transparent !max-w-[320px]">
                           <select
                             value={data.komcrestCategory}
                             onChange={(e) =>
@@ -451,7 +451,7 @@ const KnowledgeBase = ({
                                 e.target.value
                               )
                             }
-                            className="py-1 px-2 max-w-[250px]"
+                            className="py-1 px-2 max-w-[250px] bg-transparent"
                           >
                             {komcrestCategories?.map((item, index) => (
                               <option key={index} value={item?.value}>
@@ -495,7 +495,7 @@ const KnowledgeBase = ({
                           {formatDateWithTime(data.updatedAt)}
                         </td>
                         <td
-                          className="outline border outline-[#e9e6e6] sticky -right-[1px]  pl-9 bg-white"
+                          className={`outline border outline-[#e9e6e6] sticky -right-[1px]  pl-9 ${index % 2 === 0 ? 'bg-gray-100':"bg-white"}`}
                           style={{ outlineWidth: "1px" }}
                         >
                           <Popover

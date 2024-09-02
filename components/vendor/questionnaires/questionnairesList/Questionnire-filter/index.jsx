@@ -77,7 +77,11 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
 
   useEffect(() => {
     if(filters?.length === 0 ){
+      alert("ok")
         setFilters(createInitialFilters(filterHeader));
+    }else{
+      alert("LLLLLL")
+      setFilters(createInitialFilters(filterHeader));
     }
   }, [setFilters]);
 
@@ -132,7 +136,7 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
   const getEntries = () => {
     let totalEntries = 0;
     if (isSelected) {
-      totalEntries = filters.filter((item)=> item.name == selectedOne)[0].value.length
+      totalEntries = filters.filter((item)=> item.name == selectedOne)[0]?.value?.length
     } else {
       console.log("filtersfilters",filters)
       filters?.forEach(obj => {

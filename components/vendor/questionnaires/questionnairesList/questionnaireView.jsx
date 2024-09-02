@@ -44,20 +44,47 @@ const QuestionnairesView = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState([]);
+  const [dropDownOpen, setDropDownOpen] = useState(false);
+
+  // filter data after notification
+  useEffect(() => {
+    const { Questionnair } = router.query;
+    const params = new URLSearchParams(router.asPath);
+    const notifyQuestions = [];
+    params.forEach((value, key) => {
+      if (key.startsWith("notifyQuestions")) {
+        notifyQuestions.push(parseInt(value, 10));
+      }
+    });
+
+    console.log("Questionnair:", Questionnair);
+    console.log("Notify Questions:", notifyQuestions);
+
+    if (Questionnair) {
+      setFilters([
+        {
+          name: "id",
+          value: notifyQuestions,
+        },
+      ]);
+    }
+  }, [router.query]);
 
   const fetchQuestionnaire = async () => {
     const token = cookiesData && cookiesData.token;
     const requestOptions = {
-      method: "GET",
+      method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify(filters),
       redirect: "follow",
     };
 
     try {
       const response = await fetch(
-        `${baseUrl}/questionnaires/${id}`,
+        `${baseUrl}/questionnaire-records/${id}`,
         requestOptions
       );
       const data = await handleResponse(
@@ -70,7 +97,7 @@ const QuestionnairesView = () => {
         setCurrentStatus(data.questionnaire.status);
         setQuestionnaireData(data?.questionnaire);
         setDataLoaded(true);
-        console.log(">>>>>>>>>>>>>", data?.questionnaire);
+        console.log(">>>>>>>>>>>>>", data);
       } else {
         toast.error(data?.error);
       }
@@ -84,7 +111,7 @@ const QuestionnairesView = () => {
     if (id) {
       fetchQuestionnaire();
     }
-  }, [id, dataUpdate]);
+  }, [id, dataUpdate, filters]);
 
   const handleChange = (index, newAnswer) => {
     setQuestionnaireData((prevData) => {
@@ -152,7 +179,7 @@ const QuestionnairesView = () => {
   const handleBulkDelete = async () => {
     const token = cookiesData.token;
     const payLoad = JSON.stringify({
-      questionnaireId: id,
+      questionnaireId: localStorage.getItem("QuestionnaireId"),
       ids: bulkSelected,
     });
 
@@ -201,7 +228,7 @@ const QuestionnairesView = () => {
   };
 
   const UpdateRecord = (id, property, data) => {
-    let statusValue = data
+    let statusValue = data;
     let value;
     if (property == "answer") {
       value = questionnaireData?.questionnaireRecords[data].answer;
@@ -247,11 +274,11 @@ const QuestionnairesView = () => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          if( statusValue == "Flagged"){
+          if (statusValue == "Flagged") {
             toast.warning(`Selected Question/s move to "Require Attention"`);
-          } else if ( statusValue == "approved") {
+          } else if (statusValue == "approved") {
             toast.success(`Selected Question/s Validated by user`);
-          } else{
+          } else {
             toast.success(data.message);
           }
           setDataUpdate(!dataUpdate);
@@ -259,7 +286,7 @@ const QuestionnairesView = () => {
             let newArr = bulkSelected.filter((item) => item !== id[0]);
             setBulkSelected(newArr);
             setSelectedId("");
-            setAnswerIsUpdate(false)
+            setAnswerIsUpdate(false);
           } else {
             setBulkSelected([]);
           }
@@ -375,6 +402,15 @@ const QuestionnairesView = () => {
                 >
                   <Filter size={26} className="text-gray-500" color="#2457d7" />
                 </div>
+                {filters.some((filter) => filter.value.length > 0) &&
+                  !showFilter && (
+                    <button
+                      onClick={()=>setFilters([])}
+                      className="px-2 py-1 rounded-full border text-blue-700 border-blue-700 border-dashed text-nowrap"
+                    >
+                      Clear filter
+                    </button>
+                  )}
               </div>
               {bulkSelected.length !== 0 && (
                 <div className="flex gap-3 items-center pr-3">
@@ -399,9 +435,18 @@ const QuestionnairesView = () => {
                       UpdateRecord(bulkSelected, "status", "Flagged")
                     }
                   />
-                  <Popover className="rounded-[0px]">
+                  <Popover
+                    isOpen={dropDownOpen}
+                    onOpenChange={(open) => {
+                      setDropDownOpen(false);
+                    }}
+                    className="rounded-[0px]"
+                  >
                     <PopoverTrigger>
-                      <FilePenLine size={17} />
+                      <FilePenLine
+                        size={17}
+                        onClick={() => setDropDownOpen(true)}
+                      />
                     </PopoverTrigger>
                     <PopoverContent>
                       <div className="px-3 py-2  space-y-1.5 text-[16px]">
@@ -409,6 +454,7 @@ const QuestionnairesView = () => {
                           className="text-md cursor-pointer"
                           onClick={() => {
                             setAnswerIsUpdate(true);
+                            setDropDownOpen(false);
                           }}
                         >
                           Improve answer
@@ -417,6 +463,7 @@ const QuestionnairesView = () => {
                           className="text-md cursor-pointer"
                           onClick={() => {
                             reRunForAnswer(bulkSelected);
+                            setDropDownOpen(false);
                           }}
                         >
                           Re-run AI for compliance & answer
@@ -426,6 +473,7 @@ const QuestionnairesView = () => {
                           onClick={() => {
                             notifyDisclosure.onOpen();
                             setOpenPopoverIndex(null);
+                            setDropDownOpen(false);
                           }}
                         >
                           Notify for help
@@ -435,6 +483,7 @@ const QuestionnairesView = () => {
                           onClick={() => {
                             deleteDisclosure.onOpen();
                             setDeleteAction("bulk");
+                            setDropDownOpen(false);
                           }}
                         >
                           Delete
@@ -489,11 +538,14 @@ const QuestionnairesView = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {questionnaireData?.questionnaireRecords?.sort((a,b) => a.id - b.id)?.map(
-                      (item, index) => (
+                    {questionnaireData?.questionnaireRecords
+                      ?.sort((a, b) => a.id - b.id)
+                      ?.map((item, index) => (
                         <tr
                           key={index}
-                          className="border-b 2xl:text-[20px] text-[16px]"
+                          className={`border-b 2xl:text-[20px] text-[16px] ${
+                            index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                          }`}
                         >
                           <td className="px-4 py-2 text-center border w-[70px]">
                             <Checkbox
@@ -521,65 +573,69 @@ const QuestionnairesView = () => {
                           </td>
                           <td className=" py-2 items-center ">
                             <div className="w-[90%] mx-auto">
-                            <p className="text-[12px] italic text-left pl-1">A.I</p>
-                            <select
-                              value={item.compliance}
-                              onChange={(e) =>
-                                UpdateRecord(
-                                  [item.id],
-                                  "compliance",
-                                  e.target.value
-                                )
-                              }
-                              className="w-full  text-[18px] 2xl:text-[20px] rounded-lg "
-                            >
-                              <option value="" disabled>
-                                Select
-                              </option>
-                              <option value="Yes">Yes</option>
-                              <option value="No">No</option>
-                              <option value="Partial">Partial</option>
-                            </select>
+                            <div className={`text-[12px] flex  my-2`}>
+                              {item.complianceGeneratedBy ? (
+                                <p className=" italic text-left">Manually</p>
+                              ) : (
+                                <p className=" italic text-left">A.I.</p>
+                              )}
+                            </div>
+                              <select
+                                value={item.compliance}
+                                onChange={(e) =>
+                                  UpdateRecord(
+                                    [item.id],
+                                    "compliance",
+                                    e.target.value
+                                  )
+                                }
+                                className="w-full  text-[16px] 2xl:text-[20px] rounded-lg bg-transparent"
+                              >
+                                <option value="" disabled>
+                                  Select
+                                </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                                <option value="Partial">Partial</option>
+                              </select>
                             </div>
                           </td>
                           <td
-                          
                             className={`px-4 py-2  border ${
                               item.confidence < 7
                                 ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
                                 : ""
                             }`}
                           >
-                            <div
-                              className={`text-[12px] flex  my-2 ${
-                                item.generatedBy == "AI"
-                                  ? "justify-between"
-                                  : "justify-end"
-                              }`}
-                            >
-                              {item.generatedBy == "AI" && (
-                                <p className=" italic text-left">A.I</p>
+                            <div className={`text-[12px] flex  my-2`}>
+                              {item.generatedBy == "AI" ? (
+                                <p className=" italic text-left">A.I.</p>
+                              ) : (
+                                <p className=" italic text-left">Updated</p>
                               )}
                             </div>
                             <textarea
                               disabled={
                                 updateMultipleAnswer(item.id) === true &&
-                                answerIsUpdate === true 
-                                
+                                answerIsUpdate === true
                               }
                               onChange={(e) =>
                                 handleChange(index, e.target.value)
                               }
                               onClick={() => {
-                                if(bulkSelected.length == 0 ){
+                                if (bulkSelected.length == 0) {
                                   setSelectedId(item.id);
                                   setAnswerIsUpdate(true);
                                 }
-                               
                               }}
-                             
                               value={item.answer}
-                              className={`w-full  h-[150px] rounded-md focus:outline-none focus:ring-2 focus:px-2  ${item.status == "approved" ? "focus:ring-green-700" : item.status == "Flagged" ? "focus:ring-yellow-500" : "focus-blue-500"} ${
+                              className={`w-full  h-[150px] rounded-md focus:outline-none focus:ring-2 focus:px-2  ${
+                                item.status == "approved"
+                                  ? "focus:ring-green-700"
+                                  : item.status == "Flagged"
+                                  ? "focus:ring-yellow-500"
+                                  : "focus-blue-500"
+                              } ${
                                 (updateMultipleAnswer(item.id) &&
                                   answerIsUpdate) ||
                                 (selectedId === item.id && answerIsUpdate)
@@ -598,7 +654,13 @@ const QuestionnairesView = () => {
                                   onClick={() => {
                                     UpdateRecord([item.id], "answer", index);
                                   }}
-                                  className={`${item.status == "approved" ? "bg-green-700" : item.status == "Flagged" ? "bg-yellow-500" : "bg-blue-500"}  cursor-pointer rounded-sm px-2 py-1  text-white`}
+                                  className={` text-[16px] 2xl:text-[20px] rounded-lg ${
+                                    item.status == "approved"
+                                      ? "bg-green-700"
+                                      : item.status == "Flagged"
+                                      ? "bg-yellow-500"
+                                      : "bg-blue-500"
+                                  }  cursor-pointer rounded-sm px-2   text-white`}
                                 >
                                   Update
                                 </p>
@@ -641,7 +703,7 @@ const QuestionnairesView = () => {
                                 style={{ strokeWidth: 3 }}
                                 onClick={() => {
                                   setSelectedId(item.id);
-                                  setShowHistory(true);
+                                  setShowHistory(!showHistory);
                                 }}
                               />
 
@@ -720,8 +782,7 @@ const QuestionnairesView = () => {
                             <div></div>
                           </td>
                         </tr>
-                      )
-                    )}
+                      ))}
                   </tbody>
                 </table>
               </div>

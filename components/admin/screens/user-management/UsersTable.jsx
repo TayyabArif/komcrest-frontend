@@ -31,7 +31,7 @@ const UsersTable = ({allUsers, setAllUsers, isDeleted, setIsDeleted}) => {
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     const filtered = allUsers?.filter(user =>
-        user.firstName.toLowerCase().includes(value) ||  user.lastName.toLowerCase().includes(value)
+        user.firstName.toLowerCase().includes(value) ||  user.lastName.toLowerCase().includes(value) || user?.Company?.name.toLowerCase().includes(value)
     );
     setFilteredUsers(filtered);
 };

@@ -33,7 +33,7 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
   
     return (
       <select
-        className="w-[250px] bg-transparent text-[15px] border rounded-lg pr-3 p-2"
+        className="w-[250px] bg-transparent text-[16px] 2xl:text-[20px] border rounded-lg pr-3 p-2"
         name={`mapping-${sheetName}-${columnIndex}`}
         value={currentSelection || ''}
         onChange={(e) => handleMappingChange(sheetName, columnIndex, e.target.value)}
