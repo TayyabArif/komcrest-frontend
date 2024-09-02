@@ -117,7 +117,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
           <span className="font-bold  text-black"> Last Update </span>{" "}
           {formatDateWithTime(data?.updatedAt)}
         </div>
-        <div>By Richard Branco</div>
+        <div>By {data?.customerName}</div>
 
         <div className=" font-bold mt-4">
           Due date{" "}
@@ -130,8 +130,8 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
         {data?.status !== "Completed" && (
           <div className="relative h-[9px] w-full">
           {[
-            { key: 'processed', color: 'bg-[#2358d3]', value: questionnaireProgressBar?.processed?.percentage, zIndex: 5 },
-            { key: 'Flagged', color: 'bg-[#ffc001]', value: questionnaireProgressBar?.Flagged?.percentage, zIndex: 20 },
+            { key: 'processed', color: '!bg-[#3b82f6]', value: questionnaireProgressBar?.processed?.percentage, zIndex: 5 },
+            { key: 'Flagged', color: 'bg-[#eab308]', value: questionnaireProgressBar?.Flagged?.percentage, zIndex: 20 },
             { key: 'approved', color: 'bg-[#00B050]', value: questionnaireProgressBar?.approved?.percentage, zIndex: 10 },
           ]
             .sort((a, b) => b.value - a.value) // Sort by value in descending order

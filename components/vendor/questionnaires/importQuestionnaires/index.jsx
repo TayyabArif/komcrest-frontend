@@ -312,7 +312,7 @@ const Import = ({setImportSuccessfully}) => {
               {stepper === 4 && <Completed content={`Importing ${totalCount} questions`} />}
             </div>
             
-              <div className="flex justify-end ">
+              <div className="flex justify-end !mt-20">
                 <Button
                   onClick={handleCancelClick}
                   radius="none"

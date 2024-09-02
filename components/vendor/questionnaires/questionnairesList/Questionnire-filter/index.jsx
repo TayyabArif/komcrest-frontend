@@ -77,10 +77,8 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
 
   useEffect(() => {
     if(filters?.length === 0 ){
-      alert("ok")
         setFilters(createInitialFilters(filterHeader));
     }else{
-      alert("LLLLLL")
       setFilters(createInitialFilters(filterHeader));
     }
   }, [setFilters]);

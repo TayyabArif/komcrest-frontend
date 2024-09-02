@@ -147,11 +147,11 @@ const Add = ({
   };
 
   return (
-    <div className="flex justify-between ">
+    <div className="flex justify-between">
       <div className="w-[45%] space-y-6 ">
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
-            Customer or prospect name
+            Customer or prospect name <span className="text-red-500">*</span>
           </label>
           <Input
             type="text"
@@ -169,7 +169,7 @@ const Add = ({
         </div>
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
-            Customer or prospect domain name
+            Customer or prospect domain name <span className="text-red-500">*</span>
           </label>
           <Input
             type="text"
@@ -187,7 +187,7 @@ const Add = ({
         </div>
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
-            Questionnaire type
+            Questionnaire type <span className="text-red-500">*</span>
           </label>
           <div className="gap-y-2 gap-10 flex flex-wrap my-1">
             {questionnaireTypeList?.map((item, index) => (
@@ -210,7 +210,7 @@ const Add = ({
         </div>
         <div className="flex-1">
           <label className="text-[16px] 2xl:text-[20px]">
-            Spreadsheet (Excel, CSV)
+            Spreadsheet (Excel, CSV) <span className="text-red-500">*</span>
           </label>
           <Dropzone onDrop={handleDrop}>
             {({ getRootProps, getInputProps }) => (
@@ -250,7 +250,7 @@ const Add = ({
       <div className="w-[45%] space-y-6 pt-3">
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
-            In scope product(s)*
+            In scope product(s) <span className="text-red-500">*</span>
           </label>
           <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
             {companyProducts?.map((item, index) => (
@@ -272,7 +272,7 @@ const Add = ({
 
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
-            Date to return the questionnaire to the client or prospect
+            Date to return the questionnaire to the client or prospect <span className="text-red-500">*</span>
           </label>
           <div className="">
           <input
@@ -281,14 +281,14 @@ const Add = ({
           value={importQuestionnaires.returnDate}
           name="returnDate"
           onChange={handleData}
-          className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
+          className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg text-[16px] 2xl:text-[20px]"
         />
           </div>
           {errors.returnDate && <p className="text-red-500">{errors.returnDate}</p>}
         </div>
         
         <div>
-          <label className="text-[16px] 2xl:text-[20px]">Language</label>
+          <label className="text-[16px] 2xl:text-[20px]">Language <span className="text-red-500">*</span></label>
           <SingleSelect
             variant="bordered"
             className="w-full bg-transparent text-[15px]"
