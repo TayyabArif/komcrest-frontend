@@ -26,7 +26,6 @@ const NotifyModal = ({
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
-
   const handleMultipleSelect = (selectedOptions, actionMeta) => {
     setNotifyPeople(selectedOptions ? selectedOptions.map(option => option.value) : []);
   };
@@ -35,10 +34,22 @@ const NotifyModal = ({
     console.log("Notifying:", notifyPeople);
     const token = cookiesData.token;
 
-   const payload = {
-      recipientIds: notifyPeople,
-      recordIds: bulkSelected
-  }
+  
+
+  const queryParams = new URLSearchParams();
+  queryParams.append("Questionnair", 1);
+  bulkSelected.forEach((id) => {
+  queryParams.append("notifyQuestions[]", id);
+});
+const urlWithParams = `http://hhh.localhost:3000/vendor/questionnaires/view?${queryParams.toString()}`;
+
+ 
+  const payload = {
+    recipientIds: notifyPeople,
+    recordIds: bulkSelected,
+    questionURL : urlWithParams
+}
+
     const requestOptions = {
       method: "post",
       headers: {

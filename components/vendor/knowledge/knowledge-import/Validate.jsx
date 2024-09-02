@@ -41,7 +41,7 @@ const Validate = ({ knowledgeData, questions }) => {
             {questions.map((item, index) => (
               <tr
                 key={index}
-                className={index % 2 === 0 ? "bg-gray-300" : ""}
+                className={index % 2 === 0 ? "bg-gray-100" : ""}
               >
                 {Object.keys(item).map((key) => (
                   <td

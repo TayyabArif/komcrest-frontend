@@ -59,7 +59,7 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-[#ebeef2] text-[16px] 2xl:text-[20px]">
+          <tr className="bg-gray-100 text-[16px] 2xl:text-[20px]">
             <td className="border border-black px-2 py-2">Komcrest</td>
             <td className="border border-black px-2 py-2">Organization</td>
             <td className="border border-black px-2 py-2 leading-7">Do you have a team or resources dedicated to IT Security?</td>

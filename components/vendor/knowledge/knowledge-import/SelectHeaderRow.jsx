@@ -50,7 +50,7 @@ const SelectHeaderRow = ({ knowledgeData, setSelectedHeader, selectedRowIndex, s
             </thead>
             <tbody>
               {knowledgeData.questions.slice(1).map((row, rowIndex) => (
-                <tr key={rowIndex + 1} className={`${rowIndex % 2 === 0 ? 'bg-gray-300 text-[16px] 2xl:text-[20px]' : 'text-[16px] 2xl:text-[20px]'}`}>
+                <tr key={rowIndex + 1} className={`${rowIndex % 2 === 0 ? 'bg-gray-100 text-[16px] 2xl:text-[20px]' : 'text-[16px] 2xl:text-[20px]'}`}>
                   <td style={tdStyle}>
                     <input
                       type="radio"

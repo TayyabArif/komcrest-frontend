@@ -10,6 +10,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import { useDisclosure, Progress } from "@nextui-org/react";
 import DeleteModal from "../../shared/DeleteModal";
 import { ArrowRight } from 'lucide-react';
+import { handleExport } from "@/helper";
 
 
 
@@ -68,61 +69,7 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
           }
         });
   }
-  const handleExport = () => {
-    // Group data by 'sheetTag'
-    const groupedData = questionnaireData?.questionnaireRecords?.reduce((acc, record) => {
-      const { sheetTag } = record;
-      if (!acc[sheetTag]) {
-        acc[sheetTag] = [];
-      }
-      
-      // Filter the record to only include the desired properties
-      const filteredRecord = {
-        Category: record.category,
-        Question: record.question,
-        Status: record.status,
-        Compliance : record.compliance,
-        Answer: record.answer
-
-      };
-      
-      acc[sheetTag].push(filteredRecord);
-      return acc;
-    }, {});
   
-    // Create a workbook
-    const workbook = XLSX.utils.book_new();
-  
-    // Add sheets to the workbook based on 'sheetTag'
-    Object.keys(groupedData).forEach(sheetName => {
-      const sheetData = groupedData[sheetName];
-      const worksheet = XLSX.utils.json_to_sheet(sheetData);
-      XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    });
-  
-    // Convert workbook to binary format
-    const workbookBinary = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
-  
-    // Function to create a Blob from the workbook binary
-    const s2ab = (s) => {
-      const buf = new ArrayBuffer(s.length);
-      const view = new Uint8Array(buf);
-      for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-      return buf;
-    };
-  
-    // Create a Blob from the workbook binary
-    const blob = new Blob([s2ab(workbookBinary)], { type: 'application/octet-stream' });
-  
-    // Create a link element to download the file
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'excel_data.xlsx'; // Use the file name provided
-    link.click();
-  
-    // Clean up and revoke the Object URL
-    URL.revokeObjectURL(link.href);
-  };
   
 
   const handleDelete = async () => {
@@ -180,7 +127,7 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
               radius="none"
               size="sm"
               className="text-white text-sm  2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4"
-              onClick={handleExport}
+              onClick={()=>handleExport(questionnaireData?.questionnaireRecords)}
             >
               Export .XLS
             </Button>

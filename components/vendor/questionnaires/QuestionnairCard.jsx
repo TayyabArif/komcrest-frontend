@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { formatDateWithTime } from "@/helper";
 import { useDrag } from "react-dnd";
 import { useMyContext } from "@/context";
+import { handleExport } from "@/helper";
 
 
 
@@ -104,7 +105,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
           <h6>{data?.fileName}</h6>
         </div>
 
-        <div className=" text-gray-500">
+        <div className="">
           <div>
             <span className="font-bold  text-black"> Creation date </span>
             {formatDateWithTime(data?.createdAt)}
@@ -112,7 +113,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
           <div>By {data?.customerName}</div>
         </div>
 
-        <div>
+        <div className="">
           <span className="font-bold  text-black"> Last Update </span>{" "}
           {formatDateWithTime(data?.updatedAt)}
         </div>
@@ -121,42 +122,33 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
         <div className=" font-bold mt-4">
           Due date{" "}
           <span>
-            31<sup>st</sup> August 2024
+          {formatDateWithTime(data?.returnDate)}
           </span>
         </div>
         </div>
       <div className="flex  items-center justify-end gap-4 p-2">
         {data?.status !== "Completed" && (
           <div className="relative h-[9px] w-full">
-             <Progress
-              aria-label="Loading..."
-              value={questionnaireProgressBar?.processed?.percentage}
-              classNames={{
-                indicator: "bg-[#2358d3]",
-              }}
-              className="h-[9px] absolute"
-              style={{ width: "100%" }}
-            />
-            <Progress
-              aria-label="Loading..."
-              value={questionnaireProgressBar?.Flagged?.percentage}
-              className="h-[9px] absolute "
-              classNames={{
-                indicator: "bg-[#ffc001]",
-              }}
-              style={{ width: "100%" }}
-            />
-            <Progress
-              aria-label="Loading..."
-              value={questionnaireProgressBar?.approved?.percentage}
-              classNames={{
-                indicator: "bg-[#00B050]",
-              }}
-              className="h-[9px] absolute"
-              style={{ width: "100%" }}
-            />
-            
-          </div>
+          {[
+            { key: 'processed', color: 'bg-[#2358d3]', value: questionnaireProgressBar?.processed?.percentage, zIndex: 5 },
+            { key: 'Flagged', color: 'bg-[#ffc001]', value: questionnaireProgressBar?.Flagged?.percentage, zIndex: 20 },
+            { key: 'approved', color: 'bg-[#00B050]', value: questionnaireProgressBar?.approved?.percentage, zIndex: 10 },
+          ]
+            .sort((a, b) => b.value - a.value) // Sort by value in descending order
+            .map((bar, index) => (
+              <Progress
+                key={bar.key}
+                aria-label="Loading..."
+                value={bar.value}
+                classNames={{
+                  indicator: bar.color,
+                }}
+                className={`h-[9px] absolute z-${10 + index * 10}`} // Adjust z-index dynamically
+                style={{ width: "100%" }}
+              />
+            ))}
+        </div>
+        
         )}
 
         <Popover
@@ -174,7 +166,14 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
           </PopoverTrigger>
           <PopoverContent>
             <div className="px-3 py-2 space-y-1.5 text-[16px]">
-              <div className="text-small cursor-pointer ">
+              <div className="text-small cursor-pointer"
+              onClick={(e)=>{
+                e.stopPropagation();
+                handleExport(data.questionnaireRecords)
+                setOpenPopoverIndex(null);
+              }}
+              
+              >
                 Download original questionnaire
               </div>
 

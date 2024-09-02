@@ -90,7 +90,7 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows}
                 </thead>
                 <tbody>
                   {excelFile[selectedSheet].slice(1).map((row, rowIndex) => (
-                    <tr key={rowIndex} className="even:bg-[#CCCCCC] text-[16px] 2xl:text-[20px]">
+                    <tr key={rowIndex} className="even:bg-gray-100 text-[16px] 2xl:text-[20px]">
                       <td className="border p-2">
                         <input
                           type="radio"
@@ -101,7 +101,7 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows}
                         />
                       </td>
                       {row.map((cell, cellIndex) => (
-                        <td key={cellIndex} className="border p-2 text-[16px] 2xl:text-[18px]">
+                        <td key={cellIndex} className="border p-2 text-[16px] 2xl:text-[20px]">
                           {truncateText(cell, 70)}
                         </td>
                       ))}
