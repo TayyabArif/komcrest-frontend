@@ -573,9 +573,13 @@ const QuestionnairesView = () => {
                           </td>
                           <td className=" py-2 items-center ">
                             <div className="w-[90%] mx-auto">
-                              <p className="text-[12px] italic text-left pl-1">
-                                A.I.
-                              </p>
+                            <div className={`text-[12px] flex  my-2`}>
+                              {item.complianceGeneratedBy ? (
+                                <p className=" italic text-left">Manually</p>
+                              ) : (
+                                <p className=" italic text-left">A.I.</p>
+                              )}
+                            </div>
                               <select
                                 value={item.compliance}
                                 onChange={(e) =>
