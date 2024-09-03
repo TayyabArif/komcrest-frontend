@@ -6,66 +6,25 @@ import { useCookies } from "react-cookie";
 import { handleResponse } from "@/helper"; 
 import { toast } from "react-toastify";
 
-const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireProgressBar}) => {
+const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireProgressBar ,onCardDrop}) => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
   
-
-  const [{ isOver }, drop] = useDrop({
-    accept: 'CARD',
-    drop: (item) => handleDrop(item, title),
+  const [{ isOver }, dropRef] = useDrop({
+    accept: 'QUESTIONNAIRE_CARD',
+    drop: (item) => {
+      onCardDrop(item.id, title); // Call the drop function
+    },
     collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
+      isOver: monitor.isOver(), // Highlight column when dragging over
     }),
   });
 
-  const handleDrop = (item, title) => {
-    const jsonPayload = JSON.stringify({
-      status : title
-      });
-    const token = cookiesData.token;
-    let requestOptions = {
-      method: "PATCH",
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: jsonPayload,
-      redirect: "follow",
-    };
-  
-    
-      fetch(`${baseUrl}/questionnaires/${item.id}`, requestOptions)
-        .then(async (response) => {
-          const data = await handleResponse(response, router, cookies, removeCookie);
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
-            toast.success(data.message);
-            setDataUpdate((prev)=>!prev)
-          } else {
-            toast.error(data?.error || "Questionnaires status not Updated");
-            console.error("Error:", data);
-          }
-        })
-        .catch((error) => {
-          if (error.response) {
-            console.error("API Error:", error.response);
-            toast.error(error.response.data?.error || "An error occurred while Updated  Questionnaires status");
-          }
-        });
-  }
-
   return (
     <div className="w-full h-[60vh]">
-      <div  ref={drop} className=" flex-1  space-y-4 h-full rounded-md"
+      <div  ref={dropRef} className=" flex-1  space-y-4 h-full rounded-md"
       style={{
         backgroundColor: isOver ? '#F9FAFB' : '',
       }}>

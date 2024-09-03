@@ -27,15 +27,14 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
   const router = useRouter();
   const [questionnaireProgressBar, setQuestionnaireProgressBar] = useState({});
 
-
-  const [{ isDragging }, drag] = useDrag({
-    type: "CARD",
-    item: { id },
+  const [{ isDragging }, dragRef] = useDrag({
+    type: 'QUESTIONNAIRE_CARD',
+    item: { id, status }, // Dragged item
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: monitor.isDragging(), // To show dragging effect
     }),
   });
-
+  
   useEffect(() => {
     let totalQuestion = data?.questionnaireRecords.length;
 
@@ -99,7 +98,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
         }}
         className=" bg-white shadow-lg rounded-lg cursor-pointer"
       >
-        <div  ref={drag} className="p-4">
+        <div  ref={dragRef} className="p-4">
         <div className="font-bold text-lg text-black mb-2 ">
           <h6>{data?.customerName} &nbsp;</h6>
           <h6>{data?.fileName}</h6>
@@ -169,7 +168,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
               <div className="text-small cursor-pointer"
               onClick={(e)=>{
                 e.stopPropagation();
-                handleExport(data.questionnaireRecords)
+                handleExport(data.questionnaireRecords , "downloadOriginal")
                 setOpenPopoverIndex(null);
               }}
               

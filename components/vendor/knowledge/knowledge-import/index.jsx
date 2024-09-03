@@ -392,9 +392,9 @@ const submitData = () => {
                   }}
                   radius="none"
                   size="sm"
-                  className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-gray-200 w-max rounded-[4px] "
+                  className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200  text-red-500   w-max rounded-[4px] "
                 >
-                  Back
+                  {stepper === 0 ? "Cancel" : "Back"}
                 </Button>
                 <Button
                   onClick={() => {

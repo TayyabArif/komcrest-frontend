@@ -112,7 +112,7 @@ export function formatDateWithTime(dateString) {
 
 
   /// exoort questionnire data 
-  export const handleExport = (data) => {
+  export const handleExport = (data , type) => {
     // Group data by 'sheetTag'
     const groupedData = data?.reduce((acc, record) => {
       const { sheetTag } = record;
@@ -125,8 +125,8 @@ export function formatDateWithTime(dateString) {
         Category: record.category,
         Question: record.question,
         Status: record.status,
-        Compliance : record.compliance,
-        Answer: record.answer
+        ...(!type ? { Compliance: record.compliance, Answer: record.answer } : {})
+        
 
       };
       

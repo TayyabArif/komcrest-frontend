@@ -10,7 +10,6 @@ const HistoryDetail = ({ selectedId }) => {
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [historyRecord, setHistoryRecord] = useState([]);
-
   const fetchQuestionnaireRecordHistory = async () => {
     const token = cookiesData && cookiesData.token;
     const requestOptions = {

@@ -76,13 +76,13 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
 
   return (
     <div>
-      <div className="flex flex-wrap  w-[85%] mx-auto py-6 gap-[3.4rem]">
+      <div className="flex flex-wrap   w-[85%] mx-auto py-6 gap-[3.4rem]">
         {cardData &&
           cardData.map((item, index) => {
             return (
               <div
                 key={index}
-                className="w-[21%] h-[200px] bg-white rounded-lg p-2 px-4 flex flex-col justify-between"
+                className="w-[21%] h-auto bg-white rounded-lg p-2 px-4 flex flex-col justify-between"
               >
                 <div
                   className=""

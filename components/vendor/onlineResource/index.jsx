@@ -165,7 +165,7 @@ const OnlineResourceComponent = () => {
     <div>
       <KnowledgeHeader headerData={headerData} buttonShow={onlineResourceData.length > 0 ? true : false} />
       {onlineResourceData.length > 0 ? (
-        <div className=" w-[85%] mx-auto overflow-x-auto h-[78vh] mt-10">
+        <div className=" w-[85%] mx-auto  h-[78vh] mt-10">
           <div className="flex justify-end h-[40px]">
           {bulkDeleted.length > 0 && (
             <Button
@@ -212,7 +212,8 @@ const OnlineResourceComponent = () => {
                 <th className="bg-gray-200 p-1  font-bold md:border md:border-gray-300 text-left block md:table-cell">
                   Indexation method
                 </th>
-                <th className="bg-gray-200 p-2  font-bold md:border md:border-gray-300 text-left block md:table-cell">
+                <th className="px-4    pr-7 border-b-0  outline outline-[#d1cece] text-left sticky -right-[1px] bg-gray-200"
+                      style={{ outlineWidth: "1px" }}>
                   Actions
                 </th>
               </tr>
@@ -221,7 +222,7 @@ const OnlineResourceComponent = () => {
               {onlineResourceData.map((item, index) => (
                 <tr
                   key={index}
-                  className="bg-white border border-gray-300 md:border-none block md:table-row text-[16px] 2xl:text-[20px]"
+                  className={` ${index % 2 === 0 ? 'bg-gray-100':"bg-white"} border border-gray-300 md:border-none block md:table-row text-[16px] 2xl:text-[20px]`}
                 >
                   <td className="py-2 px-4 border border-gray-300">
                           <Checkbox
@@ -268,7 +269,8 @@ const OnlineResourceComponent = () => {
                   <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">
                     {item.indexing}
                   </td>
-                  <td className="md:border md:border-gray-300  md:table-cell pl-[20px]">
+                  <td className={`outline border outline-[#e9e6e6] sticky -right-[1px]  pl-9 ${index % 2 === 0 ? 'bg-gray-100':"bg-white"}`}
+                          style={{ outlineWidth: "1px" }}>
                     <Popover
                       className="rounded-[0px]"
                       isOpen={openPopoverIndex === index}

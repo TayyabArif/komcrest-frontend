@@ -145,7 +145,11 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
           </PopoverTrigger>
           <PopoverContent>
             <div className="px-3 py-2 space-y-1.5 text-[16px]">
-              <div className="text-small cursor-pointer ">
+              <div className="text-small cursor-pointer"
+              onClick={()=> {
+                handleExport(questionnaireData?.questionnaireRecords , "downloadOriginal")
+                setDropDownOpen(false)
+                }}>
                 Download original questionnaire
               </div>
 

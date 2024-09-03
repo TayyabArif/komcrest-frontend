@@ -7,6 +7,7 @@ import { formatCamelCaseString } from "@/helper";
 import { useCookies } from "react-cookie";
 import { handleResponse } from "@/helper"; 
 import { useRouter } from "next/router";
+import { useMyContext } from "@/context";
 
 
 const filterHeader = [
@@ -15,7 +16,7 @@ const filterHeader = [
     { name: "Compliance", value: "compliance" },
     { name: "Answer", value: "answer" },
     { name: "Status", value: "status" },
-   
+    { name: "Notify User", value: "notifiedUserIds" },
   ];
 
 
@@ -49,14 +50,6 @@ const ComplianceOptions = [
 },
 ]
   
-
-
-
-
-
-
-
-
   const createInitialFilters = (headers) => {
     return headers.map((header) => ({
       name: header.value,
@@ -67,6 +60,11 @@ const ComplianceOptions = [
 const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filters, setShow ,komcrestCategories ,questionData ,companyProducts ,documentData , DocumentFile}) => {
   const [selectedOne, setSelectedOne] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
+  const [compnayUserList , setCompanyUserList] = useState([])
+  const { companyUserData } = useMyContext();
+  
+
+
   const childFunction = () => {
     handleClearAll()
   };
@@ -76,12 +74,17 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
   // }, [triggerFunction]);
 
   useEffect(() => {
+
+    //transform compnay userdata
+    setCompanyUserList(
+      companyUserData.map((data) => ({
+        text: data.label,
+        value: data.value
+      }))
+    );
+    
     if(filters?.length === 0 ){
-      alert("ok")
         setFilters(createInitialFilters(filterHeader));
-    }else{
-      alert("LLLLLL")
-      setFilters(createInitialFilters(filterHeader));
     }
   }, [setFilters]);
 
@@ -89,7 +92,7 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
     console.log('Current Filters:', filterType); // Add this line
     console.log('Selected Value:', value); 
     setFilters((prevFilters) => {
-      const isSpecialFilter = [ "status","compliance"].includes(filterType);
+      const isSpecialFilter = [ "status","compliance","notifiedUserIds"].includes(filterType);
       let updatedFilters = [...prevFilters];
       const filterIndex = updatedFilters.findIndex((filter) => filter.name === filterType);
   
@@ -192,6 +195,16 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
               options={ComplianceOptions}
             />
           );
+          case "notifiedUserIds":
+            return (
+              <CheckboxComponent
+                selectedValues={
+                  filters?.find((filter) => filter.name === "notifiedUserIds")?.value || []
+                }
+                handleFilterChange={(value) => handleFilterChange("notifiedUserIds", value)}
+                options={compnayUserList}
+              />
+            );
       default:
         return (
           <Search
