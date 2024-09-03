@@ -11,7 +11,6 @@ import { useMyContext } from "@/context";
 
 
 const Login = ({ type }) => {
-
   const [cookies, setCookie, removeCookie] = useCookies(['myCookie']);
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -71,7 +70,8 @@ const Login = ({ type }) => {
             role: data.user.role,
             companyType: data.user?.Company?.companyType,
             companyId : data.user.companyId,
-            userName : data.user.firstName
+            userName : data.user.firstName,
+            userId :  data.user.id
           };
          
           setCookie('myCookie',  userData, { path: '/' });

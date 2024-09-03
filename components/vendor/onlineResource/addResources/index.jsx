@@ -425,9 +425,9 @@ const AddResource = () => {
                       onClick={handleCancelClick}
                       radius="none"
                       size="sm"
-                      className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-gray-200 w-max rounded-[4px]"
+                      className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500  w-max rounded-[4px]"
                     >
-                      Cancel
+                      {stepper === 0 ? "Cancel" : "Back"}
                     </Button>
                     <Button
                       onClick={handleNextClick}

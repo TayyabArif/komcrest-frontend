@@ -14,6 +14,7 @@ export const MyProvider = ({ children }) => {
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     const router = useRouter();
     const companyId = cookiesData?.companyId;
+    const userId = cookiesData?.userId;
     const token = cookiesData && cookiesData.token;
     const [dataUpdated ,setDataUpdated] = useState(false)
 
@@ -56,8 +57,13 @@ export const MyProvider = ({ children }) => {
             value: item.id,
             label: item.firstName,
         }));
-        setCompanyUserData(curatorOptions);
-        console.log("user Listttttttttttttttttttttttt,", curatorOptions);
+
+        // remover login user and save
+
+        const filterData = () => {
+          return curatorOptions.filter((user) => user.value !== userId);
+        };
+        setCompanyUserData(filterData);
       } else {
         toast.error(data?.error);
       }

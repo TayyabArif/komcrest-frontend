@@ -15,6 +15,7 @@ export function middleware(request) {
     '/login',
     '/unauthorized',
     '/vendor/login/access',
+    '/vendor/login/password-recovery/request',
     '/vendor/login/password-confimation' // Added this route to unprotectedRoutes
   ];
 
@@ -60,7 +61,7 @@ export function middleware(request) {
       // Check if the route is a vendor route
       if (isVendorRoute) {
         // Only users with role 'Admin' and company type 'vendor' can access vendor routes
-        if (role !== 'Admin' || companyType !== 'vendor') {
+        if (companyType !== 'vendor') {
           return NextResponse.redirect(new URL('/vendor/login/access', request.url));
         }
       }

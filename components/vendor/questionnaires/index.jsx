@@ -7,6 +7,7 @@ import FilterStatus from "./FilterStatus";
 import QuestionnairCard from "./QuestionnairCard";
 import { QuestionnaireStepsContent } from "@/constants";
 import { CircularProgress} from "@nextui-org/react";
+import { toast } from "react-toastify";
 
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -32,8 +33,6 @@ const Questionnaires = () => {
   const [questionnaireList , setQuestionnaireList] = useState([])
   const [questionnaireProgressBar ,setQuestionnaireProgressBar] = useState({})
   const [dataLoaded , setDataLoaded] = useState(false)
-
-
   
   const fetchAllQuestionnaires = async () => {
     const token = cookiesData && cookiesData.token;
@@ -75,6 +74,64 @@ const Questionnaires = () => {
     return filteredData;
   };
 
+
+
+
+
+
+
+  const handleCardDrop = (id, newStatus) => {
+
+    // instantly drop 
+    setQuestionnaireList(prevList =>
+      prevList.map(item =>
+        item.id === id ? { ...item, status: newStatus } : item
+      )
+    );
+
+   //call api to change status
+
+   const jsonPayload = JSON.stringify({
+    status : newStatus
+    });
+  const token = cookiesData.token;
+  let requestOptions = {
+    method: "PATCH",
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: jsonPayload,
+    redirect: "follow",
+  };
+
+  
+    fetch(`${baseUrl}/questionnaires/${id}`, requestOptions)
+      .then(async (response) => {
+        const data = await handleResponse(response, router, cookies, removeCookie);
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          toast.success(data.message);
+          setDataUpdate((prev)=>!prev)
+        } else {
+          toast.error(data?.error || "Questionnaires status not Updated");
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error("API Error:", error.response);
+          toast.error(error.response.data?.error || "An error occurred while Updated  Questionnaires status");
+        }
+      });
+  };
+
   return (
     <>
   {dataLoaded ? (
@@ -93,10 +150,10 @@ const Questionnaires = () => {
          
           <div className="flex gap-3">
           <DndProvider backend={HTML5Backend}>
-          <FilterStatus title="To Process" data={filterStatus("To Process")} stepsContent={QuestionnaireStepsContent.process} setDataUpdate={setDataUpdate} />
-          <FilterStatus title="Started" data={filterStatus("Started")} stepsContent={QuestionnaireStepsContent.Started}  setDataUpdate={setDataUpdate} />
-          <FilterStatus title="For Review" data={filterStatus("For Review")} stepsContent={QuestionnaireStepsContent.Review} setDataUpdate={setDataUpdate} />
-          <FilterStatus title="Approved" data={filterStatus("Approved")} stepsContent={QuestionnaireStepsContent.Approved} setDataUpdate={setDataUpdate} />
+          <FilterStatus onCardDrop={handleCardDrop} title="To Process" data={filterStatus("To Process")} stepsContent={QuestionnaireStepsContent.process} setDataUpdate={setDataUpdate} />
+          <FilterStatus onCardDrop={handleCardDrop} title="Started" data={filterStatus("Started")} stepsContent={QuestionnaireStepsContent.Started}  setDataUpdate={setDataUpdate} />
+          <FilterStatus onCardDrop={handleCardDrop} title="For Review" data={filterStatus("For Review")} stepsContent={QuestionnaireStepsContent.Review} setDataUpdate={setDataUpdate} />
+          <FilterStatus onCardDrop={handleCardDrop} title="Approved" data={filterStatus("Approved")} stepsContent={QuestionnaireStepsContent.Approved} setDataUpdate={setDataUpdate} />
           </DndProvider>
         </div>
        
@@ -124,3 +181,13 @@ const Questionnaires = () => {
 };
 
 export default Questionnaires;
+
+
+
+
+
+
+
+
+
+

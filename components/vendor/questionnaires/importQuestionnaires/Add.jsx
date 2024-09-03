@@ -29,7 +29,6 @@ const Add = ({
   const { companyUserData, companyProducts } = useMyContext();
   const [companyUserDataOptions, setCompanyUserDataOptions] = useState([]);
   const [dataLoaded, setDataIsLoaded] = useState(false);
-
   const allowedFileTypes = [
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel
     "text/csv", // CSV
