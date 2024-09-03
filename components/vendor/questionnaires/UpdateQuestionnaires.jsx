@@ -186,7 +186,7 @@ const UpdateQuestionnaires = () => {
             <div className="w-[45%] space-y-6 ">
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">
-                  Customer or prospect name
+                  Customer or prospect name <span className="text-red-500">*</span>
                 </label>
                 <Input
                   type="text"
@@ -203,7 +203,7 @@ const UpdateQuestionnaires = () => {
               </div>
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">
-                  Customer or prospect domain name
+                  Customer or prospect domain name <span className="text-red-500">*</span>
                 </label>
                 <Input
                   type="text"
@@ -220,7 +220,7 @@ const UpdateQuestionnaires = () => {
               </div>
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">
-                  Questionnaire type
+                  Questionnaire type <span className="text-red-500">*</span>
                 </label>
                 <div className="gap-y-2 gap-10 flex flex-wrap my-1">
                   {questionnaireTypeList?.map((item, index) => (
@@ -264,7 +264,7 @@ const UpdateQuestionnaires = () => {
             <div className="w-[45%] space-y-6 pt-3">
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">
-                  In scope product(s)*
+                  In scope product(s) <span className="text-red-500">*</span>
                 </label>
                 <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
                   {companyProducts?.map((item, index) => (
@@ -287,7 +287,7 @@ const UpdateQuestionnaires = () => {
 
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">
-                  Date to return the questionnaire to the client or prospect
+                  Date to return the questionnaire to the client or prospect <span className="text-red-500">*</span>
                 </label>
                 <div className="">
                   <input
@@ -301,7 +301,7 @@ const UpdateQuestionnaires = () => {
                 </div>
               </div>
               <div>
-                <label className="text-[16px] 2xl:text-[20px]">Language</label>
+                <label className="text-[16px] 2xl:text-[20px]">Language <span className="text-red-500">*</span></label>
                 <SingleSelect
                   variant="bordered"
                   className="w-full bg-transparent text-[15px]"

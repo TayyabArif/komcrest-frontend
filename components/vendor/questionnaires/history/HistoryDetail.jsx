@@ -73,12 +73,10 @@ const HistoryDetail = ({ selectedId }) => {
           <div className="">
             
             <div className="flex gap-3">
-            <h1>Modify the Answer by</h1>
-            <p className="font-bold">{record.user.firstName}</p>
-            
+            <h1>Modify the answer</h1>     
             </div>
-            <h1>Answer</h1>
-            <h1>{record.currentValue}</h1>
+            <h1>Answer: {record.currentValue}</h1>
+            <h1></h1>
            
           </div>
         );
@@ -88,12 +86,10 @@ const HistoryDetail = ({ selectedId }) => {
             <div className="">
               
               <div className="flex gap-3">
-              <h1>Modify the Answer by</h1>
-              <p className="font-bold">{record.user.firstName}</p>
-              
+              <h1>Improved the answered using Komcrest AI.</h1>          
               </div>
-              <h1>Answer</h1>
-              <h1>{record.currentValue}</h1>
+              {/* <h1>Answer: {record.currentValue}</h1>
+              <h1></h1> */}
              
             </div>
           );
@@ -103,12 +99,8 @@ const HistoryDetail = ({ selectedId }) => {
             <div className="">
               
               <div className="flex gap-3">
-              <h1>Notified tayyab for help</h1>
-              <p className="font-bold">{record.user.firstName}</p>
-              
+              <h1>Notified <span className="font-bold">{record.user.firstName}</span> for help</h1>             
               </div>
-              <h1>Answer</h1>
-              <h1>{record.currentValue}</h1>
              
             </div>
           );

@@ -41,7 +41,7 @@ const NotifyModal = ({
   bulkSelected.forEach((id) => {
   queryParams.append("notifyQuestions[]", id);
 });
-const urlWithParams = `http://hhh.localhost:3000/vendor/questionnaires/view?${queryParams.toString()}`;
+const urlWithParams = `http://lilawop.localhost:3000/vendor/questionnaires/view?${queryParams.toString()}`;
 
  
   const payload = {

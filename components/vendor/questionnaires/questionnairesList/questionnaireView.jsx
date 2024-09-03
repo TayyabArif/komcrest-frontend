@@ -581,7 +581,7 @@ const QuestionnairesView = () => {
                             <div className="w-[90%] mx-auto">
                             <div className={`text-[12px] flex  my-2`}>
                               {item.complianceGeneratedBy ? (
-                                <p className=" italic text-left">Manually</p>
+                                <p className=" italic text-left">Updated</p>
                               ) : (
                                 <p className=" italic text-left">A.I.</p>
                               )}
