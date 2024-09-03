@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -29,6 +29,13 @@ const NotifyModal = ({
   const handleMultipleSelect = (selectedOptions, actionMeta) => {
     setNotifyPeople(selectedOptions ? selectedOptions.map(option => option.value) : []);
   };
+  const [currentbaseUrl, setCurrentBaseUrl] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentBaseUrl(window.location.origin);
+    }
+  }, []);
 
   const handleSubmit = () => {
     console.log("Notifying:", notifyPeople);
@@ -41,7 +48,7 @@ const NotifyModal = ({
   bulkSelected.forEach((id) => {
   queryParams.append("notifyQuestions[]", id);
 });
-const urlWithParams = `http://lilawop.localhost:3000/vendor/questionnaires/view?${queryParams.toString()}`;
+const urlWithParams = `${currentbaseUrl}/vendor/questionnaires/view?${queryParams.toString()}`;
 
  
   const payload = {

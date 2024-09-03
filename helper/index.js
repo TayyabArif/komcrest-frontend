@@ -124,8 +124,7 @@ export function formatDateWithTime(dateString) {
       const filteredRecord = {
         Category: record.category,
         Question: record.question,
-        Status: record.status,
-        ...(!type ? { Compliance: record.compliance, Answer: record.answer } : {})
+        ...(!type ? {Status: record.status, Compliance: record.compliance, Answer: record.answer } : {})
         
 
       };
