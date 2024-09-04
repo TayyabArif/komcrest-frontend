@@ -14,8 +14,6 @@ import { useDrag } from "react-dnd";
 import { useMyContext } from "@/context";
 import { handleExport } from "@/helper";
 
-
-
 const deleteModalContent = "Are you sure to delete this Questionnaires?";
 
 const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
@@ -28,13 +26,13 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
   const [questionnaireProgressBar, setQuestionnaireProgressBar] = useState({});
 
   const [{ isDragging }, dragRef] = useDrag({
-    type: 'QUESTIONNAIRE_CARD',
+    type: "QUESTIONNAIRE_CARD",
     item: { id, status }, // Dragged item
     collect: (monitor) => ({
       isDragging: monitor.isDragging(), // To show dragging effect
     }),
   });
-  
+
   useEffect(() => {
     let totalQuestion = data?.questionnaireRecords.length;
 
@@ -91,116 +89,129 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
   return (
     <div>
       <div
-       
-        onClick={() =>{
-          router.push(`/vendor/questionnaires/view?name=${data.customerName}`)
-          localStorage.setItem('QuestionnaireId',(data.id));
+        onClick={() => {
+          router.push(`/vendor/questionnaires/view?name=${data.customerName}`);
+          localStorage.setItem("QuestionnaireId", data.id);
         }}
         className=" bg-white shadow-lg rounded-lg cursor-pointer"
       >
-        <div  ref={dragRef} className="p-4">
-        <div className="font-bold text-lg text-black mb-2 ">
-          <h6>{data?.customerName} &nbsp;</h6>
-          <h6>{data?.fileName}</h6>
-        </div>
-
-        <div className="">
-          <div>
-            <span className="font-bold  text-black"> Creation date </span>
-            {formatDateWithTime(data?.createdAt)}
+        <div ref={dragRef} className="p-4">
+          <div className="font-bold text-lg text-black mb-2 ">
+            <h6>{data?.customerName} &nbsp;</h6>
+            <h6>{data?.fileName}</h6>
           </div>
-          <div>By {data?.customerName}</div>
-        </div>
 
-        <div className="">
-          <span className="font-bold  text-black"> Last Update </span>{" "}
-          {formatDateWithTime(data?.updatedAt)}
-        </div>
-        <div>By {data?.customerName}</div>
+          <div className="">
+            <div>
+              <span className="font-bold  text-black"> Creation date </span>
+              {formatDateWithTime(data?.createdAt)}
+            </div>
+            <div>By {data?.customerName}</div>
+          </div>
 
-        <div className=" font-bold mt-4">
-          Due date{" "}
-          <span>
-          {formatDateWithTime(data?.returnDate)}
-          </span>
+          <div className="">
+            <span className="font-bold  text-black"> Last Update </span>{" "}
+            {formatDateWithTime(data?.updatedAt)}
+          </div>
+          <div>By Richard Branco</div>
+
+          <div className=" font-bold mt-4">
+            Due date <span>{formatDateWithTime(data?.returnDate)}</span>
+          </div>
         </div>
-        </div>
-      <div className="flex  items-center justify-end gap-4 p-2">
-        {data?.status !== "Completed" && (
-          <div className="relative h-[9px] w-full">
-          {[
-            { key: 'processed', color: '!bg-[#3b82f6]', value: questionnaireProgressBar?.processed?.percentage, zIndex: 5 },
-            { key: 'Flagged', color: 'bg-[#eab308]', value: questionnaireProgressBar?.Flagged?.percentage, zIndex: 20 },
-            { key: 'approved', color: 'bg-[#00B050]', value: questionnaireProgressBar?.approved?.percentage, zIndex: 10 },
-          ]
-            .sort((a, b) => b.value - a.value) // Sort by value in descending order
-            .map((bar, index) => (
+        <div className="flex items-center justify-end gap-4 p-2">
+          {data?.status !== "Completed" && (
+            <div className="relative h-[9px] w-full">
+              {/* Default blue progress bar */}
               <Progress
-                key={bar.key}
                 aria-label="Loading..."
-                value={bar.value}
+                value={100} // Full width
                 classNames={{
-                  indicator: bar.color,
+                  indicator: "bg-[#2358d3]", // Blue color
                 }}
-                className={`h-[9px] absolute z-${10 + index * 10}`} // Adjust z-index dynamically
+                className="h-[9px] absolute z-10"
                 style={{ width: "100%" }}
               />
-            ))}
-        </div>
-        
-        )}
 
-        <Popover
-          className="rounded-[0px]"
-          isOpen={openPopoverIndex === index}
-          onOpenChange={(open) => setOpenPopoverIndex(open ? index : null)}
-        >
-          <PopoverTrigger>
-            <Settings
-              size={25}
-              className="cursor-pointer"
-              color="#2457d7"
-              strokeWidth={2}
-            />
-          </PopoverTrigger>
-          <PopoverContent>
-            <div className="px-3 py-2 space-y-1.5 text-[16px]">
-              <div className="text-small cursor-pointer"
-              onClick={(e)=>{
-                e.stopPropagation();
-                handleExport(data.questionnaireRecords , "downloadOriginal")
-                setOpenPopoverIndex(null);
-              }}
-              
-              >
-                Download original questionnaire
-              </div>
-
-              <div
-                className="text-small cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  router.push(`/vendor/questionnaires/update?id=${data.id}`);
-                }}
-              >
-                Update info
-              </div>
-
-              <div
-                className="text-small text-red-600 cursor-pointer "
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onOpen();
-                  setOpenPopoverIndex(null);
-                }}
-              >
-                Delete
-              </div>
+              {/* Dynamically sorted progress bars */}
+              {[
+                {
+                  key: "Flagged",
+                  color: "bg-[#ffc001]",
+                  value: questionnaireProgressBar?.Flagged?.percentage || 0,
+                },
+                {
+                  key: "approved",
+                  color: "bg-[#00B050]",
+                  value: questionnaireProgressBar?.approved?.percentage || 0,
+                },
+              ]
+                .sort((a, b) => a.value - b.value) // Sort by value in ascending order
+                .map((bar, index) => (
+                  <Progress
+                    key={bar.key}
+                    aria-label="Loading..."
+                    value={100}
+                    classNames={{
+                      indicator: bar.color,
+                    }}
+                    className={`h-[9px] absolute z-${30 - index * 10}`} // Adjust z-index dynamically: lower value, higher z-index
+                    style={{ width: `${bar.value}%` }}
+                  />
+                ))}
             </div>
-          </PopoverContent>
-        </Popover>
-      </div>
-    
+          )}
+
+          <Popover
+            className="rounded-[0px]"
+            isOpen={openPopoverIndex === index}
+            onOpenChange={(open) => setOpenPopoverIndex(open ? index : null)}
+          >
+            <PopoverTrigger>
+              <Settings
+                size={25}
+                className="cursor-pointer"
+                color="#2457d7"
+                strokeWidth={2}
+              />
+            </PopoverTrigger>
+            <PopoverContent>
+              <div className="px-3 py-2 space-y-1.5 text-[16px]">
+                <div
+                  className="text-small cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleExport(data.questionnaireRecords, "downloadOriginal");
+                    setOpenPopoverIndex(null);
+                  }}
+                >
+                  Download original questionnaire
+                </div>
+
+                <div
+                  className="text-small cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push(`/vendor/questionnaires/update?id=${data.id}`);
+                  }}
+                >
+                  Update info
+                </div>
+
+                <div
+                  className="text-small text-red-600 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpen();
+                    setOpenPopoverIndex(null);
+                  }}
+                >
+                  Delete
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
       <DeleteModal
         isOpen={isOpen}

@@ -169,7 +169,7 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
             isRequired
             value={formData.confirmPassword}
             onChange={handleChange}
-            name="confirmPassword"
+            name="ConfirmPassword"
             size="md"
             type={isConfirmPassowrdVisible ? "text" : "password"}
             placeholder="confirm password"

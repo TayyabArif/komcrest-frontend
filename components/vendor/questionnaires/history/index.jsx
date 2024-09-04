@@ -14,7 +14,7 @@ const History = ({selectedId ,setShowHistory ,setSelectedId}) => {
   };
 
   return (
-    <div className="bg-[#F2F2F2] px-5 h-screen">
+    <div className="bg-[#F2F2F2] px-5 h-screen overflow-scroll">
       <div className="flex justify-between  items-center sticky top-0 py-5 z-50 bg-[#F2F2F2] ">
         <div className="flex items-center justify-between gap-10">
            <h1 onClick={()=>{

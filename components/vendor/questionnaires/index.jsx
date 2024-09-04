@@ -45,7 +45,7 @@ const Questionnaires = () => {
     };
 
     try {
-      const response = await fetch(`${baseUrl}/questionnaires`, requestOptions);
+      const response = await fetch(`${baseUrl}/questionnaires/filtered`, requestOptions);
       const data = await handleResponse(
         response,
         router,
@@ -55,6 +55,8 @@ const Questionnaires = () => {
       if (response.ok) {
         setQuestionnaireList(data.questionnaires);
         setDataLoaded(true)
+        console.log("000000000",data.questionnaires)
+
       } else {
         toast.error(data?.error);
       }

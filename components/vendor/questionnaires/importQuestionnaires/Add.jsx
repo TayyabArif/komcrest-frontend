@@ -331,7 +331,7 @@ const Add = ({
             onChange={handleMultipleSelect}
           />
         </div>
-        <div>
+        {/* <div>
           <label className="text-[16px] 2xl:text-[20px]">
             Assignees – Who will review and validate the questionnaire
           </label>
@@ -345,7 +345,7 @@ const Add = ({
             onChange={handleMultipleSelect}
             styles={multipleSelectStyle}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
