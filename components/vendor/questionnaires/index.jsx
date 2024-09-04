@@ -45,7 +45,7 @@ const Questionnaires = () => {
     };
 
     try {
-      const response = await fetch(`${baseUrl}/questionnaires`, requestOptions);
+      const response = await fetch(`${baseUrl}/questionnaires/filtered`, requestOptions);
       const data = await handleResponse(
         response,
         router,
