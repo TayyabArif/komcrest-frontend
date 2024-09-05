@@ -139,7 +139,10 @@ export const MyProvider = ({ children }) => {
     }
   };
   useEffect(()=>{
-    fetchAllQuestionnaires()
+    if(token){
+      fetchAllQuestionnaires()
+    }
+
   },[questionnaireUpdated])
 
 

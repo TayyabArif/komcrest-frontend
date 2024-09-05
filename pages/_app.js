@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 export default function App({ Component, pageProps }) {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const router = useRouter()
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
