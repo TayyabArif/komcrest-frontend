@@ -79,20 +79,20 @@ const urlWithParams = `${currentbaseUrl}/vendor/questionnaires/view?${queryParam
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="lg"
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl"
     classNames={{
-      body: "py-6 h-[300px]",
+      body: "py-6 min-h-[300px] overflow-y-scroll",
      
     }}>
       <ModalContent>
-        <ModalBody className="py-12 flex h-auto flex-col justify-center items-center gap-5">
+        <ModalBody className="!py-12 flex h-auto flex-col justify-center items-center gap-5">
           <p className="text-[18px] 2xl:text-[20px] font-semibold">
             Who do you want to notify to review this question?
           </p>
           <div className="w-full text-[18px] 2xl:text-[20px]">
             <Select
               isMulti
-              options={allCollaborators} // Ensure this array has {value, label} format
+              options={allCollaborators}
               name="assignees"
               onChange={handleMultipleSelect}
               styles={multipleSelectStyle}

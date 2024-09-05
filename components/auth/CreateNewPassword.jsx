@@ -20,7 +20,7 @@ const CreateNewPassword = ({type}) => {
           <Input
             size="md"
             type="text"
-            placeholder="confirm password"
+            placeholder="Confirm password"
             className="mt-5"
             classNames={{ inputWrapper: "h-[50px]" }}
           />
