@@ -70,7 +70,7 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
           <Input
             isRequired
             type="text"
-            value={formData.firstName}
+            value={formData?.firstName}
             onChange={handleChange}
             name="firstName"
             label="First name"
