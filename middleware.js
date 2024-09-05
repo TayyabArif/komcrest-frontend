@@ -7,7 +7,7 @@ export function middleware(request) {
   const myCookie = cookies.get('myCookie');
   const { pathname } = request.nextUrl;
 
-  console.log(">>>>>",pathname)
+  console.log("+++++++++",pathname)
 
   // Exclude login and unauthorized routes from protection
   const unprotectedRoutes = [

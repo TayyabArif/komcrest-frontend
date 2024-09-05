@@ -219,7 +219,7 @@ const OnlineResourceComponent = () => {
               </tr>
             </thead>
             <tbody className="block md:table-row-group">
-              {onlineResourceData.map((item, index) => (
+              {onlineResourceData?.sort((a, b) => b.id - a.id)?.map((item, index) => (
                 <tr
                   key={index}
                   className={` ${index % 2 === 0 ? 'bg-gray-100':"bg-white"} border border-gray-300 md:border-none block md:table-row text-[16px] 2xl:text-[20px]`}

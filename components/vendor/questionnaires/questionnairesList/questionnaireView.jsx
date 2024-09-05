@@ -26,6 +26,7 @@ const deleteModalContent = "Are you sure to delete Questions";
 const QuestionnairesView = () => {
   const router = useRouter();
   const [showHistory, setShowHistory] = useState(false);
+  const { setQuestionnaireUpdated  } = useMyContext();
   let id;
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -40,11 +41,13 @@ const QuestionnairesView = () => {
   const [isHeaderChecked, setIsHeaderChecked] = useState(false);
   const [deleteAction, setDeleteAction] = useState("");
   const [questionnaireData, setQuestionnaireData] = useState({});
-  const [answerIsUpdate, setAnswerIsUpdate] = useState(false);
+  const [answerIsUpdate, setAnswerIsUpdate] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState([]);
   const [dropDownOpen, setDropDownOpen] = useState(false);
+
+  const [allCollaborators , setAllCollaborators] = useState([])
 
   // filter data after notification
   useEffect(() => {
@@ -98,7 +101,13 @@ const QuestionnairesView = () => {
         setCurrentStatus(data.questionnaire.status);
         setQuestionnaireData(data?.questionnaire);
         setDataLoaded(true);
-        console.log(">>>>>>>>>>>>>", data);
+
+        const transformCollaborator = data?.questionnaire.collaborators.map((item) => ({
+          value: item.id,
+          label: item.firstName,
+      }));
+      setAllCollaborators(transformCollaborator)
+        console.log("::::::::::", data);
       } else {
         toast.error(data?.error);
       }
@@ -130,7 +139,6 @@ const QuestionnairesView = () => {
       payload = [...payload, id];
     }
     setBulkSelected(payload);
-    console.log(">>>>>>>>>>>>", payload);
   };
   const handleHeaderCheckboxChange = () => {
     if (isHeaderChecked) {
@@ -283,11 +291,11 @@ const QuestionnairesView = () => {
             toast.success(data.message);
           }
           setDataUpdate(!dataUpdate);
+          setQuestionnaireUpdated ((prev)=>!prev)
           if (property == "answer") {
             let newArr = bulkSelected.filter((item) => item !== id[0]);
             setBulkSelected(newArr);
             setSelectedId("");
-            setAnswerIsUpdate(false);
           } else {
             setBulkSelected([]);
           }
@@ -457,7 +465,7 @@ const QuestionnairesView = () => {
                         <div
                           className="text-md cursor-pointer"
                           onClick={() => {
-                            setAnswerIsUpdate(true);
+                            setAnswerIsUpdate("multiple");
                             setDropDownOpen(false);
                           }}
                         >
@@ -621,22 +629,19 @@ const QuestionnairesView = () => {
                               )}
                             </div>
                             <textarea
-                              disabled={
-                                updateMultipleAnswer(item.id) === true &&
-                                answerIsUpdate === true
-                              }
+                               disabled={answerIsUpdate === "multiple" ? !updateMultipleAnswer(item.id) : false}
                               onChange={(e) => {
                                 handleChange(index, e.target.value);
-                                // Automatically adjust the height based on content
-                                e.target.style.height = 'auto'; // Reset the height
-                                alert(e.target.scrollHeight)
-                                e.target.style.height = `${e.target.scrollHeight}px`; // Set the height to the scroll height
                               }}
-                              onClick={() => {
+                              onClick={(e) => {
                                 if (bulkSelected.length == 0) {
                                   setSelectedId(item.id);
-                                  setAnswerIsUpdate(true);
+                                  setAnswerIsUpdate("single");
                                 }
+
+                                e.target.style.height = 'auto'; // Reset the height
+                                e.target.style.height = `${e.target.scrollHeight}px`; 
+
                               }}
                               value={item.answer}
                               className={`w-full  rounded-md focus:outline-none focus:ring-2 focus:px-2  ${
@@ -799,7 +804,7 @@ const QuestionnairesView = () => {
                         colSpan={6}
                         className="py-5  px-4 text-center text-gray-500 text-18px"
                       >
-                        { " No data match for this filter"}
+                         No Question found 
                       </td>
                     </tr>
                       
@@ -823,6 +828,7 @@ const QuestionnairesView = () => {
             onOpenChange={notifyDisclosure.onOpenChange}
             bulkSelected={bulkSelected}
             setBulkSelected={setBulkSelected}
+            allCollaborators={allCollaborators}
           />
 
           <DeleteModal

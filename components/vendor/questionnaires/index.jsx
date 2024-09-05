@@ -11,7 +11,8 @@ import { toast } from "react-toastify";
 
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-// import DragCard from "./DragCard" 
+import { useMyContext } from "@/context";
+
 
 const headerData = {
   title: "Questionnaires",
@@ -30,42 +31,47 @@ const Questionnaires = () => {
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [dataUpdate , setDataUpdate] = useState(false)
-  const [questionnaireList , setQuestionnaireList] = useState([])
+  // const [questionnaireList , setQuestionnaireList] = useState([])
   const [questionnaireProgressBar ,setQuestionnaireProgressBar] = useState({})
-  const [dataLoaded , setDataLoaded] = useState(false)
-  
-  const fetchAllQuestionnaires = async () => {
-    const token = cookiesData && cookiesData.token;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
+  const [dataLoaded , setDataLoaded] = useState(true)
+  const { questionnaireList ,setQuestionnaireList ,setQuestionnaireUpdated} = useMyContext();
 
-    try {
-      const response = await fetch(`${baseUrl}/questionnaires/filtered`, requestOptions);
-      const data = await handleResponse(
-        response,
-        router,
-        cookies,
-        removeCookie
-      );
-      if (response.ok) {
-        setQuestionnaireList(data.questionnaires);
-        setDataLoaded(true)
-      } else {
-        toast.error(data?.error);
-      }
-    } catch (error) {
-      console.error("Error fetching Questionnaire:", error);
-    }
-  };
 
-  useEffect(() => {
-    fetchAllQuestionnaires();
-  }, [dataUpdate]);
+
+  // const fetchAllQuestionnaires = async () => {
+  //   const token = cookiesData && cookiesData.token;
+  //   const requestOptions = {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     redirect: "follow",
+  //   };
+
+  //   try {
+  //     const response = await fetch(`${baseUrl}/questionnaires/filtered`, requestOptions);
+  //     const data = await handleResponse(
+  //       response,
+  //       router,
+  //       cookies,
+  //       removeCookie
+  //     );
+  //     if (response.ok) {
+  //       setQuestionnaireList(data.questionnaires);
+  //       setDataLoaded(true)
+  //       console.log("000000000",data.questionnaires)
+
+  //     } else {
+  //       toast.error(data?.error);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching Questionnaire:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchAllQuestionnaires();
+  // }, [dataUpdate]);
 
   const filterStatus = (status) => {
     const filteredData = questionnaireList?.filter(
@@ -73,11 +79,6 @@ const Questionnaires = () => {
     );
     return filteredData;
   };
-
-
-
-
-
 
 
   const handleCardDrop = (id, newStatus) => {

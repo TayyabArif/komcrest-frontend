@@ -17,10 +17,12 @@ export const MyProvider = ({ children }) => {
     const userId = cookiesData?.userId;
     const token = cookiesData && cookiesData.token;
     const [dataUpdated ,setDataUpdated] = useState(false)
+    const [questionnaireUpdated ,setQuestionnaireUpdated] = useState(false)
 
    // all states
     const [companyUserData, setCompanyUserData] = useState([]);
     const [companyProducts, setCompanyProducts] = useState([]);
+    const [questionnaireList , setQuestionnaireList] = useState([])
   
 
 
@@ -105,8 +107,44 @@ export const MyProvider = ({ children }) => {
       .catch((error) => console.error(error));
   };
 
+
+  const fetchAllQuestionnaires = async () => {
+    const token = cookiesData && cookiesData.token;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(`${baseUrl}/questionnaires/filtered`, requestOptions);
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
+      if (response.ok) {
+        setQuestionnaireList(data.questionnaires);
+        // setDataLoaded(true)
+        console.log("000000000",data.questionnaires)
+
+      } else {
+        toast.error(data?.error);
+      }
+    } catch (error) {
+      console.error("Error fetching Questionnaire:", error);
+    }
+  };
+  useEffect(()=>{
+    fetchAllQuestionnaires()
+  },[questionnaireUpdated])
+
+
   return (
-    <MyContext.Provider value={{ companyUserData ,companyProducts ,setDataUpdated ,dataUpdated , }}>
+    <MyContext.Provider value={{ companyUserData ,companyProducts ,setDataUpdated ,dataUpdated , questionnaireList,setQuestionnaireList ,setQuestionnaireUpdated }}>
       {children}
     </MyContext.Provider>
   );

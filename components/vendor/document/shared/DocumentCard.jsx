@@ -82,7 +82,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
             return (
               <div
                 key={index}
-                className="w-[21%] h-auto bg-white rounded-lg p-2 px-4 flex flex-col justify-between"
+                className="w-[21%] min-h-[250px] bg-white rounded-lg p-2 px-4 flex flex-col justify-between"
               >
                 <div
                   className=""
