@@ -107,7 +107,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
               <span className="font-bold  text-black"> Creation date </span>
               {formatDateWithTime(data?.createdAt)}
             </div>
-            <div>By {data?.creator.firstName}</div>
+            <div>By {data?.creator?.firstName}</div>
           </div>
 
           <div className="">

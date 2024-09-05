@@ -103,8 +103,8 @@ const QuestionnairesView = () => {
         setDataLoaded(true);
 
         const transformCollaborator = data?.questionnaire.collaborators.map((item) => ({
-          value: item.id,
-          label: item.firstName,
+          value: item?.id,
+          label: item?.firstName,
       }));
       setAllCollaborators(transformCollaborator)
         console.log("::::::::::", data);
