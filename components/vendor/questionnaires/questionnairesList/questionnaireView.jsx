@@ -26,6 +26,7 @@ const deleteModalContent = "Are you sure to delete Questions";
 const QuestionnairesView = () => {
   const router = useRouter();
   const [showHistory, setShowHistory] = useState(false);
+  const { setQuestionnaireUpdated  } = useMyContext();
   let id;
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -41,12 +42,12 @@ const QuestionnairesView = () => {
   const [deleteAction, setDeleteAction] = useState("");
   const [questionnaireData, setQuestionnaireData] = useState({});
   const [answerIsUpdate, setAnswerIsUpdate] = useState("");
-  const [multipleAnswerIsUpdate, setMultipleAnswerIsUpdate] = useState(false);
-
   const [dataLoaded, setDataLoaded] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState([]);
   const [dropDownOpen, setDropDownOpen] = useState(false);
+
+  const [allCollaborators , setAllCollaborators] = useState([])
 
   // filter data after notification
   useEffect(() => {
@@ -100,6 +101,12 @@ const QuestionnairesView = () => {
         setCurrentStatus(data.questionnaire.status);
         setQuestionnaireData(data?.questionnaire);
         setDataLoaded(true);
+
+        const transformCollaborator = data?.questionnaire.collaborators.map((item) => ({
+          value: item.id,
+          label: item.firstName,
+      }));
+      setAllCollaborators(transformCollaborator)
         console.log("::::::::::", data);
       } else {
         toast.error(data?.error);
@@ -284,6 +291,7 @@ const QuestionnairesView = () => {
             toast.success(data.message);
           }
           setDataUpdate(!dataUpdate);
+          setQuestionnaireUpdated ((prev)=>!prev)
           if (property == "answer") {
             let newArr = bulkSelected.filter((item) => item !== id[0]);
             setBulkSelected(newArr);
@@ -820,6 +828,7 @@ const QuestionnairesView = () => {
             onOpenChange={notifyDisclosure.onOpenChange}
             bulkSelected={bulkSelected}
             setBulkSelected={setBulkSelected}
+            allCollaborators={allCollaborators}
           />
 
           <DeleteModal

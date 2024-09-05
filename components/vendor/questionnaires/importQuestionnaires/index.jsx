@@ -16,9 +16,13 @@ import Add from "./Add";
 import SelectHeader from "./SelectHeader";
 import SelectQuestion from "./SelectQuestion";
 import ValidateData from "./ValidateData";
+import { useMyContext } from "@/context"; 
+
+
 
 const Import = ({setImportSuccessfully}) => {
   const [stepper, setStepper] = useState(0);
+  const { setQuestionnaireUpdated  } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -43,6 +47,7 @@ const Import = ({setImportSuccessfully}) => {
     returnDate: "",
     fileName: "",
     Questionnaires: [],
+    originalFile : ""
   });
   function getTitle() {
     switch (stepper) {
@@ -165,6 +170,36 @@ const Import = ({setImportSuccessfully}) => {
       Questionnaires: result,
     };
 
+
+    // const formData = new FormData();
+    // // Append the fields to FormData
+    // formData.append("customerName", importQuestionnaires.customerName);
+    // formData.append("customerDomain", importQuestionnaires.customerDomain);
+    // formData.append("questionnaireType", importQuestionnaires.questionnaireType);
+    // formData.append("description", importQuestionnaires.description);
+    // formData.append("language", importQuestionnaires.language);
+    // formData.append("returnDate", importQuestionnaires.returnDate);
+    // formData.append("fileName", importQuestionnaires.fileName);
+    // formData.append("originalFile", importQuestionnaires.originalFile);
+    
+
+    // importQuestionnaires.productIds.forEach((id) => {
+    //   formData.append("productIds[]", id);
+    // });
+    
+    // importQuestionnaires.collaborators.forEach((id) => {
+    //   formData.append("collaborators[]", id);
+    // });
+
+    // importQuestionnaires.assignees.forEach((id) => {
+    //   formData.append("assignees[]", id);
+    // });
+    // result.forEach((data) => {
+    //   formData.append("Questionnaires[]", data);
+    // });
+
+
+
    setTotalCount(payload.Questionnaires.length)
 
     const jsonPayload = JSON.stringify(payload);
@@ -176,7 +211,7 @@ const Import = ({setImportSuccessfully}) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: jsonPayload,
+      body: JSON.stringify(payload),
       redirect: "follow",
     };
 
@@ -203,6 +238,7 @@ const Import = ({setImportSuccessfully}) => {
             toast.success("Questionnaires created successfully");
             localStorage.setItem('QuestionnaireId',(data?.questionnaire?.id));
             router.push(`/vendor/questionnaires/view?name=${data?.questionnaire?.customerName}`)
+            setQuestionnaireUpdated ((prev)=>!prev)
           } else {
             toast.error(data?.error || "Questionnaires not Created");
             console.error("Error:", data);

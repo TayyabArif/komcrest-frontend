@@ -23,7 +23,7 @@ import { parseISO, format, parse } from 'date-fns';
 
 
 const UpdateQuestionnaires = () => {
-  const { companyUserData, companyProducts } = useMyContext();
+  const { companyUserData, companyProducts ,setQuestionnaireUpdated  } = useMyContext();
   const [questionnaireData, setQuestionnaireData] = useState([]);
   const router = useRouter();
   const { id } = router.query;
@@ -159,6 +159,7 @@ const UpdateQuestionnaires = () => {
         if (ok) {
           toast.success(data.message);
           router.push("/vendor/questionnaires");
+          setQuestionnaireUpdated ((prev)=>!prev)
         } else {
           toast.error(data?.error || "Questionnaires not Updated");
           console.error("Error:", data);
@@ -343,7 +344,7 @@ const UpdateQuestionnaires = () => {
                   onChange={handleMultipleSelect}
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="text-[16px] 2xl:text-[20px]">
                   Assignees – Who will review and validate the questionnaire
                 </label>
@@ -357,7 +358,7 @@ const UpdateQuestionnaires = () => {
                   onChange={handleMultipleSelect}
                   styles={multipleSelectStyle}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="flex justify-end  gap-3">

@@ -18,7 +18,8 @@ const NotifyModal = ({
   onOpenChange,
   isLoading,
   bulkSelected,
-  setBulkSelected
+  setBulkSelected,
+  allCollaborators
 }) => {
   const { companyUserData } = useMyContext();
   const [notifyPeople, setNotifyPeople] = useState([]);
@@ -26,6 +27,7 @@ const NotifyModal = ({
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
+
   const handleMultipleSelect = (selectedOptions, actionMeta) => {
     setNotifyPeople(selectedOptions ? selectedOptions.map(option => option.value) : []);
   };
@@ -70,16 +72,20 @@ const urlWithParams = `http://lilawop.localhost:3000/vendor/questionnaires/view?
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="lg">
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="lg"
+    classNames={{
+      body: "py-6 h-[300px]",
+     
+    }}>
       <ModalContent>
-        <ModalBody className="py-12 flex flex-col justify-center items-center gap-5">
+        <ModalBody className="py-12 flex h-auto flex-col justify-center items-center gap-5">
           <p className="text-[18px] 2xl:text-[20px] font-semibold">
             Who do you want to notify to review this question?
           </p>
           <div className="w-full text-[18px] 2xl:text-[20px]">
             <Select
               isMulti
-              options={companyUserData} // Ensure this array has {value, label} format
+              options={allCollaborators} // Ensure this array has {value, label} format
               name="assignees"
               onChange={handleMultipleSelect}
               styles={multipleSelectStyle}

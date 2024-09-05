@@ -172,7 +172,7 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
             name="ConfirmPassword"
             size="md"
             type={isConfirmPassowrdVisible ? "text" : "password"}
-            placeholder="confirm password"
+            placeholder="Confirm password"
             className="mt-5"
             classNames={{ inputWrapper: "h-[50px]", input: "text-base 2xl:text-[20px]" }}
             endContent={

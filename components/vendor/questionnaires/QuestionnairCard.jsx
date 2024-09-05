@@ -24,7 +24,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
   const cookiesData = cookies.myCookie;
   const router = useRouter();
   const [questionnaireProgressBar, setQuestionnaireProgressBar] = useState({});
-
+  const { setQuestionnaireUpdated} = useMyContext();
   const [{ isDragging }, dragRef] = useDrag({
     type: "QUESTIONNAIRE_CARD",
     item: { id, status }, // Dragged item
@@ -77,7 +77,8 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
       if (response.ok) {
         const result = await response.json();
         toast.success(result.message);
-        setDataUpdate((prev) => !prev);
+        setQuestionnaireUpdated((prev) => !prev);
+
       } else {
         toast.error("Failed to delete questionnaires");
       }
@@ -106,7 +107,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
               <span className="font-bold  text-black"> Creation date </span>
               {formatDateWithTime(data?.createdAt)}
             </div>
-            <div>By {data?.customerName}</div>
+            <div>By {data?.creator.firstName}</div>
           </div>
 
           <div className="">
@@ -119,47 +120,63 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
             Due date <span>{formatDateWithTime(data?.returnDate)}</span>
           </div>
         </div>
-        <div className="flex items-center justify-end gap-4 p-2">
+        <div className="flex items-center justify-end gap-4 px-2 pb-2">
           {data?.status !== "Completed" && (
             <div className="relative h-[9px] w-full">
-              {/* Default blue progress bar */}
-              <Progress
-                aria-label="Loading..."
-                value={100} // Full width
-                classNames={{
-                  indicator: "bg-[#2358d3]", // Blue color
-                }}
-                className="h-[9px] absolute z-10"
-                style={{ width: "100%" }}
-              />
-
-              {/* Dynamically sorted progress bars */}
-              {[
-                {
-                  key: "Flagged",
-                  color: "bg-[#ffc001]",
-                  value: questionnaireProgressBar?.Flagged?.percentage || 0,
-                },
-                {
-                  key: "approved",
-                  color: "bg-[#00B050]",
-                  value: questionnaireProgressBar?.approved?.percentage || 0,
-                },
-              ]
-                .sort((a, b) => a.value - b.value) // Sort by value in ascending order
-                .map((bar, index) => (
+            {/* Default blue progress bar */}
+            <Progress
+              aria-label="Loading..."
+              value={100} // Full width
+              radius="none"
+              classNames={{
+                indicator: "bg-[#2358d3]", // Blue color
+              }}
+              className="h-[9px] absolute z-10"
+              style={{ width: "100%" }}
+            />
+          
+            {/* Dynamically sorted progress bars */}
+            {[
+              {
+                key: "Flagged",
+                color: "bg-[#ffc001]",
+                value: questionnaireProgressBar?.Flagged?.percentage || 0,
+              },
+              {
+                key: "approved",
+                color: "bg-[#00B050]",
+                value: questionnaireProgressBar?.approved?.percentage || 0,
+              },
+            ]
+              .sort((a, b) => a.value - b.value) // Sort by value in ascending order
+              .reduce((acc, bar, index) => {
+                const cumulativeWidth = acc.cumulative + bar.value; // Calculate the cumulative width for positioning
+                acc.bars.push(
+                  <>
+                  {/* <h1>{index} {bar.color}</h1> */}
                   <Progress
                     key={bar.key}
                     aria-label="Loading..."
                     value={100}
+                    radius="none"
                     classNames={{
                       indicator: bar.color,
                     }}
-                    className={`h-[9px] absolute z-${30 - index * 10}`} // Adjust z-index dynamically: lower value, higher z-index
-                    style={{ width: `${bar.value}%` }}
+                    className={`h-[9px] absolute`}
+                    style={{
+                      width: `${bar.value}%`,
+                      left: `${acc.cumulative}%`,  // Position it immediately after the previous bar
+                      zIndex: 30 - index * 10,
+                      borderRadius: '0px !important',  // Adjust z-index dynamically: lower value, higher z-index
+                    }}
                   />
-                ))}
-            </div>
+                  </>
+                );
+                acc.cumulative = cumulativeWidth; // Update cumulative width for the next bar
+                return acc;
+              }, { cumulative: 0, bars: [] }).bars}
+          </div>
+          
           )}
 
           <Popover

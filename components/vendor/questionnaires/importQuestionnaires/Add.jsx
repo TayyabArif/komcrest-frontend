@@ -39,6 +39,7 @@ const Add = ({
     setImportQuestionnaire({
       ...importQuestionnaires,
       fileName: file.name,
+      originalFile:file 
     });
 
     const reader = new FileReader();
