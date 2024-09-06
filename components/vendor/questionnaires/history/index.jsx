@@ -5,7 +5,7 @@ import DocumentHistory from "./DocumentHistory";
 import OnlineResourceHistory from "./OnlineResourceHistory";
 import HistoryDetail from "./HistoryDetail";
 
-const History = ({selectedId ,setShowHistory ,setSelectedId}) => {
+const History = ({selectedId ,setShowHistory ,setSelectedId ,dataUpdate}) => {
   const [selectedOption, setSelectedOption] = useState("references");
   const [referenceSelect, setReferenceSelect] = useState("knowledge");
 
@@ -44,15 +44,12 @@ const History = ({selectedId ,setShowHistory ,setSelectedId}) => {
         </div>
         
       }
-
-      {selectedOption}
-      {/* {referenceSelect}djdwkdwwdjwd */}
       
       {/* Conditionally render components based on selected option */}
       {(referenceSelect === "knowledge" && selectedOption === "references") && <KnowledgeHistory />}
       {(referenceSelect === "document" && selectedOption === "references") && <DocumentHistory />}
       {(referenceSelect === "online" && selectedOption === "references") && <OnlineResourceHistory />}
-      {selectedOption === "history" && <HistoryDetail selectedId={selectedId}/>}
+      {selectedOption === "history" && <HistoryDetail selectedId={selectedId} dataUpdate={dataUpdate}/>}
     </div>
   );
 };

@@ -60,12 +60,16 @@ export const MyProvider = ({ children }) => {
         removeCookie
       );
       if (response.ok) {
-        const curatorOptions = data.map((item) => ({
+
+ //remove unapproved user 
+        const approvedUser = data.filter((user)=>user.invitationStatus == "activated")
+
+        const curatorOptions = approvedUser .map((item) => ({
             value: item.id,
             label: item.firstName,
         }));
         setAllCompanyUserData(curatorOptions)
-        // remover login user and save
+        // remover login user
 
         const filterData = () => {
           return curatorOptions.filter((user) => user.value !== userId);

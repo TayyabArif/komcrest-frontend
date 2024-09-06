@@ -11,6 +11,7 @@ import { useDisclosure, Progress } from "@nextui-org/react";
 import DeleteModal from "../../shared/DeleteModal";
 import { ArrowRight } from 'lucide-react';
 import { handleExport } from "@/helper";
+import { useMyContext } from "@/context";
 
 
 
@@ -22,6 +23,7 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [dropDownOpen ,setDropDownOpen] = useState(false)
+  const { setQuestionnaireUpdated  } = useMyContext();
 
   let id ;
 
@@ -57,6 +59,7 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
           if (ok) {
             toast.success(data.message);
             setDataUpdate((prev)=>!prev)
+            setQuestionnaireUpdated ((prev)=>!prev)
           } else {
             toast.error(data?.error || "Questionnaires status not Updated");
             console.error("Error:", data);

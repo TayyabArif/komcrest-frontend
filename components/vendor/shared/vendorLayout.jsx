@@ -80,8 +80,7 @@ const VendorLayout = ({ children }) => {
       </div>
       <div className="ml-[15%] w-[85%]">
        
-        <div className="py-2 text-right flex justify-between font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
-        <h1>{loogedinUser}</h1>
+        <div className="py-2 text-right flex justify-end gap-2 font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
           <Button
           radius="none"
           size="sm"
@@ -90,6 +89,7 @@ const VendorLayout = ({ children }) => {
         >
           Logout
         </Button>
+        <h1>{loogedinUser}</h1>
         </div>
         <div className="flex flex-col bg-[#ebeef2] h-screen overflow-auto">
           {children}

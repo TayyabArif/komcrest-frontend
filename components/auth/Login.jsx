@@ -70,7 +70,7 @@ const Login = ({ type }) => {
             role: data.user.role,
             companyType: data.user?.Company?.companyType,
             companyId : data.user.companyId,
-            userName : data.user.firstName,
+            userName : `${data.user.firstName} ${data.user.lastName}`,
             userId :  data.user.id
           };
          
