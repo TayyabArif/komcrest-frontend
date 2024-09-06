@@ -79,13 +79,12 @@ const urlWithParams = `${currentbaseUrl}/vendor/questionnaires/view?${queryParam
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl"
+    <Modal className="min-h-content" isOpen={isOpen} onOpenChange={onOpenChange}  style={{ height: 'auto', overflow: 'visible' }} size="xl"
     classNames={{
-      body: "py-6 min-h-[300px] overflow-y-scroll",
-     
+      wrapper: "h-auto overflow-visible", // Custom wrapper height and scrolling if needed
     }}>
-      <ModalContent>
-        <ModalBody className="!py-12 flex h-auto flex-col justify-center items-center gap-5">
+      <ModalContent className="overflow-visible">
+        <ModalBody className="!py-12 flex h-auto flex-col justify-center items-center gap-5 overflow-visible">
           <p className="text-[18px] 2xl:text-[20px] font-semibold">
             Who do you want to notify to review this question?
           </p>
@@ -96,6 +95,7 @@ const urlWithParams = `${currentbaseUrl}/vendor/questionnaires/view?${queryParam
               name="assignees"
               onChange={handleMultipleSelect}
               styles={multipleSelectStyle}
+              
             />
           </div>
           <div className="space-x-10">
