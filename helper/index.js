@@ -56,8 +56,6 @@ export function formatDateWithTime(dateString) {
   }
 
   export const handleDownload = (filePath) => {
-    alert(typeof filePath)
-    console.log("filePathfilePathfilePath",filePath)
     if (typeof filePath === "string") {
         const fileName = filePath.split("/").pop();
         const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${fileName}`;
@@ -109,7 +107,9 @@ export function formatDateWithTime(dateString) {
         borderRadius: "1rem",
         color: "white",
       },
+     
     }),
+  
   };
 
 
