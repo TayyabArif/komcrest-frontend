@@ -239,6 +239,7 @@ const Import = ({setImportSuccessfully}) => {
             localStorage.setItem('QuestionnaireId',(data?.questionnaire?.id));
             router.push(`/vendor/questionnaires/view?name=${data?.questionnaire?.customerName}`)
             setQuestionnaireUpdated ((prev)=>!prev)
+            uploadFile(data?.questionnaire?.id)
           } else {
             toast.error(data?.error || "Questionnaires not Created");
             console.error("Error:", data);
@@ -255,6 +256,44 @@ const Import = ({setImportSuccessfully}) => {
         });
     }, 2000); // 2-second delay
   };
+
+  const uploadFile  = (id) => {
+     const formData = new FormData();
+     formData.append("file", importQuestionnaires.originalFile);
+    const token = cookiesData.token;
+    let requestOptions = {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+      redirect: "follow",
+    };
+  
+    
+      fetch(`${baseUrl}/questionnaire/file/${id}`, requestOptions)
+        .then(async (response) => {
+          const data = await handleResponse(response, router, cookies, removeCookie);
+          return {
+            status: response.status,
+            ok: response.ok,
+            data,
+          };
+        })
+        .then(({ status, ok, data }) => {
+          if (ok) {
+            console("file save");
+          } else {
+            console.error("Error:", data);
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error("API Error:", error.response);
+            toast.error(error.response.data?.error || "An error occurred while Updated  Questionnaires status");
+          }
+        });
+  }
 
   const handleCancelClick = () => {
     if (stepper > 0) {

@@ -252,6 +252,7 @@ const QuestionnairesView = () => {
       field: property,
       value: value,
       eventType: `${property}Changed`,
+      questionnairId:localStorage.getItem("QuestionnaireId")
     };
 
     const jsonPayload = JSON.stringify(updatedData);

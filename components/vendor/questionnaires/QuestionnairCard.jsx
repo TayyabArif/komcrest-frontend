@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { formatDateWithTime } from "@/helper";
 import { useDrag } from "react-dnd";
 import { useMyContext } from "@/context";
-import { handleExport } from "@/helper";
+import { handleExport  , handleDownload} from "@/helper";
 
 const deleteModalContent = "Are you sure to delete this Questionnaires?";
 
@@ -197,7 +197,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                   className="text-small cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleExport(data.questionnaireRecords, "downloadOriginal");
+                    handleDownload(data.filePath);
                     setOpenPopoverIndex(null);
                   }}
                 >
