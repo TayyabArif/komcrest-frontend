@@ -8,13 +8,16 @@ import { Button } from "@nextui-org/react";
 
 const VendorLayout = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
+  const cookiesData = cookies.myCookie;
   const router = useRouter();
   const route  = router.route;
+  const [loogedinUser , setLoggdinUser] = useState()
   const [selectedItem, setSelectedItem] = useState("");
   useEffect(() => {
     const parts = route.split('/');
     const segment = parts[2];
     setSelectedItem(segment)
+    setLoggdinUser(cookiesData && cookiesData.userName)
   }, [route])
   
   function handleLogout() {
@@ -76,8 +79,8 @@ const VendorLayout = ({ children }) => {
         </div>
       </div>
       <div className="ml-[15%] w-[85%]">
-        <div className="py-2 text-right font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
-          {/* <h1>Logout</h1> */}
+       
+        <div className="py-2 text-right flex justify-end gap-2 font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
           <Button
           radius="none"
           size="sm"
@@ -86,6 +89,7 @@ const VendorLayout = ({ children }) => {
         >
           Logout
         </Button>
+        <h1>{loogedinUser}</h1>
         </div>
         <div className="flex flex-col bg-[#ebeef2] h-screen overflow-auto">
           {children}

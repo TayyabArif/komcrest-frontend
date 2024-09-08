@@ -3,8 +3,9 @@ import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import { handleResponse } from "@/helper";
 import { formatDateWithTime } from "@/helper";
+import { ArrowRight } from "lucide-react";
 
-const HistoryDetail = ({ selectedId }) => {
+const HistoryDetail = ({ selectedId, dataUpdate }) => {
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -47,7 +48,7 @@ const HistoryDetail = ({ selectedId }) => {
     if (selectedId) {
       fetchQuestionnaireRecordHistory();
     }
-  }, [selectedId]);
+  }, [selectedId, dataUpdate]);
 
   const getHistoryStructure = (record) => {
     switch (record.eventType) {
@@ -56,7 +57,10 @@ const HistoryDetail = ({ selectedId }) => {
           <div>
             <h1>Modified the compliance.</h1>
             <div>
-              <h1>Compliance {record.currentValue}</h1>
+              <h1 className="flex items-center gap-1">
+                Compliance : {record?.previousValue} <ArrowRight size={15} />{" "}
+                {record.currentValue}
+              </h1>
             </div>
           </div>
         );
@@ -68,42 +72,43 @@ const HistoryDetail = ({ selectedId }) => {
           </div>
         );
 
-        case "answerChanged":
+      case "answerChanged":
         return (
           <div className="">
-            
             <div className="flex gap-3">
-            <h1>Modify the answer</h1>     
+              <h1>Improved the answered.</h1>
             </div>
             <h1>Answer: {record.currentValue}</h1>
             <h1></h1>
-           
           </div>
         );
 
-        case "answerUpdatedByAI":
-          return (
-            <div className="">
-              
-              <div className="flex gap-3">
-              <h1>Improved the answered using Komcrest AI.</h1>          
-              </div>
-              {/* <h1>Answer: {record.currentValue}</h1>
-              <h1></h1> */}
-             
+      case "answerUpdatedByAI":
+        return (
+          <div className="">
+            <div className="flex gap-3">
+              {/* <h1>Improved the answered using Komcrest AI.</h1>           */}
+              <h1>Re-ran AI for compliance & answer.</h1>
             </div>
-          );
+          </div>
+        );
 
-          case "Notification Sent":
-          return (
-            <div className="">
-              
-              <div className="flex gap-3">
-              <h1>Notified <span className="font-bold">{record.user.firstName}</span> for help</h1>             
-              </div>
-             
+      case "Notification Sent":
+        return (
+          <div className="">
+            <div className="flex gap-3">
+              <h1>
+                Notified{" "}
+                <span className="font-bold">
+                  {record?.recipients?.map((recipient, index) => (
+                    <span className="text-bold" key={index}>{recipient.firstName} {index+1 == record?.recipients.length ? "" : ","} </span>
+                  ))}
+                </span>{" "}
+                for help
+              </h1>
             </div>
-          );
+          </div>
+        );
       default:
         return <h1>Default case</h1>;
     }
@@ -112,16 +117,19 @@ const HistoryDetail = ({ selectedId }) => {
   return (
     <div>
       {historyRecord.length > 0 ? (
-        historyRecord.map((record, index) => (
-          <div key={index} className="my-4 bg-white p-3">
-            <div className="flex gap-2">
-              <p className="font-bold">{record.user.firstName}</p>
-              <p>-</p>
-              <p>{formatDateWithTime(record.updatedAt)}</p>
+        historyRecord
+          ?.sort((a, b) => b.id - a.id)
+          ?.map((record, index) => (
+            <div key={index} className="my-4 bg-white p-3">
+              <div className="flex gap-2">
+                <p className="font-bold text-wrap">
+                  {record.user.firstName} -{" "}
+                  {formatDateWithTime(record.updatedAt)}{" "}
+                </p>
+              </div>
+              {getHistoryStructure(record)}
             </div>
-            {getHistoryStructure(record)}
-          </div>
-        ))
+          ))
       ) : (
         <p>No records found.</p>
       )}

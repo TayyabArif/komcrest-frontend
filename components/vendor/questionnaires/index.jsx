@@ -160,13 +160,13 @@ const Questionnaires = () => {
        
         ): 
         <div className="flex flex-wrap gap-5">
-          {filterStatus("Completed")?.map((data, index)=>{
+          {filterStatus("Completed").length > 0 ? filterStatus("Completed")?.map((data, index)=>{
             return(
               <DndProvider key={index} backend={HTML5Backend}>
               <QuestionnairCard  data={data} setDataUpdate={setDataUpdate} dataUpdate={dataUpdate}/>
               </DndProvider>
             )
-          })}
+          }):"No Questionnaire is completed yet"}
         </div>
         }
         

@@ -5,18 +5,17 @@ import DocumentHistory from "./DocumentHistory";
 import OnlineResourceHistory from "./OnlineResourceHistory";
 import HistoryDetail from "./HistoryDetail";
 
-const History = ({selectedId ,setShowHistory ,setSelectedId}) => {
+const History = ({selectedId ,setShowHistory ,setSelectedId ,dataUpdate}) => {
   const [selectedOption, setSelectedOption] = useState("references");
-  const [referenceSelect, setReferenceSelect] = useState("Select");
+  const [referenceSelect, setReferenceSelect] = useState("knowledge");
 
   const handleChange = (event) => {
     setReferenceSelect(event.target.value);
   };
 
   return (
-    <div className="bg-[#F2F2F2] px-5 h-screen overflow-scroll">
+    <div className="bg-[#F2F2F2] px-5 h-screen ">
      <div className="flex justify-between  items-center sticky top-0 py-5 z-50 bg-[#F2F2F2] ">
-
         <div className="flex items-center justify-between gap-10">
            <h1 onClick={()=>{
             setSelectedOption("references")
@@ -43,12 +42,14 @@ const History = ({selectedId ,setShowHistory ,setSelectedId}) => {
               <option value="knowledge">Knowledge</option>
             </select>
         </div>
+        
       }
+      
       {/* Conditionally render components based on selected option */}
       {(referenceSelect === "knowledge" && selectedOption === "references") && <KnowledgeHistory />}
       {(referenceSelect === "document" && selectedOption === "references") && <DocumentHistory />}
       {(referenceSelect === "online" && selectedOption === "references") && <OnlineResourceHistory />}
-      {selectedOption === "history" && <HistoryDetail selectedId={selectedId}/>}
+      {selectedOption === "history" && <HistoryDetail selectedId={selectedId} dataUpdate={dataUpdate}/>}
     </div>
   );
 };

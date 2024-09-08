@@ -252,6 +252,7 @@ const QuestionnairesView = () => {
       field: property,
       value: value,
       eventType: `${property}Changed`,
+      questionnairId:localStorage.getItem("QuestionnaireId")
     };
 
     const jsonPayload = JSON.stringify(updatedData);
@@ -295,7 +296,8 @@ const QuestionnairesView = () => {
           if (property == "answer") {
             let newArr = bulkSelected.filter((item) => item !== id[0]);
             setBulkSelected(newArr);
-            setSelectedId("");
+            // setSelectedId("");
+            setDataUpdate(!dataUpdate);
           } else {
             setBulkSelected([]);
           }
@@ -437,12 +439,14 @@ const QuestionnairesView = () => {
                   </h1>
                   <Check
                     size={20}
+                    className="cursor-pointer"
                     onClick={() =>
                       UpdateRecord(bulkSelected, "status", "approved")
                     }
                   />
                   <TriangleAlert
                     size={20}
+                    className="cursor-pointer"
                     onClick={() =>
                       UpdateRecord(bulkSelected, "status", "Flagged")
                     }
@@ -457,6 +461,7 @@ const QuestionnairesView = () => {
                     <PopoverTrigger>
                       <FilePenLine
                         size={17}
+                        className="cursor-pointer"
                         onClick={() => setDropDownOpen(true)}
                       />
                     </PopoverTrigger>
@@ -629,7 +634,7 @@ const QuestionnairesView = () => {
                               )}
                             </div>
                             <textarea
-                               disabled={answerIsUpdate === "multiple" ? !updateMultipleAnswer(item.id) : false}
+                              disabled={answerIsUpdate === "multiple" ? !updateMultipleAnswer(item.id) : false}
                               onChange={(e) => {
                                 handleChange(index, e.target.value);
                               }}
@@ -668,6 +673,7 @@ const QuestionnairesView = () => {
                                 <p
                                   onClick={() => {
                                     UpdateRecord([item.id], "answer", index);
+                                    setAnswerIsUpdate("");
                                   }}
                                   className={` text-[16px] 2xl:text-[20px] rounded-lg ${
                                     item.status == "approved"
@@ -818,6 +824,7 @@ const QuestionnairesView = () => {
                     selectedId={selectedId}
                     setShowHistory={setShowHistory}
                     setSelectedId={setSelectedId}
+                    dataUpdate={dataUpdate}
                   />
                 </div>
               )}

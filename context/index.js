@@ -20,7 +20,12 @@ export const MyProvider = ({ children }) => {
     const [questionnaireUpdated ,setQuestionnaireUpdated] = useState(false)
 
    // all states
+
+   // company user except loggedin user
     const [companyUserData, setCompanyUserData] = useState([]);
+    //all compnay user include loggedin user
+    const [allCompanyUserData, setAllCompanyUserData] = useState([]);
+
     const [companyProducts, setCompanyProducts] = useState([]);
     const [questionnaireList , setQuestionnaireList] = useState([])
   
@@ -55,12 +60,16 @@ export const MyProvider = ({ children }) => {
         removeCookie
       );
       if (response.ok) {
-        const curatorOptions = data.map((item) => ({
+
+ //remove unapproved user 
+        const approvedUser = data.filter((user)=>user.invitationStatus == "activated")
+
+        const curatorOptions = approvedUser .map((item) => ({
             value: item.id,
             label: item.firstName,
         }));
-
-        // remover login user and save
+        setAllCompanyUserData(curatorOptions)
+        // remover login user
 
         const filterData = () => {
           return curatorOptions.filter((user) => user.value !== userId);
@@ -147,7 +156,7 @@ export const MyProvider = ({ children }) => {
 
 
   return (
-    <MyContext.Provider value={{ companyUserData ,companyProducts ,setDataUpdated ,dataUpdated , questionnaireList,setQuestionnaireList ,setQuestionnaireUpdated }}>
+    <MyContext.Provider value={{ companyUserData ,companyProducts ,setDataUpdated ,dataUpdated , questionnaireList,setQuestionnaireList ,setQuestionnaireUpdated ,allCompanyUserData }}>
       {children}
     </MyContext.Provider>
   );

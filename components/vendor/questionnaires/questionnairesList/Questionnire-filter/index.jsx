@@ -16,7 +16,7 @@ const filterHeader = [
     { name: "Compliance", value: "compliance" },
     { name: "Answer", value: "answer" },
     { name: "Status", value: "status" },
-    { name: "Notify User", value: "notifiedUserIds" },
+    { name: "Notified Users", value: "notifiedUserIds" },
   ];
 
 

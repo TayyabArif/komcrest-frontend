@@ -23,13 +23,15 @@ import { parseISO, format, parse } from 'date-fns';
 
 
 const UpdateQuestionnaires = () => {
-  const { companyUserData, companyProducts ,setQuestionnaireUpdated  } = useMyContext();
+  const { allCompanyUserData, companyProducts ,setQuestionnaireUpdated  } = useMyContext();
   const [questionnaireData, setQuestionnaireData] = useState([]);
   const router = useRouter();
   const { id } = router.query;
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const [filterCollaboratorList , setFilterCollaboratorList] = useState([])
+  const [errors, setErrors] = useState({});
 
   const fetchQuestionnaire = async () => {
     const token = cookiesData && cookiesData.token;
@@ -53,6 +55,8 @@ const UpdateQuestionnaires = () => {
         removeCookie
       );
       if (response.ok) {
+
+        console.log("data.questionnairedata.questionnaire",data.questionnaire);
         let transformData = {
           customerName: data.questionnaire.customerName,
           customerDomain: data.questionnaire.customerDomain,
@@ -70,9 +74,15 @@ const UpdateQuestionnaires = () => {
           // returnDate: format(parseISO(data.questionnaire.returnDate), 'yyyy-MM-dd'),
           fileName: data.questionnaire.fileName,
         };
-
-        console.log("data::::::");
         setQuestionnaireData(transformData);
+
+
+        // escape create id in all user list
+        const filterCollaborator = allCompanyUserData?.filter((item) => {
+          return item.value !== data?.questionnaire?.createdBy;
+        });
+        setFilterCollaboratorList(filterCollaborator)
+        console.log(">>>>>LLLLLLLL",filterCollaborator)
       } else {
         toast.error(data?.error);
       }
@@ -126,7 +136,36 @@ const UpdateQuestionnaires = () => {
     }));
   };
 
+  const checkValidations = () => {
+    const newErrors = {};
+    if (questionnaireData.productIds.length == 0) {
+      newErrors.products = "Products is required";
+    }
+    if (!questionnaireData.language) {
+      newErrors.language = "Language is required";
+    }
+    if (!questionnaireData.returnDate) {
+      newErrors.returnDate = "Return Date is required";
+    }
+    if (!questionnaireData.customerName) {
+      newErrors.customerName = "Customer Name is required";
+    }
+    if (!questionnaireData.customerDomain) {
+      newErrors.customerDomain = "Customer Domain is required";
+    }
+    if (!questionnaireData.questionnaireType) {
+      newErrors.questionnaireType = "Questionnaire Type is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+
   const questionnaireUpdated = () => {
+    if(checkValidations()){
+
+   
     console.log("questionnaireDataquestionnaireData", questionnaireData);
     const jsonPayload = JSON.stringify(questionnaireData);
     const token = cookiesData.token;
@@ -174,11 +213,12 @@ const UpdateQuestionnaires = () => {
           );
         }
       });
+    }
   };
 
   return (
-    <div className="w-[100%] h-full">
-      <div className="w-[90%] mx-auto py-4 mt-[4rem]">
+    <div className="w-[100%] h-full ">
+      <div className="w-[90%] mx-auto py-4 mt-[7rem]">
         <h1 className="py-2 px-4 bg-[#F6F7F9] text-[16px] 2xl:text-[20px] font-bold">
           Update questionnaire information
         </h1>
@@ -201,6 +241,7 @@ const UpdateQuestionnaires = () => {
                     input: "2xl:text-[20px] text-[16px] text-gray-500",
                   }}
                 />
+                 {errors.customerName && <p className="text-red-500">{errors.customerName}</p>}
               </div>
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">
@@ -218,6 +259,7 @@ const UpdateQuestionnaires = () => {
                     input: "2xl:text-[20px] text-[16px] text-gray-500",
                   }}
                 />
+                 {errors.customerDomain && <p className="text-red-500">{errors.customerDomain}</p>}
               </div>
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">
@@ -241,6 +283,7 @@ const UpdateQuestionnaires = () => {
                     </Checkbox>
                   ))}
                 </div>
+                {errors.questionnaireType && <p className="text-red-500">{errors.questionnaireType}</p>}
               </div>
 
               <div className="mt-2 mb-3">
@@ -284,6 +327,7 @@ const UpdateQuestionnaires = () => {
                     </Checkbox>
                   ))}
                 </div>
+                {errors.products && <p className="text-red-500">{errors.products}</p>}
               </div>
 
               <div>
@@ -300,6 +344,7 @@ const UpdateQuestionnaires = () => {
                     className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
                   />
                 </div>
+                {errors.returnDate && <p className="text-red-500">{errors.returnDate}</p>}
               </div>
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">Language <span className="text-red-500">*</span></label>
@@ -335,10 +380,10 @@ const UpdateQuestionnaires = () => {
                 </label>
                 <Select
                   isMulti
-                  options={companyUserData}
+                  options={filterCollaboratorList}
                   styles={multipleSelectStyle}
                   name="collaborators"
-                  value={companyUserData.filter((option) =>
+                  value={allCompanyUserData.filter((option) =>
                     questionnaireData.collaborators?.includes(option.value)
                   )}
                   onChange={handleMultipleSelect}
@@ -350,9 +395,9 @@ const UpdateQuestionnaires = () => {
                 </label>
                 <Select
                   isMulti
-                  options={companyUserData}
+                  options={allCompanyUserData}
                   name="assignees"
-                  value={companyUserData.filter((option) =>
+                  value={allCompanyUserData.filter((option) =>
                     questionnaireData.assignees?.includes(option.value)
                   )}
                   onChange={handleMultipleSelect}

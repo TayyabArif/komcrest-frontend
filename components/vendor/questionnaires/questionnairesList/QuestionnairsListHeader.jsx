@@ -10,7 +10,8 @@ import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import { useDisclosure, Progress } from "@nextui-org/react";
 import DeleteModal from "../../shared/DeleteModal";
 import { ArrowRight } from 'lucide-react';
-import { handleExport } from "@/helper";
+import { handleExport ,handleDownload } from "@/helper";
+import { useMyContext } from "@/context";
 
 
 
@@ -22,6 +23,7 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [dropDownOpen ,setDropDownOpen] = useState(false)
+  const { setQuestionnaireUpdated  } = useMyContext();
 
   let id ;
 
@@ -57,6 +59,7 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
           if (ok) {
             toast.success(data.message);
             setDataUpdate((prev)=>!prev)
+            setQuestionnaireUpdated ((prev)=>!prev)
           } else {
             toast.error(data?.error || "Questionnaires status not Updated");
             console.error("Error:", data);
@@ -70,8 +73,6 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
         });
   }
   
-  
-
   const handleDelete = async () => {
     const token = cookiesData.token;
     const requestOptions = {
@@ -115,7 +116,7 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
         </div>
         <div>
           <div className="flex items-center gap-3">
-            <select onChange={(e)=>questionnaireUpdated(e.target.value)}  value={currentStatus} className="w-[150px]  bg-[#D8D8D8] text-[18px] 2xl:text-[20px] border rounded-lg pr-3 p-[5px]">
+            <select onChange={(e)=>questionnaireUpdated(e.target.value)}  value={currentStatus} className="w-[150px] cursor-pointer  bg-[#D8D8D8] text-[18px] 2xl:text-[20px] border rounded-lg pr-3 p-[5px]">
               <option  disabled>Change Status</option>
               <option value="To Process">To Process</option>
               <option value="Started">Started</option>
@@ -141,13 +142,13 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
           className="rounded-[0px]"
         >
           <PopoverTrigger>
-          <Settings className="text-[#252525] " onClick={()=>setDropDownOpen(true)}/>
+          <Settings className="text-[#252525]  cursor-pointer" onClick={()=>setDropDownOpen(true)}/>
           </PopoverTrigger>
           <PopoverContent>
             <div className="px-3 py-2 space-y-1.5 text-[16px]">
               <div className="text-small cursor-pointer"
               onClick={()=> {
-                handleExport(questionnaireData?.questionnaireRecords , "downloadOriginal")
+                handleDownload(questionnaireData?.filePath);
                 setDropDownOpen(false)
                 }}>
                 Download original questionnaire

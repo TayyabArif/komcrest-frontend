@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { formatDateWithTime } from "@/helper";
 import { useDrag } from "react-dnd";
 import { useMyContext } from "@/context";
-import { handleExport } from "@/helper";
+import { handleExport  , handleDownload} from "@/helper";
 
 const deleteModalContent = "Are you sure to delete this Questionnaires?";
 
@@ -96,31 +96,30 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
         }}
         className=" bg-white shadow-lg rounded-lg cursor-pointer"
       >
-        <div ref={dragRef} className="p-4">
+        <div ref={dragRef} className="p-4 ">
           <div className="font-bold text-lg text-black mb-2 ">
             <h6>{data?.customerName} &nbsp;</h6>
             <h6>{data?.fileName}</h6>
           </div>
 
           <div className="">
-            <div>
               <span className="font-bold  text-black"> Creation date </span>
               {formatDateWithTime(data?.createdAt)}
-            </div>
             <div>By {data?.creator?.firstName}</div>
           </div>
 
-          <div className="">
+          <div className="my-1">
             <span className="font-bold  text-black"> Last Update </span>{" "}
             {formatDateWithTime(data?.updatedAt)}
+            <div>By {data?.updater?.firstName}</div>
           </div>
-          <div>By Richard Branco</div>
+      
 
-          <div className=" font-bold mt-4">
+          <div className=" font-bold">
             Due date <span>{formatDateWithTime(data?.returnDate)}</span>
           </div>
         </div>
-        <div className="flex items-center justify-end gap-4 px-2 pb-2">
+        <div className="flex items-center justify-end gap-2 px-4 pb-2">
           {data?.status !== "Completed" && (
             <div className="relative h-[9px] w-full">
             {/* Default blue progress bar */}
@@ -198,7 +197,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                   className="text-small cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleExport(data.questionnaireRecords, "downloadOriginal");
+                    handleDownload(data.filePath);
                     setOpenPopoverIndex(null);
                   }}
                 >
