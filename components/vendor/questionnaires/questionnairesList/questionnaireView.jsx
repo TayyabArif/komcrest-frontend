@@ -49,8 +49,9 @@ const QuestionnairesView = () => {
   const [allCollaborators, setAllCollaborators] = useState([]);
   const [selectedOption, setSelectedOption] = useState("references");
   const divRef = useRef(null);
-  const [textAreaSize, setTextAreaSize] = useState("")
-  const [selectedTextAreaId ,setSelectedTextAreaId] = useState()
+  const [textAreaSize, setTextAreaSize] = useState("");
+  const [selectedTextAreaId, setSelectedTextAreaId] = useState();
+  const [getFilterData, setFilterData] = useState("");
 
   useEffect(() => {
     const storedHistoryPreference = JSON.parse(
@@ -89,28 +90,36 @@ const QuestionnairesView = () => {
 
   // filter data after notification
   useEffect(() => {
-    const { Questionnair } = router.query;
-    const params = new URLSearchParams(router.asPath);
-    const notifyQuestions = [];
-    params.forEach((value, key) => {
-      if (key.startsWith("notifyQuestions")) {
-        notifyQuestions.push(parseInt(value, 10));
+    if (router.isReady) {
+      // Ensure that the router is fully ready
+      const { Questionnair } = router.query;
+      const params = new URLSearchParams(router.asPath);
+      const notifyQuestions = [];
+
+      params.forEach((value, key) => {
+        if (key.startsWith("notifyQuestions")) {
+          notifyQuestions.push(parseInt(value, 10));
+        }
+      });
+
+      console.log("Questionnair:", Questionnair);
+      console.log("Notify Questions:", notifyQuestions);
+
+      if (Questionnair) {
+        localStorage.setItem("QuestionnaireId", Questionnair);
+        setFilters([
+          {
+            name: "id",
+            value: notifyQuestions,
+          },
+        ]);
+
+        setFilterData("filtered");
+      } else {
+        setFilterData("all");
       }
-    });
-
-    console.log("Questionnair:", Questionnair);
-    console.log("Notify Questions:", notifyQuestions);
-
-    if (Questionnair) {
-      localStorage.setItem("QuestionnaireId", Questionnair);
-      setFilters([
-        {
-          name: "id",
-          value: notifyQuestions,
-        },
-      ]);
     }
-  }, [router.query]);
+  }, [router.isReady, router.query]);
 
   const fetchQuestionnaire = async () => {
     const token = cookiesData && cookiesData.token;
@@ -158,10 +167,13 @@ const QuestionnairesView = () => {
 
   useEffect(() => {
     id = localStorage.getItem("QuestionnaireId");
-    if (id) {
+    if (id && getFilterData == "filtered") {
       fetchQuestionnaire();
     }
-  }, [id, dataUpdate, filters]);
+    if (id && getFilterData == "all") {
+      fetchQuestionnaire();
+    }
+  }, [id, dataUpdate, filters, getFilterData]);
 
   const handleChange = (index, newAnswer) => {
     setQuestionnaireData((prevData) => {
@@ -436,6 +448,7 @@ const QuestionnairesView = () => {
 
   return (
     <>
+      {textAreaSize}
       {dataLoaded ? (
         <div>
           <QuestionnairsListHeader
@@ -670,7 +683,7 @@ const QuestionnairesView = () => {
                               </div>
                             </td>
                             <td
-                              className={`px-4 py-2 w-[600px]  border ${
+                              className={`px-4 py-2 w-[600px] !text-wrap  border ${
                                 item.confidence < 7
                                   ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
                                   : ""
@@ -690,13 +703,17 @@ const QuestionnairesView = () => {
                                   value={item.answer}
                                   onChange={(e) => {
                                     handleChange(index, e.target.value);
+                                    // Reset the height to auto to adjust downwards if needed
+                                    // e.target.style.height = `${e.target.scrollHeight}px`;
                                   }}
                                   onClick={(e) => {
                                     setSelectedTextAreaId(item.id);
                                     setAnswerIsUpdate("single");
                                   }}
-                                  className={`w-full  h-[${textAreaSize}px] rounded-md focus:outline-none ring-2 px-2  ${
-                                    item.status == "approved" && selectedTextAreaId
+                                  style={{height : `${textAreaSize}px`}}
+                                  className={`w-full text-wrap !h-[${textAreaSize}px] rounded-md focus:outline-none ring-2 px-2  ${
+                                    item.status == "approved" &&
+                                    selectedTextAreaId
                                       ? "ring-green-700"
                                       : item.status == "Flagged"
                                       ? "ring-yellow-500"
@@ -704,40 +721,65 @@ const QuestionnairesView = () => {
                                   } ${
                                     (updateMultipleAnswer(item.id) &&
                                       answerIsUpdate) ||
-                                    (selectedTextAreaId === item.id && answerIsUpdate)
+                                    (selectedTextAreaId === item.id &&
+                                      answerIsUpdate)
                                       ? ""
                                       : "bg-transparent"
                                   } `}
                                 ></textarea>
                               ) : (
-                              <div ref={divRef}
-                               onClick={(e) => {
-                                toggleEdit(item.id)
-                                setTextAreaSize(e.target.scrollHeight)
-                                setAnswerIsUpdate("single");}}>{item.answer}</div>
+                                <div
+                                  ref={divRef}
+                                  className="w-[600px] break-words overflow-hidden !h-auto !text-wrap"
+                                  onClick={(e) => {
+                                    toggleEdit(item.id);
+                                    setTextAreaSize(e.target.scrollHeight);
+                                    setAnswerIsUpdate("single");
+                                  }}
+                                >
+                                  {item.answer}
+                                </div>
                               )}
 
                               <div
                                 className={`text-[12px] flex justify-end my-2`}
                               >
-                                {selectedTextAreaId  === item.id &&
+                                {selectedTextAreaId === item.id &&
                                 answerIsUpdate == "single" ? (
-                                  <p
-                                    onClick={() => {
-                                      UpdateRecord([item.id], "answer", index);
-                                      setAnswerIsUpdate("");
-                                      setSelectedTextAreaId("")
-                                    }}
-                                    className={` text-[16px] 2xl:text-[20px] rounded-lg ${
-                                      item.status == "approved"
-                                        ? "bg-green-700"
-                                        : item.status == "Flagged"
-                                        ? "bg-yellow-500"
-                                        : "bg-blue-500"
-                                    }  cursor-pointer rounded-sm px-2   text-white`}
-                                  >
-                                    Update
-                                  </p>
+                                  <>
+                                   <p
+                                      onClick={() => {
+                                        
+                                        setAnswerIsUpdate("");
+                                        setSelectedTextAreaId("");
+                                      }}
+                                      className={` mx-2 text-[16px] 2xl:text-[20px] bg-red-400   cursor-pointer rounded-sm px-2   text-white`}
+                                    >
+                                      Cancel
+                                    </p>
+                                    <p
+                                      onClick={() => {
+                                        UpdateRecord(
+                                          [item.id],
+                                          "answer",
+                                          index
+                                        );
+                                        setAnswerIsUpdate("");
+                                        setSelectedTextAreaId("");
+                                      }}
+                                      className={` text-[16px] 2xl:text-[20px] rounded-lg ${
+                                        item.status == "approved"
+                                          ? "bg-green-700"
+                                          : item.status == "Flagged"
+                                          ? "bg-yellow-500"
+                                          : "bg-blue-500"
+                                      }  cursor-pointer rounded-sm px-2   text-white`}
+                                    >
+                                      Update
+                                    </p>
+
+                                   
+                                  </>
                                 ) : null}
                               </div>
                             </td>
@@ -865,9 +907,7 @@ const QuestionnairesView = () => {
                                   ? "bg-green-600"
                                   : "bg-blue-600"
                               }`}
-                            >
-                             
-                            </td>
+                            ></td>
                           </tr>
                         ))
                     ) : (
