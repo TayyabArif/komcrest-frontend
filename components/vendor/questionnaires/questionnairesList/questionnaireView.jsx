@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FilePenLine, Check, Eye, TriangleAlert, Filter } from "lucide-react";
 import { Settings, Search } from "lucide-react";
 import QuestionnairsListHeader from "./QuestionnairsListHeader";
@@ -25,8 +25,7 @@ const deleteModalContent = "Are you sure to delete Questions";
 
 const QuestionnairesView = () => {
   const router = useRouter();
-  const [showHistory, setShowHistory] = useState(false);
-  const { setQuestionnaireUpdated  } = useMyContext();
+  const { setQuestionnaireUpdated } = useMyContext();
   let id;
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -46,8 +45,47 @@ const QuestionnairesView = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState([]);
   const [dropDownOpen, setDropDownOpen] = useState(false);
+  const [historyVisible, setHistoryVisible] = useState(false);
+  const [allCollaborators, setAllCollaborators] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("references");
+  const divRef = useRef(null);
+  const [textAreaSize, setTextAreaSize] = useState("")
+  const [selectedTextAreaId ,setSelectedTextAreaId] = useState()
 
-  const [allCollaborators , setAllCollaborators] = useState([])
+  useEffect(() => {
+    const storedHistoryPreference = JSON.parse(
+      localStorage.getItem("showHistory")
+    );
+    const isVisible =
+      storedHistoryPreference && storedHistoryPreference.historyVisible
+        ? storedHistoryPreference.historyVisible
+        : false;
+    setHistoryVisible(isVisible);
+    const selectId =
+      storedHistoryPreference && storedHistoryPreference.selectedId;
+    setSelectedId(selectId);
+    const historySelectedoption =
+      storedHistoryPreference && storedHistoryPreference.selectedOption
+        ? "history"
+        : "references";
+    setSelectedOption(historySelectedoption);
+  }, []);
+
+  useEffect(() => {
+    console.log("<<<<<<<<", selectedOption);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "showHistory",
+        JSON.stringify({ historyVisible, selectedId, selectedOption })
+      );
+    }
+  }, [historyVisible, selectedId, selectedOption]);
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem("showHistory");
+    };
+  }, []);
 
   // filter data after notification
   useEffect(() => {
@@ -64,7 +102,7 @@ const QuestionnairesView = () => {
     console.log("Notify Questions:", notifyQuestions);
 
     if (Questionnair) {
-      localStorage.setItem('QuestionnaireId',(Questionnair));
+      localStorage.setItem("QuestionnaireId", Questionnair);
       setFilters([
         {
           name: "id",
@@ -102,11 +140,13 @@ const QuestionnairesView = () => {
         setQuestionnaireData(data?.questionnaire);
         setDataLoaded(true);
 
-        const transformCollaborator = data?.questionnaire.collaborators.map((item) => ({
-          value: item?.id,
-          label: item?.firstName,
-      }));
-      setAllCollaborators(transformCollaborator)
+        const transformCollaborator = data?.questionnaire.collaborators.map(
+          (item) => ({
+            value: item?.id,
+            label: item?.firstName,
+          })
+        );
+        setAllCollaborators(transformCollaborator);
         console.log("::::::::::", data);
       } else {
         toast.error(data?.error);
@@ -252,7 +292,7 @@ const QuestionnairesView = () => {
       field: property,
       value: value,
       eventType: `${property}Changed`,
-      questionnairId:localStorage.getItem("QuestionnaireId")
+      questionnairId: localStorage.getItem("QuestionnaireId"),
     };
 
     const jsonPayload = JSON.stringify(updatedData);
@@ -292,7 +332,7 @@ const QuestionnairesView = () => {
             toast.success(data.message);
           }
           setDataUpdate(!dataUpdate);
-          setQuestionnaireUpdated ((prev)=>!prev)
+          setQuestionnaireUpdated((prev) => !prev);
           if (property == "answer") {
             let newArr = bulkSelected.filter((item) => item !== id[0]);
             setBulkSelected(newArr);
@@ -383,6 +423,17 @@ const QuestionnairesView = () => {
     }
   };
 
+  const [editId, setEditId] = useState(null); // State to track edit mode
+
+  // Function to toggle edit mode
+  const toggleEdit = (id) => {
+    if (selectedTextAreaId === id) {
+      setSelectedTextAreaId(null); // Exit edit mode
+    } else {
+      setSelectedTextAreaId(id); // Enter edit mode for clicked item
+    }
+  };
+
   return (
     <>
       {dataLoaded ? (
@@ -416,9 +467,9 @@ const QuestionnairesView = () => {
                 {filters.some((filter) => filter.value.length > 0) &&
                   !showFilter && (
                     <button
-                      onClick={()=>{
-                        setFilters([])
-                        router.push("/vendor/questionnaires/view")
+                      onClick={() => {
+                        setFilters([]);
+                        router.push("/vendor/questionnaires/view");
                       }}
                       className="px-2 py-1 rounded-full border text-blue-700 border-blue-700 border-dashed text-nowrap"
                     >
@@ -469,10 +520,10 @@ const QuestionnairesView = () => {
                       <div className="px-3 py-2  space-y-1.5 text-[16px]">
                         <div
                           className="text-md cursor-pointer"
-                          onClick={() => {
-                            setAnswerIsUpdate("multiple");
-                            setDropDownOpen(false);
-                          }}
+                          // onClick={() => {
+                          //   setAnswerIsUpdate("multiple");
+                          //   setDropDownOpen(false);
+                          // }}
                         >
                           Improve answer
                         </div>
@@ -552,279 +603,295 @@ const QuestionnairesView = () => {
                         Actions
                       </th>
                       <th className="px-[2.5px] text-center text-gray-600 border"></th>
-                      
                     </tr>
                   </thead>
                   <tbody>
-                    {questionnaireData?.questionnaireRecords.length > 0 ?
-                    questionnaireData?.questionnaireRecords
-                      ?.sort((a, b) => a.id - b.id)
-                      ?.map((item, index) => (
-                        <tr
-                          key={index}
-                          className={`border-b 2xl:text-[20px] text-[16px] ${
-                            index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                          }`}
-                        >
-                          <td className="px-4 py-2 text-center border w-[70px]">
-                            <Checkbox
-                              isSelected={bulkSelected.includes(item.id)}
-                              onChange={() => handleCheckboxChange(item.id)}
-                              className="2xl:text-[20px] !text-[50px]"
-                              radius="none"
-                              size="md"
-                              classNames={{ wrapper: "!rounded-[3px]" }}
-                            />
-                          </td>
-                          <td className="px-4 py-2 text-center border w-[70px]">
-                            <div
-                              className={`h-5 w-5 mx-auto rounded-full cursor-pointer border ${
+                    {questionnaireData?.questionnaireRecords.length > 0 ? (
+                      questionnaireData?.questionnaireRecords
+                        ?.sort((a, b) => a.id - b.id)
+                        ?.map((item, index) => (
+                          <tr
+                            key={index}
+                            className={`border-b 2xl:text-[20px] text-[16px] ${
+                              index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                            }`}
+                          >
+                            <td className="px-4 py-2 text-center border w-[70px]">
+                              <Checkbox
+                                isSelected={bulkSelected.includes(item.id)}
+                                onChange={() => handleCheckboxChange(item.id)}
+                                className="2xl:text-[20px] !text-[50px]"
+                                radius="none"
+                                size="md"
+                                classNames={{ wrapper: "!rounded-[3px]" }}
+                              />
+                            </td>
+                            <td className="px-4 py-2 text-center border w-[70px]">
+                              <div
+                                className={`h-5 w-5 mx-auto rounded-full cursor-pointer border ${
+                                  item.status === "Flagged"
+                                    ? "bg-yellow-500"
+                                    : item.status === "approved"
+                                    ? "bg-green-600"
+                                    : "bg-blue-600"
+                                }`}
+                              ></div>
+                            </td>
+                            <td className="px-4 py-2 border  w-[600px]">
+                              {item.question}
+                            </td>
+                            <td className=" py-2 items-center ">
+                              <div className="w-[90%] mx-auto">
+                                <div className={`text-[12px] flex  my-2`}>
+                                  {item.complianceGeneratedBy ? (
+                                    <p className=" italic text-left">Updated</p>
+                                  ) : (
+                                    <p className=" italic text-left">A.I.</p>
+                                  )}
+                                </div>
+                                <select
+                                  value={item.compliance}
+                                  onChange={(e) =>
+                                    UpdateRecord(
+                                      [item.id],
+                                      "compliance",
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-full  text-[16px] 2xl:text-[20px] rounded-lg bg-transparent"
+                                >
+                                  <option value="" disabled>
+                                    Select
+                                  </option>
+                                  <option value="Yes">Yes</option>
+                                  <option value="No">No</option>
+                                  <option value="Partial">Partial</option>
+                                </select>
+                              </div>
+                            </td>
+                            <td
+                              className={`px-4 py-2 w-[600px]  border ${
+                                item.confidence < 7
+                                  ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
+                                  : ""
+                              }`}
+                            >
+                              <div className={`text-[12px] flex  my-2`}>
+                                {item.generatedBy == "AI" ? (
+                                  <p className=" italic text-left">A.I.</p>
+                                ) : (
+                                  <p className=" italic text-left">Updated</p>
+                                )}
+                              </div>
+
+                              {selectedTextAreaId === item.id ? (
+                                <textarea
+                                  // disabled={answerIsUpdate === "multiple" ? !updateMultipleAnswer(item.id) : false}
+                                  value={item.answer}
+                                  onChange={(e) => {
+                                    handleChange(index, e.target.value);
+                                  }}
+                                  onClick={(e) => {
+                                    setSelectedTextAreaId(item.id);
+                                    setAnswerIsUpdate("single");
+                                  }}
+                                  className={`w-full  h-[${textAreaSize}px] rounded-md focus:outline-none ring-2 px-2  ${
+                                    item.status == "approved" && selectedTextAreaId
+                                      ? "ring-green-700"
+                                      : item.status == "Flagged"
+                                      ? "ring-yellow-500"
+                                      : "ring-blue-500"
+                                  } ${
+                                    (updateMultipleAnswer(item.id) &&
+                                      answerIsUpdate) ||
+                                    (selectedTextAreaId === item.id && answerIsUpdate)
+                                      ? ""
+                                      : "bg-transparent"
+                                  } `}
+                                ></textarea>
+                              ) : (
+                              <div ref={divRef}
+                               onClick={(e) => {
+                                toggleEdit(item.id)
+                                setTextAreaSize(e.target.scrollHeight)
+                                setAnswerIsUpdate("single");}}>{item.answer}</div>
+                              )}
+
+                              <div
+                                className={`text-[12px] flex justify-end my-2`}
+                              >
+                                {selectedTextAreaId  === item.id &&
+                                answerIsUpdate == "single" ? (
+                                  <p
+                                    onClick={() => {
+                                      UpdateRecord([item.id], "answer", index);
+                                      setAnswerIsUpdate("");
+                                      setSelectedTextAreaId("")
+                                    }}
+                                    className={` text-[16px] 2xl:text-[20px] rounded-lg ${
+                                      item.status == "approved"
+                                        ? "bg-green-700"
+                                        : item.status == "Flagged"
+                                        ? "bg-yellow-500"
+                                        : "bg-blue-500"
+                                    }  cursor-pointer rounded-sm px-2   text-white`}
+                                  >
+                                    Update
+                                  </p>
+                                ) : null}
+                              </div>
+                            </td>
+                            <td className="px-4 py-2 text-center border w-[100px]">
+                              <div className="inline-flex space-x-2 text-[#A5A5A5]">
+                                <Check
+                                  size={17}
+                                  style={{ strokeWidth: 3 }}
+                                  className={` cursor-pointer ${
+                                    item.status == "approved"
+                                      ? "text-green-700"
+                                      : ""
+                                  }`}
+                                  onClick={() =>
+                                    UpdateRecord(
+                                      [item.id],
+                                      "status",
+                                      "approved"
+                                    )
+                                  }
+                                />
+                                <TriangleAlert
+                                  size={17}
+                                  style={{ strokeWidth: 3 }}
+                                  className={` cursor-pointer  ${
+                                    item.status == "Flagged"
+                                      ? "text-yellow-500"
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    UpdateRecord(
+                                      [item.id],
+                                      "status",
+                                      "Flagged"
+                                    );
+                                  }}
+                                />
+                                <Eye
+                                  size={17}
+                                  className={`cursor-pointer ${
+                                    selectedId == item.id && historyVisible
+                                      ? "text-blue-600"
+                                      : ""
+                                  }`}
+                                  style={{ strokeWidth: 3 }}
+                                  onClick={() => {
+                                    setSelectedId(item.id);
+                                    if (selectedId == item.id) {
+                                      setHistoryVisible((prev) => !prev);
+                                    } else if (!selectedId) {
+                                      setHistoryVisible((prev) => !prev);
+                                    }
+                                    // Toggle visibility
+                                  }}
+                                />
+
+                                <Popover
+                                  className="rounded-[0px] "
+                                  isOpen={openPopoverIndex === index}
+                                  onOpenChange={(open) =>
+                                    setOpenPopoverIndex(open ? index : null)
+                                  }
+                                >
+                                  <PopoverTrigger>
+                                    <FilePenLine
+                                      size={17}
+                                      style={{ strokeWidth: 3 }}
+                                      className="cursor-pointer "
+                                    />
+                                  </PopoverTrigger>
+                                  <PopoverContent>
+                                    <div className="px-3 py-2  space-y-1.5 text-[16px] cursor-pointer">
+                                      <div
+                                        // onClick={() => {
+                                        //   setSelectedId(item.id);
+                                        //   setAnswerIsUpdate(true);
+                                        // }}
+                                        className="text-md cursor-pointer "
+                                      >
+                                        Improve answer
+                                      </div>
+                                      <div
+                                        className="text-md cursor-pointer"
+                                        onClick={() => {
+                                          setOpenPopoverIndex(null);
+                                          reRunForAnswer([item.id]);
+                                        }}
+                                      >
+                                        Re-run AI for compliance & answer
+                                      </div>
+                                      <div
+                                        className="text-md cursor-pointer"
+                                        onClick={() => {
+                                          setBulkSelected([
+                                            ...bulkSelected,
+                                            item.id,
+                                          ]);
+                                          notifyDisclosure.onOpen();
+                                          setOpenPopoverIndex(null);
+                                        }}
+                                      >
+                                        Notify for help
+                                      </div>
+                                      <div
+                                        className="text-md text-red-600 cursor-pointer"
+                                        onClick={() => {
+                                          setSelectedId(item.id);
+                                          deleteDisclosure.onOpen();
+                                          setDeleteAction("single");
+                                          setOpenPopoverIndex(null);
+                                        }}
+                                      >
+                                        Delete
+                                      </div>
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            </td>
+                            <td
+                              className={`my-2 ${
                                 item.status === "Flagged"
                                   ? "bg-yellow-500"
                                   : item.status === "approved"
                                   ? "bg-green-600"
                                   : "bg-blue-600"
                               }`}
-                            ></div>
-                          </td>
-                          <td className="px-4 py-2 border  w-[600px]">
-                            {item.question}
-                          </td>
-                          <td className=" py-2 items-center ">
-                            <div className="w-[90%] mx-auto">
-                            <div className={`text-[12px] flex  my-2`}>
-                              {item.complianceGeneratedBy ? (
-                                <p className=" italic text-left">Updated</p>
-                              ) : (
-                                <p className=" italic text-left">A.I.</p>
-                              )}
-                            </div>
-                              <select
-                                value={item.compliance}
-                                onChange={(e) =>
-                                  UpdateRecord(
-                                    [item.id],
-                                    "compliance",
-                                    e.target.value
-                                  )
-                                }
-                                className="w-full  text-[16px] 2xl:text-[20px] rounded-lg bg-transparent"
-                              >
-                                <option value="" disabled>
-                                  Select
-                                </option>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                                <option value="Partial">Partial</option>
-                              </select>
-                            </div>
-                          </td>
-                          <td
-                            className={`px-4 py-2 w-[600px]  border ${
-                              item.confidence < 7
-                                ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
-                                : ""
-                            }`}
-                          >
-                            <div className={`text-[12px] flex  my-2`}>
-                              {item.generatedBy == "AI" ? (
-                                <p className=" italic text-left">A.I.</p>
-                              ) : (
-                                <p className=" italic text-left">Updated</p>
-                              )}
-                            </div>
-                            <textarea
-                              disabled={answerIsUpdate === "multiple" ? !updateMultipleAnswer(item.id) : false}
-                              onChange={(e) => {
-                                handleChange(index, e.target.value);
-                              }}
-                              onClick={(e) => {
-                                if (bulkSelected.length == 0) {
-                                  setSelectedId(item.id);
-                                  setAnswerIsUpdate("single");
-                                }
-
-                                e.target.style.height = 'auto'; // Reset the height
-                                e.target.style.height = `${e.target.scrollHeight}px`; 
-
-                              }}
-                              value={item.answer}
-                              className={`w-full  rounded-md focus:outline-none focus:ring-2 focus:px-2  ${
-                                item.status == "approved"
-                                  ? "focus:ring-green-700"
-                                  : item.status == "Flagged"
-                                  ? "focus:ring-yellow-500"
-                                  : "focus-blue-500"
-                              } ${
-                                (updateMultipleAnswer(item.id) &&
-                                  answerIsUpdate) ||
-                                (selectedId === item.id && answerIsUpdate)
-                                  ? ""
-                                  : "bg-transparent"
-                              } `}
-                            />
-
-                            <div
-                              className={`text-[12px] flex justify-end my-2`}
                             >
-                              {(updateMultipleAnswer(item.id) &&
-                                answerIsUpdate) ||
-                              (selectedId === item.id && answerIsUpdate) ? (
-                                <p
-                                  onClick={() => {
-                                    UpdateRecord([item.id], "answer", index);
-                                    setAnswerIsUpdate("");
-                                  }}
-                                  className={` text-[16px] 2xl:text-[20px] rounded-lg ${
-                                    item.status == "approved"
-                                      ? "bg-green-700"
-                                      : item.status == "Flagged"
-                                      ? "bg-yellow-500"
-                                      : "bg-blue-500"
-                                  }  cursor-pointer rounded-sm px-2   text-white`}
-                                >
-                                  Update
-                                </p>
-                              ) : null}
-                            </div>
-                          </td>
-                          <td className="px-4 py-2 text-center border w-[100px]">
-                            <div className="inline-flex space-x-2 text-[#A5A5A5]">
-                              <Check
-                                size={17}
-                                style={{ strokeWidth: 3 }}
-                                className={` cursor-pointer ${
-                                  item.status == "approved"
-                                    ? "text-green-700"
-                                    : ""
-                                }`}
-                                onClick={() =>
-                                  UpdateRecord([item.id], "status", "approved")
-                                }
-                              />
-                              <TriangleAlert
-                                size={17}
-                                style={{ strokeWidth: 3 }}
-                                className={` cursor-pointer  ${
-                                  item.status == "Flagged"
-                                    ? "text-yellow-500"
-                                    : ""
-                                }`}
-                                onClick={() => {
-                                  UpdateRecord([item.id], "status", "Flagged");
-                                }}
-                              />
-                              <Eye
-                                size={17}
-                                className={`cursor-pointer ${
-                                  selectedId == item.id && showHistory
-                                    ? "text-blue-600"
-                                    : ""
-                                }`}
-                                style={{ strokeWidth: 3 }}
-                                onClick={() => {
-                                  setSelectedId(item.id);
-                                  setShowHistory(!showHistory);
-                                }}
-                              />
-
-                              <Popover
-                                className="rounded-[0px] "
-                                isOpen={openPopoverIndex === index}
-                                onOpenChange={(open) =>
-                                  setOpenPopoverIndex(open ? index : null)
-                                }
-                              >
-                                <PopoverTrigger>
-                                  <FilePenLine
-                                    size={17}
-                                    style={{ strokeWidth: 3 }}
-                                    className="cursor-pointer "
-                                  />
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                  <div className="px-3 py-2  space-y-1.5 text-[16px] cursor-pointer">
-                                    <div
-                                      onClick={() => {
-                                        setSelectedId(item.id);
-                                        setAnswerIsUpdate(true);
-                                      }}
-                                      className="text-md cursor-pointer "
-                                    >
-                                      Improve answer
-                                    </div>
-                                    <div
-                                      className="text-md cursor-pointer"
-                                      onClick={() => {
-                                        setOpenPopoverIndex(null);
-                                        reRunForAnswer([item.id]);
-                                      }}
-                                    >
-                                      Re-run AI for compliance & answer
-                                    </div>
-                                    <div
-                                      className="text-md cursor-pointer"
-                                      onClick={() => {
-                                        setBulkSelected([
-                                          ...bulkSelected,
-                                          item.id,
-                                        ]);
-                                        notifyDisclosure.onOpen();
-                                        setOpenPopoverIndex(null);
-                                      }}
-                                    >
-                                      Notify for help
-                                    </div>
-                                    <div
-                                      className="text-md text-red-600 cursor-pointer"
-                                      onClick={() => {
-                                        setSelectedId(item.id);
-                                        deleteDisclosure.onOpen();
-                                        setDeleteAction("single");
-                                        setOpenPopoverIndex(null);
-                                      }}
-                                    >
-                                      Delete
-                                    </div>
-                                  </div>
-                                </PopoverContent>
-                              </Popover>
-                            </div>
-                          </td>
-                          <td
-                            className={`my-2 ${
-                              item.status === "Flagged"
-                                ? "bg-yellow-500"
-                                : item.status === "approved"
-                                ? "bg-green-600"
-                                : "bg-blue-600"
-                            }`}
-                          >
-                            <div></div>
-                          </td>
-                        </tr>
-                      )
-                      
-                      ): <tr>
-                      <td
-                        colSpan={6}
-                        className="py-5  px-4 text-center text-gray-500 text-18px"
-                      >
-                         No Question found 
-                      </td>
-                    </tr>
-                      
-                      }
+                             
+                            </td>
+                          </tr>
+                        ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={6}
+                          className="py-5  px-4 text-center text-gray-500 text-18px"
+                        >
+                          No question found
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
-              {showHistory && (
+              {historyVisible && (
                 <div className="w-[35%] h-[80vh] overflow-auto">
                   <History
                     selectedId={selectedId}
-                    setShowHistory={setShowHistory}
                     setSelectedId={setSelectedId}
                     dataUpdate={dataUpdate}
+                    setHistoryVisible={setHistoryVisible}
+                    setSelectedOption={setSelectedOption}
+                    selectedOption={selectedOption}
                   />
                 </div>
               )}

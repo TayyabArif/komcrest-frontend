@@ -238,7 +238,6 @@ const Import = ({setImportSuccessfully}) => {
             toast.success("Questionnaires created successfully");
             localStorage.setItem('QuestionnaireId',(data?.questionnaire?.id));
             router.push(`/vendor/questionnaires/view?name=${data?.questionnaire?.customerName}`)
-            setQuestionnaireUpdated ((prev)=>!prev)
             uploadFile(data?.questionnaire?.id)
           } else {
             toast.error(data?.error || "Questionnaires not Created");
@@ -282,7 +281,8 @@ const Import = ({setImportSuccessfully}) => {
         })
         .then(({ status, ok, data }) => {
           if (ok) {
-            console("file save");
+            console.log("file save");
+            setQuestionnaireUpdated ((prev)=>!prev)
           } else {
             console.error("Error:", data);
           }
@@ -387,7 +387,9 @@ const Import = ({setImportSuccessfully}) => {
               {stepper === 4 && <Completed content={`Importing ${totalCount} questions`} />}
             </div>
             
-              <div className="flex justify-end !mt-20">
+
+            { stepper < 4 && (
+                <div className="flex justify-end !mt-20">
                 <Button
                   onClick={handleCancelClick}
                   radius="none"
@@ -405,6 +407,9 @@ const Import = ({setImportSuccessfully}) => {
                   {stepper === 3 ? "Confirm" : "Next"}
                 </Button>
               </div>
+              )
+            }
+             
             
           </div>
         </div>

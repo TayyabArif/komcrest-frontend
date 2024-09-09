@@ -38,9 +38,11 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
         // setQuestionnaireData(transformData);
       } else {
         toast.error(data?.error);
+        setHistoryRecord([]);
       }
     } catch (error) {
       console.error("Error fetching Questionnaire:", error);
+      setHistoryRecord([]);
     }
   };
 
@@ -50,6 +52,16 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
     }
   }, [selectedId, dataUpdate]);
 
+
+
+  function capitalizeFirstLetter(string) {
+    if (!string) return ''; 
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+
+
+
   const getHistoryStructure = (record) => {
     switch (record.eventType) {
       case "complianceChanged":
@@ -58,7 +70,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
             <h1>Modified the compliance.</h1>
             <div>
               <h1 className="flex items-center gap-1">
-                Compliance : {record?.previousValue} <ArrowRight size={15} />{" "}
+                Compliance : {capitalizeFirstLetter(record?.previousValue)} <ArrowRight size={15} />{" "}
                 {record.currentValue}
               </h1>
             </div>

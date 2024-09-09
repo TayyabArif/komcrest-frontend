@@ -196,8 +196,9 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                 <div
                   className="text-small cursor-pointer"
                   onClick={(e) => {
+                    console.log("data?.filePath",data)
                     e.stopPropagation();
-                    handleDownload(data.filePath);
+                    handleDownload(data?.filePath);
                     setOpenPopoverIndex(null);
                   }}
                 >

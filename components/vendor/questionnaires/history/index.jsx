@@ -5,8 +5,8 @@ import DocumentHistory from "./DocumentHistory";
 import OnlineResourceHistory from "./OnlineResourceHistory";
 import HistoryDetail from "./HistoryDetail";
 
-const History = ({selectedId ,setShowHistory ,setSelectedId ,dataUpdate}) => {
-  const [selectedOption, setSelectedOption] = useState("references");
+const History = ({selectedId ,setSelectedId ,dataUpdate ,setHistoryVisible ,selectedOption, setSelectedOption}) => {
+  // const [selectedOption, setSelectedOption] = useState("references");
   const [referenceSelect, setReferenceSelect] = useState("knowledge");
 
   const handleChange = (event) => {
@@ -14,7 +14,7 @@ const History = ({selectedId ,setShowHistory ,setSelectedId ,dataUpdate}) => {
   };
 
   return (
-    <div className="bg-[#F2F2F2] px-5 h-screen ">
+    <div className="bg-[#F2F2F2] px-5 min-h-screen ">
      <div className="flex justify-between  items-center sticky top-0 py-5 z-50 bg-[#F2F2F2] ">
         <div className="flex items-center justify-between gap-10">
            <h1 onClick={()=>{
@@ -25,7 +25,8 @@ const History = ({selectedId ,setShowHistory ,setSelectedId ,dataUpdate}) => {
         </div>
         <X className="cursor-pointer"  onClick={()=>{
           setSelectedId(null)
-          setShowHistory(false)}}/>
+          setHistoryVisible(false)
+          }}/>
       </div>
       {selectedOption === "references" &&
         <div className="flex items-center mb-4">
