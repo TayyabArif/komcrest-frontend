@@ -80,7 +80,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
       case "statusChanged":
         return (
           <div>
-            <h1>{record.currentValue} the question</h1>
+            <h1>{capitalizeFirstLetter(record.currentValue)} the question</h1>
           </div>
         );
 
@@ -88,7 +88,8 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
         return (
           <div className="">
             <div className="flex gap-3">
-              <h1>Improved the answered.</h1>
+            {/* "Improved the answer" is only when improve from AI */}
+              <h1>Modified the answer.</h1>
             </div>
             <h1>Answer: {record.currentValue}</h1>
             <h1></h1>

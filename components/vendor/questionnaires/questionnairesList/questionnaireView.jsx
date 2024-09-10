@@ -656,10 +656,10 @@ const QuestionnairesView = () => {
                             <td className=" py-2 items-center ">
                               <div className="w-[90%] mx-auto">
                                 <div className={`text-[12px] flex  my-2`}>
-                                  {item.complianceGeneratedBy ? (
-                                    <p className=" italic text-left">Updated</p>
+                                  {item.complianceGeneratedBy == "AI" ? (
+                                   <p className=" italic text-left">A.I.</p>
                                   ) : (
-                                    <p className=" italic text-left">A.I.</p>
+                                    <p className=" italic text-left">Updated</p>
                                   )}
                                 </div>
                                 <select

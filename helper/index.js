@@ -81,36 +81,35 @@ export function formatDateWithTime(dateString) {
     "i"
   );
 
- export const multipleSelectStyle = {
-    control: (provided) => ({
-      ...provided,
-      borderRadius: "0.80rem",
-      border: "2.2px solid #E5E7EB",
-      fontSize: "18px",
-    }),
-    multiValue: (provided) => ({
-      ...provided,
+export const multipleSelectStyle = {
+  control: (provided) => ({
+    ...provided,
+    borderRadius: "0.80rem",
+    border: "2.2px solid #E5E7EB",
+    fontSize: "18px",
+  }),
+  multiValue: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.data.isFixed ? "gray" : "#2457D7",
+    borderRadius: "1rem",
+    padding: "0px 2px",
+    color: "white",
+  }),
+  multiValueLabel: (provided, state) => ({
+    ...provided,
+    color: state.data.isFixed ? "white" : "white",
+  }),
+  multiValueRemove: (provided) => ({
+    ...provided,
+    color: "white",
+    ":hover": {
       backgroundColor: "#2457D7",
       borderRadius: "1rem",
-      padding: "0px 2px",
       color: "white",
-    }),
-    multiValueLabel: (provided) => ({
-      ...provided,
-      color: "white",
-    }),
-    multiValueRemove: (provided) => ({
-      ...provided,
-      color: "white",
-      ":hover": {
-        backgroundColor: "#2457D7",
-        borderRadius: "1rem",
-        color: "white",
-      },
-     
-    }),
-  
-  };
+    },
+  }),
+};
+
 
 
   /// exoort questionnire data 

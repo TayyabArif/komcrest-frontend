@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/react";
 import Dropzone from "react-dropzone";
 import { languageOptions } from "@/constants";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import { multipleSelectStyle } from "@/helper";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
@@ -216,6 +216,16 @@ const UpdateQuestionnaires = () => {
     }
   };
 
+  const { MultiValueRemove } = components;
+
+  const CustomMultiValueRemove = (props) => {
+    if (props.data.isFixed) {
+      return null;
+    }
+    return <MultiValueRemove {...props} />;
+  };
+
+
   return (
     <div className="w-[100%] h-full ">
       <div className="w-[90%] mx-auto py-4 mt-[7rem]">
@@ -387,6 +397,7 @@ const UpdateQuestionnaires = () => {
                     questionnaireData.collaborators?.includes(option.value)
                   )}
                   onChange={handleMultipleSelect}
+                  components={{ MultiValueRemove: CustomMultiValueRemove }}
                 />
               </div>
               {/* <div>

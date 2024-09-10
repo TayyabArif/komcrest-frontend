@@ -194,7 +194,7 @@ const OnlineResourceComponent = () => {
                         classNames={{ wrapper: "!rounded-[3px]" }}
                       />
                     </th>
-                <th className="bg-gray-200  px-2 font-bold md:border md:border-gray-300 text-left block md:table-cell min-w-[250px]">
+                <th className="bg-gray-200  px-2 font-bold md:border md:border-gray-300 text-left block md:table-cell min-w-[180px]">
                   Title
                 </th>
                 <th className="bg-gray-200 p-1  font-bold md:border md:border-gray-300 text-left block md:table-cell">
@@ -218,7 +218,7 @@ const OnlineResourceComponent = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="block md:table-row-group">
+            <tbody className="block md:table-row-group overflow-none">
               {onlineResourceData?.sort((a, b) => b.id - a.id)?.map((item, index) => (
                 <tr
                   key={index}
