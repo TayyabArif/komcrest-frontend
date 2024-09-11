@@ -4,7 +4,7 @@ import VendorLayout from "../../../components/vendor/shared/vendorLayout";
 import DummyQuestionnairesList from "@/components/vendor/questionnaires/questionnairesList/dummyTable";
 const ImportQuestionnaire = () => {
   const [importSuccessfully ,setImportSuccessfully] = useState(false)
-  const [questionList , setQuestionList] = useState([])
+  const [questionList , setQuestionList] = useState()
   console.log("KKKKKKK",questionList)
   return (
     <VendorLayout>

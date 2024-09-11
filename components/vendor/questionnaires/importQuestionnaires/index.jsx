@@ -16,13 +16,11 @@ import Add from "./Add";
 import SelectHeader from "./SelectHeader";
 import SelectQuestion from "./SelectQuestion";
 import ValidateData from "./ValidateData";
-import { useMyContext } from "@/context"; 
+import { useMyContext } from "@/context";
 
-
-
-const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
+const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
   const [stepper, setStepper] = useState(0);
-  const { setQuestionnaireUpdated  } = useMyContext();
+  const { setQuestionnaireUpdated } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -34,7 +32,9 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
   const [selectedRows, setSelectedRows] = useState({});
   const [columnMapping, setColumnMapping] = useState({});
   const [errors, setErrors] = useState({});
-  const [totalCount ,setTotalCount] = useState("")
+  const [totalCount, setTotalCount] = useState("");
+  const [reamingData, setReamingData] = useState();
+  const ValidateComponentRef = useRef();
   const [importQuestionnaires, setImportQuestionnaire] = useState({
     customerName: "",
     customerDomain: "",
@@ -47,17 +47,24 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
     returnDate: "",
     fileName: "",
     Questionnaires: [],
-    originalFile : ""
+    originalFile: "",
   });
 
-  const [currentbaseUrl, setCurrentBaseUrl] = useState('');
+  const getDatafromChild = () => {
+    let getData;
+    if (ValidateComponentRef.current) {
+      getData = ValidateComponentRef.current.callChildFunction(); // Call the child's function via ref
+    }
+    return getData;
+  };
+
+  const [currentbaseUrl, setCurrentBaseUrl] = useState("");
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       setCurrentBaseUrl(window.location.origin);
     }
   }, []);
-
 
   function getTitle() {
     switch (stepper) {
@@ -135,14 +142,14 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
         toast.error("Please select headers");
       }
     } else if (stepper === 3) {
+      const finalData = getDatafromChild();
       setStepper(stepper + 1);
       setProgressBar(progressBar + 27);
       const transformedData = {};
-      for (const key in excelFile) {
+      for (const key in finalData) {
         const rows = excelFile[key];
         const headers = rows[0];
-        const dataRows = rows.slice(1);
-
+        const dataRows = finalData[key];
         transformedData[key] = dataRows.map((row) => {
           let obj = {};
           const mapping = columnMapping[key]; // Get the column mapping for the current key
@@ -157,6 +164,7 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
         });
       }
       submitQuestions(transformedData);
+      console.log("transformedDatatransformedData", transformedData);
     }
   };
 
@@ -179,14 +187,11 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
     const payload = {
       ...importQuestionnaires,
       Questionnaires: result,
-      questionnaireLink
+      questionnaireLink,
     };
-   
-   setQuestionList((prev)=>[...prev, result])
-   setTotalCount(payload.Questionnaires.length)
 
-   console.log("payload.Questionnaire",)
-
+    setQuestionList(result);
+    setTotalCount(payload.Questionnaires.length);
     const token = cookiesData.token;
 
     let requestOptions = {
@@ -198,10 +203,13 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
       body: JSON.stringify(payload),
       redirect: "follow",
     };
-
     // Introduce a 2-second delay before making the API call
     setTimeout(() => {
-      setImportSuccessfully(true)
+      setImportSuccessfully(true);
+    }, 1500);
+
+    setTimeout(() => {
+      // setImportSuccessfully(true)
       fetch(`${baseUrl}/questionnaires`, requestOptions)
         .then(async (response) => {
           const data = await handleResponse(
@@ -218,11 +226,12 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
         })
         .then(({ status, ok, data }) => {
           if (ok) {
-            console.log("Success:", data);
             toast.success("Questionnaires created successfully");
-            localStorage.setItem('QuestionnaireId',(data?.questionnaire?.id));
-            router.push(`/vendor/questionnaires/view?name=${data?.questionnaire?.customerName}`)
-            uploadFile(data?.questionnaire?.id)
+            localStorage.setItem("QuestionnaireId", data?.questionnaire?.id);
+            router.push(
+              `/vendor/questionnaires/view?name=${data?.questionnaire?.customerName}`
+            );
+            uploadFile(data?.questionnaire?.id);
           } else {
             toast.error(data?.error || "Questionnaires not Created");
             console.error("Error:", data);
@@ -237,12 +246,12 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
             );
           }
         });
-    }, 2000); // 2-second delay
+    }, 3000); // 3-second delay
   };
 
-  const uploadFile  = (id) => {
-     const formData = new FormData();
-     formData.append("file", importQuestionnaires.originalFile);
+  const uploadFile = (id) => {
+    const formData = new FormData();
+    formData.append("file", importQuestionnaires.originalFile);
     const token = cookiesData.token;
     let requestOptions = {
       method: "PUT",
@@ -252,32 +261,38 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
       body: formData,
       redirect: "follow",
     };
-  
-    
-      fetch(`${baseUrl}/questionnaire/file/${id}`, requestOptions)
-        .then(async (response) => {
-          const data = await handleResponse(response, router, cookies, removeCookie);
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
-            console.log("file save");
-            setQuestionnaireUpdated ((prev)=>!prev)
-          } else {
-            console.error("Error:", data);
-          }
-        })
-        .catch((error) => {
-          if (error.response) {
-            console.error("API Error:", error.response);
-            toast.error(error.response.data?.error || "An error occurred while Updated  Questionnaires status");
-          }
-        });
-  }
+
+    fetch(`${baseUrl}/questionnaire/file/${id}`, requestOptions)
+      .then(async (response) => {
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          setQuestionnaireUpdated((prev) => !prev);
+        } else {
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error("API Error:", error.response);
+          toast.error(
+            error.response.data?.error ||
+              "An error occurred while Updated  Questionnaires status"
+          );
+        }
+      });
+  };
 
   const handleCancelClick = () => {
     if (stepper > 0) {
@@ -335,7 +350,12 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
               ))}
             </div>
             <div className="">
-            { stepper > 0 && stepper < 4 && <h1 className='font-semibold text-[16px] 2xl:text-[20px]'>{importQuestionnaires?.customerName} - {importQuestionnaires?.fileName?.replace(".xlsx", "")}</h1>}
+              {stepper > 0 && stepper < 4 && (
+                <h1 className="font-semibold text-[16px] 2xl:text-[20px]">
+                  {importQuestionnaires?.customerName} -{" "}
+                  {importQuestionnaires?.fileName?.replace(".xlsx", "")}
+                </h1>
+              )}
               {stepper === 0 && (
                 <Add
                   importQuestionnaires={importQuestionnaires}
@@ -366,14 +386,18 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
                 <ValidateData
                   columnMapping={columnMapping}
                   excelFile={excelFile}
+                  ref={ValidateComponentRef}
+                  setExcelFile={setExcelFile}
+                  setReamingData={setReamingData}
                 />
               )}
-              {stepper === 4 && <Completed content={`Importing ${totalCount} questions`} />}
+              {stepper === 4 && (
+                <Completed content={`Importing ${totalCount} questions`} />
+              )}
             </div>
-            
 
-            { stepper < 4 && (
-                <div className="flex justify-end !mt-20">
+            {stepper < 4 && (
+              <div className="flex justify-end !mt-15">
                 <Button
                   onClick={handleCancelClick}
                   radius="none"
@@ -391,10 +415,7 @@ const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
                   {stepper === 3 ? "Confirm" : "Next"}
                 </Button>
               </div>
-              )
-            }
-             
-            
+            )}
           </div>
         </div>
       </div>

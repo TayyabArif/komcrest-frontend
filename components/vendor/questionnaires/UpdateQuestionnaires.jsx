@@ -32,10 +32,10 @@ const UpdateQuestionnaires = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [filterCollaboratorList , setFilterCollaboratorList] = useState([])
   const [errors, setErrors] = useState({});
-  const [initialIds, setInitialIds] = useState([]);
-  const [oldCollaborators , setOldCollaborators] = useState([])
+  const [InitiaIColaboratorsIds, setInitiaIColaboratorsIds] = useState([]);
+  const [dataIsLoaded , setDataIsLoaded] = useState(false)
   const [creatorId , setCreatorId] = useState()
-  const [newCollaboratorsList , setNewCollaboratorList] = useState([])
+  const [newCollaboratorsList , setNewCollaboratorList] = useState()
 
   const [currentbaseUrl, setCurrentBaseUrl] = useState('');
 
@@ -90,11 +90,14 @@ const UpdateQuestionnaires = () => {
           
         };
         setCreatorId(data?.questionnaire?.createdBy)
-        setOldCollaborators(data?.questionnaire?.collaborators.map((collaborator) => collaborator.id))
         setQuestionnaireData(transformData);
 
-        const initialCollaboratorsIds = [...data?.questionnaire?.collaborators.map(collaborator => collaborator.id)];
-        setInitialIds(initialCollaboratorsIds)
+        const initialCollaboratorsIds = [...data?.questionnaire?.collaborators.map(collaborator => ({
+          id : collaborator.id,
+          isNew:false
+        }))];
+        setInitiaIColaboratorsIds(initialCollaboratorsIds)
+        setNewCollaboratorList(initialCollaboratorsIds)
   
         // escape create id in all user list
         const filterCollaborator = allCompanyUserData?.map((item) => {
@@ -111,6 +114,7 @@ const UpdateQuestionnaires = () => {
           }
         });
         setFilterCollaboratorList(filterCollaborator)
+        setDataIsLoaded(true)
       } else {
         toast.error(data?.error);
       }
@@ -166,16 +170,23 @@ const UpdateQuestionnaires = () => {
 };
 
   const checkNewColaboratorOrNot = (newCollaborators) => {
+     // add isnNewFiled in the original array
+
+     const transformArray = newCollaborators?.map((data)=>({
+      id : data,
+      isNew : null
+     }))
+
+    console.log(">>>>>LLLLL",newCollaborators)
     let result = [];
-    newCollaborators.filter((data)=> data !== creatorId).forEach(id => {
+    transformArray.filter((data)=> data.id !== creatorId).forEach(item => {
     result.push({
-      id: id,
-      isNew: !initialIds.includes(id) 
+      id: item.id,
+      isNew: !InitiaIColaboratorsIds.some(obj => obj.id === item.id)
     });
   });
 
   setNewCollaboratorList(result)
-  console.log("resultresultresulttttt",result)
   return result;
   }
 
@@ -206,8 +217,8 @@ const UpdateQuestionnaires = () => {
   
 
   const questionnaireUpdated = () => {
+    console.log("newCollaboratorsListnewCollaboratorsList",newCollaboratorsList)
     if(checkValidations()){
-      
       const paylaod = {
         ...questionnaireData,
         collaborators : newCollaboratorsList,
@@ -276,7 +287,8 @@ const UpdateQuestionnaires = () => {
 
   return (
     <div className="w-[100%] h-full ">
-      <div className="w-[90%] mx-auto py-4 mt-[7rem]">
+      {dataIsLoaded && (
+        <div className="w-[90%] mx-auto py-4 mt-[7rem]">
         <h1 className="py-2 px-4 bg-[#F6F7F9] text-[16px] 2xl:text-[20px] font-bold">
           Update questionnaire information 
         </h1>
@@ -416,7 +428,7 @@ const UpdateQuestionnaires = () => {
                   onChange={(e) => handleData(e)}
                   defaultSelectedKeys={
                     questionnaireData?.language
-                      ? [questionnaireData.language]
+                      ? [questionnaireData?.language]
                       : []
                   }
                   classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
@@ -484,6 +496,8 @@ const UpdateQuestionnaires = () => {
           </div>
         </div>
       </div>
+      )}
+      
     </div>
   );
 };

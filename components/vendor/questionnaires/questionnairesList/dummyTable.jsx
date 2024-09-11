@@ -105,7 +105,8 @@ const data = [
   },
 ];
 
-const DummyQuestionnairesList = () => {
+const DummyQuestionnairesList = ({questionList}) => {
+  console.log(questionList)
     const [showHistory ,setShowHistory] = useState(true)
   return (
     <div>
@@ -160,7 +161,7 @@ const DummyQuestionnairesList = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
+              {questionList?.map((item, index) => (
                 <tr
                   key={index}
                   className="border-b 2xl:text-[20px] text-[16px]"
@@ -181,7 +182,7 @@ const DummyQuestionnairesList = () => {
                     ></div>
                   </td>
                   <td className="px-4 py-2 border  w-[500px]">
-                    {item.question}
+                    {item.Question}
                   </td>
                   <td className="px-4 py-2 text-center border w-[100px]">
                     <Settings className="text-blue-600 spin-slow" />
