@@ -20,7 +20,7 @@ import { useMyContext } from "@/context";
 
 
 
-const Import = ({setImportSuccessfully}) => {
+const Import = ({setImportSuccessfully ,setQuestionList ,questionList}) => {
   const [stepper, setStepper] = useState(0);
   const { setQuestionnaireUpdated  } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
@@ -49,6 +49,16 @@ const Import = ({setImportSuccessfully}) => {
     Questionnaires: [],
     originalFile : ""
   });
+
+  const [currentbaseUrl, setCurrentBaseUrl] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentBaseUrl(window.location.origin);
+    }
+  }, []);
+
+
   function getTitle() {
     switch (stepper) {
       case 0:
@@ -165,44 +175,18 @@ const Import = ({setImportSuccessfully}) => {
         result.push(newObj);
       });
     }
+    const questionnaireLink = `${currentbaseUrl}/vendor/questionnaires/view?Questionnair=questionnaireId`;
     const payload = {
       ...importQuestionnaires,
       Questionnaires: result,
+      questionnaireLink
     };
-
-
-    // const formData = new FormData();
-    // // Append the fields to FormData
-    // formData.append("customerName", importQuestionnaires.customerName);
-    // formData.append("customerDomain", importQuestionnaires.customerDomain);
-    // formData.append("questionnaireType", importQuestionnaires.questionnaireType);
-    // formData.append("description", importQuestionnaires.description);
-    // formData.append("language", importQuestionnaires.language);
-    // formData.append("returnDate", importQuestionnaires.returnDate);
-    // formData.append("fileName", importQuestionnaires.fileName);
-    // formData.append("originalFile", importQuestionnaires.originalFile);
-    
-
-    // importQuestionnaires.productIds.forEach((id) => {
-    //   formData.append("productIds[]", id);
-    // });
-    
-    // importQuestionnaires.collaborators.forEach((id) => {
-    //   formData.append("collaborators[]", id);
-    // });
-
-    // importQuestionnaires.assignees.forEach((id) => {
-    //   formData.append("assignees[]", id);
-    // });
-    // result.forEach((data) => {
-    //   formData.append("Questionnaires[]", data);
-    // });
-
-
-
+   
+   setQuestionList((prev)=>[...prev, result])
    setTotalCount(payload.Questionnaires.length)
 
-    const jsonPayload = JSON.stringify(payload);
+   console.log("payload.Questionnaire",)
+
     const token = cookiesData.token;
 
     let requestOptions = {

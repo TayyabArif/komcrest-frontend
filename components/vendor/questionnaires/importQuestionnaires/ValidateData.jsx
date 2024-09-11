@@ -89,7 +89,7 @@ const ValidateData = ({ excelFile, columnMapping }) => {
           <table className="min-w-full border-collapse border mb-4">
             <thead className="bg-gray-200 sticky -top-1 z-10">
               <tr className='text-[16px] 2xl:text-[20px]'>
-                <th className="border p-2 text-left">Select rows to remove</th>
+                <th className="border p-2 text-left w-[100px] ">Select rows to remove</th>
                 {getMappedData(visibleTable).headers.map((header, index) => (
                   <th key={index} className="border p-2 text-left">
                     {header}
@@ -100,7 +100,7 @@ const ValidateData = ({ excelFile, columnMapping }) => {
             <tbody>
               {getMappedData(visibleTable).rows.map((row, rowIndex) => (
                 <tr key={rowIndex} className={`${selectedRows[visibleTable]?.has(rowIndex + 1) ? 'bg-red-100' : 'even:bg-gray-100'} text-[16px] 2xl:text-[20px]`}>
-                  <td className="border p-2 text-left">
+                  <td className="border p-2 text-left w-[100px]" >
                     <input
                       type="radio"
                       className={`w-4 h-4 ${isRowRemoved(visibleTable, rowIndex + 1) ? 'text-red-500' : ''}`}
@@ -110,7 +110,7 @@ const ValidateData = ({ excelFile, columnMapping }) => {
                     />
                   </td>
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} className="border p-2 text-left">
+                    <td key={cellIndex} className="border p-2 text-left ">
                       {cell}
                     </td>
                   ))}

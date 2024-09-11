@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@nextui-org/react";
-import UsersDetailsCard from "./UsersDetailsCard";
-import UsersSettingsCard from "./UsersSettingsCard";
+import UsersDetailsCard from "@/components/admin/screens/user-management/UsersDetailsCard";
+import UsersSettingsCard from "@/components/admin/screens/user-management/UsersSettingsCard";
 import { toast } from "react-toastify";
 import { useRouter } from 'next/router';
 import { useDisclosure } from "@nextui-org/react";
-import ConfirmationModal from "../../shared/ConfirmationModal";
+import ConfirmationModal from "@/components/admin/shared/ConfirmationModal";
 import { useCookies } from "react-cookie";
+import { useMyContext } from "@/context";
 
 const modalData = {
   heading: "Create User",
   desc: "Verify information before confirming",
   confirmText: "Send invitation"
 }
-const CreateUser = () => {
+const InviteUser = () => {
+    const { companyProducts } = useMyContext();
   const [cookies] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [isClick, setClick] = useState(false)
@@ -24,14 +26,27 @@ const CreateUser = () => {
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([])
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+  const [isMounted, setIsMounted] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     position: "",
     role: "Contributor",
-    companyId: null
+    companyId: ""
   });
+
+  useEffect(() => {
+   
+    if (cookiesData?.companyId) {
+        setFormData(prevState => ({
+            ...prevState,
+            companyId: cookiesData?.companyId
+          })); 
+    setIsMounted(true);
+    }
+  }, [cookiesData]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
@@ -123,7 +138,6 @@ const CreateUser = () => {
       .then(({ status, ok, data }) => {
         if (ok){
           toast.success("User created successfully")
-          router.push("/admin/user-management")
         }else{
           toast.error(data?.error)
         }
@@ -134,11 +148,13 @@ const CreateUser = () => {
       });
   }
   return (
+    <>
+    {isMounted && (
     <div className="flex flex-col w-full bg-white">
       <div className="flex flex-col justify-between w-full gap-5 pl-20 pr-10 py-10 bg-gray-200 min-h-screen ">
         <div className="flex items-start justify-start w-full gap-10 pl-20 h-full">
           <UsersDetailsCard action="create"
-            isDisabled={false}
+            isDisabled={true}
             formData={formData}
             handleChange={(value) => handleChange(value)}
             allCompanies={allCompanies}
@@ -146,7 +162,7 @@ const CreateUser = () => {
           <UsersSettingsCard action="create"
             formData={formData}
             handleChange={(value) => handleChange(value)}
-            products={products}
+            products={companyProducts}
             handleProductsChange={handleProductsChange}
             selectedProducts={selectedProducts}
           />
@@ -154,14 +170,14 @@ const CreateUser = () => {
         <div className="flex justify-end mb-5 pr-16">
           <div>
             <div className="flex items-center gap-5">
-              <Button
+              {/* <Button
                 radius="none"
                 size="sm"
                 className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
                 onClick={() => router.push("/admin/user-management")}
               >
                 Cancel
-              </Button>
+              </Button> */}
               <Button
                 radius="none"
                 size="sm"
@@ -178,7 +194,9 @@ const CreateUser = () => {
       </div>
       <ConfirmationModal isOpen={isOpen} onOpenChange={onOpenChange} data={modalData} handleSubmit={handleSubmit} isLoading={isLoading} />
     </div>
+)}
+</>
   );
 };
 
-export default CreateUser;
+export default InviteUser;
