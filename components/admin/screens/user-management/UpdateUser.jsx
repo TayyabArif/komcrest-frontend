@@ -192,6 +192,7 @@ const UpdateUser = () => {
         {isDataLoaded && formData && (
           <>
             <UsersDetailsCard 
+              isDisabled={false}
               action="update"
               formData={formData}
               handleChange={(value) => handleChange(value)}

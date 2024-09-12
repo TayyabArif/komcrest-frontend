@@ -43,7 +43,7 @@ const VendorLayout = ({ children }) => {
               <FileText size={20} />
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Documents</h1>
             </div>
-            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "onlineResource" ? "bg-[#2457d7] text-white shadow-md" : "hover:bg-gray-200 hover:shadow-md"}`} 
+            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "onlineResource" ? "bg-[#2457d7] text-white shadow-md rounded" : "hover:bg-gray-200 hover:shadow-md"}`} 
               onClick={() => { 
                 router.push("/vendor/onlineResource");
               }}>
@@ -51,14 +51,14 @@ const VendorLayout = ({ children }) => {
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Online Resources</h1>
             </div>
 
-            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "knowledge" ? "bg-[#2457d7] text-white shadow-md" : "hover:bg-gray-200 hover:shadow-md"}`} 
+            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "knowledge" ? "bg-[#2457d7] text-white shadow-md rounded" : "hover:bg-gray-200 hover:shadow-md"}`} 
               onClick={() => { 
                 router.push("/vendor/knowledge");
               }}>
               <AlignLeft size={20} />
               <h1 className="text-[16px] 2xl:text-[20px] py-2">Knowledge</h1>
             </div>
-            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "questionnaires" ? "bg-[#2457d7] text-white shadow-md" : "hover:bg-gray-200 hover:shadow-md"}`}
+            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "questionnaires" ? "bg-[#2457d7] text-white shadow-md rounded"  : "hover:bg-gray-200 hover:shadow-md"}`}
               onClick={() => { 
                 router.push("/vendor/questionnaires");
               }}>
@@ -71,7 +71,10 @@ const VendorLayout = ({ children }) => {
               <CircleHelp size={20} />
               <h1 className="text-lg text-[16px] 2xl:text-[20px] py-2">Help Center</h1>
             </div>
-            <div className="flex gap-1 items-center px-4 cursor-pointer">
+            <div className={`flex gap-1 items-center px-4 cursor-pointer ${selectedItem === "invite-user" ? "bg-[#2457d7] text-white shadow-md rounded" : "hover:bg-gray-200 hover:shadow-md"}`}
+             onClick={() => { 
+              router.push("/vendor/invite-user");
+            }}>
               <Settings size={20} />
               <h1 className="font-normal text-[16px] 2xl:text-[20px] py-2">Settings</h1>
             </div>

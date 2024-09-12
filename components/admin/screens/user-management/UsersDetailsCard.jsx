@@ -12,7 +12,8 @@ const companies = [
   {id: "2", label: "Sodexo"},
   {id: "3", label: "staffbase"},
 ];
-const UsersDetailsCard = ({handleChange, formData, allCompanies}) => {
+const UsersDetailsCard = ({handleChange, formData, allCompanies ,isDisabled}) => {
+  debugger
 const id = 50
   return (
     <div className='flex flex-col bg-white shadow-md w-[45%] min-h-[550px] mt-12 pb-10'>
@@ -20,6 +21,7 @@ const id = 50
     <div className='mt-7 px-4'>
       <Select
         label="Company"
+        isDisabled={isDisabled}
         placeholder="Select company"
         className="max-w-sm"
         labelPlacement='outside'

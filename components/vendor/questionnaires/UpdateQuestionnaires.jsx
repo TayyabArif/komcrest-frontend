@@ -32,6 +32,18 @@ const UpdateQuestionnaires = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [filterCollaboratorList , setFilterCollaboratorList] = useState([])
   const [errors, setErrors] = useState({});
+  const [InitiaIColaboratorsIds, setInitiaIColaboratorsIds] = useState([]);
+  const [dataIsLoaded , setDataIsLoaded] = useState(false)
+  const [creatorId , setCreatorId] = useState()
+  const [newCollaboratorsList , setNewCollaboratorList] = useState()
+
+  const [currentbaseUrl, setCurrentBaseUrl] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentBaseUrl(window.location.origin);
+    }
+  }, []);
 
   const fetchQuestionnaire = async () => {
     const token = cookiesData && cookiesData.token;
@@ -64,25 +76,45 @@ const UpdateQuestionnaires = () => {
           description: data.questionnaire.description,
           productIds: data.questionnaire.products.map((product) => product.id),
           language: data.questionnaire.language,
-          collaborators: data.questionnaire.collaborators.map(
-            (collaborator) => collaborator.id
-          ),
+          collaborators: [
+            ...data?.questionnaire?.collaborators.map((collaborator) => collaborator.id),
+            data?.questionnaire?.createdBy
+          ],
           assignees: data.questionnaire.assignees.map(
             (assignee) => assignee.id
           ),
           returnDate: data?.questionnaire?.returnDate?.split('T')[0],
           // returnDate: format(parseISO(data.questionnaire.returnDate), 'yyyy-MM-dd'),
           fileName: data.questionnaire.fileName,
+          
+          
         };
+        setCreatorId(data?.questionnaire?.createdBy)
         setQuestionnaireData(transformData);
 
-
+        const initialCollaboratorsIds = [...data?.questionnaire?.collaborators.map(collaborator => ({
+          id : collaborator.id,
+          isNew:false
+        }))];
+        setInitiaIColaboratorsIds(initialCollaboratorsIds)
+        setNewCollaboratorList(initialCollaboratorsIds)
+  
         // escape create id in all user list
-        const filterCollaborator = allCompanyUserData?.filter((item) => {
-          return item.value !== data?.questionnaire?.createdBy;
+        const filterCollaborator = allCompanyUserData?.map((item) => {
+          if (item.value === data?.questionnaire?.createdBy) {
+            return {
+              ...item,
+              isFixed: true, // Set isFixed to true for the matching condition
+            };
+          } else {
+            return {
+              ...item,
+              isFixed: false, // Set isFixed to false for other items
+            };
+          }
         });
         setFilterCollaboratorList(filterCollaborator)
-        console.log(">>>>>LLLLLLLL",filterCollaborator)
+        setDataIsLoaded(true)
       } else {
         toast.error(data?.error);
       }
@@ -128,13 +160,35 @@ const UpdateQuestionnaires = () => {
 
   const handleMultipleSelect = (selectedOptions, actionMeta) => {
     const { name } = actionMeta;
+    const newValue = selectedOptions ? selectedOptions.map((option) => option.value) : [];
     setQuestionnaireData((prevState) => ({
       ...prevState,
-      [name]: selectedOptions
-        ? selectedOptions.map((option) => option.value)
-        : [],
+      [name]: newValue,
     }));
-  };
+
+    checkNewColaboratorOrNot(newValue);
+};
+
+  const checkNewColaboratorOrNot = (newCollaborators) => {
+     // add isnNewFiled in the original array
+
+     const transformArray = newCollaborators?.map((data)=>({
+      id : data,
+      isNew : null
+     }))
+
+    console.log(">>>>>LLLLL",newCollaborators)
+    let result = [];
+    transformArray.filter((data)=> data.id !== creatorId).forEach(item => {
+    result.push({
+      id: item.id,
+      isNew: !InitiaIColaboratorsIds.some(obj => obj.id === item.id)
+    });
+  });
+
+  setNewCollaboratorList(result)
+  return result;
+  }
 
   const checkValidations = () => {
     const newErrors = {};
@@ -163,11 +217,16 @@ const UpdateQuestionnaires = () => {
   
 
   const questionnaireUpdated = () => {
+    console.log("newCollaboratorsListnewCollaboratorsList",newCollaboratorsList)
     if(checkValidations()){
-
+      const paylaod = {
+        ...questionnaireData,
+        collaborators : newCollaboratorsList,
+        questionnaireLink : `${currentbaseUrl}/vendor/questionnaires/view?Questionnair=${id}`
+      }
    
     console.log("questionnaireDataquestionnaireData", questionnaireData);
-    const jsonPayload = JSON.stringify(questionnaireData);
+    const jsonPayload = JSON.stringify(paylaod);
     const token = cookiesData.token;
 
     let requestOptions = {
@@ -228,9 +287,10 @@ const UpdateQuestionnaires = () => {
 
   return (
     <div className="w-[100%] h-full ">
-      <div className="w-[90%] mx-auto py-4 mt-[7rem]">
+      {dataIsLoaded && (
+        <div className="w-[90%] mx-auto py-4 mt-[7rem]">
         <h1 className="py-2 px-4 bg-[#F6F7F9] text-[16px] 2xl:text-[20px] font-bold">
-          Update questionnaire information
+          Update questionnaire information 
         </h1>
         <div className="px-4 bg-white py-10">
           <div className="flex justify-between pb-10">
@@ -368,7 +428,7 @@ const UpdateQuestionnaires = () => {
                   onChange={(e) => handleData(e)}
                   defaultSelectedKeys={
                     questionnaireData?.language
-                      ? [questionnaireData.language]
+                      ? [questionnaireData?.language]
                       : []
                   }
                   classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
@@ -393,7 +453,7 @@ const UpdateQuestionnaires = () => {
                   options={filterCollaboratorList}
                   styles={multipleSelectStyle}
                   name="collaborators"
-                  value={allCompanyUserData.filter((option) =>
+                  value={filterCollaboratorList.filter((option) =>
                     questionnaireData.collaborators?.includes(option.value)
                   )}
                   onChange={handleMultipleSelect}
@@ -436,8 +496,22 @@ const UpdateQuestionnaires = () => {
           </div>
         </div>
       </div>
+      )}
+      
     </div>
   );
 };
 
 export default UpdateQuestionnaires;
+
+
+
+
+
+
+
+
+
+
+
+

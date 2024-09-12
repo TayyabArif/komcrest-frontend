@@ -299,6 +299,17 @@ const QuestionnairesView = () => {
       value = data;
     }
 
+  // immediatlty state change 
+    setQuestionnaireData({
+      ...questionnaireData,
+      questionnaireRecords: questionnaireData.questionnaireRecords.map(record => {
+        if (record.id === id[0]) {
+            return { ...record, [property]: value };
+        }
+        return record;
+    })
+    })
+
     const updatedData = {
       ids: id,
       field: property,
@@ -448,7 +459,6 @@ const QuestionnairesView = () => {
 
   return (
     <>
-      {textAreaSize}
       {dataLoaded ? (
         <div>
           <QuestionnairsListHeader
