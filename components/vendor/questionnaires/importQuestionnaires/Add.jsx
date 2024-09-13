@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/react";
 import Dropzone from "react-dropzone";
 import { languageOptions } from "@/constants";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import { multipleSelectStyle } from "@/helper";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
@@ -17,6 +17,7 @@ import { useMyContext } from "@/context";
 import { questionnaireTypeList } from "@/constants";
 import { format, parse } from 'date-fns';
 import { Vault } from "lucide-react";
+import { useCookies } from "react-cookie";
 
 const Add = ({
   importQuestionnaires,
@@ -26,9 +27,16 @@ const Add = ({
   errors,
   setErrors,
 }) => {
-  const { companyUserData, companyProducts } = useMyContext();
+  const { companyUserData, companyProducts ,allCompanyUserData } = useMyContext();
   const [companyUserDataOptions, setCompanyUserDataOptions] = useState([]);
   const [dataLoaded, setDataIsLoaded] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
+  const userID = cookiesData?.userId;
+
+
+
+
   const allowedFileTypes = [
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel
     "text/csv", // CSV
@@ -146,8 +154,39 @@ const Add = ({
     }
   };
 
+  useEffect(()=>{
+    const filterCollaborator = allCompanyUserData?.map((item) => {
+      if (item.value === userID) {
+        return {
+          ...item,
+          isFixed: true, // Set isFixed to true for the matching condition
+        };
+      } else {
+        return {
+          ...item,
+          isFixed: false, // Set isFixed to false for other items
+        };
+      }
+    });
+
+    setCompanyUserDataOptions(filterCollaborator)
+    console.log("filterCollaboratorfilterCollaborator",filterCollaborator)
+    setDataIsLoaded(true)
+  },[allCompanyUserData ,userID])
+
+
+  const { MultiValueRemove } = components;
+  const CustomMultiValueRemove = (props) => {
+    if (props.data.isFixed) {
+      return null;
+    }
+    return <MultiValueRemove {...props} />;
+  };
+
   return (
-    <div className="flex justify-between">
+    <>
+    {dataLoaded && (
+      <div className="flex justify-between">
       <div className="w-[45%] space-y-6 ">
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
@@ -281,6 +320,7 @@ const Add = ({
           value={importQuestionnaires.returnDate}
           name="returnDate"
           onChange={handleData}
+          min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}  
           className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg text-[16px] 2xl:text-[20px]"
         />
           </div>
@@ -319,17 +359,18 @@ const Add = ({
 
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
-            Collaborators who will work on this questionnaire
+            Collaborators who will work on this questionnaire {JSON.stringify(importQuestionnaires.collaborators)}
           </label>
           <Select
             isMulti
-            options={companyUserData}
+            options={companyUserDataOptions}
             styles={multipleSelectStyle}
             name="collaborators"
-            value={companyUserData.filter((option) =>
+            value={companyUserDataOptions.filter((option) =>
               importQuestionnaires.collaborators.includes(option.value)
             )}
             onChange={handleMultipleSelect}
+            components={{ MultiValueRemove: CustomMultiValueRemove }}
           />
         </div>
         {/* <div>
@@ -349,6 +390,9 @@ const Add = ({
         </div> */}
       </div>
     </div>
+    )}
+    </>
+    
   );
 };
 

@@ -100,6 +100,7 @@ const UpdateQuestionnaires = () => {
         setNewCollaboratorList(initialCollaboratorsIds)
   
         // escape create id in all user list
+        console.log("allCompanyUserDataallCompanyUserData",allCompanyUserData)
         const filterCollaborator = allCompanyUserData?.map((item) => {
           if (item.value === data?.questionnaire?.createdBy) {
             return {
@@ -113,6 +114,7 @@ const UpdateQuestionnaires = () => {
             };
           }
         });
+        console.log(">>>>>>>>>>LLLLLLLLLLLKKKKK",filterCollaborator)
         setFilterCollaboratorList(filterCollaborator)
         setDataIsLoaded(true)
       } else {
@@ -127,7 +129,7 @@ const UpdateQuestionnaires = () => {
     if (id) {
       fetchQuestionnaire();
     }
-  }, [id]);
+  }, [id ,allCompanyUserData]);
 
   const handleData = (e) => {
     const { name, value } = e.target;
@@ -411,6 +413,7 @@ const UpdateQuestionnaires = () => {
                     value={questionnaireData.returnDate}
                     name="returnDate"
                     onChange={handleData}
+                    min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}
                     className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
                   />
                 </div>

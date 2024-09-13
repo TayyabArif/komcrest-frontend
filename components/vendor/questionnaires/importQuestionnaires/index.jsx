@@ -25,6 +25,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const token = cookiesData?.token;
+  const userID = cookiesData?.userId;
   const companyId = cookiesData?.companyId;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
@@ -42,14 +43,13 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
     description: "",
     productIds: [],
     language: "",
-    collaborators: [],
+    collaborators: [userID],
     assignees: [],
     returnDate: "",
     fileName: "",
     Questionnaires: [],
     originalFile: "",
   });
-
   const getDatafromChild = () => {
     let getData;
     if (ValidateComponentRef.current) {
@@ -188,6 +188,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
       ...importQuestionnaires,
       Questionnaires: result,
       questionnaireLink,
+      collaborators : importQuestionnaires.collaborators.filter((id)=> id !== userID)
     };
 
     setQuestionList(result);
