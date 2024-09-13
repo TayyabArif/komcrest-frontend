@@ -124,7 +124,7 @@ const ValidateData = forwardRef(
               <thead className="bg-gray-200 sticky -top-1 z-10">
                 <tr className="text-[16px] 2xl:text-[20px]">
                   <th className="border p-2 text-left w-[100px] ">
-                    Select rows to remove
+                    Rows to remove
                   </th>
                   {getMappedData(visibleTable).headers.map((header, index) => (
                     <th key={index} className="border p-2 text-left">
@@ -161,7 +161,7 @@ const ValidateData = forwardRef(
                       />
                     </td>
                     {row.map((cell, cellIndex) => (
-                      <td key={cellIndex} className="border p-2 text-left ">
+                      <td key={cellIndex} className="border p-2 text-left min-w-[200px]">
                         {cell}
                       </td>
                     ))}
