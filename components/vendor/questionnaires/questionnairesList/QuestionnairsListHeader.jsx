@@ -146,7 +146,7 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
           </PopoverTrigger>
           <PopoverContent>
             <div className="px-3 py-2 space-y-1.5 text-[16px]">
-              <div className="text-small cursor-pointer"
+              <div className="text-sm 2xl:text-[18px] cursor-pointer"
               onClick={()=> {
                 handleDownload(questionnaireData?.filePath);
                 setDropDownOpen(false)
@@ -154,14 +154,14 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
                 Download original questionnaire
               </div>
 
-              <div className="text-small cursor-pointer"
+              <div className="text-sm  2xl:text-[18px] cursor-pointer"
               onClick={(e)=>{
                 e.stopPropagation()
                 router.push(`/vendor/questionnaires/update?id=${id}`)
               }}
               >Update info</div>
 
-              <div className="text-small text-red-600 cursor-pointer "
+              <div className="text-sm 2xl:text-[18px] text-red-600 cursor-pointer "
               onClick={(e) => {
                 onOpen();
                 setDropDownOpen(false)

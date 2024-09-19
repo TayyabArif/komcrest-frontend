@@ -179,7 +179,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
           )}
 
           <Popover
-            className="rounded-[0px]"
+            className="rounded-[0px] "
             isOpen={openPopoverIndex === index}
             onOpenChange={(open) => setOpenPopoverIndex(open ? index : null)}
           >
@@ -194,7 +194,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
             <PopoverContent>
               <div className="px-3 py-2 space-y-1.5 text-[16px]">
                 <div
-                  className="text-small cursor-pointer"
+                  className="text-small cursor-pointer  2xl:text-[18px]"
                   onClick={(e) => {
                     console.log("data?.filePath",data)
                     e.stopPropagation();
@@ -206,7 +206,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                 </div>
 
                 <div
-                  className="text-small cursor-pointer"
+                  className="text-small cursor-pointer  2xl:text-[18px]"
                   onClick={(e) => {
                     e.stopPropagation();
                     router.push(`/vendor/questionnaires/update?id=${data.id}`);
@@ -216,7 +216,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                 </div>
 
                 <div
-                  className="text-small text-red-600 cursor-pointer"
+                  className="text-small text-red-600 cursor-pointer 2xl:text-[18px]"
                   onClick={(e) => {
                     e.stopPropagation();
                     onOpen();

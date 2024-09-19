@@ -26,7 +26,7 @@ const Validate = ({ knowledgeData, questions }) => {
       <div className="overflow-x-auto relative">
         <table className="min-w-max bg-white border border-gray-300 table-fixed text-sm w-full border-collapse">
           <thead className="bg-gray-50">
-            <tr className="bg-[#ebeef2] ">
+            <tr className="bg-[#ebeef2]  ">
               {Object.keys(questions[0]).map((header) => (
                 <th
                   key={header}
@@ -41,12 +41,12 @@ const Validate = ({ knowledgeData, questions }) => {
             {questions.map((item, index) => (
               <tr
                 key={index}
-                className={index % 2 === 0 ? "bg-gray-100" : ""}
+                className={` break-words ${index % 2 === 0 ? "bg-gray-100" : ""}`}
               >
                 {Object.keys(item).map((key) => (
                   <td
                     key={key}
-                    className="px-2 py-2 border text-sm font-medium text-gray-900 text-[16px] 2xl:text-[20px]"
+                    className="px-2 py-2 border text-sm font-medium  text-gray-900 text-[16px] 2xl:text-[20px] text-wrap"
                   >
                     {truncate(item[key], 30)}
                   </td>
