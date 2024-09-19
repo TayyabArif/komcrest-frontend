@@ -212,55 +212,11 @@ const UpdateComponent = () => {
     }
   };
 
-
-
-  // const reIndexation = async () => {
-  //   setIndexing(true);
-  //   const requestOptions = {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     redirect: 'follow',
-  //   };
-
-  //   try {
-  //     const response = await fetch(`${baseUrl}/resources/${id}/re-index`, requestOptions);
-  //     const data = await handleResponse(response, router, cookies, removeCookie);
-
-  //     if (response.ok) {
-  //       toast.success('Re-indexation started. Check real-time updates below.');
-
-  //       // Listen for real-time updates from the backend
-  //    await  socket?.on('scrapingStatus', (statusUpdate) => {
-  //         setTimeout(() => {
-  //           alert("socket")
-  //             setSocketStataus(statusUpdate.status);
-  //             toast.info(`${statusUpdate.status}: ${statusUpdate.title}`);
-  //             console.log('Update from socket:', statusUpdate);
-  //         }, 1000); 
-  //     });
-
-  //       setOnlineResource((prevData) => ({
-  //         ...prevData,
-  //         file: data.file,
-  //       }));
-  //       setIndexing(false);
-  //       alert("ok")
-  //     } else {
-  //       toast.error(data?.error);
-  //     }
-  //   } catch (error) {
-  //     toast.error('An unexpected error occurred.');
-  //   } 
-  // };
-
   useEffect(() => {
     if (socket && !socket.hasListeners('scrapingStatus')) {
       // Set up the socket listener once
       socket.on('scrapingStatus', (statusUpdate) => {
         setSocketStataus(statusUpdate.status);
-        toast.info(`${statusUpdate.status}: ${statusUpdate.title}`);
         console.log('Update from socket:', statusUpdate);
       });
     }
