@@ -5,16 +5,30 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
 
   const handleMappingChange = (sheetName, columnIndex, value) => {
     setColumnMapping((prevMapping) => {
-      const updatedMapping = {
-        ...prevMapping,
-        [sheetName]: {
-          ...prevMapping[sheetName],
+      const updatedMapping = { ...prevMapping };
+  
+      // If value is empty, delete the key
+      if (value === '') {
+        // Delete the columnIndex key for the specified sheetName
+        const { [columnIndex]: _, ...rest } = updatedMapping[sheetName] || {};
+        updatedMapping[sheetName] = rest;
+  
+        // If there are no more keys for this sheetName, remove the sheetName key as well
+        if (Object.keys(updatedMapping[sheetName] || {}).length === 0) {
+          delete updatedMapping[sheetName];
+        }
+      } else {
+        // Otherwise, update or add the columnIndex key with the new value
+        updatedMapping[sheetName] = {
+          ...updatedMapping[sheetName],
           [columnIndex]: value,
-        },
-      };
+        };
+      }
+  
       return updatedMapping;
     });
   };
+  
 
   const renderDropdown = (sheetName, columnIndex) => {
     const usedOptions = Object.values(columnMapping[sheetName] || {});
@@ -27,6 +41,11 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
       !usedOptions.includes(option) || option === currentSelection
     );
   
+    // Add "Clear Selection" option if there is a current selection
+    if (currentSelection) {
+      availableOptions = [...availableOptions, 'Clear Selection'];
+    }
+  
     if (availableOptions.length === 0) {
       availableOptions = ["No option available"];
     }
@@ -36,17 +55,32 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
         className="w-[250px] bg-transparent text-[16px] 2xl:text-[20px] border rounded-lg pr-3 p-2"
         name={`mapping-${sheetName}-${columnIndex}`}
         value={currentSelection || ''}
-        onChange={(e) => handleMappingChange(sheetName, columnIndex, e.target.value)}
+        onChange={(e) => {
+          const selectedValue = e.target.value;
+          if (selectedValue === 'Clear Selection') {
+            // Clear the selection if "Clear Selection" is chosen
+            handleMappingChange(sheetName, columnIndex, '');
+          } else {
+            // Otherwise, update the selection
+            handleMappingChange(sheetName, columnIndex, selectedValue);
+          }
+        }}
       >
         <option value="" disabled>Select</option>
         {availableOptions.map((option) => (
-          <option key={option} value={option} disabled={option === "No option available"}>
+          <option
+            key={option}
+            value={option}
+            className={`${option === "Clear Selection" ? "!text-red-300" : "black"}`}
+            disabled={option === "No option available"}
+          >
             {option}
           </option>
         ))}
       </select>
     );
   };
+  
   
 
   const toggleTableVisibility = (sheetName) => {
@@ -78,7 +112,7 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
            'border-red-600 bg-white'
             }`}
           >
-            {sheetName}
+            {sheetName} 
           </button>
         ))}
       </div>

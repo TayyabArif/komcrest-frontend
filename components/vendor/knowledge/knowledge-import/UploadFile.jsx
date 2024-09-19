@@ -20,7 +20,11 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
       const workbook = XLSX.read(data, { type: 'array' });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      const jsonData = XLSX.utils.sheet_to_json(sheet, {
+          header: 1, // Output an array of arrays, instead of objects
+          defval: "", // Default value for empty cells
+          blankrows: false, // Skip blank rows
+        });
       
       // Filter out empty rows
       const filteredData = jsonData.filter(row => row.some(cell => cell !== null && cell !== undefined && cell !== ""));

@@ -542,7 +542,7 @@ const QuestionnairesView = () => {
                     <PopoverContent>
                       <div className="px-3 py-2  space-y-1.5 text-[16px]">
                         <div
-                          className="text-md cursor-pointer"
+                          className="text-sm cursor-pointer 2xl:text-[18px]"
                           // onClick={() => {
                           //   setAnswerIsUpdate("multiple");
                           //   setDropDownOpen(false);
@@ -551,7 +551,7 @@ const QuestionnairesView = () => {
                           Improve answer
                         </div>
                         <div
-                          className="text-md cursor-pointer"
+                          className="text-sm cursor-pointer 2xl:text-[18px]"
                           onClick={() => {
                             reRunForAnswer(bulkSelected);
                             setDropDownOpen(false);
@@ -560,7 +560,7 @@ const QuestionnairesView = () => {
                           Re-run AI for compliance & answer
                         </div>
                         <div
-                          className="text-md cursor-pointer"
+                          className="text-sm cursor-pointer 2xl:text-[18px]" 
                           onClick={() => {
                             notifyDisclosure.onOpen();
                             setOpenPopoverIndex(null);
@@ -570,7 +570,7 @@ const QuestionnairesView = () => {
                           Notify for help
                         </div>
                         <div
-                          className="text-md text-red-600 cursor-pointer"
+                          className="text-sm text-red-600 cursor-pointer 2xl:text-[18px]"
                           onClick={() => {
                             deleteDisclosure.onOpen();
                             setDeleteAction("bulk");
@@ -867,12 +867,12 @@ const QuestionnairesView = () => {
                                         //   setSelectedId(item.id);
                                         //   setAnswerIsUpdate(true);
                                         // }}
-                                        className="text-md cursor-pointer "
+                                        className="text-sm 2xl:text-[18px] cursor-pointer "
                                       >
                                         Improve answer
                                       </div>
                                       <div
-                                        className="text-md cursor-pointer"
+                                        className="text-sm 2xl:text-[18px] cursor-pointer"
                                         onClick={() => {
                                           setOpenPopoverIndex(null);
                                           reRunForAnswer([item.id]);
@@ -881,7 +881,7 @@ const QuestionnairesView = () => {
                                         Re-run AI for compliance & answer
                                       </div>
                                       <div
-                                        className="text-md cursor-pointer"
+                                        className="text-sm 2xl:text-[18px] cursor-pointer"
                                         onClick={() => {
                                           setBulkSelected([
                                             ...bulkSelected,
@@ -894,7 +894,7 @@ const QuestionnairesView = () => {
                                         Notify for help
                                       </div>
                                       <div
-                                        className="text-md text-red-600 cursor-pointer"
+                                        className="text-sm 2xl:text-[18px] text-red-600 cursor-pointer"
                                         onClick={() => {
                                           setSelectedId(item.id);
                                           deleteDisclosure.onOpen();

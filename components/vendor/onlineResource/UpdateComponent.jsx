@@ -17,8 +17,10 @@ import Dropzone from "react-dropzone";
 import { toast } from "react-toastify";
 import { handleDownload } from "@/helper";
 import FileUploadModal from "../shared/FileUploadModal";
+import useSocket from '@/customHook/useSocket';
 
 const UpdateComponent = () => {
+  const socket = useSocket()
   const languageOptions = [
     { key: "French", label: "French" },
     { key: "English", label: "English" },
@@ -45,6 +47,7 @@ const UpdateComponent = () => {
   const [IsIndexing, setIndexing] = useState(false);
   const allowedFileTypes = ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/plain"]
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [socketStatus , setSocketStataus] = useState("")
   const [onlineResource, setOnlineResource] = useState({
     title: "",
     url: "",
@@ -209,47 +212,53 @@ const UpdateComponent = () => {
     }
   };
 
+  useEffect(() => {
+    if (socket && !socket.hasListeners('scrapingStatus')) {
+      // Set up the socket listener once
+      socket.on('scrapingStatus', (statusUpdate) => {
+        setSocketStataus(statusUpdate.status);
+        console.log('Update from socket:', statusUpdate);
+      });
+    }
+  
+    // Clean up socket listener when component unmounts
+    return () => {
+      socket?.off('scrapingStatus');
+    };
+  }, [socket]);
+  
   const reIndexation = async () => {
     setIndexing(true);
-
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      redirect: "follow",
+      redirect: 'follow',
     };
-
+  
     try {
-      const response = await fetch(
-        `${baseUrl}/resources/${id}/re-index`,
-        requestOptions
-      );
-      const data = await handleResponse(
-        response,
-        router,
-        cookies,
-        removeCookie
-      );
-
+      const response = await fetch(`${baseUrl}/resources/${id}/re-index`, requestOptions);
+      const data = await handleResponse(response, router, cookies, removeCookie);
+  
       if (response.ok) {
-        toast.success(
-          "Re-indexation is complete and your file is updated. You can download and check File Content"
-        );
+        toast.success('Re-indexation started. Check real-time updates below.');
+        
         setOnlineResource((prevData) => ({
           ...prevData,
           file: data.file,
         }));
+        setIndexing(false);
+        setSocketStataus("")
       } else {
         toast.error(data?.error);
       }
     } catch (error) {
-      toast.error("An unexpected error occurred.");
-    } finally {
-      setIndexing(false);
+      toast.error('An unexpected error occurred.');
     }
   };
-
+  
+  
   const getNextIndexationData = () => {
     const updatedDate = onlineResource.indexing;
     const updatedAt = new Date(onlineResource.updatedAt);
@@ -511,6 +520,7 @@ const UpdateComponent = () => {
                   </div>
 
                   {onlineResource.indexing === "On demand" && (
+                    <>
                     <Button
                       radius="none"
                       size="sm"
@@ -521,7 +531,10 @@ const UpdateComponent = () => {
                       onClick={reIndexation}
                     >
                       {IsIndexing ? "Indexing..." : " Start Indexation"}
-                    </Button>
+                    </Button>{" "}
+                    <span>{socketStatus ? `${socketStatus}...` : ""}</span>
+
+                    </>
                   )}
                   {onlineResource.indexing === "Manual" && (
                     <Button

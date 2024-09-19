@@ -89,7 +89,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
           <div className="">
             <div className="flex gap-3">
             {/* "Improved the answer" is only when improve from AI */}
-              <h1>Modified the answer.</h1>
+              <h1>Updated the answer.</h1>
             </div>
             <h1>Answer: {record.currentValue}</h1>
             <h1></h1>
