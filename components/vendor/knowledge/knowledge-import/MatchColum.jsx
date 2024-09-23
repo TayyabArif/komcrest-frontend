@@ -3,6 +3,7 @@ import { Select, SelectItem } from "@nextui-org/react";
 
 const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHeader, setMappedIndexValue, mappedIndexValue }) => {
   const [availableOptions, setAvailableOptions] = useState([]);
+  debugger
 
   const thStyle = {
     border: '1px solid #dddddd',

@@ -398,12 +398,13 @@ const submitData = () => {
                 </Button>
                 <Button
                   onClick={() => {
-                        
                       if(stepper == 1){
                         gotToMatchColum()
                       }
                      else if(stepper == 2){
-                         handleUpdateData()
+                      if(mappedIndexValue.includes("Question")){
+                        handleUpdateData()
+                      }else {toast.error("Please select  Question field")}
                       }else if (stepper == 3) {
                         submitData();
                       }
