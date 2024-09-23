@@ -19,6 +19,7 @@ import ValidateData from "./ValidateData";
 import { useMyContext } from "@/context";
 
 const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
+  const { companyProducts } = useMyContext();
   const [stepper, setStepper] = useState(0);
   const { setQuestionnaireUpdated } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
@@ -50,6 +51,24 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
     Questionnaires: [],
     originalFile: "",
   });
+
+
+
+  useEffect(() => {
+    if (companyProducts.length === 1) {
+      console.log("companyProducts", companyProducts);
+      setImportQuestionnaire((prev) => ({
+        ...prev,
+        productIds: [companyProducts[0].id], 
+      }));
+    }
+  }, [companyProducts]);
+
+
+
+
+
+
   const getDatafromChild = () => {
     let getData;
     if (ValidateComponentRef.current) {

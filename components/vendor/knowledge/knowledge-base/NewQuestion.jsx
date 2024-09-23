@@ -47,7 +47,6 @@ const NewQuestion = () => {
   }, [])
   const [companyProducts, setCompanyProducts] = useState([]);
   const [documentData, setDocumentData] = useState([]);
-  // const [CompanyUserData, setCompanyUserData] = useState([]);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [dataLoaded, setDataIsLoaded] = useState(false);
   const router = useRouter();
@@ -72,6 +71,16 @@ const NewQuestion = () => {
     { key: "Spanish", label: "Spanish" },
     { key: "German", label: "German" },
   ];
+
+  useEffect(() => {
+    if (companyProducts.length === 1) {
+      console.log("companyProducts", companyProducts);
+      setNewQuestion((prev) => ({
+        ...prev,
+        productIds: [companyProducts[0].id], 
+      }));
+    }
+  }, [companyProducts]);
 
   const handleCheckboxChange = (id) => {
     setNewQuestion((prevData) => {

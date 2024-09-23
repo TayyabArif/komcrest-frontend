@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import { handleResponse } from "../../../helper";
 import { Select, SelectItem } from "@nextui-org/react";
+import { useMyContext } from "@/context";
 
 const language = [
   { key: "French", label: "French" },
@@ -18,11 +19,11 @@ const NewDocument = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
-
+  const {companyProducts } = useMyContext();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
 
-  const [companyProducts, setCompanyProducts] = useState([]);
+
   const router = useRouter();
   const { id } = router.query;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -36,6 +37,17 @@ const NewDocument = () => {
     productIds: [],
     documentLink: "",
   });
+
+
+  useEffect(() => {
+    if (companyProducts.length === 1) {
+      console.log("companyProducts", companyProducts);
+      setDocumentData((prev) => ({
+        ...prev,
+        productIds: [companyProducts[0].id], 
+      }));
+    }
+  }, [companyProducts]);
 
   const handleData = (e) => {
     const { name, value } = e.target;
@@ -162,38 +174,7 @@ const NewDocument = () => {
     }
   };
 
-  const getCompanyProducts = async () => {
-    const token = cookiesData.token;
-    const companyId = cookiesData?.companyId;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-    fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
-      .then((response) => {
-        return response.json().then((data) => ({
-          status: response.status,
-          ok: response.ok,
-          data,
-        }));
-      })
-      .then(({ status, ok, data }) => {
-        if (ok) {
-          setCompanyProducts(data?.Products);
-          console.log(">>>>>>>", data?.Products);
-        } else {
-          toast.error(data?.error);
-          console.error("Error:", data);
-        }
-      })
-      .catch((error) => console.error(error));
-  };
-
   useEffect(() => {
-    getCompanyProducts();
     if (id) {
       setDataIsLoaded(false);
       const token = cookiesData?.token;
@@ -272,7 +253,6 @@ const NewDocument = () => {
                   xls, xlsx files smaller than 100 MB
                 </p>
               </div>
-
               <div className="flex-1">
                 <div
                   {...getRootProps()}
