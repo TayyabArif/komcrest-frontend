@@ -302,9 +302,9 @@ const KnowledgeBase = ({
 
   return (
     
-      <div className="w-[86%] mx-auto py-2">
-        <div className="flex justify-between">
-          <div className="flex items-center gap-1 mb-2">
+      <div className="w-[86%] mx-auto ">
+        <div className="flex justify-between my-[6px]">
+          <div className="flex items-center gap-1 ">
             <Input
               onChange={handleSearch}
               variant="bordered"

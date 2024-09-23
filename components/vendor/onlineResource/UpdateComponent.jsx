@@ -17,10 +17,10 @@ import Dropzone from "react-dropzone";
 import { toast } from "react-toastify";
 import { handleDownload } from "@/helper";
 import FileUploadModal from "../shared/FileUploadModal";
-import useSocket from '@/customHook/useSocket';
+import useSocket from "@/customHook/useSocket";
 
 const UpdateComponent = () => {
-  const socket = useSocket()
+  const socket = useSocket();
   const languageOptions = [
     { key: "French", label: "French" },
     { key: "English", label: "English" },
@@ -45,9 +45,12 @@ const UpdateComponent = () => {
   const { id } = router.query;
   const token = cookiesData?.token;
   const [IsIndexing, setIndexing] = useState(false);
-  const allowedFileTypes = ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/plain"]
+  const allowedFileTypes = [
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "text/plain",
+  ];
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [socketStatus , setSocketStataus] = useState("")
+  const [socketStatus, setSocketStataus] = useState("");
   const [onlineResource, setOnlineResource] = useState({
     title: "",
     url: "",
@@ -65,9 +68,9 @@ const UpdateComponent = () => {
         ...prevData,
         file: uploadedFile,
       }));
-  } else {
-      toast.error('Invalid file type. Only .docx and .txt files are allowed.');
-  }
+    } else {
+      toast.error("Invalid file type. Only .docx and .txt files are allowed.");
+    }
   };
 
   const getCompanyProducts = async () => {
@@ -213,52 +216,59 @@ const UpdateComponent = () => {
   };
 
   useEffect(() => {
-    if (socket && !socket.hasListeners('scrapingStatus')) {
+    if (socket && !socket.hasListeners("scrapingStatus")) {
       // Set up the socket listener once
-      socket.on('scrapingStatus', (statusUpdate) => {
+      socket.on("scrapingStatus", (statusUpdate) => {
         setSocketStataus(statusUpdate.status);
-        console.log('Update from socket:', statusUpdate);
+        console.log("Update from socket:", statusUpdate);
       });
     }
-  
+
     // Clean up socket listener when component unmounts
     return () => {
-      socket?.off('scrapingStatus');
+      socket?.off("scrapingStatus");
     };
   }, [socket]);
-  
+
   const reIndexation = async () => {
     setIndexing(true);
     const requestOptions = {
-      method: 'GET',
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      redirect: 'follow',
+      redirect: "follow",
     };
-  
+
     try {
-      const response = await fetch(`${baseUrl}/resources/${id}/re-index`, requestOptions);
-      const data = await handleResponse(response, router, cookies, removeCookie);
-  
+      const response = await fetch(
+        `${baseUrl}/resources/${id}/re-index`,
+        requestOptions
+      );
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
+
       if (response.ok) {
-        toast.success('Re-indexation started. Check real-time updates below.');
-        
+        toast.success("Re-indexation started. Check real-time updates below.");
+
         setOnlineResource((prevData) => ({
           ...prevData,
           file: data.file,
         }));
         setIndexing(false);
-        setSocketStataus("")
+        setSocketStataus("");
       } else {
         toast.error(data?.error);
       }
     } catch (error) {
-      toast.error('An unexpected error occurred.');
+      toast.error("An unexpected error occurred.");
     }
   };
-  
-  
+
   const getNextIndexationData = () => {
     const updatedDate = onlineResource.indexing;
     const updatedAt = new Date(onlineResource.updatedAt);
@@ -375,23 +385,19 @@ const UpdateComponent = () => {
                 </div>
                 <div className="flex-1">
                   <div className="flex justify-between">
-                  <label className="text-[16px] 2xl:text-[20px]">
-                  Indexation file
-                  </label>
-                  <Button
-                          
-                          size="sm"
-                          color="primary"
-                          className="rounded-md 2xl:text-[18px] cursor-pointer text-[16px] font-semibold mb-1"
-                          onClick={() =>
-                            handleDownload(onlineResource.file)
-                          }
-                        >
-                          Download File
-                        </Button>
+                    <label className="text-[16px] 2xl:text-[20px]">
+                      Indexation file
+                    </label>
+                    <Button
+                      size="sm"
+                      color="primary"
+                      className="rounded-md 2xl:text-[18px] cursor-pointer text-[16px] font-semibold mb-1"
+                      onClick={() => handleDownload(onlineResource.file)}
+                    >
+                      Download File
+                    </Button>
+                  </div>
 
-                        </div>
-                  
                   <Dropzone onDrop={handleDrop}>
                     {({ getRootProps, getInputProps }) => (
                       <div
@@ -521,19 +527,18 @@ const UpdateComponent = () => {
 
                   {onlineResource.indexing === "On demand" && (
                     <>
-                    <Button
-                      radius="none"
-                      size="sm"
-                      isDisabled={IsIndexing}
-                      className={`text-white text-sm 2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4 ${
-                        IsIndexing ? "bg-gray-500" : "bg-btn-primary"
-                      }`}
-                      onClick={reIndexation}
-                    >
-                      {IsIndexing ? "Indexing..." : " Start Indexation"}
-                    </Button>{" "}
-                    <span>{socketStatus ? `${socketStatus}...` : ""}</span>
-
+                      <Button
+                        radius="none"
+                        size="sm"
+                        isDisabled={IsIndexing}
+                        className={`text-white text-sm 2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4 ${
+                          IsIndexing ? "bg-gray-500" : "bg-btn-primary"
+                        }`}
+                        onClick={reIndexation}
+                      >
+                        {IsIndexing ? "Indexing..." : " Start Indexation"}
+                      </Button>{" "}
+                      <span>{socketStatus ? `${socketStatus}...` : ""}</span>
                     </>
                   )}
                   {onlineResource.indexing === "Manual" && (
@@ -541,7 +546,7 @@ const UpdateComponent = () => {
                       radius="none"
                       size="sm"
                       // isDisabled={true}
-                      className="text-white text-sm 2xl:text-[20px] bg-btn-primary  cursor-not-allowed w-max rounded-[4px] my-4"
+                      className="text-white text-sm 2xl:text-[20px] bg-btn-primary  w-max rounded-[4px] my-4"
                       onClick={() => {
                         onOpen();
                       }}
@@ -577,7 +582,7 @@ const UpdateComponent = () => {
         onOpen={onOpen}
         onClose={onClose}
         handleFileData={handleFileUpdate}
-        allowedFileTypes = {allowedFileTypes }
+        allowedFileTypes={allowedFileTypes}
       />
     </div>
   );

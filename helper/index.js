@@ -20,11 +20,11 @@ export const formatDate = (dateString) => {
 export function formatDateWithTime(dateString) {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: '2-digit',
     hour: 'numeric',
     minute: 'numeric',
-    second: 'numeric',
+    // second: 'numeric',
     hour12: true,
   }).format(new Date(dateString));
 }

@@ -97,26 +97,26 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
         className=" bg-white shadow-lg rounded-lg cursor-pointer"
       >
         <div ref={dragRef} className="p-4 ">
-          <div className="font-bold text-lg text-black mb-2 ">
+          <div className="font-semibold text-lg text-black mb-2 ">
             <h6>{data?.customerName} &nbsp;</h6>
             <h6>{data?.fileName}</h6>
           </div>
 
           <div className="">
-              <span className="font-bold  text-black"> Creation date </span>
-              {formatDateWithTime(data?.createdAt)}
-            <div>By {data?.creator?.firstName}</div>
+              <div className="font-semibold  text-black"> Creation date </div>
+              {formatDateWithTime(data?.createdAt)} - {data?.creator?.firstName}
+            {/* <div>By {data?.creator?.firstName}</div> */}
           </div>
 
           <div className="my-1">
-            <span className="font-bold  text-black"> Last Update </span>{" "}
-            {formatDateWithTime(data?.updatedAt)}
-            <div>By {data?.updater?.firstName}</div>
+            <div className="font-semibold  text-black"> Last Update </div>{" "}
+            {formatDateWithTime(data?.updatedAt)} - {data?.updater?.firstName}
+            {/* <div>By {data?.updater?.firstName}</div> */}
           </div>
       
 
           <div className=" font-bold">
-            Due date <span>{formatDateWithTime(data?.returnDate)}</span>
+            Due date: <span>{formatDateWithTime(data?.returnDate)}</span>
           </div>
         </div>
         <div className="flex items-center justify-end gap-2 px-4 pb-2">
