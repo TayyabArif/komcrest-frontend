@@ -11,23 +11,21 @@ import { useCookies } from "react-cookie";
 import {handleResponse}  from "../../../../helper/index"
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { useMyContext } from "@/context";
 
 const UploadQuestions = () => {
   const [stepper, setStepper] = useState(0);
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  const [companyProducts, setCompanyProducts] = useState([]);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter()
   const [selectedHeader , setSelectedHeader] = useState([])
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [updateHeader , setUpdateHeader] = useState([]) 
   const [mappedIndexValue , setMappedIndexValue] = useState([])
+  const {companyProducts } = useMyContext();
   
-
-
-
   const [knowledgeData, setKnowledgeData] = useState({
     name: "",
     language: "",
@@ -62,37 +60,17 @@ const UploadQuestions = () => {
     }
   }
 
-  const getCompanyProducts = async () => {
-    const token = cookiesData?.token;
-    const companyId = cookiesData?.companyId;
-    // debugger
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-    fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
-      .then( async (response) => {
-        const data = await handleResponse(response, router, cookies, removeCookie);
-        return {
-          status: response.status,
-          ok: response.ok,
-          data,
-        };
-      })
-      .then(({ status, ok, data }) => {
-        if (ok) {
-          setCompanyProducts(data?.Products);
-          console.log(">>>>>>>", data?.Products);
-        } else {
-          toast.error(data?.error);
-          console.error("Error:", data);
-        }
-      })
-      .catch((error) => console.error(error));
-  };
+  useEffect(() => {
+    if (companyProducts.length === 1) {
+      console.log("companyProducts", companyProducts);
+      setKnowledgeData((prev) => ({
+        ...prev,
+        productIds: [companyProducts[0].id], 
+      }));
+    }
+  }, [companyProducts]);
+
+
 
   const handleCheckboxChange = (id) => {
     setKnowledgeData((prevData) => {
@@ -114,11 +92,7 @@ const UploadQuestions = () => {
     });
   };
 
-  useEffect(() => {
-    getCompanyProducts();
-  }, []);
-
-
+ 
   const handleUpdateData = () => { 
     // const [headers, ...rows] = knowledgeData.questions;
     const rows = knowledgeData.questions.slice(1);
@@ -194,7 +168,7 @@ const submitData = () => {
     .then(({ status, ok, data }) => {
       if (ok) {
         console.log("Success:", data);
-        toast.success("Document created successfully");
+        toast.success("Knowledge created successfully");
         router.push("/vendor/knowledge");
       } else {
         toast.error(data?.error || "Document not Created");

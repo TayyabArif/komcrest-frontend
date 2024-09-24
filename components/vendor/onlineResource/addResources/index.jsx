@@ -18,22 +18,24 @@ import { useRouter } from "next/router";
 import Completed from "../../shared/Completed";
 import { urlPattern } from "../../../../helper/index";
 import useSocket from "@/customHook/useSocket";
+import { useMyContext } from "@/context";
 
 const AddResource = () => {
   const [stepper, setStepper] = useState(0);
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  const [companyProducts, setCompanyProducts] = useState([]);
   const token = cookiesData?.token;
   const companyId = cookiesData?.companyId;
   const [allResources, setAllResources] = useState([{ url: "", title: "" , status:"pending"}]);
   const [errors, setErrors] = useState([]);
+  const {companyProducts } = useMyContext();
   const [resourceData, setResourceData] = useState({
     language: "",
     productIds: [],
     resources: [],
   });
+
 
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
@@ -60,44 +62,17 @@ const AddResource = () => {
       default:
         return "";
     }
-  }
-
-  const getCompanyProducts = async () => {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-    fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
-      .then(async (response) => {
-        const data = await handleResponse(
-          response,
-          router,
-          cookies,
-          removeCookie
-        );
-        return {
-          status: response.status,
-          ok: response.ok,
-          data,
-        };
-      })
-      .then(({ status, ok, data }) => {
-        if (ok) {
-          setCompanyProducts(data?.Products);
-        } else {
-          toast.error(data?.error);
-          console.error("Error:", data);
-        }
-      })
-      .catch((error) => console.error(error));
-  };
+  } 
 
   useEffect(() => {
-    getCompanyProducts();
-  }, []);
+    if (companyProducts.length === 1) {
+      console.log("companyProducts", companyProducts);
+      setResourceData((prev) => ({
+        ...prev,
+        productIds: [companyProducts[0].id], 
+      }));
+    }
+  }, [companyProducts]);
 
   
 
@@ -363,12 +338,12 @@ const AddResource = () => {
                   {stepper === 2 && (
                     <div className="space-y-2">
                       <div className=" mt-8 mb-2">
-                        <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-60">
+                        <h1 className="font-semibold text-[16px] 2xl:text-[20px] ">
                           Select Language:
                         </h1>
                         <Select
                           variant="bordered"
-                          className="w-1/2 bg-transparent"
+                          className="min-w-[80px] bg-transparent"
                           size="md"
                           placeholder="Select Language"
                           value={resourceData.language}
