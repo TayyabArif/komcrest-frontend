@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 import { handleResponse } from "../../../helper";
 import { Select, SelectItem } from "@nextui-org/react";
 import { useMyContext } from "@/context";
+import { addDocuments ,updateDocuments  ,singleDocument} from "@/apis/vendor/documentApis";
 
 const language = [
   { key: "French", label: "French" },
@@ -99,119 +100,51 @@ const NewDocument = () => {
     formData.append("productIds", JSON.stringify(documentData.productIds));
     formData.append("documentLink", documentData.documentLink);
     formData.append("language", documentData.language);
-
-    const token = cookiesData.token;
-    let requestOptions;
-    if (id) {
-      requestOptions = {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-        redirect: "follow",
-      };
-
-      fetch(`${baseUrl}/documents/${id}`, requestOptions)
-        .then(async (response) => {
-          const data = await handleResponse(
-            response,
-            router,
-            cookies,
-            removeCookie
-          );
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
-            toast.success("Document updated successfully");
-            router.push("/vendor/document");
-          } else {
-            toast.error(data?.error);
-            console.error("Error:", data);
-          }
-        })
-        .catch((error) => console.error(error));
-    } else {
-      requestOptions = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-        redirect: "follow",
-      };
-
-      fetch(`${baseUrl}/documents`, requestOptions)
-        .then(async (response) => {
-          const data = await handleResponse(
-            response,
-            router,
-            cookies,
-            removeCookie
-          );
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
-            console.log("Success:", data);
-            toast.success("Document created successfully");
-            router.push("/vendor/document");
-          } else {
-            toast.error(data?.error || "Document not Created");
-            console.error("Error:", data);
-          }
-        })
-        .catch((error) => console.error(error));
+    try {
+      let response;
+      if (id) {
+        response = await updateDocuments(id, formData);
+      } else {
+        response = await addDocuments(formData);
+      }
+      if (response.status === 200 || response.status === 201) {
+        router.push("/vendor/document");
+        toast.success(`Document ${id ? "Updated" : "Created"}`);
+      } else {
+        toast.error("Failed to process the document");
+        console.error("Unexpected response status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error submitting document:", error);
+      toast.error("An error occurred while submitting the document.");
     }
   };
+  
 
   useEffect(() => {
     if (id) {
       setDataIsLoaded(false);
-      const token = cookiesData?.token;
-      const requestOptions = {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        redirect: "follow",
-      };
-      fetch(`${baseUrl}/documents/${id}`, requestOptions)
-        .then(async (response) => {
-          const data = await handleResponse(
-            response,
-            router,
-            cookies,
-            removeCookie
-          );
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
+      const fetchDocument = async () => {
+        try {
+          const response = await singleDocument(id);
+          const data = response.data;
+          if (response.status === 200) {
             setDocumentData({
               ...data,
               productIds: data.Products.map((product) => product.id),
             });
             setDataIsLoaded(true);
           } else {
-            toast.error(data?.error);
+            toast.error(data?.error || "Failed to load document");
             console.error("Error:", data);
           }
-        })
-        .catch((error) => console.error(error));
+        } catch (error) {
+          toast.error("An error occurred while fetching the document.");
+          console.error("Fetch document error:", error);
+        }
+      };
+  
+      fetchDocument(); 
     }
   }, [id]);
 

@@ -8,6 +8,7 @@ import ExampleCard from "./shared/ExampleCard";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import {handleResponse} from "../../../helper"
+import { fetchDocuments } from "@/apis/vendor/documentApis";
 
 
 const AddDocument = () => {
@@ -26,34 +27,23 @@ const AddDocument = () => {
   }, [isDeleted]);
 
   const getUserDocument = async () => {
-    setIsLoading(true);
-    const token = cookiesData && cookiesData.token;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-
     try {
-      const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
-      const data = await handleResponse(response, router, cookies,removeCookie);
-      // const data = await response.json();
-      if (response.ok) {
-        setDocumentData(data);
+      setIsLoading(true);
+      const response = await fetchDocuments();
+      if (response.status === 200) {
+        setDocumentData(response.data);
         setDataIsLoaded(true);
       } else {
-        toast.error(data?.error);
-        
+        console.error("Failed to fetch documents, status:", response.status);
+        setDataIsLoaded(false);
       }
     } catch (error) {
-      console.error("Error fetching user documents:", error);
+      console.error("Error fetching documents:", error);
+      setDataIsLoaded(false);
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
     <div>
       <VendorHeader buttonShow={documentData.length > 0} />

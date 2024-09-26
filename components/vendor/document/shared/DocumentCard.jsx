@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { formatDate } from "../../../../helper";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { deleteDocuments } from "@/apis/vendor/documentApis";
 
 const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
   const router = useRouter();
@@ -28,23 +29,21 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
   };
 
   const handleDelete = async () => {
-    const token = cookiesData.token;
-    const requestOptions = {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-    fetch(`${baseUrl}/documents/${selectedDocument?.id}`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        console.log("$$$$$$$$$", result);
+    try {
+      const response = await deleteDocuments(selectedDocument?.id);
+      if (response.status === 200 || response.status === 204) { 
         toast.success("Document deleted successfully");
         setIsDeleted(!isDeleted);
-      })
-      .catch((error) => console.error(error));
+      } else {
+        toast.error("Failed to delete the document");
+        console.error("Delete failed, response status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      toast.error("An error occurred while deleting the document.");
+    }
   };
+  
 
   const handleDownload = async (filePath) => {
     const proxyUrl = "https://cors-anywhere.herokuapp.com/";
