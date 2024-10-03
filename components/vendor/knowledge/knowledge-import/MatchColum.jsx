@@ -3,8 +3,6 @@ import { Select, SelectItem } from "@nextui-org/react";
 
 const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHeader, setMappedIndexValue, mappedIndexValue }) => {
   const [availableOptions, setAvailableOptions] = useState([]);
-  debugger
-
   const thStyle = {
     border: '1px solid #dddddd',
     textAlign: 'left',
@@ -24,7 +22,7 @@ const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHea
   const selectOptions = [
     { key: "Category", label: "Category" },
     { key: "Question", label: "Question" },
-    { key: "Coverage", label: "Coverage" },
+    { key: "Coverage", label: "Compliance" },
     { key: "Answer", label: "Answer" },
     { key: "Product", label: "Product" },
     { key: "Curator", label: "Curator" },
