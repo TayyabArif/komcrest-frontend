@@ -9,7 +9,7 @@ import FilterStatus from "./FilterStatus";
 import DeleteModal from "../shared/DeleteModal";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import { formatDateWithTime } from "@/helper";
+import { formatDateWithTime ,getOnlyDate} from "@/helper";
 import { useDrag } from "react-dnd";
 import { useMyContext } from "@/context";
 import { handleExport  , handleDownload} from "@/helper";
@@ -115,8 +115,8 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
           </div>
       
 
-          <div className=" font-bold">
-            Due date: <span>{formatDateWithTime(data?.returnDate)}</span>
+          <div className="font-semibold">
+            Due date: <span>{getOnlyDate(data?.returnDate)}</span>
           </div>
         </div>
         <div className="flex items-center justify-end gap-2 px-4 pb-2">

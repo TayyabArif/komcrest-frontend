@@ -29,6 +29,14 @@ export function formatDateWithTime(dateString) {
   }).format(new Date(dateString));
 }
 
+export function getOnlyDate(dateString) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  }).format(new Date(dateString));
+}
+
   export const handleResponse = async (response  ,router, cookies,removeCookie) => {
     const data = await response.json();
     if (response.ok) {

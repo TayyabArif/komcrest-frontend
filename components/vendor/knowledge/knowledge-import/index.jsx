@@ -376,9 +376,15 @@ const submitData = () => {
                         gotToMatchColum()
                       }
                      else if(stepper == 2){
-                      if(mappedIndexValue.includes("Question")){
-                        handleUpdateData()
-                      }else {toast.error("Please select  Question field")}
+                      if (!mappedIndexValue.includes("Question") && !mappedIndexValue.includes("Coverage")) {
+                        toast.error("Please select Compliance and Question field");
+                      } else if (!mappedIndexValue.includes("Question")) {
+                        toast.error("Please select Question field");
+                      } else if (!mappedIndexValue.includes("Coverage")) {
+                        toast.error("Please select Compliance field");
+                      } else {
+                        handleUpdateData();
+                      }
                       }else if (stepper == 3) {
                         submitData();
                       }
