@@ -97,9 +97,9 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
         className=" bg-white shadow-lg rounded-lg cursor-pointer"
       >
         <div ref={dragRef} className="p-4 ">
-          <div className="font-semibold text-lg text-black mb-2 ">
-            <h6>{data?.customerName} &nbsp;</h6>
-            <h6>{data?.fileName}</h6>
+          <div className="font-semibold  text-black mb-2 ">
+            <div>{data?.customerName} &nbsp;</div>
+            <div>{data?.fileName}</div>
           </div>
 
           <div className="">
