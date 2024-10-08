@@ -136,9 +136,9 @@ const Questionnaires = () => {
   return (
     <>
   {dataLoaded ? (
-    <div>
+    <div >
       <KnowledgeHeader headerData={headerData} buttonShow={true} />
-      <div className="w-[86%] mx-auto py-2 px-2">
+      <div className="w-[86%] mx-auto py-2 px-2 ">
         <div className="flex gap-5 text-[16px] 2xl:text-[20px] py-2 ">
           <h1 className={`${filterValue == "progress" ? "text-blue-700 " : ""} cursor-pointer`}
           onClick={()=>setFilterValue("progress")}
@@ -149,7 +149,7 @@ const Questionnaires = () => {
         </div>
         {filterValue == "progress" ? (
          
-          <div className="flex gap-3">
+          <div className="flex gap-3  overflow-auto h-[75vh]">
           <DndProvider backend={HTML5Backend}>
           <FilterStatus onCardDrop={handleCardDrop} title="To Process" data={filterStatus("To Process")} stepsContent={QuestionnaireStepsContent.process} setDataUpdate={setDataUpdate} />
           <FilterStatus onCardDrop={handleCardDrop} title="Started" data={filterStatus("Started")} stepsContent={QuestionnaireStepsContent.Started}  setDataUpdate={setDataUpdate} />

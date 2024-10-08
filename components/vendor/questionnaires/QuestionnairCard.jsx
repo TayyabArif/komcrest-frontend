@@ -110,7 +110,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
 
           <div className="my-1">
             <div className="font-semibold  text-black"> Last Update </div>{" "}
-            {formatDateWithTime(data?.updatedAt)} - {data?.updater?.firstName}
+            {formatDateWithTime(data?.updatedAt)} - {data?.updater?.firstName ? data?.updater?.firstName : "N/A"}
             {/* <div>By {data?.updater?.firstName}</div> */}
           </div>
       
