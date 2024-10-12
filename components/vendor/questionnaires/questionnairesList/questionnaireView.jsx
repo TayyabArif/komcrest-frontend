@@ -53,6 +53,10 @@ const QuestionnairesView = () => {
   const [selectedTextAreaId, setSelectedTextAreaId] = useState();
   const [getFilterData, setFilterData] = useState("");
 
+
+
+  const [selectedQuestionnaireReference , setSelectedQuestionnaireReference ] = useState()
+
   useEffect(() => {
     const storedHistoryPreference = JSON.parse(
       localStorage.getItem("showHistory")
@@ -457,6 +461,19 @@ const QuestionnairesView = () => {
     }
   };
 
+
+
+  // fetch selected questionnire after page reload base on seleted id store in localstorage
+  useEffect(() => {
+    const filetrSingleQuestionnisre = questionnaireData?.questionnaireRecords?.find((item) => {
+        return item.id === selectedId; 
+    });
+    console.log("questionnaireData?.questionnaireRecords:",questionnaireData?.questionnaireRecords);
+    console.log("Found itemmmmmmmmm:",filetrSingleQuestionnisre);
+    setSelectedQuestionnaireReference(filetrSingleQuestionnisre?.references)
+}, [selectedId ,questionnaireData]);
+
+
   return (
     <>
       {dataLoaded ? (
@@ -547,6 +564,10 @@ const QuestionnairesView = () => {
                           //   setAnswerIsUpdate("multiple");
                           //   setDropDownOpen(false);
                           // }}
+                          onClick={() => {
+                            reRunForAnswer(bulkSelected);
+                            setDropDownOpen(false);
+                          }}
                         >
                           Improve answer
                         </div>
@@ -614,7 +635,7 @@ const QuestionnairesView = () => {
                         Status
                       </th>
                       <th className="px-4 py-2 text-left text-gray-600 border">
-                        Question
+                        Question {selectedId}
                       </th>
                       <th className="px-4 py-2 text-left text-gray-600 border">
                         Compliance
@@ -663,8 +684,12 @@ const QuestionnairesView = () => {
                             <td className="px-4 py-2 border  w-[600px]">
                               {item.question}
                             </td>
-                            <td className=" py-2 items-center ">
-                              <div className="w-[90%] mx-auto">
+                            <td className={`py-2 items-center ${
+                                item.confidence == 0
+                                  ? "outline outline-[#FFC001]  shadow-inner"
+                                  : ""
+                              }`}>
+                              <div className="w-[100%] mx-auto">
                                 <div className={`text-[12px] flex  my-2`}>
                                   {item.complianceGeneratedBy == "AI" ? (
                                    <p className=" italic text-left">A.I.</p>
@@ -686,9 +711,9 @@ const QuestionnairesView = () => {
                                   <option value="" disabled>
                                     Select
                                   </option>
-                                  <option value="Yes">Yes</option>
-                                  <option value="No">No</option>
-                                  <option value="Partial">Partial</option>
+                                  <option value="yes">Yes</option>
+                                  <option value="no">No</option>
+                                  <option value="Not applicable">Not applicable</option>
                                 </select>
                               </div>
                             </td>
@@ -837,6 +862,7 @@ const QuestionnairesView = () => {
                                   style={{ strokeWidth: 3 }}
                                   onClick={() => {
                                     setSelectedId(item.id);
+                                   
                                     if (selectedId == item.id) {
                                       setHistoryVisible((prev) => !prev);
                                     } else if (!selectedId) {
@@ -867,6 +893,10 @@ const QuestionnairesView = () => {
                                         //   setSelectedId(item.id);
                                         //   setAnswerIsUpdate(true);
                                         // }}
+                                        onClick={() => {
+                                          setOpenPopoverIndex(null);
+                                          reRunForAnswer([item.id]);
+                                        }}
                                         className="text-sm 2xl:text-[18px] cursor-pointer "
                                       >
                                         Improve answer
@@ -942,6 +972,7 @@ const QuestionnairesView = () => {
                     setHistoryVisible={setHistoryVisible}
                     setSelectedOption={setSelectedOption}
                     selectedOption={selectedOption}
+                    selectedQuestionnaireReference={selectedQuestionnaireReference}
                   />
                 </div>
               )}

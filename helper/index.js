@@ -41,7 +41,7 @@ export function getOnlyDate(dateString) {
     const data = await response.json();
     if (response.ok) {
       return data;
-    } else if (response.status === 400) {
+    } else if (response.status === 401) {
       // router.push("/vendor/login/access");
       removeCookie('myCookie', { path: '/' });
       router.push("/vendor/login/access");

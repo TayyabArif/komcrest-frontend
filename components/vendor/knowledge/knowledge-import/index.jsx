@@ -143,7 +143,18 @@ const submitData = () => {
   setStepper(stepper + 1);
   setProgressBar(progressBar + 27);
 
-  const jsonPayload = JSON.stringify(updatedData);
+  // change compliance to coverage
+
+  let payloadData = updatedData
+  payloadData.questions.forEach(question => {
+    if (question.compliance !== undefined) {
+        question.coverage = question.compliance;
+        delete question.compliance;
+    }
+});
+  
+console.log(">>>>>>>>>>:::::::",payloadData)
+  const jsonPayload = JSON.stringify(payloadData);
 
   const token = cookiesData.token;
   let requestOptions = {
@@ -181,7 +192,7 @@ const submitData = () => {
         toast.error(error.response.data?.error || "An error occurred while creating the document");
       } else {
         console.error("Fetch Error:", error);
-        toast.error("The question field cannot be empty");
+        toast.error("An error occurred while creating the Knowledge");
         setStepper(0);
       }
     });
@@ -376,11 +387,11 @@ const submitData = () => {
                         gotToMatchColum()
                       }
                      else if(stepper == 2){
-                      if (!mappedIndexValue.includes("Question") && !mappedIndexValue.includes("Coverage")) {
+                      if (!mappedIndexValue.includes("Question") && !mappedIndexValue.includes("Compliance")) {
                         toast.error("Please select Compliance and Question field");
                       } else if (!mappedIndexValue.includes("Question")) {
                         toast.error("Please select Question field");
-                      } else if (!mappedIndexValue.includes("Coverage")) {
+                      } else if (!mappedIndexValue.includes("Compliance")) {
                         toast.error("Please select Compliance field");
                       } else {
                         handleUpdateData();

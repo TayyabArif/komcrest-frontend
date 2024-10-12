@@ -52,22 +52,15 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
     originalFile: "",
   });
 
-
-
   useEffect(() => {
     if (companyProducts.length === 1) {
       console.log("companyProducts", companyProducts);
       setImportQuestionnaire((prev) => ({
         ...prev,
-        productIds: [companyProducts[0].id], 
+        productIds: [companyProducts[0].id],
       }));
     }
   }, [companyProducts]);
-
-
-
-
-
 
   const getDatafromChild = () => {
     let getData;
@@ -207,12 +200,16 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
       ...importQuestionnaires,
       Questionnaires: result,
       questionnaireLink,
-      collaborators : importQuestionnaires.collaborators.filter((id)=> id !== userID)
+      collaborators: importQuestionnaires.collaborators.filter(
+        (id) => id !== userID
+      ),
     };
 
     setQuestionList(result);
     setTotalCount(payload.Questionnaires.length);
     const token = cookiesData.token;
+
+    console.log("questionnire payloadllllllllll", payload);
 
     let requestOptions = {
       method: "POST",
@@ -247,11 +244,14 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
         .then(({ status, ok, data }) => {
           if (ok) {
             toast.success("Questionnaires created successfully");
-            localStorage.setItem("QuestionnaireId", data?.questionnaire?.id);
-            router.push(
-              `/vendor/questionnaires/view?name=${data?.questionnaire?.customerName}`
+            localStorage.setItem(
+              "QuestionnaireId",
+              data?.fullQuestionnaire?.id
             );
-            uploadFile(data?.questionnaire?.id);
+            router.push(
+              `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`
+            );
+            uploadFile(data?.fullQuestionnaire?.id);
           } else {
             toast.error(data?.error || "Questionnaires not Created");
             console.error("Error:", data);
