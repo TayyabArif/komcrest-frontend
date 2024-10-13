@@ -686,7 +686,7 @@ const QuestionnairesView = () => {
                             </td>
                             <td className={`py-2 items-center ${
                                 item.confidence == 0
-                                  ? "outline outline-[#FFC001]  shadow-inner"
+                                  ? "outline outline-[#FFC001] text-[#FFC001]  shadow-inner"
                                   : ""
                               }`}>
                               <div className="w-[100%] mx-auto">

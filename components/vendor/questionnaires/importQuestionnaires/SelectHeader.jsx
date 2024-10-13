@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CircleX } from 'lucide-react';
 
-const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows}) => {
+const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows, columnMapping, setColumnMapping  }) => {
   
   const initialSheet = excelFile && Object.keys(excelFile).length > 0 ? Object.keys(excelFile)[0] : null;
   const [selectedSheet, setSelectedSheet] = useState(initialSheet);
@@ -28,17 +28,38 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows}
     }));
   };
 
+  // const handleRemoveSheet = (sheetName) => {
+  //   const updatedSheetsData = { ...excelFile };
+  //   delete updatedSheetsData[sheetName];
+  //   setExcelFile(updatedSheetsData);
+
+  //   const updatedSelectedRows = { ...selectedRows };
+  //   delete updatedSelectedRows[sheetName];
+  //   console.log(">>>>>>>>>>>",updatedSelectedRows)
+  //   setSelectedRows(updatedSelectedRows)
+
+  // };
+
   const handleRemoveSheet = (sheetName) => {
+    // Remove sheet from excelFile
     const updatedSheetsData = { ...excelFile };
     delete updatedSheetsData[sheetName];
     setExcelFile(updatedSheetsData);
-
+  
+    // Remove sheet from selectedRows
     const updatedSelectedRows = { ...selectedRows };
     delete updatedSelectedRows[sheetName];
-    console.log(">>>>>>>>>>>",updatedSelectedRows)
-    setSelectedRows(updatedSelectedRows)
-
+    setSelectedRows(updatedSelectedRows);
+  
+    // Also remove the sheet from columnMapping
+    const updatedColumnMapping = { ...columnMapping };
+    delete updatedColumnMapping[sheetName];
+    setColumnMapping(updatedColumnMapping);
+  
+    console.log("Updated Selected Rows:", updatedSelectedRows);
+    console.log("Updated Column Mapping:", updatedColumnMapping);
   };
+  
 
   const truncateText = (text, maxLength) => {
     if (typeof text === 'string' && text.length > maxLength) {

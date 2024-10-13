@@ -126,11 +126,23 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
     if (Object.keys(columnMapping).length === 0) {
       return false;
     }
-
-    return Object.values(columnMapping).every(
-      (value) => Object.keys(value).length === 2
-    );
+  
+    return Object.entries(columnMapping).every(([sheetName, value]) => {
+      // Add null safety check for excelFile[sheetName] and excelFile[sheetName][0]
+      if (!excelFile[sheetName] || !excelFile[sheetName][0]) {
+        return false; // Return false if the sheet or the first row doesn't exist
+      }
+  
+      // For single-column sheets, check if only "Question" is selected
+      if (excelFile[sheetName][0].length === 1) {
+        return value[0] === "Question";  // Check if the first and only option is "Question"
+      }
+  
+      // For multiple columns, ensure both "Category" and "Question" are selected
+      return Object.keys(value).length === 2 && value[0] && value[1];
+    });
   };
+  
 
   const handleNextClick = () => {
     if (stepper === 0 && firstStepValidation()) {
@@ -151,7 +163,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
         setStepper(stepper + 1);
         setProgressBar(progressBar + 27);
       } else {
-        toast.error("Please select headers");
+        toast.error("Please select headers correctly");
       }
     } else if (stepper === 3) {
       const finalData = getDatafromChild();
@@ -164,12 +176,12 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
         const dataRows = finalData[key];
         transformedData[key] = dataRows.map((row) => {
           let obj = {};
-          const mapping = columnMapping[key]; // Get the column mapping for the current key
-
+          const mapping = columnMapping[key];
+  
           row.forEach((value, index) => {
-            const mappedHeader = mapping[index]; // Get the mapped header index
+            const mappedHeader = mapping[index]; 
             if (mappedHeader) {
-              obj[mappedHeader] = value; // Assign value to the mapped header
+              obj[mappedHeader] = value; 
             }
           });
           return obj;
@@ -179,7 +191,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
       console.log("transformedDatatransformedData", transformedData);
     }
   };
-
+  
   const submitQuestions = (transformedData) => {
     // convert object data in array of object
     let result = [];
@@ -327,7 +339,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
     <div className="w-[100%] h-full">
       <div className="w-[90%] mx-auto py-4 mt-[2rem]">
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
-          {getTitle()}
+          {getTitle()}{JSON.stringify(columnMapping)}
         </h1>
         <div className="w-full h-auto bg-white p-6">
           <Progress
@@ -392,6 +404,8 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
                   setExcelFile={setExcelFile}
                   setSelectedRows={setSelectedRows}
                   selectedRows={selectedRows}
+                  columnMapping={columnMapping}          
+                  setColumnMapping={setColumnMapping}   
                 />
               )}
               {stepper === 2 && (
