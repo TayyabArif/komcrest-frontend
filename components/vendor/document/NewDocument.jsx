@@ -65,6 +65,7 @@ const NewDocument = () => {
       "application/json",
       "application/vnd.ms-excel",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "application/pdf", 
     ];
 
     const file = acceptedFiles[0];
