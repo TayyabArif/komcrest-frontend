@@ -53,9 +53,8 @@ const QuestionnairesView = () => {
   const [selectedTextAreaId, setSelectedTextAreaId] = useState();
   const [getFilterData, setFilterData] = useState("");
 
-
-
-  const [selectedQuestionnaireReference , setSelectedQuestionnaireReference ] = useState()
+  const [selectedQuestionnaireReference, setSelectedQuestionnaireReference] =
+    useState();
 
   useEffect(() => {
     const storedHistoryPreference = JSON.parse(
@@ -303,16 +302,18 @@ const QuestionnairesView = () => {
       value = data;
     }
 
-  // immediatlty state change 
+    // immediatlty state change
     setQuestionnaireData({
       ...questionnaireData,
-      questionnaireRecords: questionnaireData.questionnaireRecords.map(record => {
-        if (record.id === id[0]) {
+      questionnaireRecords: questionnaireData.questionnaireRecords.map(
+        (record) => {
+          if (record.id === id[0]) {
             return { ...record, [property]: value };
+          }
+          return record;
         }
-        return record;
-    })
-    })
+      ),
+    });
 
     const updatedData = {
       ids: id,
@@ -461,18 +462,19 @@ const QuestionnairesView = () => {
     }
   };
 
-
-
   // fetch selected questionnire after page reload base on seleted id store in localstorage
   useEffect(() => {
-    const filetrSingleQuestionnisre = questionnaireData?.questionnaireRecords?.find((item) => {
-        return item.id === selectedId; 
-    });
-    console.log("questionnaireData?.questionnaireRecords:",questionnaireData?.questionnaireRecords);
-    console.log("Found itemmmmmmmmm:",filetrSingleQuestionnisre);
-    setSelectedQuestionnaireReference(filetrSingleQuestionnisre?.references)
-}, [selectedId ,questionnaireData]);
-
+    const filetrSingleQuestionnisre =
+      questionnaireData?.questionnaireRecords?.find((item) => {
+        return item.id === selectedId;
+      });
+    console.log(
+      "questionnaireData?.questionnaireRecords:",
+      questionnaireData?.questionnaireRecords
+    );
+    console.log("Found itemmmmmmmmm:", filetrSingleQuestionnisre);
+    setSelectedQuestionnaireReference(filetrSingleQuestionnisre?.references);
+  }, [selectedId, questionnaireData]);
 
   return (
     <>
@@ -581,7 +583,7 @@ const QuestionnairesView = () => {
                           Re-run AI for compliance & answer
                         </div>
                         <div
-                          className="text-sm cursor-pointer 2xl:text-[18px]" 
+                          className="text-sm cursor-pointer 2xl:text-[18px]"
                           onClick={() => {
                             notifyDisclosure.onOpen();
                             setOpenPopoverIndex(null);
@@ -673,10 +675,10 @@ const QuestionnairesView = () => {
                             <td className="px-4 py-2 text-center border w-[70px]">
                               <div
                                 className={`h-5 w-5 mx-auto rounded-full cursor-pointer border ${
-                                  item.status === "Flagged"
-                                    ? "bg-yellow-500"
-                                    : item.status === "approved"
+                                  item.status === "approved"
                                     ? "bg-green-600"
+                                    : item.status === "Flagged" || item.confidence < 7
+                                    ? "bg-yellow-500"
                                     : "bg-blue-600"
                                 }`}
                               ></div>
@@ -684,15 +686,17 @@ const QuestionnairesView = () => {
                             <td className="px-4 py-2 border  w-[600px]">
                               {item.question}
                             </td>
-                            <td className={`py-2 items-center ${
+                            <td
+                              className={`py-2 items-center ${
                                 item.confidence == 0
                                   ? "outline outline-[#FFC001] text-[#FFC001]  shadow-inner"
                                   : ""
-                              }`}>
+                              }`}
+                            >
                               <div className="w-[100%] mx-auto">
                                 <div className={`text-[12px] flex  my-2`}>
                                   {item.complianceGeneratedBy == "AI" ? (
-                                   <p className=" italic text-left">A.I.</p>
+                                    <p className=" italic text-left">A.I.</p>
                                   ) : (
                                     <p className=" italic text-left">Updated</p>
                                   )}
@@ -713,7 +717,9 @@ const QuestionnairesView = () => {
                                   </option>
                                   <option value="yes">Yes</option>
                                   <option value="no">No</option>
-                                  <option value="Not applicable">Not applicable</option>
+                                  <option value="Not applicable">
+                                    Not applicable
+                                  </option>
                                 </select>
                               </div>
                             </td>
@@ -745,7 +751,7 @@ const QuestionnairesView = () => {
                                     setSelectedTextAreaId(item.id);
                                     setAnswerIsUpdate("single");
                                   }}
-                                  style={{height : `${textAreaSize}px`}}
+                                  style={{ height: `${textAreaSize}px` }}
                                   className={`w-full text-wrap !h-[${textAreaSize}px] rounded-md focus:outline-none ring-2 px-2  ${
                                     item.status == "approved" &&
                                     selectedTextAreaId
@@ -782,9 +788,8 @@ const QuestionnairesView = () => {
                                 {selectedTextAreaId === item.id &&
                                 answerIsUpdate == "single" ? (
                                   <>
-                                   <p
+                                    <p
                                       onClick={() => {
-                                        
                                         setAnswerIsUpdate("");
                                         setSelectedTextAreaId("");
                                       }}
@@ -812,8 +817,6 @@ const QuestionnairesView = () => {
                                     >
                                       Update
                                     </p>
-
-                                   
                                   </>
                                 ) : null}
                               </div>
@@ -862,7 +865,7 @@ const QuestionnairesView = () => {
                                   style={{ strokeWidth: 3 }}
                                   onClick={() => {
                                     setSelectedId(item.id);
-                                   
+
                                     if (selectedId == item.id) {
                                       setHistoryVisible((prev) => !prev);
                                     } else if (!selectedId) {
@@ -941,10 +944,10 @@ const QuestionnairesView = () => {
                             </td>
                             <td
                               className={`my-2 ${
-                                item.status === "Flagged"
-                                  ? "bg-yellow-500"
-                                  : item.status === "approved"
+                                item.status === "approved"
                                   ? "bg-green-600"
+                                  : item.status === "Flagged" || item.confidence < 7
+                                  ? "bg-yellow-500"
                                   : "bg-blue-600"
                               }`}
                             ></td>
@@ -972,7 +975,9 @@ const QuestionnairesView = () => {
                     setHistoryVisible={setHistoryVisible}
                     setSelectedOption={setSelectedOption}
                     selectedOption={selectedOption}
-                    selectedQuestionnaireReference={selectedQuestionnaireReference}
+                    selectedQuestionnaireReference={
+                      selectedQuestionnaireReference
+                    }
                   />
                 </div>
               )}
