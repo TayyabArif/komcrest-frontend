@@ -635,7 +635,7 @@ const QuestionnairesView = () => {
                         Status
                       </th>
                       <th className="px-4 py-2 text-left text-gray-600 border">
-                        Question {selectedId}
+                        Question
                       </th>
                       <th className="px-4 py-2 text-left text-gray-600 border">
                         Compliance
