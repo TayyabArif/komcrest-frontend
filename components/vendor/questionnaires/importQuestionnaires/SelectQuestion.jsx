@@ -4,7 +4,6 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
   const [visibleTable, setVisibleTable] = useState(Object.keys(excelFile)[0]);
 
   const handleMappingChange = (sheetName, columnIndex, value) => {
-    alert(value)
     setColumnMapping((prevMapping) => {
       const updatedMapping = { ...prevMapping };
   

@@ -163,7 +163,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
         setStepper(stepper + 1);
         setProgressBar(progressBar + 27);
       } else {
-        toast.error("Please select headers correctly");
+        toast.error("Please choose a mapped options first to proceed.");
       }
     } else if (stepper === 3) {
       const finalData = getDatafromChild();
@@ -339,7 +339,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
     <div className="w-[100%] h-full">
       <div className="w-[90%] mx-auto py-4 mt-[2rem]">
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
-          {getTitle()}{JSON.stringify(columnMapping)}
+          {getTitle()}
         </h1>
         <div className="w-full h-auto bg-white p-6">
           <Progress
