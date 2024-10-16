@@ -17,8 +17,10 @@ import SelectHeader from "./SelectHeader";
 import SelectQuestion from "./SelectQuestion";
 import ValidateData from "./ValidateData";
 import { useMyContext } from "@/context";
+import useSocket from "@/customHook/useSocket";
 
 const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
+
   const { companyProducts } = useMyContext();
   const [stepper, setStepper] = useState(0);
   const { setQuestionnaireUpdated } = useMyContext();
@@ -126,7 +128,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
     if (Object.keys(columnMapping).length === 0) {
       return false;
     }
-  
+      // return true
     return Object.entries(columnMapping).every(([sheetName, value]) => {
       // Add null safety check for excelFile[sheetName] and excelFile[sheetName][0]
       if (!excelFile[sheetName] || !excelFile[sheetName][0]) {
@@ -139,7 +141,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
       }
   
       // For multiple columns, ensure both "Category" and "Question" are selected
-      return Object.keys(value).length === 2 && value[0] && value[1];
+      return Object.keys(value).length === 2 
     });
   };
   
@@ -191,7 +193,8 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
       console.log("transformedDatatransformedData", transformedData);
     }
   };
-  
+
+
   const submitQuestions = (transformedData) => {
     // convert object data in array of object
     let result = [];
@@ -237,7 +240,6 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
       setImportSuccessfully(true);
     }, 1500);
 
-    setTimeout(() => {
       // setImportSuccessfully(true)
       fetch(`${baseUrl}/questionnaires`, requestOptions)
         .then(async (response) => {
@@ -278,7 +280,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
             );
           }
         });
-    }, 3000); // 3-second delay
+ 
   };
 
   const uploadFile = (id) => {
@@ -339,7 +341,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
     <div className="w-[100%] h-full">
       <div className="w-[90%] mx-auto py-4 mt-[2rem]">
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
-          {getTitle()}
+          {getTitle()} 
         </h1>
         <div className="w-full h-auto bg-white p-6">
           <Progress

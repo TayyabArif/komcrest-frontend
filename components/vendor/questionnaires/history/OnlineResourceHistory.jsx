@@ -1,22 +1,5 @@
 import React from "react";
 import { ThumbsUp, ThumbsDown, FilePenLine } from "lucide-react";
-const OnlineResourceHistoryData = [
-  {
-    title: "2021 CAIQ Questionnaire 20210914",
-    link: "Link",
-    file: "File",
-  },
-  {
-    title: "SOC 2 certificate",
-    link: "Link",
-    file: "File",
-  },
-  {
-    title: "SOC 2 certificate",
-    link: "Link",
-    file: "File",
-  },
-];
 
 const OnlineResourceHistory = ({ onlineResourceReferenceData }) => {
   return (

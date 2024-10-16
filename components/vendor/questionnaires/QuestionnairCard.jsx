@@ -17,6 +17,7 @@ import { handleExport  , handleDownload} from "@/helper";
 const deleteModalContent = "Are you sure to delete this Questionnaires?";
 
 const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
+  
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -101,7 +102,6 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
             <div>{data?.customerName} &nbsp;</div>
             <div>{data?.fileName}</div>
           </div>
-
           <div className="">
               <div className="font-semibold  text-black"> Creation date </div>
               {formatDateWithTime(data?.createdAt)} - {data?.creator?.firstName}

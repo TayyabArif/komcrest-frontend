@@ -144,7 +144,6 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
       </button>
     ))}
       </div>
-
       {/* Table for the selected sheet */}
       {visibleTable && excelFile[visibleTable] && (
         <div className='h-[56vh] overflow-auto '>
@@ -163,6 +162,7 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
                 .filter((row) => Array.isArray(row)) // Ensure that each row is an array
                 .map((row, rowIndex) => (
                   <tr key={rowIndex} className="even:bg-gray-100 text-[16px] 2xl:text-[20px]">
+                    
                     {row.map((cell, cellIndex) => (
                       <td key={cellIndex} className="border p-2 text-left">
                         {truncateText(cell, 70)}

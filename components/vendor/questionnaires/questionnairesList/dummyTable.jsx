@@ -1,113 +1,49 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import { FilePenLine, Check, Eye, TriangleAlert, Filter } from "lucide-react";
 import { Settings, Search } from "lucide-react";
 import QuestionnairsListHeader from "./QuestionnairsListHeader";
 import { Input } from "@nextui-org/react";
 import History from "../history";
+import useSocket from "@/customHook/useSocket";
 
-const data = [
-  {
-    status: false,
-    question:
-      "Do you use industry standards to build in security for your Systems/Software Development Lifecycle (SDLC)?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Do you use an automated source code analysis tool to detect security defects in code prior to production?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Do you use manual source-code analysis to detect security defects in code prior to production?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Do you verify that all of your software suppliers adhere to industry standards for Systems/Software Development Lifecycle (SDLC) security?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Do you verify that all of your software suppliers adhere to industry standards for Systems/Software Development Lifecycle (SDLC) security?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Do you verify that all of your software suppliers adhere to industry standards for Systems/Software Development Lifecycle (SDLC) security?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Do you verify that all of your software suppliers adhere to industry standards for Systems/Software Development Lifecycle (SDLC) security?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Do you verify that all of your software suppliers adhere to industry standards for Systems/Software Development Lifecycle (SDLC) security?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Do you verify that all of your software suppliers adhere to industry standards for Systems/Software Development Lifecycle (SDLC) security?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-
-  {
-    status: false,
-    question:
-      "(SaaS only) Do you review your applications for security vulnerabilities and address any issues prior to deployment to production?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Are all identified security, contractual and regulatory requirements for customer access contractually addressed and remediated prior to granting customers access to data, assets, and information systems?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-  {
-    status: false,
-    question:
-      "Are all requirements and trust levels for customers’ access defined and documented?",
-    compliance: "faCog",
-    answer: "faCog",
-    actions: ["faCheckCircle", "faExclamationTriangle", "faEye"],
-  },
-];
 
 const DummyQuestionnairesList = ({questionList}) => {
-  console.log(questionList)
+ 
+
+  const [questionnaireData   , setQuestionnireData] = useState(questionList)
+  const socket = useSocket();
+  
     const [showHistory ,setShowHistory] = useState(true)
+
+
+
+    useEffect(() => {
+      if (socket) { 
+        socket.on("Question", (questionnaireRecord) => {
+          setQuestionnireData((prevState) => {
+            // Map over the previous state to update it with the new incoming data
+            let updatedUsers = prevState.map(user =>
+              user.Question === questionnaireRecord.question
+                ? { ...user, compliance: questionnaireRecord.compliance ,answer:questionnaireRecord.answer }
+                : user
+            );
+        
+            console.log("Updated Users:", updatedUsers);
+            
+            // Return the updated state
+            return updatedUsers;
+          });
+        });
+        
+      }
+    
+      // Clean up on component unmount
+      return () => {
+        if (socket) {
+          socket.off("Question");
+        }
+      };
+    }, [socket]);
   return (
     <div>
       <QuestionnairsListHeader />
@@ -161,7 +97,7 @@ const DummyQuestionnairesList = ({questionList}) => {
               </tr>
             </thead>
             <tbody>
-              {questionList?.map((item, index) => (
+              {questionnaireData?.map((item, index) => (
                 <tr
                   key={index}
                   className="border-b 2xl:text-[20px] text-[16px]"
@@ -185,10 +121,11 @@ const DummyQuestionnairesList = ({questionList}) => {
                     {item.Question}
                   </td>
                   <td className="px-4 py-2 text-center border w-[100px]">
-                    <Settings className="text-blue-600 spin-slow" />
+                  {item?.compliance ? item.compliance  : <Settings className="text-blue-600 spin-slow" /> }
+                    
                   </td>
                   <td className="px-4 py-2 text-center border">
-                    <Settings className="text-blue-600 spin-slow" />
+                  {item?.answer ? item.answer : <Settings className="text-blue-600 spin-slow" /> }
                   </td>
                   <td className="px-4 py-2 text-center border w-[100px]">
                     <div className="inline-flex space-x-2 text-[#A5A5A5]">
@@ -210,3 +147,51 @@ const DummyQuestionnairesList = ({questionList}) => {
 };
 
 export default DummyQuestionnairesList;
+
+
+
+
+
+
+// [
+//   {
+//       "Question": "Sodexo must own legally the user data and have the right to use the data for analyses and to create solutions (algorithms).",
+//       "sheetTag": "Data Ownership"
+//   },
+//   {
+//       "Question": "Staffbase Answer: This is covered in Online Terms (Clause 6) \"Rights in Customer Data. As between the parties, Customer retains all right, title, and interest (including any intellectual property rights) in and to the Customer Data. Customer hereby grants Staffbase a non-exclusive, worldwide, royalty-free right and license to collect, use, copy, display, perform, store, transmit, modify, and create derivative works of the Customer Data solely to the extent necessary to provide the Staffbase Service and related services to Customer.\" https://staffbase.com/en/terms/",
+//       "sheetTag": "Data Ownership"
+//   },
+//   {
+//       "Question": "Data access:",
+//       "sheetTag": "Data Ownership"
+//   },
+//   {
+//       "Question": "Partner must commit on providing access by design (eg. API or other) that are compliant with SDX Global Data Platform ingestion procedures. ",
+//       "sheetTag": "Data Ownership"
+//   },
+//   {
+//       "Question": "Access requirements must be formalized in contract, with the right Service Levels agreement (quantified), and penalties",
+//       "sheetTag": "Data Ownership"
+//   },
+//   {
+//       "Question": "Staffbase: Can you please supply the SDX Global Data Platform ingestion procedures",
+//       "sheetTag": "Data Ownership"
+//   },
+//   {
+//       "Question": "Commitment on data quality and documentation:",
+//       "sheetTag": "Data Ownership"
+//   },
+//   {
+//       "Question": "Data quality levels must be documented and included in the contract, with quantified metrics, associated SLAs and penalties and reviewed by our Data Office",
+//       "sheetTag": "Data Ownership"
+//   },
+//   {
+//       "Question": "Partners data must be well documented to enable the use of the data",
+//       "sheetTag": "Data Ownership"
+//   },
+//   {
+//       "Question": "Staffbase: Still checking with legal team for proper response - will come back to you",
+//       "sheetTag": "Data Ownership"
+//   }
+// ]
