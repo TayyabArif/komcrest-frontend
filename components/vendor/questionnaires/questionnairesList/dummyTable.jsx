@@ -7,25 +7,22 @@ import History from "../history";
 import useSocket from "@/customHook/useSocket";
 
 
-const DummyQuestionnairesList = ({questionList}) => {
- 
+const DummyQuestionnairesList = ({questionList ,questionnaireData}) => {
 
-  const [questionnaireData   , setQuestionnireData] = useState(questionList)
+  const [allQuestionnaireList , setAllQuestionnireList] = useState(questionList)
   const socket = useSocket();
   
     const [showHistory ,setShowHistory] = useState(true)
-
-
-
     useEffect(() => {
       if (socket) { 
         socket.on("Question", (questionnaireRecord) => {
-          setQuestionnireData((prevState) => {
+          console.log("questionnaireRecordquestionnaire:", questionnaireRecord);
+          setAllQuestionnireList((prevState) => {
             // Map over the previous state to update it with the new incoming data
-            let updatedUsers = prevState.map(user =>
-              user.Question === questionnaireRecord.question
-                ? { ...user, compliance: questionnaireRecord.compliance ,answer:questionnaireRecord.answer }
-                : user
+            let updatedUsers = prevState.map(data =>
+              data.Question === questionnaireRecord.question
+                ? { ...data, compliance: questionnaireRecord.compliance ,answer:questionnaireRecord.answer }
+                : data
             );
         
             console.log("Updated Users:", updatedUsers);
@@ -46,7 +43,7 @@ const DummyQuestionnairesList = ({questionList}) => {
     }, [socket]);
   return (
     <div>
-      <QuestionnairsListHeader />
+      <QuestionnairsListHeader questionnaireData={questionnaireData}/>
       <div className="w-[86%] mx-auto">
         <div className="flex justify-between items-center">
         <div className="flex items-center gap-1 my-2">
@@ -97,7 +94,7 @@ const DummyQuestionnairesList = ({questionList}) => {
               </tr>
             </thead>
             <tbody>
-              {questionnaireData?.map((item, index) => (
+              {allQuestionnaireList?.map((item, index) => (
                 <tr
                   key={index}
                   className="border-b 2xl:text-[20px] text-[16px]"

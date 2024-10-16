@@ -19,7 +19,7 @@ import ValidateData from "./ValidateData";
 import { useMyContext } from "@/context";
 import useSocket from "@/customHook/useSocket";
 
-const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
+const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuestionnaireData }) => {
 
   const { companyProducts } = useMyContext();
   const [stepper, setStepper] = useState(0);
@@ -221,10 +221,11 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList }) => {
     };
 
     setQuestionList(result);
+    setQuestionnaireData({fileName : importQuestionnaires.fileName , customerName :importQuestionnaires.customerName})
     setTotalCount(payload.Questionnaires.length);
     const token = cookiesData.token;
 
-    console.log("questionnire payloadllllllllll", payload);
+    console.log("questionnire payload", payload);
 
     let requestOptions = {
       method: "POST",

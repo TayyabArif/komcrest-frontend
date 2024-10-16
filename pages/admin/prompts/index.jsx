@@ -1,13 +1,13 @@
-import React from 'react'
-import AdminLayout from '@/components/admin/AdminLayout'
-import PromptsComponent from '@/components/admin/screens/prompts'
+import React from "react";
+import AdminLayout from "@/components/admin/AdminLayout";
+import PromptsComponent from "@/components/admin/screens/prompts";
 
 const Prompts = () => {
   return (
     <AdminLayout>
-    <PromptsComponent />
-  </AdminLayout>
-  )
-}
+      <PromptsComponent />
+    </AdminLayout>
+  );
+};
 
-export default Prompts
+export default Prompts;

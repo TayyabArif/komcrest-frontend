@@ -5,10 +5,14 @@ import DummyQuestionnairesList from "@/components/vendor/questionnaires/question
 const ImportQuestionnaire = () => {
   const [importSuccessfully ,setImportSuccessfully] = useState(false)
   const [questionList , setQuestionList] = useState()
+  const [questionnaireData , setQuestionnaireData] = useState({
+    filename:"",
+    customerName : ""
+  })
   console.log("KKKKKKK",questionList)
   return (
     <VendorLayout>
-      {importSuccessfully ? <DummyQuestionnairesList questionList={questionList}/> : <Import setImportSuccessfully={setImportSuccessfully} setQuestionList={setQuestionList} questionList={questionList}/>}
+      {importSuccessfully ? <DummyQuestionnairesList questionList={questionList} questionnaireData={questionnaireData} /> : <Import setImportSuccessfully={setImportSuccessfully} setQuestionList={setQuestionList} questionList={questionList} setQuestionnaireData={setQuestionnaireData}/>}
     </VendorLayout>
   );
 };

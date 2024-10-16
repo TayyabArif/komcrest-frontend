@@ -158,11 +158,10 @@ const SelectQuestion = ({ excelFile, selectedRows, columnMapping, setColumnMappi
               </tr>
             </thead>
             <tbody>
-              {[excelFile[visibleTable][selectedRows[visibleTable]], ...excelFile[visibleTable].slice(1, 3)]
+              {[...excelFile[visibleTable].slice(1, 3)]
                 .filter((row) => Array.isArray(row)) // Ensure that each row is an array
                 .map((row, rowIndex) => (
                   <tr key={rowIndex} className="even:bg-gray-100 text-[16px] 2xl:text-[20px]">
-                    
                     {row.map((cell, cellIndex) => (
                       <td key={cellIndex} className="border p-2 text-left">
                         {truncateText(cell, 70)}
