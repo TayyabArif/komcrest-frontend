@@ -724,6 +724,10 @@ const QuestionnairesView = () => {
                               </div>
                             </td>
                             <td
+                             onClick={(e) => {
+                              setSelectedTextAreaId(item.id);
+                              setAnswerIsUpdate("single");
+                            }}
                               className={`px-4 py-2 w-[600px] !text-wrap  border ${
                                 item.confidence < 7
                                   ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
@@ -747,10 +751,7 @@ const QuestionnairesView = () => {
                                     // Reset the height to auto to adjust downwards if needed
                                     // e.target.style.height = `${e.target.scrollHeight}px`;
                                   }}
-                                  onClick={(e) => {
-                                    setSelectedTextAreaId(item.id);
-                                    setAnswerIsUpdate("single");
-                                  }}
+                                 
                                   style={{ height: `${textAreaSize}px` }}
                                   className={`w-full text-wrap !h-[${textAreaSize}px] rounded-md focus:outline-none ring-2 px-2  ${
                                     item.status == "approved" &&
@@ -789,7 +790,8 @@ const QuestionnairesView = () => {
                                 answerIsUpdate == "single" ? (
                                   <>
                                     <p
-                                      onClick={() => {
+                                      onClick={(e) => {
+                                        e.stopPropagation()
                                         setAnswerIsUpdate("");
                                         setSelectedTextAreaId("");
                                       }}
@@ -798,7 +800,8 @@ const QuestionnairesView = () => {
                                       Cancel
                                     </p>
                                     <p
-                                      onClick={() => {
+                                      onClick={(e) => {
+                                        e.stopPropagation()
                                         UpdateRecord(
                                           [item.id],
                                           "answer",

@@ -34,6 +34,11 @@ const AdminLayout = ({children}) => {
             localStorage.setItem("selectedSideBar", "prompts")
             router.push("/admin/prompts")
             }}>Prompts</p>
+
+        <p className={`text-lg font-normal ${selectedItem === "Questionnaire" ? "text-white" : "text-gray-400"} cursor-pointer`}   onClick={() =>{
+            localStorage.setItem("selectedSideBar", "Questionnaire")
+            router.push("/admin/similarity-factor")
+            }}>Questionnaire</p>
         </div>
       </div>
       <div className="w-[85%]">

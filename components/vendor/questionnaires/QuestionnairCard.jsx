@@ -17,6 +17,7 @@ import { handleExport  , handleDownload} from "@/helper";
 const deleteModalContent = "Are you sure to delete this Questionnaires?";
 
 const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
+  
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -33,30 +34,36 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
     }),
   });
 
-  useEffect(() => {
-    let totalQuestion = data?.questionnaireRecords.length;
+useEffect(() => {
+  let totalQuestion = data?.questionnaireRecords.length;
+  // Check if there are any questionnaire records to avoid division by zero
+  if (totalQuestion === 0) return;
 
-    // Check if there are any questionnaire records to avoid division by zero
-    if (totalQuestion === 0) return;
-
-    const statusCounts = data?.questionnaireRecords.reduce((acc, record) => {
+  const statusCounts = data?.questionnaireRecords.reduce((acc, record) => {
+    // Check if the record should be flagged (confidence < 7 and status not "approved")
+    if (record.confidence < 7 && record.status !== "approved") {
+      acc["Flagged"] = (acc["Flagged"] || 0) + 1;
+    } else {
       // Increment count for each status
       acc[record.status] = (acc[record.status] || 0) + 1;
-      return acc;
-    }, {});
+    }
+    return acc;
+  }, {});
+  // Calculate percentage for each status and update the object
+  const statusPercentages = Object.keys(statusCounts).reduce((acc, key) => {
+    acc[key] = {
+      count: statusCounts[key],
+      percentage: ((statusCounts[key] / totalQuestion) * 100).toFixed(2),
+    };
+    return acc;
+  }, {});
 
-    // Calculate percentage for each status and update the object
-    const statusPercentages = Object.keys(statusCounts).reduce((acc, key) => {
-      acc[key] = {
-        count: statusCounts[key],
-        percentage: ((statusCounts[key] / totalQuestion) * 100).toFixed(2),
-      };
-      return acc;
-    }, {});
+  // Set the calculated counts and percentages in the state
+  setQuestionnaireProgressBar(statusPercentages);
+}, [data]);
 
-    // Set the calculated counts and percentages in the state
-    setQuestionnaireProgressBar(statusPercentages);
-  }, [data]);
+
+
 
   const handleDelete = async () => {
     const token = cookiesData.token;
@@ -94,14 +101,13 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
           router.push(`/vendor/questionnaires/view?name=${data.customerName}`);
           localStorage.setItem("QuestionnaireId", data.id);
         }}
-        className=" bg-white shadow-lg rounded-lg cursor-pointer"
+        className=" bg-white  shadow-lg rounded-lg cursor-pointer"
       >
         <div ref={dragRef} className="p-4 ">
           <div className="font-semibold  text-black mb-2 ">
             <div>{data?.customerName} &nbsp;</div>
             <div>{data?.fileName}</div>
           </div>
-
           <div className="">
               <div className="font-semibold  text-black"> Creation date </div>
               {formatDateWithTime(data?.createdAt)} - {data?.creator?.firstName}

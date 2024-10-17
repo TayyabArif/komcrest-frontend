@@ -1,23 +1,7 @@
 import React from 'react'
 import { ThumbsUp ,ThumbsDown ,FilePenLine } from 'lucide-react';
-const documentReferences = [
-    {
-      title: "2021 CAIQ Questionnaire 20210914",
-      pages: "4, 12",
-    },
-    {
-      title: "SOC 2 certificate",
-      pages: "9",
-    },
-    {
-      title: "SOC 2 certificate",
-      pages: "9",
-    },
-  ];
-  
 
 const DocumentHistory = ({documentReferenceData}) => {
-  debugger
   return (
     <div className="max-w-md mx-auto bg-bg-[#FFFFFF]">
    {documentReferenceData?.length > 0 ? (

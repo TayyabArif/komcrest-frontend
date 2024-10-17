@@ -1,29 +1,13 @@
 import React from 'react'
 import { ThumbsUp ,ThumbsDown ,FilePenLine } from 'lucide-react';
 
-const knowledgeData = [
-    {
-      question: "Do you use industry standards to build in security for your Systems/Software Development Lifecycle (SDLC)?",
-      compliance: "YES",
-      answer: "We’re using the standard sanitisation components from the used frameworks.",
-    },
-    {
-      question: "Do you use industry standards to build in security for your Systems/Software Development Lifecycle (SDLC)?",
-      compliance: "YES",
-      answer: "We’re using the standard sanitisation components from the used frameworks.",
-    },
-    {
-      question: "Do you use industry standards to build in security for your Systems/Software Development Lifecycle (SDLC)?",
-      compliance: "YES",
-      answer: "We’re using the standard sanitisation components from the used frameworks.",
-    },
-  ];
-const KnowledgeHistory = ({questionReferenceData }) => {
 
+const KnowledgeHistory = ({questionReferenceData }) => {
+  
   return (
     <div className="max-w-md mx-auto   flex flex-col gap-5 overflow-scroll ">
       {questionReferenceData?.length > 0 ? (
-  questionReferenceData.map((item, index) => (
+      questionReferenceData.map((item, index) => (
     <div key={index} className="bg-[#FFFFFF] rounded-md p-4 space-y-3">
       <p className="font-bold">Question: <span className="font-normal">{item.question}</span></p>
       <p className="font-bold">Compliance: <span className="font-normal">{item.coverage}</span></p>
