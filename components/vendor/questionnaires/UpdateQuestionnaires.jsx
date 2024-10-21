@@ -440,7 +440,7 @@ const UpdateQuestionnaires = () => {
                     <SelectItem
                       key={option.key}
                       value={option.key}
-                      classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                      classNames={{ title: "text-[16px] 2xl:text-[17px]" }}
                     >
                       {option.label}
                     </SelectItem>

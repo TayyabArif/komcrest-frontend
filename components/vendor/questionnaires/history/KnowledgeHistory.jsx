@@ -5,7 +5,7 @@ import { ThumbsUp ,ThumbsDown ,FilePenLine } from 'lucide-react';
 const KnowledgeHistory = ({questionReferenceData }) => {
   
   return (
-    <div className="max-w-md mx-auto   flex flex-col gap-5 overflow-scroll ">
+    <div className="max-w-md mx-auto   flex flex-col gap-5 overflow-scroll">
       {questionReferenceData?.length > 0 ? (
       questionReferenceData.map((item, index) => (
     <div key={index} className="bg-[#FFFFFF] rounded-md p-4 space-y-3">
@@ -20,7 +20,7 @@ const KnowledgeHistory = ({questionReferenceData }) => {
     </div>
   ))
 ) : (
-  <p >No data found</p>
+  <p >No reference found</p>
 )}
 
     </div>

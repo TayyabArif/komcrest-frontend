@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { formatDate } from "../../../../helper";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import {  handleDownload} from "@/helper";
 
 const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
   const router = useRouter();
@@ -46,24 +47,23 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
       .catch((error) => console.error(error));
   };
 
-  const handleDownload = async (filePath) => {
-    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-    const fileUrl = `${baseUrl}/${filePath}`;
-    try {
-      const response = await fetch(proxyUrl + fileUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+  const handleDownload = (filePath) => {
+    if (typeof filePath === "string") {
+      const fileName = filePath.split("/").pop();
+      const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${fileName}`;
+      
+      // Create a temporary anchor element for download
       const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", filePath.split("/").pop());
+      link.href = downloadUrl;
+      link.setAttribute("download", fileName); // This attribute forces download
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      toast.success("Document Downloaded successfully");
-    } catch (error) {
-      console.error("Error downloading the file", error);
+    } else {
+      alert('Invalid file path.');
     }
   };
+  
 
   const handleDocumentLink = (link) => {
     const formattedLink =
@@ -120,7 +120,8 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                         {item.filePath && (
                           <div
                             onClick={() => {
-                              handleDownload(item.filePath);
+                              // handleDownload(item.filePath);
+                              handleDownload(item.filePath)
                               setOpenPopoverIndex(null);
                             }}
                             className="text-small cursor-pointer 2xl:text-[20px]"

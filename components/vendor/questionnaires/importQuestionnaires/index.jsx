@@ -124,11 +124,32 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
     return Object.keys(newErrors).length === 0;
   };
 
+  // const checkValuesLength = () => {
+  //   if (Object.keys(columnMapping).length === 0) {
+  //     return false;
+  //   }
+  //     // return true
+  //   return Object.entries(columnMapping).every(([sheetName, value]) => {
+  //     // Add null safety check for excelFile[sheetName] and excelFile[sheetName][0]
+  //     if (!excelFile[sheetName] || !excelFile[sheetName][0]) {
+  //       return false; // Return false if the sheet or the first row doesn't exist
+  //     }
+  
+  //     // For single-column sheets, check if only "Question" is selected
+  //     if (excelFile[sheetName][0].length === 1) {
+  //       return value[0] === "Question";  // Check if the first and only option is "Question"
+  //     }
+  
+  //     // For multiple columns, ensure both "Category" and "Question" are selected
+  //     return Object.keys(value).length === 2 
+  //   });
+  // };
+  
   const checkValuesLength = () => {
     if (Object.keys(columnMapping).length === 0) {
       return false;
     }
-      // return true
+  
     return Object.entries(columnMapping).every(([sheetName, value]) => {
       // Add null safety check for excelFile[sheetName] and excelFile[sheetName][0]
       if (!excelFile[sheetName] || !excelFile[sheetName][0]) {
@@ -137,13 +158,14 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
   
       // For single-column sheets, check if only "Question" is selected
       if (excelFile[sheetName][0].length === 1) {
-        return value[0] === "Question";  // Check if the first and only option is "Question"
+        return value[0] === "Question"; // Check if the first and only option is "Question"
       }
   
-      // For multiple columns, ensure both "Category" and "Question" are selected
-      return Object.keys(value).length === 2 
+      // For multiple columns, ensure that "Question" is selected, "Category" is optional
+      return Object.values(value).includes("Question");
     });
   };
+  
   
 
   const handleNextClick = () => {
@@ -165,7 +187,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
         setStepper(stepper + 1);
         setProgressBar(progressBar + 27);
       } else {
-        toast.error("Please choose a mapped options first to proceed.");
+        toast.error("Please choose the question first to proceed");
       }
     } else if (stepper === 3) {
       const finalData = getDatafromChild();
@@ -340,18 +362,18 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
 
   return (
     <div className="w-[100%] h-full">
-      <div className="w-[90%] mx-auto py-4 mt-[2rem]">
-        <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
+      <div className="w-[90%] mx-auto py-4 mt-1 ">
+        <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px] rounded-t-md">
           {getTitle()} 
         </h1>
-        <div className="w-full h-auto bg-white p-6">
+        <div className="w-full h-auto bg-white p-6 rounded-b-md">
           <Progress
             aria-label="Loading..."
             value={progressBar}
             className="h-[8px]"
           />
 
-          <div className=" space-y-0 h-full">
+          <div className=" space-y-0 h-full ">
             <div className="my-3 flex gap-2">
               {[
                 "Add questionnaire",
@@ -438,16 +460,16 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
                 <Button
                   onClick={handleCancelClick}
                   radius="none"
-                  size="sm"
-                  className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500 w-max rounded-[4px]"
+                  size="md"
+                  className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500 w-max rounded-md"
                 >
                   {stepper === 0 ? "Cancel" : "Back"}
                 </Button>
                 <Button
                   onClick={handleNextClick}
                   radius="none"
-                  size="sm"
-                  className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                  size="md"
+                  className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-md"
                 >
                   {stepper === 3 ? "Confirm" : "Next"}
                 </Button>

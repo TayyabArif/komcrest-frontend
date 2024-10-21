@@ -19,7 +19,7 @@ const DocumentHistory = ({documentReferenceData}) => {
     </div>
   ))
 ) : (
-  <p>No data found</p>
+  <p>No reference found</p>
 )}
 
   </div>

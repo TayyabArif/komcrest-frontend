@@ -99,14 +99,14 @@ const ValidateData = forwardRef(
     }));
 
     return (
-      <div className="p-4">
+      <div className="py-1">
         {/* Buttons to switch between tables */}
-        <div className="flex space-x-2 mb-4">
+        <div className="flex space-x-2 mb-2">
           {Object.keys(excelFile).map((sheetName) => (
             <button
               key={sheetName}
               onClick={() => setVisibleTable(sheetName)}
-              className={`px-4 py-1 rounded-full border-2 ${
+              className={`px-3 py-[2px] mx-[2px] rounded-full border-2 ${
                 visibleTable === sheetName
                   ? "border-blue-500 bg-blue-100"
                   : "border-gray-300 bg-white"
@@ -119,7 +119,7 @@ const ValidateData = forwardRef(
 
         {/* Only show the selected table */}
         {visibleTable && (
-          <div key={visibleTable} className="mb-8 overflow-auto  h-[50vh]">
+          <div key={visibleTable} className="mb-8 overflow-auto  h-[48vh]">
             <table className="min-w-full border-collapse border mb-4">
               <thead className="bg-gray-200 sticky -top-1 z-10">
                 <tr className="text-[16px] 2xl:text-[20px]">
@@ -175,7 +175,7 @@ const ValidateData = forwardRef(
         <div className="flex gap-2 mt-4">
           <button
             onClick={removeSelectedRows}
-            className="px-4 py-2 bg-red-500 text-white rounded disabled:bg-red-300"
+            className="px-4 py-2 text-[15px] 2xl:text-[20px] bg-red-500 text-white rounded disabled:bg-red-300"
             disabled={!Object.keys(selectedRows).length}
           >
             Mark{" "}
@@ -187,7 +187,7 @@ const ValidateData = forwardRef(
           </button>
           <button
             onClick={() => restoreRemovedRows(visibleTable)} // Restore only for the visible table
-            className="px-4 py-2 bg-gray-500 text-white rounded disabled:bg-gray-300"
+            className="px-4 py-2  text-[15px] 2xl:text-[20px] bg-gray-500 text-white rounded disabled:bg-gray-300"
             disabled={!removedRows[visibleTable]?.size}
           >
             Restore {removedRows[visibleTable]?.size || 0} rows
