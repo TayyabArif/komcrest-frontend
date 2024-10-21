@@ -144,7 +144,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
             </div>
           ))
       ) : (
-        <p>No records found.</p>
+        <p>No history found.</p>
       )}
     </div>
   );

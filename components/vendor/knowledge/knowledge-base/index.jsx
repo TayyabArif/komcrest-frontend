@@ -318,7 +318,7 @@ const KnowledgeBase = ({
               className="max-w-xs"
             />
             <div
-              className="bg-white p-1 border border-gray-300 rounded-[5px] shadow-md cursor-pointer"
+              className="bg-white p-1 border rounded-[5px] shadow-md cursor-pointer"
               onClick={() => setShowFilter(!showFilter)}
             >
               <Filter size={26} className="text-gray-500" color="#2457d7" />
@@ -364,14 +364,14 @@ const KnowledgeBase = ({
                 />
               </div>
             )}
-            <div className="w-[100%] overflow-x-auto relative h-[76vh] flex">
+            <div className="w-[100%] overflow-x-auto relative h-[73vh] flex">
               <table
                 style={{ width: "100%" }}
-                className="min-w-full bg-white border border-gray-300 "
+                className="min-w-full bg-white border "
               >
                 <thead className="bg-gray-200 sticky -top-1 z-30">
                   <tr className="text-[16px] 2xl:text-[20px]">
-                    <th className="py-2 px-4 border border-gray-300 text-left">
+                    <th className="py-2 px-4 border text-left">
                       <Checkbox
                         isSelected={isHeaderChecked}
                         onChange={handleHeaderCheckboxChange}
@@ -381,41 +381,41 @@ const KnowledgeBase = ({
                         classNames={{ wrapper: "!rounded-[3px]" }}
                       />
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left">
+                    <th className="py-2 px-4 text-left">
                       Category
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left !max-w-[320px]">
+                    <th className="py-2 px-4 text-left !max-w-[320px]">
                       Komcrest Domain
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left !min-w-[650px]">
+                    <th className="py-2 px-4 text-left !min-w-[650px]">
                       Question
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left">
+                    <th className="py-2 px-4 text-left">
                       Compliance
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left text-wrap !min-w-[500px]">
+                    <th className="py-2 px-4 text-left text-wrap !min-w-[500px]">
                       Answer
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left !min-w-[250px]">
+                    <th className="py-2 px-4 text-left !min-w-[250px]">
                       Products
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left !min-w-[250px]">
+                    <th className="py-2 px-4 text-left !min-w-[250px]">
                       Roadmap
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left w-[50px]">
+                    <th className="py-2 px-4 text-left w-[50px]">
                       Curator
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left">
+                    <th className="py-2 px-4 text-left">
                       Reference
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left">
+                    <th className="py-2 px-4 text-left">
                       Source
                     </th>
-                    <th className="py-2 px-4 border border-gray-300 text-left">
+                    <th className="py-2 px-4 text-left">
                       Latest Update
                     </th>
                     <th
-                      className="px-4    pr-7 border-b-0  outline outline-[#d1cece] text-left sticky -right-[1px] bg-gray-200"
+                      className="px-4    pr-7  text-left sticky -right-[1px] bg-gray-200"
                       style={{ outlineWidth: "1px" }}
                     >
                       Actions
@@ -429,7 +429,7 @@ const KnowledgeBase = ({
                         key={data.id}
                         className={` h-[100px] text-[16px] 2xl:text-[20px] ${index % 2 === 0 ? 'bg-gray-100':"bg-white"}`}
                       >
-                        <td className="py-2 px-4 border border-gray-300">
+                        <td className="py-2 px-4 border">
                           <Checkbox
                             isSelected={bulkDeleted.includes(data.id)}
                             onChange={() => handleCheckboxChange(data.id)}
@@ -439,10 +439,10 @@ const KnowledgeBase = ({
                             classNames={{ wrapper: "!rounded-[3px]" }}
                           />
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+                        <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
                           {data.category}
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 bg-transparent !max-w-[320px]">
+                        <td className="py-2 px-4 border bg-transparent !max-w-[320px]">
                           <select
                             value={data.komcrestCategory}
                             onChange={(e) =>
@@ -460,38 +460,38 @@ const KnowledgeBase = ({
                             ))}
                           </select>
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 max-w-xs">
+                        <td className="py-2 px-4 border max-w-xs">
                           {data.question}
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 whitespace-rap">
+                        <td className="py-2 px-4 border whitespace-rap">
                           {data.coverage}
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 text-wrap min-w-[500px]">
+                        <td className="py-2 px-4 border text-wrap min-w-[500px]">
                           {data.answer}
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 max-w-xs">
+                        <td className="py-2 px-4 border max-w-xs">
                           {data.Products.map((product) => product.name).join(
                             ", "
                           )}
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 max-w-xs !min-w-[250px]">
+                        <td className="py-2 px-4 border max-w-xs !min-w-[250px]">
                           {data.roadmap}
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+                        <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
                           {data.curator}
                         </td>
                         <td
-                          className="py-2 px-4 border border-gray-300 whitespace-nowrap text-blue-600 cursor-pointer"
+                          className="py-2 px-4 border whitespace-nowrap text-blue-600 cursor-pointer"
                           onClick={() =>
                             handleFileDownload(data.document?.filePath)
                           }
                         >
                           {data.document?.title}
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
+                        <td className="py-2 px-4 border whitespace-nowrap">
                           {data.documentFile?.name}
                         </td>
-                        <td className="py-2 px-4 border border-gray-300 whitespace-nowrap">
+                        <td className="py-2 px-4 border whitespace-nowrap">
                           {formatDateWithTime(data.updatedAt)}
                         </td>
                         <td

@@ -292,6 +292,7 @@ const QuestionnairesView = () => {
   };
 
   const UpdateRecord = (id, property, data) => {
+    debugger
     let statusValue = data;
     let value;
     if (property == "answer") {
@@ -308,8 +309,8 @@ const QuestionnairesView = () => {
       questionnaireRecords: questionnaireData.questionnaireRecords.map(
         (record) => {
           if (record.id === id[0]) {
-            return { ...record, [property]: value };
-          }
+            return { ...record, [property]: value ,  };
+          } 
           return record;
         }
       ),
@@ -353,9 +354,9 @@ const QuestionnairesView = () => {
       .then(({ status, ok, data }) => {
         if (ok) {
           if (statusValue == "Flagged") {
-            toast.warning(`Selected Question/s move to "Require Attention"`);
+            toast.warning(`Selected Question${id.length > 1 ? "(s) are" : ' is'} move to "Require Attention"`);
           } else if (statusValue == "approved") {
-            toast.success(`Selected Question/s Validated by user`);
+            toast.success(`The selected question${id.length > 1 ? "(s) are" : ' is'} validated by the user`);
           } else {
             toast.success(data.message);
           }
@@ -618,8 +619,8 @@ const QuestionnairesView = () => {
                   />
                 </div>
               )}
-              <div className="overflow-auto w-[100%]  h-[80vh]  bg-white border ">
-                <table className=" min-w-[100%] border-2 text-gray-700 ">
+              <div className="overflow-auto w-[100%]  max-h-[75vh]  bg-white border ">
+                <table className="min-w-[100%] border-2 text-gray-700 ">
                   <thead className="border  sticky -top-1 bg-[#E5E7EB] z-50">
                     <tr className="2xl:text-[20px] text-[16px]">
                       <th className="px-4 py-2 text-center text-gray-600 border">
@@ -636,19 +637,19 @@ const QuestionnairesView = () => {
                         {/* Status {selectedId} */}
                         Status
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 border">
+                      <th className="px-4 py-2 text-left text-gray-600 border !min-w-[450px]">
                         Question
                       </th>
                       <th className="px-4 py-2 text-left text-gray-600 border">
                         Compliance
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 border">
+                      <th className="px-4 py-2 text-left text-gray-600 border !min-w-[450px]">
                         Answer
                       </th>
-                      <th className="px-4 py-2 text-center text-gray-600 border">
+                      <th className="px-4 py-2  text-gray-600 border  pr-7  text-left sticky -right-[1px]">
                         Actions
                       </th>
-                      <th className="px-[2.5px] text-center text-gray-600 border"></th>
+                      <th className="px-[2.5px] text-gray-600 sticky -right-[1px]"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -683,7 +684,7 @@ const QuestionnairesView = () => {
                                 }`}
                               ></div>
                             </td>
-                            <td className="px-4 py-2 border  w-[600px]">
+                            <td className="px-4 py-2 border  !w-[500px]">
                               {item.question}
                             </td>
                             <td
@@ -728,7 +729,7 @@ const QuestionnairesView = () => {
                               setSelectedTextAreaId(item.id);
                               setAnswerIsUpdate("single");
                             }}
-                              className={`px-4 py-2 w-[600px] !text-wrap  border ${
+                              className={`px-4 py-2  !min-w-[450px]  !text-wrap  border ${
                                 item.confidence < 7
                                   ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
                                   : ""
@@ -824,7 +825,7 @@ const QuestionnairesView = () => {
                                 ) : null}
                               </div>
                             </td>
-                            <td className="px-4 py-2 text-center border w-[100px]">
+                            <td className={`px-4 py-2  border w-[100px]   border-b-0  outline outline-[#E5E7EB] text-left sticky -right-[1px] ${index % 2 === 0 ? 'bg-gray-100':"bg-white"}`}>
                               <div className="inline-flex space-x-2 text-[#A5A5A5]">
                                 <Check
                                   size={17}
@@ -834,12 +835,13 @@ const QuestionnairesView = () => {
                                       ? "text-green-700"
                                       : ""
                                   }`}
-                                  onClick={() =>
+                                  onClick={() =>{
                                     UpdateRecord(
                                       [item.id],
                                       "status",
                                       "approved"
                                     )
+                                  }
                                   }
                                 />
                                 <TriangleAlert
@@ -851,11 +853,12 @@ const QuestionnairesView = () => {
                                       : ""
                                   }`}
                                   onClick={() => {
+                                    {
                                     UpdateRecord(
                                       [item.id],
                                       "status",
                                       "Flagged"
-                                    );
+                                    );}
                                   }}
                                 />
                                 <Eye
@@ -946,7 +949,7 @@ const QuestionnairesView = () => {
                               </div>
                             </td>
                             <td
-                              className={`my-2 ${
+                              className={`my-2    text-left sticky -right-[1px] ${
                                 item.status === "approved"
                                   ? "bg-green-600"
                                   : item.status === "Flagged" || item.confidence < 7

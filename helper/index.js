@@ -65,6 +65,7 @@ export function getOnlyDate(dateString) {
 
   export const handleDownload = (filePath) => {
     if (typeof filePath === "string") {
+      alert(filePath)
         const fileName = filePath.split("/").pop();
         const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${fileName}`;
         const link = document.createElement("a");
@@ -94,7 +95,22 @@ export const multipleSelectStyle = {
     ...provided,
     borderRadius: "0.80rem",
     border: "2.2px solid #E5E7EB",
-    fontSize: "18px",
+    fontSize: "20px",
+  }),
+  menu: (provided) => ({
+    ...provided,
+    backgroundColor: 'white', // Set the background color of the whole dropdown menu
+    padding :"0px 6px",
+    borderRadius: "0.80rem",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    fontSize: '18px', // Adjust the text size in the dropdown
+    backgroundColor: state.isFocused ? '#D4D4D8' : provided.backgroundColor, // Change hover color to red
+    // color: state.isFocused ? 'white' : provided.color, // Optionally change text color on hover
+    padding:"4px 5px",
+    borderRadius: "10px",
+    margin:"2px 0px",
   }),
   multiValue: (provided, state) => ({
     ...provided,
@@ -112,7 +128,7 @@ export const multipleSelectStyle = {
     color: "white",
     ":hover": {
       backgroundColor: "#2457D7",
-      borderRadius: "1rem",
+      borderRadius: "4rem",
       color: "white",
     },
   }),

@@ -69,15 +69,15 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
   };
 
   return (
-    <div className="p-4">
+    <div className="py-2">
       {excelFile && (
         <>
-          <div className="flex space-x-2 mb-4">
+          <div className="flex space-x-0 mb-2">
             {Object.keys(excelFile).map((sheetName) => (
               <div key={sheetName} className="relative">
                 <button
                   onClick={() => handleSheetChange(sheetName)}
-                  className={`px-4 py-1 flex bg-[#D8D8D8] items-center gap-2 rounded-full border-2 ${
+                  className={`px-3 py-[2px] mx-[2px] flex bg-[#D8D8D8] items-center gap-2 rounded-full border-2 ${
                    selectedRows[sheetName] !== undefined
                       ? 'border-green-500'
                       : 'border-red-600'

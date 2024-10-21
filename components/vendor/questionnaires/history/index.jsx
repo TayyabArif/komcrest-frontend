@@ -51,7 +51,6 @@ const History = ({
     );
   }, [selectedQuestionnaireReference]);
 
-  
   const fetchReferenceQuestion = async () => {
     const token = cookiesData && cookiesData.token;
     const paylaod = { ids: questionIds };
@@ -185,52 +184,56 @@ const History = ({
 
   return (
     <div className="bg-[#F2F2F2] px-5 min-h-screen ">
-      <div className="flex justify-between  items-center sticky top-0 py-5 z-50 bg-[#F2F2F2] ">
-        <div className="flex items-center justify-between gap-10">
-          <h1
+      <div className="sticky top-0 py-5  z-50 bg-[#F2F2F2] space-y-3 ">
+        <div className="flex justify-between  items-center ">
+          <div className="flex items-center justify-between gap-10">
+            <h1
+              onClick={() => {
+                setSelectedOption("references");
+                setReferenceSelect("document");
+              }}
+              className={`text-xl font-bold cursor-pointer ${
+                selectedOption === "references" ? "text-blue-600" : ""
+              } `}
+            >
+              References
+            </h1>
+            <h1
+              onClick={() => setSelectedOption("history")}
+              className={`text-xl font-bold cursor-pointer ${
+                selectedOption === "history" ? "text-blue-600" : ""
+              } `}
+            >
+              History
+            </h1>
+          </div>
+          <X
+            className="cursor-pointer"
             onClick={() => {
-              setSelectedOption("references");
-              setReferenceSelect("document");
+              setSelectedId(null);
+              setHistoryVisible(false);
             }}
-            className={`text-xl font-bold cursor-pointer ${
-              selectedOption === "references" ? "text-blue-600" : ""
-            } `}
-          >
-            References
-          </h1>
-          <h1
-            onClick={() => setSelectedOption("history")}
-            className={`text-xl font-bold cursor-pointer ${
-              selectedOption === "history" ? "text-blue-600" : ""
-            } `}
-          >
-            History
-          </h1>
+          />
         </div>
-        <X
-          className="cursor-pointer"
-          onClick={() => {
-            setSelectedId(null);
-            setHistoryVisible(false);
-          }}
-        />
+
+        {selectedOption === "references" && (
+          <div className="flex items-center">
+            <select
+              className="w-[150px] text-[15px] border rounded-lg pr-3 p-2"
+              value={referenceSelect}
+              onChange={handleChange}
+            >
+              <option value="" disabled>
+                Select
+              </option>
+              <option value="document">Document</option>
+              <option value="online">Online Resource</option>
+              <option value="knowledge">Knowledge</option>
+            </select>
+          </div>
+        )}
       </div>
-      {selectedOption === "references" && (
-        <div className="flex items-center mb-4">
-          <select
-            className="w-[150px] text-[15px] border rounded-lg pr-3 p-2"
-            value={referenceSelect}
-            onChange={handleChange}
-          >
-            <option value="" disabled>
-              Select
-            </option>
-            <option value="document">Document</option>
-            <option value="online">Online</option>
-            <option value="knowledge">Knowledge</option>
-          </select>
-        </div>
-      )}
+
       {/* Conditionally render components based on selected option */}
       {referenceSelect === "knowledge" && selectedOption === "references" && (
         <KnowledgeHistory questionReferenceData={questionReferenceData} />

@@ -71,7 +71,7 @@ const DummyQuestionnairesList = ({questionList ,questionnaireData}) => {
         </div>
 
         <div className="flex gap-4">
-        <div className="overflow-auto w-full h-[80vh]  bg-white border">
+        <div className="overflow-auto w-full h-[75vh]  bg-white border">
           <table className="min-w-full border-collapse border text-gray-700">
             <thead className="border">
               <tr className="2xl:text-[20px] text-[16px]">

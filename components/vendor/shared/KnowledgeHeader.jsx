@@ -7,7 +7,7 @@ const KnowledgeHeader = ({ buttonShow, headerData }) => {
   return (
     <div className="bg-gray-50 py-2">
       <div className="flex justify-between  w-[85%] mx-auto">
-        <div className="leading-7">
+        <div className="leading-5">
           <h1 className="font-semibold text-[15px] 2xl:text-[25px] mb-4">
             {headerData?.title}
           </h1>

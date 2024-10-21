@@ -261,7 +261,7 @@ const AddResource = () => {
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
           {getTitle()}
         </h1>
-        <div className="w-full h-[83vh] bg-white p-6">
+        <div className="w-full h-[80vh] bg-white p-6">
           <Progress
             aria-label="Loading..."
             value={progressBar}
@@ -360,7 +360,7 @@ const AddResource = () => {
                               key={option.key}
                               value={option.label}
                               classNames={{
-                                title: "text-[16px] 2xl:text-[20px]",
+                                title: "text-[16px] 2xl:text-[17px]",
                               }}
                             >
                               {option.label}

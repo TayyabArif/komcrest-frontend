@@ -193,8 +193,8 @@ const OnlineResourceComponent = () => {
               <div className="w-[100%] overflow-x-auto relative  max-h-[75vh]">
                 <table className="">
                   <thead className="block md:table-header-group sticky -top-1 z-30 ">
-                    <tr className="border text-[16px] 2xl:text-[20px] border-gray-300">
-                      <th className="py-2 px-4 border border-gray-300 text-left bg-gray-200">
+                    <tr className="border text-[16px] 2xl:text-[20px] ">
+                      <th className="py-2 px-4 border  text-left bg-gray-200">
                         <Checkbox
                           isSelected={isHeaderChecked}
                           onChange={handleHeaderCheckboxChange}
@@ -204,26 +204,26 @@ const OnlineResourceComponent = () => {
                           classNames={{ wrapper: "!rounded-[3px]" }}
                         />
                       </th>
-                      <th className="bg-gray-200 !max-w-[100px] px-2 font-bold md:border md:border-gray-300 text-left block md:table-cell ">
+                      <th className="bg-gray-200 !max-w-[100px] px-2 font-bold md:border md: text-left block md:table-cell ">
                         Title
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md:border-gray-300 text-left block md:table-cell">
+                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell">
                         URL
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md:border-gray-300 text-left block md:table-cell min-w-[200px]">
+                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell min-w-[200px]">
                         Indexation file
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md:border-gray-300 text-left block md:table-cell min-w-[250px]">
+                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell min-w-[250px]">
                         Product
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md:border-gray-300 text-left block md:table-cell min-w-[200px]">
+                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell min-w-[200px]">
                         Last indexation date
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md:border-gray-300 text-left block md:table-cell">
+                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell">
                         Indexation method
                       </th>
                       <th
-                        className="px-4    pr-7 border-b-0  outline outline-[#d1cece] text-left sticky -right-[1px] bg-gray-200"
+                        className="px-4    pr-9  text-left sticky -right-[1px] bg-gray-200"
                         style={{ outlineWidth: "1px" }}
                       >
                         Actions
@@ -238,9 +238,9 @@ const OnlineResourceComponent = () => {
                           key={index}
                           className={` ${
                             index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                          } border border-gray-300 md:border-none block md:table-row text-[16px] 2xl:text-[20px]`}
+                          } border  md:border-none block md:table-row text-[16px] 2xl:text-[20px]`}
                         >
-                          <td className="py-2 px-4 border border-gray-300">
+                          <td className="py-2 px-4 border ">
                             <Checkbox
                               isSelected={bulkDeleted.includes(item.id)}
                               onChange={() => handleCheckboxChange(item.id)}
@@ -251,15 +251,15 @@ const OnlineResourceComponent = () => {
                             />
                           </td>
 
-                          <td className="p-2 min-w-[130px] max-w-[180px] md:border md:border-gray-300 text-left block md:table-cell break-words">
+                          <td className="p-2 min-w-[130px] max-w-[180px] md:border md: text-left block md:table-cell break-words">
                             {item.title}
                           </td>
 
-                          <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">
+                          <td className="p-2 md:border md: text-left block md:table-cell">
                             {item.url}
                           </td>
 
-                          <td className="p-2 border md:border-gray-300  text-left block md:table-cell py-3">
+                          <td className="p-2 border md:  text-left block md:table-cell py-3">
                             {item.file ? (
                               <div className="flex flex-col">
                                 <span
@@ -274,15 +274,15 @@ const OnlineResourceComponent = () => {
                             )}
                           </td>
 
-                          <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">
+                          <td className="p-2 md:border md: text-left block md:table-cell">
                             {item.Products.map((product) => product.name).join(
                               ", "
                             )}
                           </td>
-                          <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell ">
+                          <td className="p-2 md:border md: text-left block md:table-cell ">
                             {formatDateWithTime(item.updatedAt)}
                           </td>
-                          <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">
+                          <td className="p-2 md:border md: text-left block md:table-cell">
                             {item.indexing}
                           </td>
                           <td
