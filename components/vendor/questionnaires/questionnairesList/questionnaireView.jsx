@@ -292,7 +292,6 @@ const QuestionnairesView = () => {
   };
 
   const UpdateRecord = (id, property, data) => {
-    debugger
     let statusValue = data;
     let value;
     if (property == "answer") {
@@ -309,13 +308,23 @@ const QuestionnairesView = () => {
       questionnaireRecords: questionnaireData.questionnaireRecords.map(
         (record) => {
           if (record.id === id[0]) {
-            return { ...record, [property]: value ,  };
+           
+            // let status;
+
+            // if(record.complianceGeneratedBy == "AI"){
+            //   alert(data)
+            //   status = "manual"
+            // }
+            // complianceGeneratedBy : status
+          
+
+            return { ...record, [property]: value };
           } 
           return record;
         }
       ),
     });
-
+ 
     const updatedData = {
       ids: id,
       field: property,
@@ -646,7 +655,7 @@ const QuestionnairesView = () => {
                       <th className="px-4 py-2 text-left text-gray-600 border !min-w-[450px]">
                         Answer
                       </th>
-                      <th className="px-4 py-2  text-gray-600 border  pr-7  text-left sticky -right-[1px]">
+                      <th className="px-4 py-2  text-gray-600 bg-[#E5E7EB]  border  pr-7  text-left sticky -right-[1px]">
                         Actions
                       </th>
                       <th className="px-[2.5px] text-gray-600 sticky -right-[1px]"></th>

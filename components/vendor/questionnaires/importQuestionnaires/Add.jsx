@@ -187,7 +187,7 @@ const Add = ({
     <>
     {dataLoaded && (
       <div className="flex justify-between">
-      <div className="w-[45%] space-y-1 ">
+      <div className="w-[45%] space-y-3 ">
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
             Customer or prospect name <span className="text-red-500">*</span>
@@ -286,7 +286,7 @@ const Add = ({
           />
         </div>
       </div>
-      <div className="w-[45%] space-y-1 pt-3">
+      <div className="w-[45%] space-y-3 pt-3">
         <div>
           <label className="text-[16px] 2xl:text-[20px]">
             In scope product(s) <span className="text-red-500">*</span>

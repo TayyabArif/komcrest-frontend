@@ -73,7 +73,7 @@ const DummyQuestionnairesList = ({questionList ,questionnaireData}) => {
         <div className="flex gap-4">
         <div className="overflow-auto w-full h-[75vh]  bg-white border">
           <table className="min-w-full border-collapse border text-gray-700">
-            <thead className="border">
+            <thead className="border sticky -top-1 bg-[#E5E7EB] z-50">
               <tr className="2xl:text-[20px] text-[16px]">
                 <th className="px-4 py-2 text-left text-gray-600 border"></th>
                 <th className="px-4 py-2 text-left text-gray-600 border">
@@ -85,7 +85,7 @@ const DummyQuestionnairesList = ({questionList ,questionnaireData}) => {
                 <th className="px-4 py-2 text-left text-gray-600 border">
                   Compliance
                 </th>
-                <th className="px-4 py-2 text-left text-gray-600 border">
+                <th className="px-4 py-2 text-left text-gray-600 border min-w-[400px]">
                   Answer
                 </th>
                 <th className="px-4 py-2 text-center text-gray-600 border">

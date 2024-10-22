@@ -28,7 +28,7 @@ const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireP
       style={{
         backgroundColor: isOver ? '#F9FAFB' : '',
       }}>
-        <div className="flex gap-3 items-center border-2 py-[6px] px-2 rounded-lg bg-white">
+        <div className="flex gap-3 items-center border-2 py-[6px] px-2 rounded-lg bg-white   sticky top-0  z-50">
           <span
             className={`flex items-center justify-center rounded-full w-[27px] h-[27px] text-center border-2 bg-[#EBEEF2]`}
           >

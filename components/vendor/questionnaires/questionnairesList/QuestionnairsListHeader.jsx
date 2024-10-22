@@ -111,7 +111,8 @@ const QuestionnairsListHeader = ({currentStatus ,questionnaireData, setDataUpdat
           onClick={()=>router.push("/vendor/questionnaires")}
           className="text-[16px] 2xl:text-[20px] cursor-pointer">Questionnaires</p>
           <ArrowRight size={20}/>
-          <p className="text-[16px] 2xl:text-[20px]">{questionnaireData?.customerName} - {questionnaireData?.fileName.replace(".xlsx", "")}
+          <p className="text-[16px] 2xl:text-[20px]">{questionnaireData?.customerName} 
+          {/* - {questionnaireData?.fileName.replace(".xlsx", "")} */}
           </p>
         </div>
         <div>

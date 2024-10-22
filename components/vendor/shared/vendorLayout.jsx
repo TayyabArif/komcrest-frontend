@@ -81,7 +81,7 @@ const VendorLayout = ({ children }) => {
           </div>
         </div>
       </div>
-      <div className="ml-[15%] w-[85%]">
+      <div className="ml-[15%] w-[85%] fixed">
        
         <div className="py-2 text-right flex justify-end gap-2 font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
         <h1>{loogedinUser}</h1>
