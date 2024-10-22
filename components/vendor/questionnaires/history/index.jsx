@@ -183,7 +183,7 @@ const History = ({
   };
 
   return (
-    <div className="bg-[#F2F2F2] px-5 min-h-screen ">
+    <div className="bg-[#F2F2F2] px-5 h-[75vh] overflow-scroll">
       <div className="sticky top-0 py-5  z-50 bg-[#F2F2F2] space-y-3 ">
         <div className="flex justify-between  items-center ">
           <div className="flex items-center justify-between gap-10">
@@ -192,7 +192,7 @@ const History = ({
                 setSelectedOption("references");
                 setReferenceSelect("document");
               }}
-              className={`text-xl font-bold cursor-pointer ${
+              className={`text-xl font-bold cursor-pointer 2xl:text-[20px] text-[16px]  ${
                 selectedOption === "references" ? "text-blue-600" : ""
               } `}
             >
@@ -200,7 +200,7 @@ const History = ({
             </h1>
             <h1
               onClick={() => setSelectedOption("history")}
-              className={`text-xl font-bold cursor-pointer ${
+              className={`text-xl font-bold cursor-pointer 2xl:text-[20px] text-[16px]  ${
                 selectedOption === "history" ? "text-blue-600" : ""
               } `}
             >

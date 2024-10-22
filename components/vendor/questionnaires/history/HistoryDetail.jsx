@@ -69,9 +69,9 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
           <div>
             <h1>Modified the compliance.</h1>
             <div>
-              <h1 className="flex items-center gap-1">
-                Compliance : {capitalizeFirstLetter(record?.previousValue)} <ArrowRight size={15} />{" "}
-                {record.currentValue}
+              <h1 className="flex items-center gap-1  text-nowrap">
+                Compliance : {capitalizeFirstLetter(record?.previousValue  == "Not applicable" ? "N/A" : record?.previousValue )} <ArrowRight size={15} />{" "}
+                {record.currentValue == "Not applicable" ? "N/A" : record.currentValue}
               </h1>
             </div>
           </div>
@@ -133,7 +133,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
         historyRecord
           ?.sort((a, b) => b.id - a.id)
           ?.map((record, index) => (
-            <div key={index} className="my-4 bg-white p-3  break-words">
+            <div key={index} className="my-4 bg-white p-3 2xl:text-[20px] text-[16px] text-gray-600    break-words rounded-md">
               <div className="flex gap-2">
                 <p className="font-bold text-wrap">
                   {record.user.firstName} -{" "}
