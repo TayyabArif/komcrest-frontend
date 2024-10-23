@@ -65,13 +65,12 @@ const AddResource = () => {
   } 
 
   useEffect(() => {
-    if (companyProducts.length === 1) {
-      console.log("companyProducts", companyProducts);
       setResourceData((prev) => ({
         ...prev,
-        productIds: [companyProducts[0].id], 
+        language : "English",
+        productIds: companyProducts.length === 1 ?  [companyProducts[0].id] : prev.productIds, 
       }));
-    }
+  
   }, [companyProducts]);
 
   

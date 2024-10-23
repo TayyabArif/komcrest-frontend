@@ -37,15 +37,26 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
       },
       redirect: "follow",
     };
+    
     fetch(`${baseUrl}/documents/${selectedDocument?.id}`, requestOptions)
-      .then((response) => response.text())
+      .then((response) => {
+        if (response.ok) {  // Check if response status is 200-299
+          return response.text();
+        } else {
+          throw new Error("Failed to delete document"); // Handle non-200 responses
+        }
+      })
       .then((result) => {
         console.log("$$$$$$$$$", result);
         toast.success("Document deleted successfully");
         setIsDeleted(!isDeleted);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        toast.error("Error deleting document");
+      });
   };
+  
 
   const handleDownload = (filePath) => {
     if (typeof filePath === "string") {
@@ -75,8 +86,8 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
 
 
   return (
-    <div>
-      <div className="flex flex-wrap   w-[85%] mx-auto py-6 gap-[3.4rem]">
+    <div className="">
+      <div className="flex flex-wrap   w-[85%] mx-auto py-6 gap-[3.4rem] overflow-scroll">
         {cardData &&
           cardData.map((item, index) => {
             return (

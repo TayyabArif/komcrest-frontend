@@ -72,15 +72,18 @@ const NewQuestion = () => {
     { key: "German", label: "German" },
   ];
 
+ 
   useEffect(() => {
-    if (companyProducts.length === 1) {
-      console.log("companyProducts", companyProducts);
+    if(!id){
       setNewQuestion((prev) => ({
         ...prev,
-        productIds: [companyProducts[0].id], 
+        language: "English", 
+        productIds: companyProducts.length === 1 ? [companyProducts[0].id] : prev.productIds, // Conditionally set productIds
       }));
     }
+    
   }, [companyProducts]);
+
 
   const handleCheckboxChange = (id) => {
     setNewQuestion((prevData) => {
@@ -400,7 +403,7 @@ const NewQuestion = () => {
                       <SelectItem
                         key={option.key}
                         value={option.label}
-                        classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                        classNames={{ title: "text-[16px] 2xl:text-[18px]" }}
                       >
                         {option.label}
                       </SelectItem>
@@ -539,7 +542,7 @@ const NewQuestion = () => {
                       <SelectItem
                         key={option.label}
                         value={option.label}
-                        classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
+                        classNames={{ title: "text-[16px] 2xl:text-[18px]" }}
                       >
                         {option.label}
                       </SelectItem>
@@ -562,7 +565,7 @@ const NewQuestion = () => {
                     defaultSelectedKeys={
                       newQuestion.documentId ? [newQuestion.documentId] : []
                     }
-                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                    classNames={{ value: "text-[16px] 2xl:text-[18px]" }}
                   >
                     {documentData?.map((option) => (
                       <SelectItem

@@ -308,17 +308,16 @@ const QuestionnairesView = () => {
       questionnaireRecords: questionnaireData.questionnaireRecords.map(
         (record) => {
           if (record.id === id[0]) {
-           
-            // let status;
 
-            // if(record.complianceGeneratedBy == "AI"){
-            //   alert(data)
-            //   status = "manual"
-            // }
-            // complianceGeneratedBy : status
-          
-
-            return { ...record, [property]: value };
+            let complianceStatus = record.complianceGeneratedBy
+            let answerStatus = record.generatedBy
+            if(record.complianceGeneratedBy == "AI" && property == "compliance"){
+              complianceStatus = "manual"
+            }
+            if(record.generatedBy == "AI" && property == "answer"){
+              answerStatus = "manual"
+            }
+            return { ...record, [property]: value , complianceGeneratedBy : complianceStatus ,generatedBy : answerStatus  };
           } 
           return record;
         }
@@ -697,7 +696,7 @@ const QuestionnairesView = () => {
                               {item.question}
                             </td>
                             <td
-                              className={`py-2 items-center ${
+                              className={`py-2 items-center min-w-[150px] ${
                                 item.confidence == 0
                                   ? "outline outline-[#FFC001] text-[#FFC001]  shadow-inner"
                                   : ""
@@ -722,12 +721,12 @@ const QuestionnairesView = () => {
                                   }
                                   className="w-full  text-[16px] 2xl:text-[20px] rounded-lg bg-transparent"
                                 >
-                                  <option value="" disabled>
+                                  <option disabled>
                                     Select
                                   </option>
                                   <option value="yes">Yes</option>
                                   <option value="no">No</option>
-                                  <option value="Not applicable">
+                                  <option value="">
                                     Not applicable
                                   </option>
                                 </select>
