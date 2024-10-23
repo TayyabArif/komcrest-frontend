@@ -8,6 +8,7 @@ import { useCookies } from "react-cookie";
 import { handleResponse } from "../../../../helper";
 import { useRouter } from "next/router";
 import { json } from "react-router-dom";
+import { ChevronRight, ChevronDown } from "lucide-react";
 
 const History = ({
   selectedId,
@@ -23,11 +24,16 @@ const History = ({
   const router = useRouter();
   const [referenceSelect, setReferenceSelect] = useState("knowledge");
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const [isKnowledgeOpen, setIsKnowledgeOpen] = useState(true);
+  const [isDocumentOpen, setIsDocumentOpen] = useState(true);
+  const [isOnlineOpen, setIsOnlineOpen] = useState(true);
 
+  // reference ids
   const [onlineResourceIds, setOnlineResourceIds] = useState([]);
   const [questionIds, setQuestionIds] = useState([]);
   const [documentIds, setDocumentIds] = useState([]);
 
+  // reference data
   const [questionReferenceData, setQuestionReferenceData] = useState([]);
   const [onlineResourceReferenceData, setOnlineResourceReferenceData] =
     useState([]);
@@ -182,6 +188,12 @@ const History = ({
     setReferenceSelect(event.target.value);
   };
 
+  const iconProps = {
+    size: 18,
+    strokeWidth: 6,
+    className: "text-[#2457D7]",
+  };
+
   return (
     <div className="bg-[#F2F2F2] px-5 h-[75vh] overflow-scroll">
       <div className="sticky top-0 py-5  z-50 bg-[#F2F2F2] space-y-3 ">
@@ -216,7 +228,7 @@ const History = ({
           />
         </div>
 
-        {selectedOption === "references" && (
+        {/* {selectedOption === "references" && (
           <div className="flex items-center">
             <select
               className="w-[150px] text-[15px] border rounded-lg pr-3 p-2"
@@ -231,11 +243,11 @@ const History = ({
               <option value="knowledge">Knowledge</option>
             </select>
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Conditionally render components based on selected option */}
-      {referenceSelect === "knowledge" && selectedOption === "references" && (
+      {/* {referenceSelect === "knowledge" && selectedOption === "references" && (
         <KnowledgeHistory questionReferenceData={questionReferenceData} />
       )}
       {referenceSelect === "document" && selectedOption === "references" && (
@@ -245,7 +257,60 @@ const History = ({
         <OnlineResourceHistory
           onlineResourceReferenceData={onlineResourceReferenceData}
         />
+      )} */}
+
+      {selectedOption === "references" && (
+        <div className="space-y-4 mt-5">
+          <div
+            className="flex justify-between items-center 2xl:text-[20px] text-[16px] cursor-pointer w-[60%]"
+            onClick={() => setIsDocumentOpen(!isDocumentOpen)}
+          >
+            <h1>Documents</h1>
+            {isDocumentOpen ? (
+              <ChevronDown {...iconProps} />
+            ) : (
+              <ChevronRight {...iconProps} />
+            )}
+          </div>
+          {isDocumentOpen && (
+            <DocumentHistory documentReferenceData={documentReferenceData} />
+          )}
+
+          <div
+            className="flex justify-between items-center 2xl:text-[20px] text-[16px] cursor-pointer w-[60%]"
+            onClick={() => setIsKnowledgeOpen(!isKnowledgeOpen)}
+          >
+            {" "}
+            <h1>Knowledge Base</h1>
+            {isKnowledgeOpen ? (
+              <ChevronDown {...iconProps} />
+            ) : (
+              <ChevronRight {...iconProps} />
+            )}
+          </div>
+          {isKnowledgeOpen && (
+            <KnowledgeHistory questionReferenceData={questionReferenceData} />
+          )}
+
+          <div
+            className="flex justify-between items-center 2xl:text-[20px] text-[16px] cursor-pointer w-[60%]"
+            onClick={() => setIsOnlineOpen(!isOnlineOpen)}
+          >
+            <h1>Online Reference</h1>
+            {isOnlineOpen ? (
+              <ChevronDown {...iconProps} />
+            ) : (
+              <ChevronRight {...iconProps} />
+            )}
+          </div>
+          {isOnlineOpen && (
+            <OnlineResourceHistory
+              onlineResourceReferenceData={onlineResourceReferenceData}
+            />
+          )}
+        </div>
       )}
+
       {selectedOption === "history" && (
         <HistoryDetail selectedId={selectedId} dataUpdate={dataUpdate} />
       )}

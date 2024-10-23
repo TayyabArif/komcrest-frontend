@@ -61,14 +61,13 @@ const UploadQuestions = () => {
   }
 
   useEffect(() => {
-    if (companyProducts.length === 1) {
-      console.log("companyProducts", companyProducts);
-      setKnowledgeData((prev) => ({
-        ...prev,
-        productIds: [companyProducts[0].id], 
-      }));
-    }
+    setKnowledgeData((prev) => ({
+      ...prev,
+      language: "English",
+      productIds: companyProducts.length === 1 ? [companyProducts[0].id] : prev.productIds, // Conditionally set productIds
+    }));
   }, [companyProducts]);
+  
 
 
 

@@ -55,14 +55,13 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
   });
 
   useEffect(() => {
-    if (companyProducts.length === 1) {
-      console.log("companyProducts", companyProducts);
-      setImportQuestionnaire((prev) => ({
-        ...prev,
-        productIds: [companyProducts[0].id],
-      }));
-    }
+    setImportQuestionnaire((prev) => ({
+      ...prev,
+      language: "English", // Always set language to English
+      productIds: companyProducts.length === 1 ? [companyProducts[0].id] : prev.productIds, // Conditionally set productIds
+    }));
   }, [companyProducts]);
+  
 
   const getDatafromChild = () => {
     let getData;
