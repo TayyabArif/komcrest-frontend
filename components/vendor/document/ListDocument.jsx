@@ -55,7 +55,7 @@ const AddDocument = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <VendorHeader buttonShow={documentData.length > 0} />
       {dataIsLoaded &&
         (documentData.length > 0 ? (
