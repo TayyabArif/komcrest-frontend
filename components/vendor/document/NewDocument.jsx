@@ -46,7 +46,6 @@ const NewDocument = () => {
         language: "English",
         productIds:companyProducts.length === 1 ?  [companyProducts[0].id] : prev.productIds,
       }));
-    debugger
   }, [companyProducts]);
 
   const handleData = (e) => {
@@ -218,8 +217,6 @@ const NewDocument = () => {
               file : data.filePath
             
             });
-
-            debugger
             setDataIsLoaded(true);
           } else {
             toast.error(data?.error);
