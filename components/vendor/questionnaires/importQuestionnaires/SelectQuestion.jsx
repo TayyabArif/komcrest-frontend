@@ -139,7 +139,7 @@ const SelectQuestion = ({
   };
 
   return (
-    <div className="py-2">
+    <div className="py-2 h-[60vh]">
       {/* Buttons for each sheet */}
       <div className="flex  mb-2">
         {Object.keys(excelFile).map((sheetName) => (

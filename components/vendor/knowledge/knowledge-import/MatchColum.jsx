@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Select, SelectItem } from "@nextui-org/react";
 
-const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHeader, setMappedIndexValue, mappedIndexValue }) => {
+const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHeader, setMappedIndexValue, mappedIndexValue , selectedRowIndex }) => {
   const [availableOptions, setAvailableOptions] = useState([]);
   const thStyle = {
     border: '1px solid #dddddd',

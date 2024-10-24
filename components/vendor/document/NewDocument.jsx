@@ -140,7 +140,6 @@ const NewDocument = () => {
             toast.success("Document updated successfully");
             router.push("/vendor/document");
           } else {
-            alert('okkk')
             toast.error(data?.error);
             console.error("Error:", data);
           }

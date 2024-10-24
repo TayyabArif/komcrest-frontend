@@ -192,9 +192,9 @@ const KnowledgeFilter = ({ triggerFunction, setShowFilter, setFilters, filters, 
   
 
   return (
-    <div className="w-full h-full bg-white flex flex-col justify-between">
+    <div className="w-full h-full bg-white  flex flex-col justify-between ">
       <div className="text-[18px]">
-        <div className="flex justify-between p-5 items-center border-b-2">
+        <div className="flex justify-between px-5 py-3 items-center border-b-2 ">
           <h1 className="2xl:text-[20px] text-[16px] font-bold ">Filter</h1>
           <X
             className="size-[16px] cursor-pointer"
@@ -253,7 +253,7 @@ const KnowledgeFilter = ({ triggerFunction, setShowFilter, setFilters, filters, 
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-2 p-5  border-t-2">
+      <div className="flex flex-col gap-2 px-5 py-2  border-t-2">
         <h1>Entries {getEntries()}</h1>
         <button
           className="border rounded-md border-gray-300 px-3 py-1 text-gray-500 2xl:text-[20px] text-[16px]"

@@ -256,8 +256,8 @@ const AddResource = () => {
 
   return (
     <div className="w-[100%] h-full">
-      <div className="w-[90%] mx-auto py-4 mt-[2rem]">
-        <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
+      <div className="w-[90%] mx-auto py-3 mt-[1rem]">
+        <h1 className="font-semibold bg-slate-50 px-6 py-2 2xl:text-[20px]">
           {getTitle()}
         </h1>
         <div className="w-full h-[80vh] bg-white p-6">
@@ -394,7 +394,7 @@ const AddResource = () => {
                       </div>
                     </div>
                   )}
-                  <div className="mt-5">
+                  <div className="mt-3">
                     <Button
                       onClick={handleCancelClick}
                       radius="none"

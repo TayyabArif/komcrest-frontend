@@ -243,7 +243,10 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
     };
 
     setQuestionList(result);
-    setQuestionnaireData({fileName : importQuestionnaires.fileName , customerName :importQuestionnaires.customerName})
+    setQuestionnaireData({fileName : importQuestionnaires.fileName ,
+      customerName :importQuestionnaires.customerName,
+       originalFile :importQuestionnaires.originalFile
+    })
     setTotalCount(payload.Questionnaires.length);
     const token = cookiesData.token;
 
@@ -265,6 +268,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
 
       // setImportSuccessfully(true)
       fetch(`${baseUrl}/questionnaires`, requestOptions)
+      
         .then(async (response) => {
           const data = await handleResponse(
             response,
@@ -361,12 +365,12 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
   };
 
   return (
-    <div className="w-[100%] h-full">
+    <div className="w-[100%] h-full ">
       <div className="w-[90%] mx-auto py-4 mt-1 ">
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px] rounded-t-md">
           {getTitle()} 
         </h1>
-        <div className="w-full h-auto bg-white p-5 rounded-b-md">
+        <div className="w-full h-auto p-5 rounded-b-md bg-white">
           <Progress
             aria-label="Loading..."
             value={progressBar}
@@ -406,7 +410,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
                 </div>
               ))}
             </div>
-            <div className="">
+            <div className="min-h-[60vh]">
               {stepper > 0 && stepper < 4 && (
                 <h1 className="font-semibold text-[16px] 2xl:text-[20px]">
                   {importQuestionnaires?.customerName} -{" "}

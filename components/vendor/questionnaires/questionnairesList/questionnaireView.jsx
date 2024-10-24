@@ -632,7 +632,7 @@ const QuestionnairesView = () => {
                   />
                 </div>
               )}
-              <div className="overflow-auto w-[100%]  max-h-[75vh]  bg-white border ">
+              <div className="overflow-auto w-[100%]  max-h-[73vh]  bg-white border ">
                 <table className="min-w-[100%] border-2 text-gray-700 ">
                   <thead className="border  sticky -top-1 bg-[#E5E7EB] z-50">
                     <tr className="2xl:text-[20px] text-[16px]">

@@ -269,7 +269,7 @@ const History = ({
               }))
             }
           >
-            <h1>Documents</h1>
+            <h1 className="2xl:text-[20px] text-[16px] font-semibold">Documents</h1>
             {referenceToggle.isDocumentOpen ? (
               <ChevronDown {...iconProps} />
             ) : (
@@ -290,7 +290,7 @@ const History = ({
             }
           >
             {" "}
-            <h1>Knowledge Base</h1>
+            <h1  className="2xl:text-[20px] text-[16px] font-semibold">Knowledge Base</h1>
             {referenceToggle.isKnowledgeOpen ? (
               <ChevronDown {...iconProps} />
             ) : (
@@ -310,7 +310,7 @@ const History = ({
               }))
             }
           >
-            <h1>Online Reference</h1>
+            <h1 className="2xl:text-[20px] text-[16px] font-semibold">Online Reference</h1>
             {referenceToggle.isOnlineOpen ? (
               <ChevronDown {...iconProps} />
             ) : (

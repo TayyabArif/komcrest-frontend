@@ -94,7 +94,7 @@ const VendorLayout = ({ children }) => {
           Logout
         </Button>
         </div>
-        <div className="flex flex-col bg-[#ebeef2]  h-[95vh] overflow-scroll">
+        <div className="flex flex-col bg-[#ebeef2]  h-[95vh]">
           {children}
         </div>
       </div>

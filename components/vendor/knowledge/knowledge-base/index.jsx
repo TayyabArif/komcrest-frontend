@@ -364,7 +364,7 @@ const KnowledgeBase = ({
                 />
               </div>
             )}
-            <div className="w-[100%] overflow-x-auto relative h-[73vh] flex">
+            <div className="w-[100%] overflow-x-auto relative h-[68vh]  flex">
               <table
                 style={{ width: "100%" }}
                 className="min-w-full bg-white border "

@@ -120,7 +120,7 @@ const ValidateData = forwardRef(
         </div>
         {/* Only show the selected table */}
         {visibleTable && (
-          <div key={visibleTable} className="mb-8 overflow-auto  h-[48vh]">
+          <div key={visibleTable} className="mb-8 overflow-auto  h-[45vh]">
             <table className="min-w-full border-collapse border mb-4">
               <thead className="bg-gray-200 sticky -top-1 z-10">
                 <tr className="text-[16px] 2xl:text-[20px]">

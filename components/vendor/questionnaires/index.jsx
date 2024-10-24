@@ -36,7 +36,9 @@ const Questionnaires = () => {
   const [dataLoaded , setDataLoaded] = useState(true)
   const { questionnaireList ,setQuestionnaireList ,setQuestionnaireUpdated} = useMyContext();
 
-
+//  useEffect(()=>{
+//   alert("ok")
+//  },[])
 
   // const fetchAllQuestionnaires = async () => {
   //   const token = cookiesData && cookiesData.token;

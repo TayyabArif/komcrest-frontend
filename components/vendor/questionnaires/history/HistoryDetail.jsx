@@ -69,7 +69,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
           <div>
             <h1>Modified the compliance.</h1>
             <div>
-              <h1 className="flex items-center gap-1  text-nowrap">
+              <h1 className="flex items-center gap-1  text-nowrap 2xl:text-[20px] text-[16px]">
                 Compliance : {capitalizeFirstLetter(record?.previousValue  == "Not applicable" ? "N/A" : record?.previousValue )} <ArrowRight size={15} />{" "}
                 {record.currentValue == "Not applicable" ? "N/A" : record.currentValue}
               </h1>
@@ -87,7 +87,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
       case "answerChanged":
         return (
           <div className="">
-            <div className="flex gap-3">
+            <div className="flex gap-3 2xl:text-[20px] text-[16px]">
             {/* "Improved the answer" is only when improve from AI */}
               <h1>Updated the answer.</h1>
             </div>
@@ -99,7 +99,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
       case "answerUpdatedByAI":
         return (
           <div className="">
-            <div className="flex gap-3">
+            <div className="flex gap-3 2xl:text-[20px] text-[16px]">
               {/* <h1>Improved the answered using Komcrest AI.</h1>           */}
               <h1>Re-ran AI for compliance & answer.</h1>
             </div>
@@ -114,7 +114,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
                 Notified{" "}
                 <span className="font-bold">
                   {record?.recipients?.map((recipient, index) => (
-                    <span className="text-bold" key={index}>{recipient.firstName} {index+1 == record?.recipients.length ? "" : ","} </span>
+                    <span className="text-bold 2xl:text-[20px] text-[16px]" key={index}>{recipient.firstName} {index+1 == record?.recipients.length ? "" : ","} </span>
                   ))}
                 </span>{" "}
                 for help

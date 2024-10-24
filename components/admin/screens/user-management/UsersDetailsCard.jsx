@@ -13,7 +13,7 @@ const companies = [
   {id: "3", label: "staffbase"},
 ];
 const UsersDetailsCard = ({handleChange, formData, allCompanies ,isDisabled}) => {
-  debugger
+
 const id = 50
   return (
     <div className='flex flex-col bg-white shadow-md w-[45%] min-h-[550px] mt-12 pb-10'>
