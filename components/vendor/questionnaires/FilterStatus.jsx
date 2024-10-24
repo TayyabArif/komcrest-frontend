@@ -23,12 +23,12 @@ const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireP
   });
 
   return (
-    <div className="w-full h-[60vh]">
+    <div className="w-full">
       <div  ref={dropRef} className=" flex-1  space-y-4 h-full rounded-md"
       style={{
         backgroundColor: isOver ? '#F9FAFB' : '',
       }}>
-        <div className="flex gap-3 items-center border-2 py-[6px] px-2 rounded-lg bg-white   sticky top-0  z-50">
+        <div className="flex gap-3 items-center border-2 py-[6px] px-2 rounded-md bg-white   sticky top-0  z-50">
           <span
             className={`flex items-center justify-center rounded-full w-[27px] h-[27px] text-center border-2 bg-[#EBEEF2]`}
           >

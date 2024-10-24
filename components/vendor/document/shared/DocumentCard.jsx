@@ -57,23 +57,30 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
       });
   };
   
-
   const handleDownload = (filePath) => {
     if (typeof filePath === "string") {
       const fileName = filePath.split("/").pop();
       const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${fileName}`;
-      
-      // Create a temporary anchor element for download
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.setAttribute("download", fileName); // This attribute forces download
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const fileExtension = fileName.split('.').pop().toLowerCase(); // Get the file extension
+  
+      if (fileExtension === 'pdf') {
+        // Open PDF in a new tab
+        window.open(downloadUrl, '_blank');
+      } else {
+        // For other file types, force download
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.setAttribute("download", fileName); // This attribute forces download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success("Document downloaded successfully")
+      }
     } else {
       alert('Invalid file path.');
     }
   };
+  
   
 
   const handleDocumentLink = (link) => {
@@ -86,8 +93,8 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
 
 
   return (
-    <div className="">
-      <div className="flex flex-wrap   w-[85%] mx-auto py-6 gap-[3.4rem] overflow-scroll">
+    <div className="overflow-auto h-[85vh]">
+      <div className="flex flex-wrap   w-[85%] mx-auto py-6 gap-[3.4rem]">
         {cardData &&
           cardData.map((item, index) => {
             return (

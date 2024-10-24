@@ -190,6 +190,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
       }
     } else if (stepper === 3) {
       const finalData = getDatafromChild();
+      console.log("finalDatafinalData",finalData)
       setStepper(stepper + 1);
       setProgressBar(progressBar + 27);
       const transformedData = {};
@@ -365,7 +366,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px] rounded-t-md">
           {getTitle()} 
         </h1>
-        <div className="w-full h-auto bg-white p-6 rounded-b-md">
+        <div className="w-full h-auto bg-white p-5 rounded-b-md">
           <Progress
             aria-label="Loading..."
             value={progressBar}
@@ -447,6 +448,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
                   ref={ValidateComponentRef}
                   setExcelFile={setExcelFile}
                   setReamingData={setReamingData}
+                  selectedHeaderRow={selectedRows}
                 />
               )}
               {stepper === 4 && (

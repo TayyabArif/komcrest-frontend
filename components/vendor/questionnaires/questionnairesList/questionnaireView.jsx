@@ -52,6 +52,11 @@ const QuestionnairesView = () => {
   const [textAreaSize, setTextAreaSize] = useState("");
   const [selectedTextAreaId, setSelectedTextAreaId] = useState();
   const [getFilterData, setFilterData] = useState("");
+  const [referenceToggle , setReferenceToggle] = useState({
+    isKnowledgeOpen :true,
+    isDocumentOpen : true,
+    isOnlineOpen : true
+  })
 
   const [selectedQuestionnaireReference, setSelectedQuestionnaireReference] =
     useState();
@@ -992,6 +997,8 @@ const QuestionnairesView = () => {
                     selectedQuestionnaireReference={
                       selectedQuestionnaireReference
                     }
+                    referenceToggle={referenceToggle}
+                    setReferenceToggle ={setReferenceToggle}
                   />
                 </div>
               )}
