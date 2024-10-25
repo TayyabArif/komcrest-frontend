@@ -18,15 +18,14 @@ const History = ({
   selectedOption,
   setSelectedOption,
   selectedQuestionnaireReference,
+  setReferenceToggle,
+  referenceToggle,
 }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const router = useRouter();
   const [referenceSelect, setReferenceSelect] = useState("knowledge");
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [isKnowledgeOpen, setIsKnowledgeOpen] = useState(true);
-  const [isDocumentOpen, setIsDocumentOpen] = useState(true);
-  const [isOnlineOpen, setIsOnlineOpen] = useState(true);
 
   // reference ids
   const [onlineResourceIds, setOnlineResourceIds] = useState([]);
@@ -263,47 +262,62 @@ const History = ({
         <div className="space-y-4 mt-5">
           <div
             className="flex justify-between items-center 2xl:text-[20px] text-[16px] cursor-pointer w-[60%]"
-            onClick={() => setIsDocumentOpen(!isDocumentOpen)}
+            onClick={() =>
+              setReferenceToggle((prevState) => ({
+                ...prevState,
+                isDocumentOpen: !prevState.isDocumentOpen,
+              }))
+            }
           >
-            <h1>Documents</h1>
-            {isDocumentOpen ? (
+            <h1 className="2xl:text-[20px] text-[16px] font-semibold">Documents</h1>
+            {referenceToggle.isDocumentOpen ? (
               <ChevronDown {...iconProps} />
             ) : (
               <ChevronRight {...iconProps} />
             )}
           </div>
-          {isDocumentOpen && (
+          {referenceToggle.isDocumentOpen && (
             <DocumentHistory documentReferenceData={documentReferenceData} />
           )}
 
           <div
             className="flex justify-between items-center 2xl:text-[20px] text-[16px] cursor-pointer w-[60%]"
-            onClick={() => setIsKnowledgeOpen(!isKnowledgeOpen)}
+            onClick={() =>
+              setReferenceToggle((prevState) => ({
+                ...prevState,
+                isKnowledgeOpen: !prevState.isKnowledgeOpen,
+              }))
+            }
           >
             {" "}
-            <h1>Knowledge Base</h1>
-            {isKnowledgeOpen ? (
+            <h1  className="2xl:text-[20px] text-[16px] font-semibold">Knowledge Base</h1>
+            {referenceToggle.isKnowledgeOpen ? (
               <ChevronDown {...iconProps} />
             ) : (
               <ChevronRight {...iconProps} />
             )}
           </div>
-          {isKnowledgeOpen && (
+          {referenceToggle.isKnowledgeOpen && (
             <KnowledgeHistory questionReferenceData={questionReferenceData} />
           )}
 
           <div
             className="flex justify-between items-center 2xl:text-[20px] text-[16px] cursor-pointer w-[60%]"
-            onClick={() => setIsOnlineOpen(!isOnlineOpen)}
+            onClick={() =>
+              setReferenceToggle((prevState) => ({
+                ...prevState,
+                isOnlineOpen: !prevState.isOnlineOpen,
+              }))
+            }
           >
-            <h1>Online Reference</h1>
-            {isOnlineOpen ? (
+            <h1 className="2xl:text-[20px] text-[16px] font-semibold">Online Reference</h1>
+            {referenceToggle.isOnlineOpen ? (
               <ChevronDown {...iconProps} />
             ) : (
               <ChevronRight {...iconProps} />
             )}
           </div>
-          {isOnlineOpen && (
+          {referenceToggle.isOnlineOpen && (
             <OnlineResourceHistory
               onlineResourceReferenceData={onlineResourceReferenceData}
             />

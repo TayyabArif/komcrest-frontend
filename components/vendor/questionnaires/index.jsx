@@ -36,7 +36,9 @@ const Questionnaires = () => {
   const [dataLoaded , setDataLoaded] = useState(true)
   const { questionnaireList ,setQuestionnaireList ,setQuestionnaireUpdated} = useMyContext();
 
-
+//  useEffect(()=>{
+//   alert("ok")
+//  },[])
 
   // const fetchAllQuestionnaires = async () => {
   //   const token = cookiesData && cookiesData.token;
@@ -149,7 +151,7 @@ const Questionnaires = () => {
         </div>
         {filterValue == "progress" ? (
          
-          <div className="flex gap-3  overflow-auto h-[75vh]">
+          <div className="flex gap-3  overflow-scroll h-[73vh]">
           <DndProvider backend={HTML5Backend}>
           <FilterStatus onCardDrop={handleCardDrop} title="To Process" data={filterStatus("To Process")} stepsContent={QuestionnaireStepsContent.process} setDataUpdate={setDataUpdate} />
           <FilterStatus onCardDrop={handleCardDrop} title="Started" data={filterStatus("Started")} stepsContent={QuestionnaireStepsContent.Started}  setDataUpdate={setDataUpdate} />

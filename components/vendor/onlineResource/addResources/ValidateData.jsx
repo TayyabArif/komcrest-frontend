@@ -8,23 +8,23 @@ const ValidateData = ({ resourceData, companyProducts }) => {
   };
 
   return (
-    <div className="overflow-x-auto mt-10">
+    <div className="overflow-x-auto ">
       <table className="min-w-full block md:table">
-        <thead className="block md:table-header-group">
-          <tr className="border text-[16px] 2xl:text-[20px] md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
-            <th className="p-2 font-bold py-3 border border-[#b8b6b6] text-left block md:table-cell">
+        <thead className="block md:table-header-group bg-[#EBEEF2]">
+          <tr className="border text-[16px]  2xl:text-[20px] md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
+            <th className="p-2 font-bold py-3 border  text-left block md:table-cell">
               Title
             </th>
-            <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
+            <th className="p-2 py-3 font-bold border  text-left block md:table-cell">
               URL
             </th>
-            <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
+            <th className="p-2 py-3 font-bold border  text-left block md:table-cell">
               Download
             </th>
-            <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
+            <th className="p-2 py-3 font-bold border  text-left block md:table-cell">
               Products
             </th>
-            <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
+            <th className="p-2 py-3 font-bold border  text-left block md:table-cell">
               Indexation method
             </th>
           </tr>
@@ -32,13 +32,13 @@ const ValidateData = ({ resourceData, companyProducts }) => {
         <tbody className="block md:table-row-group">
           {resourceData?.resources?.map((item, index) => (
             <tr key={index} className="bg-white text-[16px] 2xl:text-[20px]">
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3">
                 {item.title}
               </td>
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3">
                 {item.url}
               </td>
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3">
                 {item.file ? (
                   <div className="flex flex-col">
                     <span>Click to download Docx file</span>
@@ -56,7 +56,7 @@ const ValidateData = ({ resourceData, companyProducts }) => {
                 )}
               </td>
 
-              <td className="p-2 border border-[#b8b6b6] text-left md:table-cell py-3 flex">
+              <td className="p-2 border  text-left md:table-cell py-3 flex">
                 {resourceData.productIds?.map((id, index) => {
                   return (
                     <span key={id} className="px-1">
@@ -66,7 +66,7 @@ const ValidateData = ({ resourceData, companyProducts }) => {
                   );
                 })}
               </td>
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3">
                 {item.indexing}
               </td>
             </tr>

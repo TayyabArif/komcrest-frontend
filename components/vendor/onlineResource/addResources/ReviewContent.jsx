@@ -44,23 +44,23 @@ const ReviewContent = ({
   };
 
   return (
-    <div className="overflow-x-auto mt-10">
+    <div className="overflow-x-auto xl:max-h-[50vh] max-h-[40vh]">
       <table className="min-w-full block md:table">
-        <thead className="block md:table-header-group">
+        <thead className="block md:table-header-group sticky -top-1 bg-[#EBEEF2]">
           <tr className="border text-[16px] 2xl:text-[20px] md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
-            <th className="p-2 font-bold py-3 border border-[#b8b6b6] text-left block md:table-cell">
+            <th className="p-2 font-bold py-3 border  text-left block md:table-cell">
               Title
             </th>
-            <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
+            <th className="p-2 py-3 font-bold border  text-left block md:table-cell">
               URL
             </th>
-            <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
+            <th className="p-2 py-3 font-bold border  text-left block md:table-cell">
               Download
             </th>
-            <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
+            <th className="p-2 py-3 font-bold border  text-left block md:table-cell">
               Upload
             </th>
-            <th className="p-2 py-3 font-bold border border-[#b8b6b6] text-left block md:table-cell">
+            <th className="p-2 py-3 font-bold border  text-left block md:table-cell">
               Indexation method
             </th>
           </tr>
@@ -68,13 +68,13 @@ const ReviewContent = ({
         <tbody className="block md:table-row-group">
           {resourceData?.resources?.map((item, index) => (
             <tr key={index} className="bg-white text-[16px] 2xl:text-[20px]">
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3">
                 {item.title}
               </td>
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3">
                 {item.url}
               </td>
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3">
                 {item.file ? (
                   <div className="flex flex-col">
                     <span>Click to download Docx file</span>
@@ -91,7 +91,7 @@ const ReviewContent = ({
                   "Docx file not available"
                 )}
               </td>
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3">
                 <button
                   onClick={() => {
                     onOpen(), setSelectedIndex(index);
@@ -101,7 +101,7 @@ const ReviewContent = ({
                   Upload docx file
                 </button>
               </td>
-              <td className="p-2 border border-[#b8b6b6] text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3">
                 <select
                   className="py-1 px-2 w-[90%]"
                   value={item.indexing}

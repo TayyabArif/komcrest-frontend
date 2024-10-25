@@ -10,7 +10,7 @@ const OnlineResourceHistory = ({ onlineResourceReferenceData }) => {
             key={index}
             className="bg-white shadow-md space-y-5 rounded-md py-2 px-4 mb-4"
           >
-            <a href="#" className="text-blue-600 font-bold block mb-1">
+            <a href="#" className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] ">
               {doc.title}
             </a>
             <div className="flex justify-between">

@@ -200,9 +200,9 @@ console.log(">>>>>>>>>>:::::::",payloadData)
   
   return (
     <div className="w-[100%] h-full">
-      <div className="w-[90%] mx-auto py-4 mt-[2rem]">
+      <div className="w-[90%] mx-auto py-4 mt-[1rem]">
         <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px]">
-          {getTitle()}
+          {getTitle()} {selectedRowIndex}
         </h1>
         <div className="w-full h-[83vh] bg-white p-6">
           <Progress
@@ -285,7 +285,7 @@ console.log(">>>>>>>>>>:::::::",payloadData)
             </div>
           </div>
           {stepper > 0 &&  <h1 className='my-2 font-semibold text-[16px] 2xl:text-[20px]'>Your table - {knowledgeData.name.replace(".xlsx", "")}</h1>}
-          <div className="overflow-auto  max-h-[58vh]">
+          <div className="overflow-auto  max-h-[55vh]">
             {stepper == 0 && (
               <UploadFile
                 setKnowledgeData={setKnowledgeData}
@@ -312,6 +312,7 @@ console.log(">>>>>>>>>>:::::::",payloadData)
                 setMappedIndexValue={setMappedIndexValue}
                 mappedIndexValue={mappedIndexValue}
                 updateHeader={updateHeader}
+                selectedRowIndex={selectedRowIndex}
                 
               />
             )}
@@ -346,7 +347,7 @@ console.log(">>>>>>>>>>:::::::",payloadData)
                     ))}
                   </div>
                   </div>
-                  <div className="flex items-center mt-8 mb-2">
+                  <div className="flex items-center mt-5 mb-2">
                     <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-60"> Select Language: </h1>
                     <Select
                       variant="bordered"

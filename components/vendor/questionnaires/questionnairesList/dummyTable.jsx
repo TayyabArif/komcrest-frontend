@@ -5,18 +5,35 @@ import QuestionnairsListHeader from "./QuestionnairsListHeader";
 import { Input } from "@nextui-org/react";
 import History from "../history";
 import useSocket from "@/customHook/useSocket";
+import { useMyContext } from "@/context";
+import { useCookies } from "react-cookie";
+import { handleResponse } from "../../../../helper/index";
 
 
 const DummyQuestionnairesList = ({questionList ,questionnaireData}) => {
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
+  const token = cookiesData?.token;
 
   const [allQuestionnaireList , setAllQuestionnireList] = useState(questionList)
+  const { setQuestionnaireUpdated } = useMyContext();
+  // const [isFirstResponse, setIsFirstResponse] = useState(true);
   const socket = useSocket();
-  
+
     const [showHistory ,setShowHistory] = useState(true)
+
+
+
     useEffect(() => {
       if (socket) { 
+        // setQuestionnaireUpdated((prev) => !prev);
         socket.on("Question", (questionnaireRecord) => {
           console.log("questionnaireRecordquestionnaire:", questionnaireRecord);
+          // if (isFirstResponse) {
+          //   uploadFile(questionnaireRecord.questionnaireId)
+          //   setIsFirstResponse(false);
+          // }
           setAllQuestionnireList((prevState) => {
             // Map over the previous state to update it with the new incoming data
             let updatedUsers = prevState.map(data =>
@@ -41,6 +58,56 @@ const DummyQuestionnairesList = ({questionList ,questionnaireData}) => {
         }
       };
     }, [socket]);
+
+
+    // const uploadFile = (id) => {
+    //   const formData = new FormData();
+    //   formData.append("file", questionnaireData.originalFile);
+    //   const token = cookiesData.token;
+    //   let requestOptions = {
+    //     method: "PUT",
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //     body: formData,
+    //     redirect: "follow",
+    //   };
+  
+    //   fetch(`${baseUrl}/questionnaire/file/${id}`, requestOptions)
+    //     .then(async (response) => {
+    //       const data = await handleResponse(
+    //         response,
+    //         router,
+    //         cookies,
+    //         removeCookie
+    //       );
+    //       return {
+    //         status: response.status,
+    //         ok: response.ok,
+    //         data,
+    //       };
+    //     })
+    //     .then(({ status, ok, data }) => {
+    //       if (ok) {
+    //         setQuestionnaireUpdated((prev) => !prev);
+    //       } else {
+    //         console.error("Error:", data);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       if (error.response) {
+    //         console.error("API Error:", error.response);
+    //         toast.error(
+    //           error.response.data?.error ||
+    //             "An error occurred while Updated  Questionnaires status"
+    //         );
+    //       }
+    //     });
+    // };
+
+
+
+
   return (
     <div>
       <QuestionnairsListHeader questionnaireData={questionnaireData}/>
@@ -72,7 +139,7 @@ const DummyQuestionnairesList = ({questionList ,questionnaireData}) => {
 
         <div className="flex gap-4">
         <div className="overflow-auto w-full h-[75vh]  bg-white border">
-          <table className="min-w-full border-collapse border text-gray-700">
+          <table className="min-w-full border-collapse border  text-gray-700">
             <thead className="border sticky -top-1 bg-[#E5E7EB] z-50">
               <tr className="2xl:text-[20px] text-[16px]">
                 <th className="px-4 py-2 text-left text-gray-600 border"></th>

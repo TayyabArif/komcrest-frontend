@@ -69,7 +69,7 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
   };
 
   return (
-    <div className="py-2">
+    <div className="py-2 ">
       {excelFile && (
         <>
           <div className="flex space-x-0 mb-2">
@@ -90,7 +90,7 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
             ))}
           </div>
           {selectedSheet && excelFile[selectedSheet] && (
-            <div className="h-[56vh] overflow-auto">
+            <div className="h-[53vh] overflow-auto">
               <table className="min-w-full border-collapse border">
                 <thead className="bg-[#F6F7F9] sticky -top-1 z-10">
                   <tr className='text-[16px] 2xl:text-[20px]'>

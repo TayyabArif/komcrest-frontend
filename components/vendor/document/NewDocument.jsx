@@ -46,7 +46,6 @@ const NewDocument = () => {
         language: "English",
         productIds:companyProducts.length === 1 ?  [companyProducts[0].id] : prev.productIds,
       }));
-    debugger
   }, [companyProducts]);
 
   const handleData = (e) => {
@@ -99,10 +98,9 @@ const NewDocument = () => {
   const SubmitDocument = async () => {
     if (!documentData.title || !documentData.file) {
       setTitleError(documentData.title ? false : true);
-      setFileError(documentData.file ? false : true);
+      setFileError(documentData.file || documentData.filePath ? false : true);
       return null;
     }
-
     const formData = new FormData();
     formData.append("title", documentData.title);
     formData.append("description", documentData.description);
@@ -215,6 +213,8 @@ const NewDocument = () => {
             setDocumentData({
               ...data,
               productIds: data.Products.map((product) => product.id),
+              file : data.filePath
+            
             });
             setDataIsLoaded(true);
           } else {
@@ -274,7 +274,7 @@ const NewDocument = () => {
                     {documentData.file || documentData.filePath ? (
                       <div className="mt-2">
                         <p>
-                          {documentData.file
+                          {typeof documentData.file !== "string"
                             ? documentData.file?.name
                             : filePath(documentData.filePath)}
                         </p>
@@ -294,7 +294,7 @@ const NewDocument = () => {
               <div className="flex my-2 mt-4 justify-between gap-4">
                 <div className="w-[50%]">
                   <label className="text-[16px] 2xl:text-[20px]">
-                    Title(max 50 characters)
+                    Title(max 50 characters) {JSON.stringify(fileError)}
                   </label>
                   <Input
                     type="text"
@@ -355,7 +355,6 @@ const NewDocument = () => {
                   />
                 </div>
                 <div className="flex-1 mt-2">
-                  {JSON.stringify(documentData.language)}
                   <label className="text-[16px] 2xl:text-[20px]">
                     Language
                   </label>

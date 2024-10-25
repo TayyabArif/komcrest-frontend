@@ -65,7 +65,6 @@ export function getOnlyDate(dateString) {
 
   export const handleDownload = (filePath) => {
     if (typeof filePath === "string") {
-      alert(filePath)
         const fileName = filePath.split("/").pop();
         const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${fileName}`;
         const link = document.createElement("a");

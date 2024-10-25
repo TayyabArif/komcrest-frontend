@@ -6,7 +6,7 @@ import React, {
 } from "react";
 
 const ValidateData = forwardRef(
-  ({ excelFile, columnMapping, setExcelFile, setReamingData }, ref) => {
+  ({ excelFile, columnMapping, setExcelFile, setReamingData,selectedHeaderRow }, ref) => {
     const [selectedRows, setSelectedRows] = useState({});
     const [removedRows, setRemovedRows] = useState({});
     const [visibleTable, setVisibleTable] = useState(Object.keys(excelFile)[0]); // Initially show the first table
@@ -80,7 +80,7 @@ const ValidateData = forwardRef(
       const remainingData = {};
 
       Object.keys(excelFile).forEach((sheetName) => {
-        const rows = excelFile[sheetName].slice(1).filter((row, rowIndex) => {
+        const rows = excelFile[sheetName].slice(selectedHeaderRow[sheetName] + 1).filter((row, rowIndex) => {
           return !isRowRemoved(sheetName, rowIndex + 1); // Only send non-deleted rows
         });
         remainingData[sheetName] = rows;
@@ -89,6 +89,8 @@ const ValidateData = forwardRef(
 
       return remainingData;
     };
+
+
     const childFunction = () => {
       const remainingResult = sendDataBackToParentComponent();
       return remainingResult;
@@ -116,10 +118,9 @@ const ValidateData = forwardRef(
             </button>
           ))}
         </div>
-
         {/* Only show the selected table */}
         {visibleTable && (
-          <div key={visibleTable} className="mb-8 overflow-auto  h-[48vh]">
+          <div key={visibleTable} className="mb-8 overflow-auto  h-[45vh]">
             <table className="min-w-full border-collapse border mb-4">
               <thead className="bg-gray-200 sticky -top-1 z-10">
                 <tr className="text-[16px] 2xl:text-[20px]">
@@ -134,7 +135,7 @@ const ValidateData = forwardRef(
                 </tr>
               </thead>
               <tbody>
-                {getMappedData(visibleTable).rows.map((row, rowIndex) => (
+                {getMappedData(visibleTable).rows.slice(selectedHeaderRow[visibleTable]).map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
                     className={`${

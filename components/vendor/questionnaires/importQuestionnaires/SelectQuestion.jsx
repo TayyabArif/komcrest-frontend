@@ -139,7 +139,7 @@ const SelectQuestion = ({
   };
 
   return (
-    <div className="py-2">
+    <div className="py-2 h-[60vh]">
       {/* Buttons for each sheet */}
       <div className="flex  mb-2">
         {Object.keys(excelFile).map((sheetName) => (
@@ -152,7 +152,7 @@ const SelectQuestion = ({
                 : "border-red-600 bg-white"
             }`}
           >
-            {sheetName}
+            {sheetName} 
           </button>
         ))}
       </div>
@@ -175,8 +175,8 @@ const SelectQuestion = ({
               {[...excelFile[visibleTable]]
                 .filter(
                   (row, index) =>
-                    Array.isArray(row) && index !== selectedRows[visibleTable]
-                ) // Ensure each row is an array and filter out selected row
+                    Array.isArray(row) && index !== selectedRows[visibleTable]) // Ensure each row is an array and filter out selected row
+                .slice(selectedRows[visibleTable]) // remove the data before the selected header row
                 .slice(0, 3) // Slice the filtered rows to get rows between index 1 and 3
                 .map((row, rowIndex) => (
                   <tr
