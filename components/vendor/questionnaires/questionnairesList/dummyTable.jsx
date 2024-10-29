@@ -188,7 +188,7 @@ const DummyQuestionnairesList = ({questionList ,questionnaireData}) => {
                   {item?.compliance ? item.compliance  : <Settings className="text-blue-600 spin-slow" /> }
                     
                   </td>
-                  <td className="px-4 py-2 text-center border">
+                  <td className="px-4 py-2  border">
                   {item?.answer ? item.answer : <Settings className="text-blue-600 spin-slow" /> }
                   </td>
                   <td className="px-4 py-2 text-center border w-[100px]">

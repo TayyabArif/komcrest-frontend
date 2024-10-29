@@ -42,7 +42,7 @@ const History = ({
     setOnlineResourceIds(
       selectedQuestionnaireReference
         ?.filter((item) => item.referenceType === "OnlineResource")
-        .map((item) => item.referenceId)
+        .map((item) => ({ referenceId: item.referenceId, pageNumber: item.pageNumber }))
     );
     setQuestionIds(
       selectedQuestionnaireReference
@@ -52,7 +52,7 @@ const History = ({
     setDocumentIds(
       selectedQuestionnaireReference
         ?.filter((item) => item.referenceType === "Document")
-        .map((item) => item.referenceId)
+        .map((item) => ({ referenceId: item.referenceId, pageNumber: item.pageNumber }))
     );
   }, [selectedQuestionnaireReference]);
 
@@ -92,7 +92,8 @@ const History = ({
   };
   const fetchReferenceOnlineResource = async () => {
     const token = cookiesData && cookiesData.token;
-    const paylaod = { ids: onlineResourceIds };
+    const referenceIds = onlineResourceIds.map(item => item.referenceId);
+    const paylaod = { ids: referenceIds };
     const requestOptions = {
       method: "POST",
       headers: {
@@ -113,7 +114,14 @@ const History = ({
       );
       if (response.ok) {
         console.log("::::::::::", data);
-        setOnlineResourceReferenceData(data);
+        const updatedArray = data.map(item => {
+          const match = onlineResourceIds.find(ref => ref.referenceId === item.id);
+          if (match) {
+              return { ...item, pageNumber: match.pageNumber };
+          }
+          return item;
+      });
+        setOnlineResourceReferenceData(updatedArray);
       } else {
         toast.error(data?.error);
       }
@@ -123,7 +131,8 @@ const History = ({
   };
   const fetchReferenceDocument = async () => {
     const token = cookiesData && cookiesData.token;
-    const paylaod = { ids: documentIds };
+    const referenceIds = documentIds.map(item => item.referenceId);
+    const paylaod = { ids: referenceIds };
     const requestOptions = {
       method: "POST",
       headers: {
@@ -143,8 +152,18 @@ const History = ({
         removeCookie
       );
       if (response.ok) {
-        console.log("::::::::::", data);
-        setDocumentReferenceData(data);
+        console.log(">>>>>>>>>>", data);
+
+
+        const updatedArray = data.map(item => {
+          const match = documentIds.find(ref => ref.referenceId === item.id);
+          if (match) {
+              return { ...item, pageNumber: match.pageNumber };
+          }
+          return item;
+      });
+
+        setDocumentReferenceData(updatedArray);
       } else {
         toast.error(data?.error);
       }

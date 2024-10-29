@@ -8,11 +8,12 @@ const OnlineResourceHistory = ({ onlineResourceReferenceData }) => {
         onlineResourceReferenceData.map((doc, index) => (
           <div
             key={index}
-            className="bg-white shadow-md space-y-5 rounded-md py-2 px-4 mb-4"
+            className="bg-white shadow-md  rounded-md py-2 px-4 mb-4"
           >
-            <a href="#" className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] ">
+            <a href="#" className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px]  ">
               {doc.title}
             </a>
+            <p className="text-sm text-gray-600 2xl:text-[20px] text-[16px] ">Pages: {doc.pageNumber}</p>
             <div className="flex justify-between">
               <div className="flex gap-7">
                 {/* You can uncomment these lines if you want to display the link or file */}

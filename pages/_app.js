@@ -16,6 +16,7 @@ export default function App({ Component, pageProps }) {
       const currentPath = window.location.pathname;
       if (currentPath == "/") {
         removeCookie("myCookie", { path: "/" });
+        // window.open("https://komcrest.tilda.ws/" , "_blank");
         router.push("/vendor/login/access");
         localStorage.removeItem("selectedSideBar");
       }
