@@ -57,6 +57,7 @@ const QuestionnairesView = () => {
     isDocumentOpen : true,
     isOnlineOpen : true
   })
+  const [seletedQuestionnaireReference , setSeletedQuestionnaireReference] = useState()
 
   const [selectedQuestionnaireReference, setSelectedQuestionnaireReference] =
     useState();
@@ -697,7 +698,7 @@ const QuestionnairesView = () => {
                                 }`}
                               ></div>
                             </td>
-                            <td className="px-4 py-2 border  !w-[500px]">
+                            <td className="px-4 py-2 border   min-w-[350px] xl:min-w-[500px]">
                               {item.question}
                             </td>
                             <td
@@ -742,7 +743,7 @@ const QuestionnairesView = () => {
                               setSelectedTextAreaId(item.id);
                               setAnswerIsUpdate("single");
                             }}
-                              className={`px-4 py-2  !min-w-[450px]  !text-wrap  border ${
+                              className={`px-4 py-2  !min-w-[450px]   !text-wrap  border ${
                                 item.confidence < 7
                                   ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
                                   : ""

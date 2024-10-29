@@ -9,7 +9,7 @@ const DocumentHistory = ({documentReferenceData}) => {
     <div key={index} className="bg-white shadow-md rounded-md p-4 mb-4">
       <a href="#" className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px]">{doc.title}</a>
       <div className='flex justify-between'>
-        <p className="text-sm text-gray-600 mb-2 2xl:text-[20px] text-[16px]">Pages: {doc.pages}</p>
+        <p className="text-sm text-gray-600 mb-2 2xl:text-[20px] text-[16px]">Pages: {doc.pageNumber}</p>
         <div className="flex justify-end space-x-4 mt-2">
           <FilePenLine className="cursor-pointer text-gray-500" size={18} />
           <ThumbsUp className="cursor-pointer text-gray-500" size={18} />

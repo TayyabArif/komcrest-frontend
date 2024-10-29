@@ -10,6 +10,7 @@ import { formatDate } from "../../../../helper";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import {  handleDownload} from "@/helper";
+import { saveAs } from "file-saver";
 
 const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
   const router = useRouter();
@@ -57,29 +58,33 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
       });
   };
   
-  const handleDownload = (filePath) => {
+ 
+  
+  const handleDownload = async (filePath) => {
     if (typeof filePath === "string") {
       const fileName = filePath.split("/").pop();
       const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${fileName}`;
-      const fileExtension = fileName.split('.').pop().toLowerCase(); // Get the file extension
   
-      if (fileExtension === 'pdf') {
-        // Open PDF in a new tab
-        window.open(downloadUrl, '_blank');
-      } else {
-        // For other file types, force download
-        const link = document.createElement("a");
-        link.href = downloadUrl;
-        link.setAttribute("download", fileName); // This attribute forces download
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        toast.success("Document downloaded successfully")
+      try {
+        const response = await fetch(downloadUrl);
+        if (!response.ok) throw new Error("Network response was not ok");
+  
+        const blob = await response.blob();
+   
+        // Directly trigger download without asking location
+        saveAs(blob, fileName);
+  
+        // Show success toast
+        toast.success("Document downloaded successfully");
+      } catch (error) {
+        console.error("Download failed:", error);
+        toast.error("Failed to download document");
       }
     } else {
-      alert('Invalid file path.');
+      alert("Invalid file path.");
     }
   };
+  
   
   
 
