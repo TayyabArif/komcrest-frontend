@@ -9,6 +9,7 @@ import { handleResponse } from "../../../../helper";
 import { useRouter } from "next/router";
 import { json } from "react-router-dom";
 import { ChevronRight, ChevronDown } from "lucide-react";
+import { toast } from "react-toastify";
 
 const History = ({
   selectedId,
@@ -42,23 +43,38 @@ const History = ({
     setOnlineResourceIds(
       selectedQuestionnaireReference
         ?.filter((item) => item.referenceType === "OnlineResource")
-        .map((item) => ({ referenceId: item.referenceId, pageNumber: item.pageNumber }))
+        .map((item) => ({
+          referenceId: item.referenceId,
+          pageNumber: item.pageNumber,
+          referenceStatus: item.likes,
+          referenceRecordId: item.id,
+        }))
     );
     setQuestionIds(
       selectedQuestionnaireReference
         ?.filter((item) => item.referenceType === "Question")
-        .map((item) => item.referenceId)
+        .map((item) => ({
+        referenceId: item.referenceId ,
+        referenceStatus: item.likes,
+        referenceRecordId: item.id
+      }))
     );
     setDocumentIds(
       selectedQuestionnaireReference
         ?.filter((item) => item.referenceType === "Document")
-        .map((item) => ({ referenceId: item.referenceId, pageNumber: item.pageNumber }))
+        .map((item) => ({
+          referenceId: item.referenceId,
+          pageNumber: item.pageNumber,
+          referenceStatus: item.likes,
+          referenceRecordId: item.id,
+        }))
     );
   }, [selectedQuestionnaireReference]);
 
   const fetchReferenceQuestion = async () => {
     const token = cookiesData && cookiesData.token;
-    const paylaod = { ids: questionIds };
+    const referenceIds = questionIds.map((item) => item.referenceId);
+    const paylaod = { ids: referenceIds };
     const requestOptions = {
       method: "POST",
       headers: {
@@ -82,7 +98,23 @@ const History = ({
       );
       if (response.ok) {
         console.log("::::::::::", data);
-        setQuestionReferenceData(data);
+
+
+        const updatedArray = data.map((item) => {
+          const match = questionIds.find(
+            (ref) => ref.referenceId === item.id
+          );
+          if (match) {
+            return {
+              ...item,
+              referenceStatus: match.referenceStatus[0]?.likeType,
+              referenceRecordId: match.referenceRecordId,
+            };
+          }
+          return item;
+        });
+       
+        setQuestionReferenceData(updatedArray);
       } else {
         toast.error(data?.error);
       }
@@ -92,7 +124,7 @@ const History = ({
   };
   const fetchReferenceOnlineResource = async () => {
     const token = cookiesData && cookiesData.token;
-    const referenceIds = onlineResourceIds.map(item => item.referenceId);
+    const referenceIds = onlineResourceIds.map((item) => item.referenceId);
     const paylaod = { ids: referenceIds };
     const requestOptions = {
       method: "POST",
@@ -114,13 +146,21 @@ const History = ({
       );
       if (response.ok) {
         console.log("::::::::::", data);
-        const updatedArray = data.map(item => {
-          const match = onlineResourceIds.find(ref => ref.referenceId === item.id);
+
+        const updatedArray = data.map((item) => {
+          const match = onlineResourceIds.find(
+            (ref) => ref.referenceId === item.id
+          );
           if (match) {
-              return { ...item, pageNumber: match.pageNumber };
+            return {
+              ...item,
+              pageNumber: match.pageNumber,
+              referenceStatus: match.referenceStatus[0]?.likeType,
+              referenceRecordId: match.referenceRecordId,
+            };
           }
           return item;
-      });
+        });
         setOnlineResourceReferenceData(updatedArray);
       } else {
         toast.error(data?.error);
@@ -131,7 +171,7 @@ const History = ({
   };
   const fetchReferenceDocument = async () => {
     const token = cookiesData && cookiesData.token;
-    const referenceIds = documentIds.map(item => item.referenceId);
+    const referenceIds = documentIds.map((item) => item.referenceId);
     const paylaod = { ids: referenceIds };
     const requestOptions = {
       method: "POST",
@@ -154,14 +194,18 @@ const History = ({
       if (response.ok) {
         console.log(">>>>>>>>>>", data);
 
-
-        const updatedArray = data.map(item => {
-          const match = documentIds.find(ref => ref.referenceId === item.id);
+        const updatedArray = data.map((item) => {
+          const match = documentIds.find((ref) => ref.referenceId === item.id);
           if (match) {
-              return { ...item, pageNumber: match.pageNumber };
+            return {
+              ...item,
+              pageNumber: match.pageNumber,
+              referenceStatus: match.referenceStatus[0]?.likeType,
+              referenceRecordId: match.referenceRecordId,
+            };
           }
           return item;
-      });
+        });
 
         setDocumentReferenceData(updatedArray);
       } else {
@@ -190,18 +234,6 @@ const History = ({
     }
   }, [questionIds, onlineResourceIds, documentIds]);
 
-  // useEffect(()=>{
-  //   if(onlineResourceIds?.length > 0 ){
-  //     fetchReferenceOnlineResource()
-  //   }
-  // },[onlineResourceIds])
-
-  // useEffect(()=>{
-  //   if(documentIds?.length > 0 ){
-  //     fetchReferenceDocument()
-  //   }
-  // },[documentIds])
-
   const handleChange = (event) => {
     setReferenceSelect(event.target.value);
   };
@@ -212,8 +244,53 @@ const History = ({
     className: "text-[#2457D7]",
   };
 
+  // like unlike
+
+  const statusUpdate = async (referenceRecordId, statusType) => {
+    const token = cookiesData && cookiesData.token;
+
+    function checkStatusType() {
+      if (statusType === "like" || statusType === "removeLike") {
+        return "like";
+      } else if (statusType === "dislike" || statusType === "removeDislike") {
+        return "dislike";
+      }
+      return null;
+    }
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(
+        `${baseUrl}/reference/${referenceRecordId}/${checkStatusType()}`,
+        requestOptions
+      );
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
+      if (response.ok) {
+        console.log(":>>>>>>>>>>>>>>>>>", data);
+        toast.success(data.message);
+      } else {
+        toast.error(data?.error);
+      }
+    } catch (error) {
+      console.error("Error fetching reference:", error);
+    }
+  };
+
   return (
-    <div className="bg-[#F2F2F2] px-5 h-[75vh] overflow-scroll">
+    <div className="bg-[#F2F2F2] px-5 h-[73vh] overflow-scroll">
       <div className="sticky top-0 py-5  z-50 bg-[#F2F2F2] space-y-3 ">
         <div className="flex justify-between  items-center ">
           <div className="flex items-center justify-between gap-10">
@@ -245,38 +322,7 @@ const History = ({
             }}
           />
         </div>
-
-        {/* {selectedOption === "references" && (
-          <div className="flex items-center">
-            <select
-              className="w-[150px] text-[15px] border rounded-lg pr-3 p-2"
-              value={referenceSelect}
-              onChange={handleChange}
-            >
-              <option value="" disabled>
-                Select
-              </option>
-              <option value="document">Document</option>
-              <option value="online">Online Resource</option>
-              <option value="knowledge">Knowledge</option>
-            </select>
-          </div>
-        )} */}
       </div>
-
-      {/* Conditionally render components based on selected option */}
-      {/* {referenceSelect === "knowledge" && selectedOption === "references" && (
-        <KnowledgeHistory questionReferenceData={questionReferenceData} />
-      )}
-      {referenceSelect === "document" && selectedOption === "references" && (
-        <DocumentHistory documentReferenceData={documentReferenceData} />
-      )}
-      {referenceSelect === "online" && selectedOption === "references" && (
-        <OnlineResourceHistory
-          onlineResourceReferenceData={onlineResourceReferenceData}
-        />
-      )} */}
-
       {selectedOption === "references" && (
         <div className="space-y-4 mt-5">
           <div
@@ -288,7 +334,9 @@ const History = ({
               }))
             }
           >
-            <h1 className="2xl:text-[20px] text-[16px] font-semibold">Documents</h1>
+            <h1 className="2xl:text-[20px] text-[16px] font-semibold">
+              Documents
+            </h1>
             {referenceToggle.isDocumentOpen ? (
               <ChevronDown {...iconProps} />
             ) : (
@@ -296,7 +344,11 @@ const History = ({
             )}
           </div>
           {referenceToggle.isDocumentOpen && (
-            <DocumentHistory documentReferenceData={documentReferenceData} />
+            <DocumentHistory
+              documentReferenceData={documentReferenceData}
+              statusUpdate={statusUpdate}
+              setDocumentReferenceData={setDocumentReferenceData}
+            />
           )}
 
           <div
@@ -309,7 +361,9 @@ const History = ({
             }
           >
             {" "}
-            <h1  className="2xl:text-[20px] text-[16px] font-semibold">Knowledge Base</h1>
+            <h1 className="2xl:text-[20px] text-[16px] font-semibold">
+              Knowledge Base
+            </h1>
             {referenceToggle.isKnowledgeOpen ? (
               <ChevronDown {...iconProps} />
             ) : (
@@ -317,7 +371,11 @@ const History = ({
             )}
           </div>
           {referenceToggle.isKnowledgeOpen && (
-            <KnowledgeHistory questionReferenceData={questionReferenceData} />
+            <KnowledgeHistory questionReferenceData={questionReferenceData}
+            statusUpdate={statusUpdate}
+            setQuestionReferenceData={setQuestionReferenceData}
+            
+            />
           )}
 
           <div
@@ -329,7 +387,9 @@ const History = ({
               }))
             }
           >
-            <h1 className="2xl:text-[20px] text-[16px] font-semibold">Online Reference</h1>
+            <h1 className="2xl:text-[20px] text-[16px] font-semibold">
+              Online Reference
+            </h1>
             {referenceToggle.isOnlineOpen ? (
               <ChevronDown {...iconProps} />
             ) : (
@@ -339,6 +399,8 @@ const History = ({
           {referenceToggle.isOnlineOpen && (
             <OnlineResourceHistory
               onlineResourceReferenceData={onlineResourceReferenceData}
+              statusUpdate={statusUpdate}
+              setOnlineResourceReferenceData={setOnlineResourceReferenceData}
             />
           )}
         </div>
