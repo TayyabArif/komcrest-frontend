@@ -19,11 +19,11 @@ import ValidateData from "./ValidateData";
 import { useMyContext } from "@/context";
 import useSocket from "@/customHook/useSocket";
 
-const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuestionnaireData }) => {
+const Import = ({setNewQuestionnaireCreated}) => {
 
   const { companyProducts } = useMyContext();
   const [stepper, setStepper] = useState(0);
-  const { setQuestionnaireUpdated } = useMyContext();
+  const { setQuestionnaireUpdated ,setQuestionList , setQuestionnaireData,setCurrentQuestionnaireImportId ,setIsSocketConnected } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -243,6 +243,7 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
     };
 
     setQuestionList(result);
+
     setQuestionnaireData({fileName : importQuestionnaires.fileName ,
       customerName :importQuestionnaires.customerName,
        originalFile :importQuestionnaires.originalFile
@@ -263,10 +264,9 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
     };
     // Introduce a 2-second delay before making the API call
     setTimeout(() => {
-      setImportSuccessfully(true);
+      setIsSocketConnected (true);
     }, 1500);
-
-      // setImportSuccessfully(true)
+      setNewQuestionnaireCreated(false)
       fetch(`${baseUrl}/questionnaires`, requestOptions)
       
         .then(async (response) => {
@@ -285,14 +285,15 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
         .then(({ status, ok, data }) => {
           if (ok) {
             toast.success("Questionnaires created successfully");
+            setQuestionnaireUpdated((prev) => !prev);
             localStorage.setItem(
               "QuestionnaireId",
               data?.fullQuestionnaire?.id
             );
+            setCurrentQuestionnaireImportId("")
             router.push(
               `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`
-            );
-            uploadFile(data?.fullQuestionnaire?.id);
+            ); 
           } else {
             toast.error(data?.error || "Questionnaires not Created");
             console.error("Error:", data);
@@ -310,52 +311,8 @@ const Import = ({ setImportSuccessfully, setQuestionList, questionList ,setQuest
  
   };
 
-  const uploadFile = (id) => {
-    const formData = new FormData();
-    formData.append("file", importQuestionnaires.originalFile);
-    const token = cookiesData.token;
-    let requestOptions = {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-      redirect: "follow",
-    };
-
-    fetch(`${baseUrl}/questionnaire/file/${id}`, requestOptions)
-      .then(async (response) => {
-        const data = await handleResponse(
-          response,
-          router,
-          cookies,
-          removeCookie
-        );
-        return {
-          status: response.status,
-          ok: response.ok,
-          data,
-        };
-      })
-      .then(({ status, ok, data }) => {
-        if (ok) {
-          setQuestionnaireUpdated((prev) => !prev);
-        } else {
-          console.error("Error:", data);
-        }
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.error("API Error:", error.response);
-          toast.error(
-            error.response.data?.error ||
-              "An error occurred while Updated  Questionnaires status"
-          );
-        }
-      });
-  };
-
-  const handleCancelClick = () => {
+ 
+ const handleCancelClick = () => {
     if (stepper > 0) {
       setStepper(stepper - 1);
       setProgressBar(progressBar - 27);
