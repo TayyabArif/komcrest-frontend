@@ -129,7 +129,7 @@ const QuestionnairsListHeader = ({
             {/* - {questionnaireData?.fileName.replace(".xlsx", "")} */}
           </p>
         </div>
-        <div className="min-h-[80px]">
+        <div className="min-h-[70px]">
           {currentQuestionnaireImportId !== id && (
             <div className="flex items-center gap-3">
               <select

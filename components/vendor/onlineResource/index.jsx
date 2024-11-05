@@ -112,9 +112,15 @@ const OnlineResourceComponent = () => {
   };
 
   const handleBulkDelete = async () => {
-    const token = cookiesData.token;
+    const token = cookiesData?.token;
+    
+    if (!token) {
+      toast.error("Authorization token is missing");
+      return;
+    }
+  
     const requestOptions = {
-      method: "post",
+      method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -122,15 +128,25 @@ const OnlineResourceComponent = () => {
       body: JSON.stringify({ ids: bulkDeleted }),
       redirect: "follow",
     };
-    fetch(`${baseUrl}/resource/delete`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
+  
+    try {
+      const response = await fetch(`${baseUrl}/resource/delete`, requestOptions);
+      const result = await response.json();
+  
+      if (response.ok) {
         toast.success("Online Resources deleted successfully");
-        setDataUpdate(!dataUpdate);
+        setDataUpdate((prevState) => !prevState);
         setBulkDeleted([]);
-      })
-      .catch((error) => console.error(error));
+      } else {
+        const errorMessage = result?.message || "Failed to delete resources";
+        toast.error(errorMessage);
+      }
+    } catch (error) {
+      console.error("Bulk delete error:", error.message);
+      toast.error("Error deleting resources");
+    }
   };
+  
 
   const handleDelete = () => {
     if (deleteAction == "single") {
@@ -175,7 +191,7 @@ const OnlineResourceComponent = () => {
             buttonShow={onlineResourceData.length > 0 ? true : false}
           />
           {onlineResourceData.length > 0 ? (
-            <div className=" w-[85%] mx-auto  mt-1">
+            <div className=" w-[85%] mx-auto   flex flex-col h-[80vh] 2xl:h-[82vh]">
               <div className="flex justify-end h-[40px]">
                 {bulkDeleted.length > 0 && (
                   <Button
@@ -190,7 +206,7 @@ const OnlineResourceComponent = () => {
                   </Button>
                 )}
               </div>
-              <div className="w-[100%] overflow-x-auto relative  max-h-[70vh]">
+              <div className="w-[100%] overflow-x-auto flex-1 relative ">
                 <table className="">
                   <thead className="block md:table-header-group sticky -top-1 z-30 ">
                     <tr className="border text-[16px] 2xl:text-[20px] ">

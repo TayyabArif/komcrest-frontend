@@ -21,6 +21,7 @@ const History = ({
   selectedQuestionnaireReference,
   setReferenceToggle,
   referenceToggle,
+  reRunForAnswer,
 }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -39,6 +40,8 @@ const History = ({
     useState([]);
   const [documentReferenceData, setDocumentReferenceData] = useState([]);
 
+  const [referenceHaveDislike, setReferenceHaveDislike] = useState(false);
+
   useEffect(() => {
     setOnlineResourceIds(
       selectedQuestionnaireReference
@@ -54,10 +57,10 @@ const History = ({
       selectedQuestionnaireReference
         ?.filter((item) => item.referenceType === "Question")
         .map((item) => ({
-        referenceId: item.referenceId ,
-        referenceStatus: item.likes,
-        referenceRecordId: item.id
-      }))
+          referenceId: item.referenceId,
+          referenceStatus: item.likes,
+          referenceRecordId: item.id,
+        }))
     );
     setDocumentIds(
       selectedQuestionnaireReference
@@ -99,11 +102,8 @@ const History = ({
       if (response.ok) {
         console.log("::::::::::", data);
 
-
         const updatedArray = data.map((item) => {
-          const match = questionIds.find(
-            (ref) => ref.referenceId === item.id
-          );
+          const match = questionIds.find((ref) => ref.referenceId === item.id);
           if (match) {
             return {
               ...item,
@@ -113,7 +113,7 @@ const History = ({
           }
           return item;
         });
-       
+
         setQuestionReferenceData(updatedArray);
       } else {
         toast.error(data?.error);
@@ -289,9 +289,34 @@ const History = ({
     }
   };
 
+  // check some one have dislike or not
+
+  useEffect(() => {
+    function checkDislikeStatusHave() {
+      const allArrays = [
+        ...questionReferenceData,
+        ...onlineResourceReferenceData,
+        ...documentReferenceData,
+      ];
+
+      const result = allArrays.some(
+        (item) => item.referenceStatus === "dislike"
+      );
+      setReferenceHaveDislike((prev) => {
+        return result;
+      });
+    }
+
+    checkDislikeStatusHave();
+  }, [
+    questionReferenceData,
+    onlineResourceReferenceData,
+    documentReferenceData,
+  ]);
+
   return (
     <div className="bg-[#F2F2F2] px-5 h-[73vh] overflow-scroll">
-      <div className="sticky top-0 py-5  z-50 bg-[#F2F2F2] space-y-3 ">
+      <div className="sticky top-0 py-[10px]  z-50 bg-[#F2F2F2] space-y-3 ">
         <div className="flex justify-between  items-center ">
           <div className="flex items-center justify-between gap-10">
             <h1
@@ -300,15 +325,15 @@ const History = ({
                 setReferenceSelect("document");
               }}
               className={`text-xl font-bold cursor-pointer 2xl:text-[20px] text-[16px]  ${
-                selectedOption === "references" ? "text-blue-600" : ""
+                selectedOption === "references" ? "text-blue-600" : "text-gray-700"
               } `}
             >
-              References
+              References 
             </h1>
             <h1
               onClick={() => setSelectedOption("history")}
-              className={`text-xl font-bold cursor-pointer 2xl:text-[20px] text-[16px]  ${
-                selectedOption === "history" ? "text-blue-600" : ""
+              className={`text-xl font-bold  cursor-pointer 2xl:text-[20px] text-[16px]  ${
+                selectedOption === "history" ? "text-blue-600" : "text-gray-700"
               } `}
             >
               History
@@ -323,6 +348,12 @@ const History = ({
           />
         </div>
       </div>
+      { selectedOption === "references" && referenceHaveDislike && (
+        <h1 onClick={()=>reRunForAnswer([selectedId])} className="underline text-blue-600 cursor-pointer 2xl:text-[20px] text-[16px]">
+          Re run AI for compliance & answer by excluding non relevant references
+        </h1>
+      )}
+
       {selectedOption === "references" && (
         <div className="space-y-4 mt-5">
           <div
@@ -334,9 +365,7 @@ const History = ({
               }))
             }
           >
-            <h1 className="2xl:text-[20px] text-[16px] font-semibold">
-              Documents
-            </h1>
+            <h1 className="2xl:text-[20px] text-[16px] font-bold">Documents</h1>
             {referenceToggle.isDocumentOpen ? (
               <ChevronDown {...iconProps} />
             ) : (
@@ -361,7 +390,7 @@ const History = ({
             }
           >
             {" "}
-            <h1 className="2xl:text-[20px] text-[16px] font-semibold">
+            <h1 className="2xl:text-[20px] text-[16px] font-bold">
               Knowledge Base
             </h1>
             {referenceToggle.isKnowledgeOpen ? (
@@ -371,10 +400,10 @@ const History = ({
             )}
           </div>
           {referenceToggle.isKnowledgeOpen && (
-            <KnowledgeHistory questionReferenceData={questionReferenceData}
-            statusUpdate={statusUpdate}
-            setQuestionReferenceData={setQuestionReferenceData}
-            
+            <KnowledgeHistory
+              questionReferenceData={questionReferenceData}
+              statusUpdate={statusUpdate}
+              setQuestionReferenceData={setQuestionReferenceData}
             />
           )}
 
@@ -387,7 +416,7 @@ const History = ({
               }))
             }
           >
-            <h1 className="2xl:text-[20px] text-[16px] font-semibold">
+            <h1 className="2xl:text-[20px] text-[16px] font-bold">
               Online Reference
             </h1>
             {referenceToggle.isOnlineOpen ? (
