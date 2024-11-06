@@ -314,7 +314,7 @@ const History = ({
   ]);
 
   return (
-    <div className="bg-[#F2F2F2] px-5 h-[73vh] overflow-scroll">
+    <div className="bg-[#F2F2F2] px-5 h-[74vh] 2xl:h-[80vh] overflow-scroll">
       <div className="sticky top-0 py-[7px]  z-50 bg-[#F2F2F2] space-y-3 ">
         <div className="flex justify-between  items-center ">
           <div className="flex items-center justify-between gap-10">

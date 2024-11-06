@@ -191,7 +191,7 @@ const OnlineResourceComponent = () => {
             buttonShow={onlineResourceData.length > 0 ? true : false}
           />
           {onlineResourceData.length > 0 ? (
-            <div className=" w-[85%] mx-auto   flex flex-col h-[80vh] 2xl:h-[82vh]">
+            <div className=" w-[85%] mx-auto   flex flex-col max-h-[80vh] 2xl:max-h-[82vh]">
               <div className="flex justify-end h-[40px]">
                 {bulkDeleted.length > 0 && (
                   <Button
@@ -206,8 +206,8 @@ const OnlineResourceComponent = () => {
                   </Button>
                 )}
               </div>
-              <div className="w-[100%] overflow-x-auto flex-1 relative ">
-                <table className="">
+              <div className="overflow-auto flex-1 relative">
+                <table className="w-[100%]">
                   <thead className="block md:table-header-group sticky -top-1 z-30 ">
                     <tr className="border text-[16px] 2xl:text-[20px] ">
                       <th className="py-2 px-4 border  text-left bg-gray-200">

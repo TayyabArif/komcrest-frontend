@@ -14,13 +14,17 @@ import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { handleResponse } from "../../../../helper/index";
 
-const UpdatePrompt = ({ isOpen, onOpenChange, prompt ,setDataUpdate}) => {
-  const [cookies, setCookie, removeCookie] = useCookies(['myCookie']);
+const UpdatePrompt = ({ isOpen, onOpenChange, prompt, setDataUpdate }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  const [updatedPrompt, setUpdatedPrompt] = useState({ prompt: '' });
+  const [updatedPrompt, setUpdatedPrompt] = useState({
+     prompt: "",
+     frequencyPenalty : "",
+     temperature : ""
+    });
 
   useEffect(() => {
     if (prompt) {
@@ -36,17 +40,25 @@ const UpdatePrompt = ({ isOpen, onOpenChange, prompt ,setDataUpdate}) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ prompt: updatedPrompt.prompt }),
+      body: JSON.stringify(updatedPrompt),
       redirect: "follow",
     };
 
     try {
-      const response = await fetch(`${baseUrl}/prompts/${prompt.id}`, requestOptions);
-      const data = await handleResponse(response, router, cookies, removeCookie);
+      const response = await fetch(
+        `${baseUrl}/prompts/${prompt.id}`,
+        requestOptions
+      );
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
       if (response.ok) {
         toast.success("Prompt updated successfully");
         onOpenChange(false);
-        setDataUpdate((pre)=>!pre)
+        setDataUpdate((pre) => !pre);
       }
     } catch (error) {
       console.error("Error updating prompt:", error);
@@ -71,6 +83,45 @@ const UpdatePrompt = ({ isOpen, onOpenChange, prompt ,setDataUpdate}) => {
               {updatedPrompt.title}
             </ModalHeader>
             <ModalBody>
+              <div className="flex gap-3">
+                <div className="w-[50%]">
+                  <label className="text-[16px] 2xl:text-[20px]">
+                  Frequency Penalty
+                  </label>
+                  <Input
+                    type="number"
+                    variant="bordered"
+                    size="md"
+                    radius="sm"
+                    min={0}
+                    name="frequencyPenalty"
+                    value={updatedPrompt?.frequencyPenalty}
+                    onChange={handleChange}
+                    classNames={{
+                      input: "text-base 2xl:text-[20px]",
+                    }}
+                  />
+                </div>
+                <div className="w-[50%]">
+                  <label className="text-[16px] 2xl:text-[20px]">
+                  Temperature
+                  </label>
+                  <Input
+                    type="number"
+                    variant="bordered"
+                    size="md"
+                    radius="sm"
+                    min={0}
+                    name="temperature"
+                    value={updatedPrompt?.temperature}
+                    onChange={handleChange}
+                    classNames={{
+                      input: "text-base 2xl:text-[20px]",
+                    }}
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className="text-[16px] 2xl:text-[20px]">Prompt</label>
                 <Textarea

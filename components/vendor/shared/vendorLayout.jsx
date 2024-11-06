@@ -81,8 +81,7 @@ const VendorLayout = ({ children }) => {
           </div>
         </div>
       </div>
-      <div className="ml-[15%] w-[85%] fixed">
-       
+      <div className="ml-[15%] w-[85%] fixed h-screen">
         <div className="py-2 text-right flex justify-end gap-2 font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
         <h1>{loogedinUser}</h1>
         <Button
@@ -94,7 +93,7 @@ const VendorLayout = ({ children }) => {
           Logout
         </Button>
         </div>
-        <div className="flex flex-col bg-[#ebeef2]  h-[95vh]">
+        <div className="flex flex-col bg-[#ebeef2] h-full ">
           {children}
         </div>
       </div>
