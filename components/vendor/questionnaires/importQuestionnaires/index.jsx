@@ -265,8 +265,9 @@ const Import = ({setNewQuestionnaireCreated}) => {
     // Introduce a 2-second delay before making the API call
     setTimeout(() => {
       setIsSocketConnected (true);
-    }, 1500);
       setNewQuestionnaireCreated(false)
+    }, 1500);
+     
       fetch(`${baseUrl}/questionnaires`, requestOptions)
       
         .then(async (response) => {
