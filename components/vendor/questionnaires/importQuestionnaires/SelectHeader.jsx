@@ -28,18 +28,6 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
     }));
   };
 
-  // const handleRemoveSheet = (sheetName) => {
-  //   const updatedSheetsData = { ...excelFile };
-  //   delete updatedSheetsData[sheetName];
-  //   setExcelFile(updatedSheetsData);
-
-  //   const updatedSelectedRows = { ...selectedRows };
-  //   delete updatedSelectedRows[sheetName];
-  //   console.log(">>>>>>>>>>>",updatedSelectedRows)
-  //   setSelectedRows(updatedSelectedRows)
-
-  // };
-
   const handleRemoveSheet = (sheetName) => {
     // Remove sheet from excelFile
     const updatedSheetsData = { ...excelFile };

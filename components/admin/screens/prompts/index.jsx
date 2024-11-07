@@ -22,6 +22,8 @@ const PromptsComponent = () => {
   const prompt_columns = [
     { uid: "title", name: "Title" },
     { uid: "prompt", name: "Prompt" },
+    { uid: "frequencyPenalty", name: "Frequency Penalty" },
+    { uid: "temperature", name: "Temperature" },
     { uid: "actions", name: "Actions" },
   ];
 
@@ -111,6 +113,12 @@ const PromptsComponent = () => {
                   </td>
                   <td className="py-3 px-4 text-left text-gray-600">
                     {truncateText(item.prompt, 167)}
+                  </td>
+                  <td className="py-3 px-4 text-left text-gray-600">
+                   {item.frequencyPenalty}
+                  </td>
+                  <td className="py-3 px-4 text-left text-gray-600">
+                    {item.temperature}
                   </td>
                   <td className="py-3 px-10 text-gray-600 ">
                     <div className="flex items-center justify-center gap-3 h-full">

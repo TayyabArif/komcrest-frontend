@@ -1,18 +1,14 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import Import from "@/components/vendor/questionnaires/importQuestionnaires";
 import VendorLayout from "../../../components/vendor/shared/vendorLayout";
-import DummyQuestionnairesList from "@/components/vendor/questionnaires/questionnairesList/dummyTable";
+import SocketQuestionnairesList from "@/components/vendor/questionnaires/questionnairesList/qustionGetWithSocket";
+import { useMyContext } from "@/context";
 const ImportQuestionnaire = () => {
-  const [importSuccessfully ,setImportSuccessfully] = useState(false)
-  const [questionList , setQuestionList] = useState()
-  const [questionnaireData , setQuestionnaireData] = useState({
-    filename:"",
-    customerName : ""
-  })
-  console.log("KKKKKKK",questionList)
+  const [newQuestionnaireCreated , setNewQuestionnaireCreated] = useState(true)
+  
   return (
     <VendorLayout>
-      {importSuccessfully ? <DummyQuestionnairesList questionList={questionList} questionnaireData={questionnaireData} /> : <Import setImportSuccessfully={setImportSuccessfully} setQuestionList={setQuestionList} questionList={questionList} setQuestionnaireData={setQuestionnaireData}/>}
+      {newQuestionnaireCreated ?  <Import  setNewQuestionnaireCreated={setNewQuestionnaireCreated} /> : <SocketQuestionnairesList />}
     </VendorLayout>
   );
 };

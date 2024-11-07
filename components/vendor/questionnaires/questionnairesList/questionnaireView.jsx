@@ -500,7 +500,7 @@ const QuestionnairesView = () => {
             questionnaireData={questionnaireData}
             setDataUpdate={setDataUpdate}
           />
-          <div className="w-[86%] mx-auto ">
+          <div className="w-[86%] mx-auto">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-1 my-2">
                 <Input
@@ -633,7 +633,7 @@ const QuestionnairesView = () => {
                   />
                 </div>
               )}
-              <div className="overflow-auto w-[100%]  max-h-[73vh]  bg-white border ">
+              <div className="overflow-auto w-[100%]  max-h-[74vh] 2xl:max-h-[78vh]  bg-white border">
                 <table className="min-w-[100%] border-2 text-gray-700 ">
                   <thead className="border  sticky -top-1 bg-[#E5E7EB] z-50">
                     <tr className="2xl:text-[20px] text-[16px]">
@@ -1000,6 +1000,7 @@ const QuestionnairesView = () => {
                     }
                     referenceToggle={referenceToggle}
                     setReferenceToggle ={setReferenceToggle}
+                    reRunForAnswer={reRunForAnswer}
                   />
                 </div>
               )}
