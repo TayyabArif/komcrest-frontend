@@ -10,7 +10,7 @@ import {
 
 const PreviewModal = ({ isOpen, onOpenChange, prompt }) => {
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal size="5xl" isOpen={isOpen}   onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
