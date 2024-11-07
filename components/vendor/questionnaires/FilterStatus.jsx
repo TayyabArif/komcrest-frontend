@@ -23,8 +23,8 @@ const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireP
   });
 
   return (
-    <div className="w-full">
-      <div  ref={dropRef} className=" flex-1  space-y-4 h-full rounded-md"
+    <div className="w-full flex flex-col" >
+      <div  ref={dropRef} className="space-y-4 flex-1 rounded-md"
       style={{
         backgroundColor: isOver ? '#F9FAFB' : '',
       }}>
@@ -36,13 +36,16 @@ const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireP
           </span>
           <h1 className="text-[16px] 2xl:text-[20px]">{title}</h1>
         </div>
+      
         {data?.length > 0 ? (
           data.map((data ,index) => {
             return <QuestionnairCard key={index} data={data} index={index} setDataUpdate={setDataUpdate} id={data.id} />;
           })
+          
         ) : (
           <h1 className="px-2 text-[15px] 2xl:text-[20px]">{stepsContent}</h1>
         )}
+        
       </div>
     </div>
   );

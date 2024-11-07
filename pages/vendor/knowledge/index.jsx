@@ -75,6 +75,7 @@ const Knowledge = () => {
 
   return (
     <VendorLayout>
+      <div className="h-full flex flex-col">
       <KnowledgeHeader
         buttonShow={questionData.length > 0 ? true : false}
         headerData={headerData}
@@ -98,6 +99,7 @@ const Knowledge = () => {
           <CircularProgress label="Fetching Data..." size="lg" />
         </div>
       )}
+      </div>
     </VendorLayout>
   );
 };

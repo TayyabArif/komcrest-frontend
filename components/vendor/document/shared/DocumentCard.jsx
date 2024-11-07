@@ -98,7 +98,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
 
 
   return (
-    <div className="overflow-auto h-[85vh]">
+    <div className="overflow-auto">
       <div className="flex flex-wrap   w-[85%] mx-auto py-6 gap-[3.4rem]">
         {cardData &&
           cardData.map((item, index) => {
