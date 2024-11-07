@@ -55,7 +55,7 @@ const AddDocument = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <VendorHeader buttonShow={documentData.length > 0} />
       {dataIsLoaded &&
         (documentData.length > 0 ? (

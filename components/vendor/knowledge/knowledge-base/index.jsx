@@ -36,7 +36,7 @@ const komcrestCategories = [
   { value: "Vendor Management", text: "Vendor Management" },
 ];
 
-const deleteModalContent = "Are you sure to delete knowledge?"
+const deleteModalContent = "Are you sure to delete knowledge?";
 
 const KnowledgeBase = ({
   questionData,
@@ -301,273 +301,259 @@ const KnowledgeBase = ({
   };
 
   return (
-    
-      <div className="w-[86%] mx-auto ">
-        <div className="flex justify-between my-[6px]">
-          <div className="flex items-center gap-1 ">
-            <Input
-              onChange={handleSearch}
-              variant="bordered"
-              placeholder="Search"
-              endContent={<Search size={18} />}
-              type="text"
-              classNames={{
-                inputWrapper: "bg-white rounded-md",
-                input: "2xl:text-[20px] text-[16px]",
-              }}
-              className="max-w-xs"
-            />
-            <div
-              className="bg-white p-1 border rounded-[5px] shadow-md cursor-pointer"
-              onClick={() => setShowFilter(!showFilter)}
-            >
-              <Filter size={26} className="text-gray-500" color="#2457d7" />
-            </div>
-            {filters.some((filter) => filter.value.length > 0) &&
-              !showFilter && (
-                <button
-                  onClick={handleClearFilter}
-                  className="px-2 py-1 rounded-full border text-blue-700 border-blue-700 border-dashed text-nowrap"
-                >
-                  Clear filter
-                </button>
-              )}
+    <div className="w-[86%] mx-auto flex-1 h-[0vh] flex flex-col">
+      <div className="flex justify-between my-[6px]">
+        <div className="flex items-center gap-1 w-[22%]">
+          <Input
+            onChange={handleSearch}
+            variant="bordered"
+            placeholder="Search"
+            endContent={<Search size={18} />}
+            type="text"
+            classNames={{
+              inputWrapper: "bg-white rounded-md",
+              input: "2xl:text-[20px] text-[16px]",
+            }}
+            className=""
+          />
+          <div
+            className="bg-white p-1 border rounded-[5px] shadow-md cursor-pointer"
+            onClick={() => setShowFilter(!showFilter)}
+          >
+            <Filter size={26} className="text-gray-500" color="#2457d7" />
           </div>
-          {bulkDeleted.length > 0 && (
-            <Button
-              size="md"
-              className="rounded-md 2xl:text-[20px] cursor-pointer text-red-600 bg-transparent  text-[13px] font-semibold"
-              onClick={() => {
-                onOpen();
-                setDeleteAction("bulk");
-              }}
+          {filters.some((filter) => filter.value.length > 0) && !showFilter && (
+            <button
+              onClick={handleClearFilter}
+              className="px-2 py-1 rounded-full border text-blue-700 border-blue-700 border-dashed text-nowrap"
             >
-              Delete Selection
-            </Button>
+              Clear filter
+            </button>
           )}
         </div>
-        {(questionData && questionData.length > 0) || filters.length > 0 ? (
-          <div className="flex gap-2 cursor-pointer ">
-            {showFilter && (
-              <div className="w-[25%]">
-                <KnowledgeFilter
-                  setShowFilter={setShowFilter}
-                  setFilters={setFilters}
-                  filters={filters}
-                  setShow={setShow}
-                  komcrestCategories={komcrestCategories}
-                  questionData={questionData}
-                  companyProducts={companyProducts}
-                  documentData={documentData}
-                  DocumentFile={DocumentFile}
-                  triggerFunction={triggerFunction}
-                />
-              </div>
-            )}
-            <div className="w-[100%] overflow-x-auto relative h-[74vh] 2xl:h-[76vh]  flex">
-              <table
-                style={{ width: "100%" }}
-                className="min-w-full bg-white border "
-              >
-                <thead className="bg-gray-200 sticky -top-1 z-30">
-                  <tr className="text-[16px] 2xl:text-[20px]">
-                    <th className="py-2 px-4 border text-left">
-                      <Checkbox
-                        isSelected={isHeaderChecked}
-                        onChange={handleHeaderCheckboxChange}
-                        className="2xl:text-[20px] !text-[50px]"
-                        radius="none"
-                        size="lg"
-                        classNames={{ wrapper: "!rounded-[3px]" }}
-                      />
-                    </th>
-                    <th className="py-2 px-4 text-left">
-                      Category
-                    </th>
-                    <th className="py-2 px-4 text-left !max-w-[320px]">
-                      Komcrest Domain
-                    </th>
-                    <th className="py-2 px-4 text-left !min-w-[650px]">
-                      Question
-                    </th>
-                    <th className="py-2 px-4 text-left">
-                      Compliance
-                    </th>
-                    <th className="py-2 px-4 text-left text-wrap !min-w-[500px]">
-                      Answer
-                    </th>
-                    <th className="py-2 px-4 text-left !min-w-[250px]">
-                      Products
-                    </th>
-                    <th className="py-2 px-4 text-left !min-w-[250px]">
-                      Roadmap
-                    </th>
-                    <th className="py-2 px-4 text-left w-[50px]">
-                      Curator
-                    </th>
-                    <th className="py-2 px-4 text-left">
-                      Reference
-                    </th>
-                    <th className="py-2 px-4 text-left">
-                      Source
-                    </th>
-                    <th className="py-2 px-4 text-left">
-                      Latest Update
-                    </th>
-                    <th
-                      className="px-4    pr-7  text-left sticky -right-[1px] bg-gray-200"
-                      style={{ outlineWidth: "1px" }}
-                    >
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filterData?.length > 0 ? (
-                    filterData.map((data, index) => (
-                      <tr
-                        key={data.id}
-                        className={` h-[100px] text-[16px] 2xl:text-[20px] ${index % 2 === 0 ? 'bg-gray-100':"bg-white"}`}
-                      >
-                        <td className="py-2 px-4 border">
-                          <Checkbox
-                            isSelected={bulkDeleted.includes(data.id)}
-                            onChange={() => handleCheckboxChange(data.id)}
-                            className="2xl:text-[20px] !text-[50px]"
-                            radius="none"
-                            size="lg"
-                            classNames={{ wrapper: "!rounded-[3px]" }}
-                          />
-                        </td>
-                        <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
-                          {data.category}
-                        </td>
-                        <td className="py-2 px-4 border bg-transparent !max-w-[320px]">
-                          <select
-                            value={data.komcrestCategory}
-                            onChange={(e) =>
-                              handleKomcrastCategoryChange(
-                                data.id,
-                                e.target.value
-                              )
-                            }
-                            className="py-1 px-2 max-w-[250px] bg-transparent"
-                          >
-                            {komcrestCategories?.map((item, index) => (
-                              <option key={index} value={item?.value}>
-                                {item?.text}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                        <td className="py-2 px-4 border max-w-xs">
-                          {data.question}
-                        </td>
-                        <td className="py-2 px-4 border whitespace-rap">
-                          {data.coverage}
-                        </td>
-                        <td className="py-2 px-4 border text-wrap min-w-[500px]">
-                          {data.answer}
-                        </td>
-                        <td className="py-2 px-4 border max-w-xs">
-                          {data.Products.map((product) => product.name).join(
-                            ", "
-                          )}
-                        </td>
-                        <td className="py-2 px-4 border max-w-xs !min-w-[250px]">
-                          {data.roadmap}
-                        </td>
-                        <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
-                          {data.curator}
-                        </td>
-                        <td
-                          className="py-2 px-4 border whitespace-nowrap text-blue-600 cursor-pointer"
-                          onClick={() =>
-                            handleFileDownload(data.document?.filePath)
-                          }
-                        >
-                          {data.document?.title}
-                        </td>
-                        <td className="py-2 px-4 border whitespace-nowrap">
-                          {data.documentFile?.name}
-                        </td>
-                        <td className="py-2 px-4 border whitespace-nowrap">
-                          {formatDateWithTime(data.updatedAt)}
-                        </td>
-                        <td
-                          className={`outline border outline-[#e9e6e6] sticky -right-[1px]  pl-9 ${index % 2 === 0 ? 'bg-gray-100':"bg-white"}`}
-                          style={{ outlineWidth: "1px" }}
-                        >
-                          <Popover
-                            className="rounded-[0px]"
-                            isOpen={openPopoverIndex === index}
-                            onOpenChange={(open) =>
-                              setOpenPopoverIndex(open ? index : null)
-                            }
-                          >
-                            <PopoverTrigger>
-                              <FilePenLine
-                                size={25}
-                                className="cursor-pointer"
-                                color="#2457d7"
-                                strokeWidth={2}
-                              />
-                            </PopoverTrigger>
-                            <PopoverContent>
-                              <div className="px-3 py-2 space-y-2">
-                                <div
-                                  className="text-small cursor-pointer 2xl:text-[20px]"
-                                  onClick={() =>
-                                    router.push(
-                                      `/vendor/knowledge/AddQuestion?id=${data.id}`
-                                    )
-                                  }
-                                >
-                                  Update
-                                </div>
-                                <div
-                                  className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
-                                  onClick={() => {
-                                    setSelectedQuestion(data);
-                                    onOpen();
-                                    setOpenPopoverIndex(null);
-                                    setDeleteAction("single");
-                                  }}
-                                >
-                                  Delete
-                                </div>
-                              </div>
-                            </PopoverContent>
-                          </Popover>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan={show ? "5" : "6"}
-                        className="py-2 px-4 text-center text-gray-500 text-18px"
-                      >
-                        {!show
-                          ? "Loading...."
-                          : " No data match for this filter"}
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-              <DeleteModal
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                handleSubmit={handleDelete}
-                deleteModalContent ={deleteModalContent }
-              />
-            </div>
-          </div>
-        ) : (
-          <p>No data to display</p>
+        {bulkDeleted.length > 0 && (
+          <Button
+            size="md"
+            className="rounded-md 2xl:text-[20px] cursor-pointer text-red-600 bg-transparent  text-[13px] font-semibold"
+            onClick={() => {
+              onOpen();
+              setDeleteAction("bulk");
+            }}
+          >
+            Delete Selection
+          </Button>
         )}
       </div>
+
+      {(questionData && questionData.length > 0) || filters.length > 0 ? (
+        <div className=" flex-1 flex  gap-2 h-[0vh] cursor-pointer">
+          {showFilter && (
+            <div className="w-[22%] h-full flex flex-col">
+              <KnowledgeFilter
+                setShowFilter={setShowFilter}
+                setFilters={setFilters}
+                filters={filters}
+                setShow={setShow}
+                komcrestCategories={komcrestCategories}
+                questionData={questionData}
+                companyProducts={companyProducts}
+                documentData={documentData}
+                DocumentFile={DocumentFile}
+                triggerFunction={triggerFunction}
+              />
+            </div>
+          )}
+          <div className="w-[100%] flex-1 overflow-auto relative">
+            <table style={{ width: "100%" }} className=" bg-white border ">
+              <thead className="bg-gray-200 sticky -top-1 z-30">
+                <tr className="text-[16px] 2xl:text-[20px]">
+                  <th className="py-2 px-4 border text-left">
+                    <Checkbox
+                      isSelected={isHeaderChecked}
+                      onChange={handleHeaderCheckboxChange}
+                      className="2xl:text-[20px] !text-[50px]"
+                      radius="none"
+                      size="lg"
+                      classNames={{ wrapper: "!rounded-[3px]" }}
+                    />
+                  </th>
+                  <th className="py-2 px-4 text-left">Category</th>
+                  <th className="py-2 px-4 text-left !max-w-[320px]">
+                    Komcrest Domain
+                  </th>
+                  <th className="py-2 px-4 text-left !min-w-[650px]">
+                    Question
+                  </th>
+                  <th className="py-2 px-4 text-left">Compliance</th>
+                  <th className="py-2 px-4 text-left text-wrap !min-w-[500px]">
+                    Answer
+                  </th>
+                  <th className="py-2 px-4 text-left !min-w-[250px]">
+                    Products
+                  </th>
+                  <th className="py-2 px-4 text-left !min-w-[250px]">
+                    Roadmap
+                  </th>
+                  <th className="py-2 px-4 text-left w-[50px]">Curator</th>
+                  <th className="py-2 px-4 text-left">Reference</th>
+                  <th className="py-2 px-4 text-left">Source</th>
+                  <th className="py-2 px-4 text-left">Latest Update</th>
+                  <th
+                    className="px-4    pr-7  text-left sticky -right-[1px] bg-gray-200"
+                    style={{ outlineWidth: "1px" }}
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filterData?.length > 0 ? (
+                  filterData.map((data, index) => (
+                    <tr
+                      key={data.id}
+                      className={` h-[100px] text-[16px] 2xl:text-[20px] ${
+                        index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                      }`}
+                    >
+                      <td className="py-2 px-4 border">
+                        <Checkbox
+                          isSelected={bulkDeleted.includes(data.id)}
+                          onChange={() => handleCheckboxChange(data.id)}
+                          className="2xl:text-[20px] !text-[50px]"
+                          radius="none"
+                          size="lg"
+                          classNames={{ wrapper: "!rounded-[3px]" }}
+                        />
+                      </td>
+                      <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+                        {data.category}
+                      </td>
+                      <td className="py-2 px-4 border bg-transparent !max-w-[320px]">
+                        <select
+                          value={data.komcrestCategory}
+                          onChange={(e) =>
+                            handleKomcrastCategoryChange(
+                              data.id,
+                              e.target.value
+                            )
+                          }
+                          className="py-1 px-2 max-w-[250px] bg-transparent"
+                        >
+                          {komcrestCategories?.map((item, index) => (
+                            <option key={index} value={item?.value}>
+                              {item?.text}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className="py-2 px-4 border max-w-xs">
+                        {data.question}
+                      </td>
+                      <td className="py-2 px-4 border whitespace-rap">
+                        {data.coverage}
+                      </td>
+                      <td className="py-2 px-4 border text-wrap min-w-[500px]">
+                        {data.answer}
+                      </td>
+                      <td className="py-2 px-4 border max-w-xs">
+                        {data.Products.map((product) => product.name).join(
+                          ", "
+                        )}
+                      </td>
+                      <td className="py-2 px-4 border max-w-xs !min-w-[250px]">
+                        {data.roadmap}
+                      </td>
+                      <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+                        {data.curator}
+                      </td>
+                      <td
+                        className="py-2 px-4 border whitespace-nowrap text-blue-600 cursor-pointer"
+                        onClick={() =>
+                          handleFileDownload(data.document?.filePath)
+                        }
+                      >
+                        {data.document?.title}
+                      </td>
+                      <td className="py-2 px-4 border whitespace-nowrap">
+                        {data.documentFile?.name}
+                      </td>
+                      <td className="py-2 px-4 border whitespace-nowrap">
+                        {formatDateWithTime(data.updatedAt)}
+                      </td>
+                      <td
+                        className={`outline border outline-[#e9e6e6] sticky -right-[1px]  pl-9 ${
+                          index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                        }`}
+                        style={{ outlineWidth: "1px" }}
+                      >
+                        <Popover
+                          className="rounded-[0px]"
+                          isOpen={openPopoverIndex === index}
+                          onOpenChange={(open) =>
+                            setOpenPopoverIndex(open ? index : null)
+                          }
+                        >
+                          <PopoverTrigger>
+                            <FilePenLine
+                              size={25}
+                              className="cursor-pointer"
+                              color="#2457d7"
+                              strokeWidth={2}
+                            />
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <div className="px-3 py-2 space-y-2">
+                              <div
+                                className="text-small cursor-pointer 2xl:text-[20px]"
+                                onClick={() =>
+                                  router.push(
+                                    `/vendor/knowledge/AddQuestion?id=${data.id}`
+                                  )
+                                }
+                              >
+                                Update
+                              </div>
+                              <div
+                                className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
+                                onClick={() => {
+                                  setSelectedQuestion(data);
+                                  onOpen();
+                                  setOpenPopoverIndex(null);
+                                  setDeleteAction("single");
+                                }}
+                              >
+                                Delete
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={show ? "5" : "6"}
+                      className="py-2 px-4 text-center text-gray-500 text-18px"
+                    >
+                      {!show ? "Loading...." : " No data match for this filter"}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+            <DeleteModal
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+              handleSubmit={handleDelete}
+              deleteModalContent={deleteModalContent}
+            />
+          </div>
+        </div>
+      ) : (
+        <p>No data to display</p>
+      )}
+    </div>
   );
 };
 

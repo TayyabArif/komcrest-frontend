@@ -94,16 +94,17 @@ const UpdatePrompt = ({ isOpen, onOpenChange, prompt, setDataUpdate }) => {
                     size="md"
                     radius="sm"
                     min={0}
+                    isInvalid={false}
                     name="frequencyPenalty"
                     value={updatedPrompt?.frequencyPenalty}
                     onChange={handleChange}
                     classNames={{
-                      input: "text-base 2xl:text-[20px]",
+                      input: "text-base 2xl:text-[20px] ",
                     }}
                   />
                 </div>
                 <div className="w-[50%]">
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-[16px] 2xl:text-[20px] ">
                   Temperature
                   </label>
                   <Input
@@ -112,6 +113,7 @@ const UpdatePrompt = ({ isOpen, onOpenChange, prompt, setDataUpdate }) => {
                     size="md"
                     radius="sm"
                     min={0}
+                    isInvalid={false}
                     name="temperature"
                     value={updatedPrompt?.temperature}
                     onChange={handleChange}

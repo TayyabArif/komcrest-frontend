@@ -28,12 +28,12 @@ const VendorLayout = ({ children }) => {
   }
   
   return (
-    <div className="flex w-full min-h-screen">
-      <div className="flex flex-col gap-5 w-[15%] pb-5 fixed min-h-screen">
+    <div className="flex w-full">
+      <div className="flex flex-col  w-[15%]  fixed h-screen">
         <p className="text-lg bg-slate-50 py-2 px-4 md:text-[19px] 2xl:text-[25px]">
           <span className="font-bold">Komcrest</span> Vendor
         </p>
-        <div className="flex flex-col justify-between h-[92vh]">
+        <div className="flex flex-col justify-between h-full">
           <div className="flex flex-col gap-2">
             <div className={`flex gap-1 items-center px-4 py-1 cursor-pointer ${selectedItem === "document" ? "bg-[#2457d7] text-white shadow-md rounded" : "hover:bg-gray-200 hover:shadow-md"}`} 
               onClick={() => { 
@@ -81,7 +81,7 @@ const VendorLayout = ({ children }) => {
           </div>
         </div>
       </div>
-      <div className="ml-[15%] w-[85%] fixed h-screen">
+      <div className="ml-[15%] w-[85%] fixed h-screen pb-4">
         <div className="py-2 text-right flex justify-end gap-2 font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
         <h1>{loogedinUser}</h1>
         <Button
@@ -93,7 +93,7 @@ const VendorLayout = ({ children }) => {
           Logout
         </Button>
         </div>
-        <div className="flex flex-col bg-[#ebeef2] h-full ">
+        <div className="flex flex-col bg-[#ebeef2] h-full  pb-10">
           {children}
         </div>
       </div>

@@ -98,7 +98,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
 
 
   return (
-    <div className="overflow-auto h-[85vh]">
+    <div className="overflow-auto">
       <div className="flex flex-wrap   w-[85%] mx-auto py-6 gap-[3.4rem]">
         {cardData &&
           cardData.map((item, index) => {
@@ -120,7 +120,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
 
                 <div className="flex justify-between items-center">
                   <span className="text-[14px] 2xl:text-[20px]">
-                    DOCX
+                    {item.filePath.split('.').pop().toUpperCase()} -
                     <span className="mx-2 text-[14px] 2xl:text-[20px]">{formatDate(item.createdAt)}</span>
                   </span>
                   <Popover

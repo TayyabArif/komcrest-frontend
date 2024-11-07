@@ -401,6 +401,7 @@ const QuestionnairesView = () => {
   };
 
   const reRunForAnswer = (ids) => {
+    toast.loading("It will take some time, please wait...")
     const token = cookiesData.token;
     let requestOptions = {
       method: "POST",
@@ -428,6 +429,7 @@ const QuestionnairesView = () => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
+          toast.dismiss();
           toast.success(data.message);
           setDataUpdate(!dataUpdate);
         } else {
@@ -487,20 +489,20 @@ const QuestionnairesView = () => {
       "questionnaireData?.questionnaireRecords:",
       questionnaireData?.questionnaireRecords
     );
-    console.log("Found itemmmmmmmmm:", filetrSingleQuestionnisre);
+    console.log("Found item:", filetrSingleQuestionnisre);
     setSelectedQuestionnaireReference(filetrSingleQuestionnisre?.references);
   }, [selectedId, questionnaireData]);
 
   return (
     <>
       {dataLoaded ? (
-        <div className="">
+        <div className="flex flex-col h-full">
           <QuestionnairsListHeader
             currentStatus={currentStatus}
             questionnaireData={questionnaireData}
             setDataUpdate={setDataUpdate}
           />
-          <div className="w-[86%] mx-auto">
+          <div className="w-[86%] mx-auto flex flex-col flex-1 h-[0vh]">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-1 my-2">
                 <Input
@@ -623,9 +625,9 @@ const QuestionnairesView = () => {
                 </div>
               )}
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 flex-1 h-[0vh]">
               {showFilter && (
-                <div className="w-[25%]">
+                <div className="w-[22%]">
                   <QuestionnairFilter
                     setShowFilter={setShowFilter}
                     setFilters={setFilters}
@@ -633,7 +635,7 @@ const QuestionnairesView = () => {
                   />
                 </div>
               )}
-              <div className="overflow-auto w-[100%]  max-h-[74vh] 2xl:max-h-[78vh]  bg-white border">
+              <div className="overflow-auto w-[100%] flex-1  bg-white border">
                 <table className="min-w-[100%] border-2 text-gray-700 ">
                   <thead className="border  sticky -top-1 bg-[#E5E7EB] z-50">
                     <tr className="2xl:text-[20px] text-[16px]">
@@ -987,7 +989,7 @@ const QuestionnairesView = () => {
                 </table>
               </div>
               {historyVisible && (
-                <div className="w-[35%] h-[80vh] overflow-auto">
+                <div className="w-[25%] h-full flex flex-col overflow-auto">
                   <History
                     selectedId={selectedId}
                     setSelectedId={setSelectedId}

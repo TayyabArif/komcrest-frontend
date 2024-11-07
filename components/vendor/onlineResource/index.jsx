@@ -185,13 +185,13 @@ const OnlineResourceComponent = () => {
           <CircularProgress label="Fetching Resources..." size="lg" />
         </div>
       ) : (
-        <div>
+        <div className="h-full flex flex-col">
           <KnowledgeHeader
             headerData={headerData}
             buttonShow={onlineResourceData.length > 0 ? true : false}
           />
           {onlineResourceData.length > 0 ? (
-            <div className=" w-[85%] mx-auto   flex flex-col max-h-[80vh] 2xl:max-h-[82vh]">
+            <div className=" w-[85%] mx-auto flex-1  h-[0vh]  flex flex-col">
               <div className="flex justify-end h-[40px]">
                 {bulkDeleted.length > 0 && (
                   <Button
@@ -206,7 +206,7 @@ const OnlineResourceComponent = () => {
                   </Button>
                 )}
               </div>
-              <div className="overflow-auto flex-1 relative">
+              <div className="overflow-auto flex-1 relative  ">
                 <table className="w-[100%]">
                   <thead className="block md:table-header-group sticky -top-1 z-30 ">
                     <tr className="border text-[16px] 2xl:text-[20px] ">
@@ -252,9 +252,9 @@ const OnlineResourceComponent = () => {
                       ?.map((item, index) => (
                         <tr
                           key={index}
-                          className={` ${
+                          className={` ${ 
                             index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                          } border  md:border-none block md:table-row text-[16px] 2xl:text-[20px]`}
+                          } h-[100px]  border  md:border-none block md:table-row text-[16px] 2xl:text-[20px]`}
                         >
                           <td className="py-2 px-4 border ">
                             <Checkbox
@@ -365,6 +365,7 @@ const OnlineResourceComponent = () => {
           ) : (
             <ResourceHome />
           )}
+         
         </div>
       )}
     </>
