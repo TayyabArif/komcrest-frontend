@@ -18,6 +18,7 @@ import { handleResponse } from "../../../helper";
 import { toast } from "react-toastify";
 import { formatDateWithTime } from "../../../helper";
 import { handleDownload } from "@/helper";
+import { useMyContext } from "@/context";
 
 const headerData = {
   title: "Online resources",
@@ -31,54 +32,18 @@ const headerData = {
 const deleteModalContent = "Are you sure to delete this online resource?";
 
 const OnlineResourceComponent = () => {
+  const { onlineResourceData ,setOnlineResourceData ,setOnlineResourceDataUpdate,isLoading} = useMyContext();
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [onlineResourceData, setOnlineResourceData] = useState([]);
-  const [selectedId, setSelectedId] = useState("");
-  const [dataUpdate, setDataUpdate] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [selectedId, setSelectedId] = useState(""); 
   const [isHeaderChecked, setIsHeaderChecked] = useState(false);
   const [bulkDeleted, setBulkDeleted] = useState([]);
   const [deleteAction, setDeleteAction] = useState("");
 
-  const getAllResourceData = async () => {
-    setIsLoading(true);
-    const token = cookiesData && cookiesData.token;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-
-    try {
-      const response = await fetch(`${baseUrl}/resources`, requestOptions);
-      const data = await handleResponse(
-        response,
-        router,
-        cookies,
-        removeCookie
-      );
-      if (response.ok) {
-        setOnlineResourceData(data);
-      } else {
-        toast.error(data?.error);
-      }
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Error fetching user documents:", error);
-    }
-  };
-
-  useEffect(() => {
-    getAllResourceData();
-  }, [dataUpdate]);
 
   const handleSingleDelete = async () => {
     const token = cookiesData.token;
@@ -99,7 +64,7 @@ const OnlineResourceComponent = () => {
 
       if (response.ok) {
         toast.success("Resource deleted successfully");
-        setDataUpdate(!dataUpdate);
+        setOnlineResourceDataUpdate((prev)=>!prev);
       } else {
         toast.error("Failed to delete the question");
       }
@@ -135,7 +100,7 @@ const OnlineResourceComponent = () => {
   
       if (response.ok) {
         toast.success("Online Resources deleted successfully");
-        setDataUpdate((prevState) => !prevState);
+        setOnlineResourceDataUpdate((prevState) => !prevState);
         setBulkDeleted([]);
       } else {
         const errorMessage = result?.message || "Failed to delete resources";
@@ -147,7 +112,6 @@ const OnlineResourceComponent = () => {
     }
   };
   
-
   const handleDelete = () => {
     if (deleteAction == "single") {
       handleSingleDelete();
@@ -191,7 +155,7 @@ const OnlineResourceComponent = () => {
             buttonShow={onlineResourceData.length > 0 ? true : false}
           />
           {onlineResourceData.length > 0 ? (
-            <div className=" w-[85%] mx-auto flex-1  h-[0vh]  flex flex-col">
+            <div className=" w-[85%] mx-auto  min-h-[0vh]  flex flex-col">
               <div className="flex justify-end h-[40px]">
                 {bulkDeleted.length > 0 && (
                   <Button

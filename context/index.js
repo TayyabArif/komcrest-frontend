@@ -9,7 +9,7 @@ const MyContext = createContext();
 
 export const MyProvider = ({ children }) => {
   const socket = useSocket();
-
+  const [overAllLoading , setOverAllLoading] = useState(false)
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -19,6 +19,12 @@ export const MyProvider = ({ children }) => {
   const token = cookiesData && cookiesData.token;
   const [dataUpdated, setDataUpdated] = useState(false);
   const [questionnaireUpdated, setQuestionnaireUpdated] = useState(false);
+  const [onlineResourceData, setOnlineResourceData] = useState([]);
+  const [onlineResourceDataUpdate, setOnlineResourceDataUpdate] = useState(false);
+  const [documentData, setDocumentData] = useState([]);
+  const [documentDataUpdate, setDocumentDataUpdate] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dataIsLoaded, setDataIsLoaded] = useState(false);
 
   const [questionnaireData, setQuestionnaireData] = useState({
     filename: "",
@@ -256,9 +262,86 @@ export const MyProvider = ({ children }) => {
       });
   };
 
+ // get all online resource
+  const getAllResourceData = async () => {
+    setIsLoading(true);
+    const token = cookiesData && cookiesData.token;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(`${baseUrl}/resources`, requestOptions);
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
+      if (response.ok) {
+        setOnlineResourceData(data);
+       
+      } else {
+        toast.error(data?.error);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error fetching user documents:", error);
+    }
+  };
+
+  useEffect(()=>{
+    getAllResourceData()
+  },[onlineResourceDataUpdate])
+
+
+
+  // get all documnets 
+
+  useEffect(() => {
+    const getUserDocument = async () => {
+      setIsLoading(true);
+      const token = cookiesData && cookiesData.token;
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+      };
+  
+      try {
+        const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
+        const data = await handleResponse(response, router, cookies,removeCookie);
+        // const data = await response.json();
+        if (response.ok) {
+          setDocumentData(data);
+          setDataIsLoaded(true);
+        } else {
+          toast.error(data?.error);
+          
+        }
+      } catch (error) {
+        console.error("Error fetching user documents:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getUserDocument();
+  }, [documentDataUpdate]);
+
+ 
+
   return (
     <MyContext.Provider
       value={{
+        overAllLoading,
+        setOverAllLoading,
         companyUserData,
         companyProducts,
         setDataUpdated,
@@ -274,7 +357,16 @@ export const MyProvider = ({ children }) => {
         allQuestionnaireList,
         setIsSocketConnected,
         currentQuestionnaireImportId,
-        setCurrentQuestionnaireImportId
+        setCurrentQuestionnaireImportId,
+        onlineResourceData,
+        setOnlineResourceData,
+        setOnlineResourceDataUpdate,
+        isLoading,
+        documentData,
+        setDocumentData,
+        setDocumentDataUpdate,
+        dataIsLoaded,
+        
       }}
     >
       {children}

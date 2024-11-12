@@ -501,8 +501,9 @@ const QuestionnairesView = () => {
             currentStatus={currentStatus}
             questionnaireData={questionnaireData}
             setDataUpdate={setDataUpdate}
+            showDropdown={true}
           />
-          <div className="w-[86%] mx-auto flex flex-col flex-1 h-[0vh]">
+          <div className="w-[86%] mx-auto flex flex-col  min-h-[0vh]">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-1 my-2">
                 <Input
@@ -635,7 +636,7 @@ const QuestionnairesView = () => {
                   />
                 </div>
               )}
-              <div className="overflow-auto w-[100%] flex-1  bg-white border">
+              <div className="overflow-auto w-[100%] flex-1 bg-white">
                 <table className="min-w-[100%] border-2 text-gray-700 ">
                   <thead className="border  sticky -top-1 bg-[#E5E7EB] z-50">
                     <tr className="2xl:text-[20px] text-[16px]">

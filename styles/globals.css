@@ -74,3 +74,81 @@ textarea {
 textarea {
   overflow: auto; /* Enable scrolling */
 }
+
+/* Custom style for disabled items */
+.disabled-item {
+  pointer-events: none; 
+  background-color: none; 
+  color: #333;
+}
+
+
+.p-multiselect-label {
+  border: 2px solid #E4E4E7;
+  border-radius: 13px;
+  padding: 5px; 
+  font-size: 15px;
+  
+
+}
+
+.p-multiselect-label:focus {
+  border: none;
+}
+.p-multiselect-trigger {
+  display: none;
+}
+.p-multiselect-header {
+  background-color: #EBEEF2;
+  padding: 4px 10px;
+  display: none;
+}
+/* .p-checkbox-input {
+  border: 1px solid red !important ;
+  display: none;
+} */
+
+.p-multiselect-token {
+  padding: 2px 7px;
+}
+.p-highlight {
+  background-color: transparent;
+  color: #333;
+}
+.p-multiselect-item-group{
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+.p-checkbox-box {
+  border : 1px solid gray;
+  border-radius: 3px;
+}
+
+.p-checkbox.p-highlight .p-checkbox-box {
+  background-color: #2457D7;
+  border : 1px solid #2457D7;
+ 
+}
+
+.p-multiselect-panel {
+  border-radius: 10px;
+  background-color: #FFFFFF;
+  border: 0.1px solid #DDDDDD;
+}
+
+.p-multiselect-label-container {
+  margin-bottom: 7px;
+}
+
+.p-multiselect:not(.p-disabled).p-focus {
+  box-shadow: none;
+}
+
+.p-multiselect-item {
+  padding: 7px 10px;
+  margin: 0px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #333;
+}

@@ -1,6 +1,5 @@
 import React from "react";
 import { ThumbsUp, ThumbsDown, FilePenLine } from "lucide-react";
-// import clickSound from "../../../../public/likeSound.mp3"
 
 import {
   FaRegThumbsDown,
@@ -8,12 +7,14 @@ import {
   FaRegThumbsUp,
   FaThumbsUp,
 } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 const OnlineResourceHistory = ({
   onlineResourceReferenceData,
   statusUpdate,
   setOnlineResourceReferenceData,
 }) => {
+  const router = useRouter();
 
   const ReferenceStatusUpdate = (referenceRecordId, type) => {
     setOnlineResourceReferenceData((prev) => {
@@ -48,6 +49,9 @@ const OnlineResourceHistory = ({
               </p>
               <div className="flex justify-end space-x-4 mt-2">
                 <FilePenLine
+                 onClick={() =>
+                  router.push(`/vendor/onlineResource/update?id=${doc?.id}`)
+                }
                   className="cursor-pointer text-gray-500"
                   size={18}
                 />

@@ -11,8 +11,10 @@ import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import {  handleDownload} from "@/helper";
 import { saveAs } from "file-saver";
+import { useMyContext } from "@/context";
 
 const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
+  const {setDocumentDataUpdate } = useMyContext();
   const router = useRouter();
   const [openPopoverIndex, setOpenPopoverIndex] = React.useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
@@ -50,7 +52,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
       .then((result) => {
         console.log("$$$$$$$$$", result);
         toast.success("Document deleted successfully");
-        setIsDeleted(!isDeleted);
+        setDocumentDataUpdate((prev)=>!prev);
       })
       .catch((error) => {
         console.error(error);

@@ -25,7 +25,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
   const cookiesData = cookies.myCookie;
   const router = useRouter();
   const [questionnaireProgressBar, setQuestionnaireProgressBar] = useState({});
-  const { setQuestionnaireUpdated} = useMyContext();
+  const { setQuestionnaireUpdated ,setOverAllLoading} = useMyContext();
   const [{ isDragging }, dragRef] = useDrag({
     type: "QUESTIONNAIRE_CARD",
     item: { id, status }, // Dragged item
@@ -66,6 +66,7 @@ useEffect(() => {
 
 
   const handleDelete = async () => {
+    setOverAllLoading(true)
     const token = cookiesData.token;
     const requestOptions = {
       method: "DELETE",
@@ -92,6 +93,8 @@ useEffect(() => {
     } catch (error) {
       console.error("Error during bulk delete:", error);
       toast.error("An error occurred during deletion");
+    } finally {
+      setOverAllLoading(false)
     }
   };
   return (
