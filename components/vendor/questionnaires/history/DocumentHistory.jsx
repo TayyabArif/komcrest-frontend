@@ -6,12 +6,15 @@ import {
   FaRegThumbsUp,
   FaThumbsUp,
 } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 const DocumentHistory = ({
   documentReferenceData,
   setDocumentReferenceData,
   statusUpdate,
 }) => {
+  const router = useRouter();
+
   const ReferenceStatusUpdate = (referenceRecordId, type) => {
     setDocumentReferenceData((prev) => {
       const updated = prev.map((record) =>
@@ -42,6 +45,9 @@ const DocumentHistory = ({
               </p>
               <div className="flex justify-end space-x-4 mt-2">
                 <FilePenLine
+                  onClick={() =>
+                    router.push(`/vendor/document/AddDocument?id=${doc?.id}`)
+                  }
                   className="cursor-pointer text-gray-500"
                   size={18}
                 />

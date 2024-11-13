@@ -346,7 +346,7 @@ const KnowledgeBase = ({
       </div>
 
       {(questionData && questionData.length > 0) || filters.length > 0 ? (
-        <div className=" flex-1 flex  gap-2 h-[0vh] cursor-pointer">
+        <div className="flex  gap-2 min-h-[0vh] cursor-pointer">
           {showFilter && (
             <div className="w-[22%] h-full flex flex-col">
               <KnowledgeFilter
@@ -507,7 +507,7 @@ const KnowledgeBase = ({
                                 className="text-small cursor-pointer 2xl:text-[20px]"
                                 onClick={() =>
                                   router.push(
-                                    `/vendor/knowledge/AddQuestion?id=${data.id}`
+                                    `/vendor/knowledge/UpdateQuestion?id=${data.id}`
                                   )
                                 }
                               >

@@ -71,7 +71,7 @@ const ReviewContent = ({
               <td className="p-2 border  text-left block md:table-cell py-3">
                 {item.title}
               </td>
-              <td className="p-2 border  text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3 max-w-[300px] break-words ">
                 {item.url}
               </td>
               <td className="p-2 border  text-left block md:table-cell py-3">

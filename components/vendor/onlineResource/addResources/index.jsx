@@ -29,7 +29,7 @@ const AddResource = () => {
   const companyId = cookiesData?.companyId;
   const [allResources, setAllResources] = useState([{ url: "", title: "" , status:"pending"}]);
   const [errors, setErrors] = useState([]);
-  const {companyProducts } = useMyContext();
+  const {companyProducts ,setOnlineResourceDataUpdate } = useMyContext();
   const [resourceData, setResourceData] = useState({
     language: "",
     productIds: [],
@@ -222,7 +222,7 @@ const AddResource = () => {
           console.error("Error:", data);
         }
       });
-
+      setOnlineResourceDataUpdate((prev)=>!prev)
       router.push("/vendor/onlineResource");
     } catch (error) {
       console.error("Error updating records:", error);

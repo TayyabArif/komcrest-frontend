@@ -18,6 +18,7 @@ const QuestionnairsListHeader = ({
   currentStatus,
   questionnaireData,
   setDataUpdate,
+  showDropdown
 }) => {
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -130,7 +131,7 @@ const QuestionnairsListHeader = ({
           </p>
         </div>
         <div className="min-h-[70px]">
-          {(currentQuestionnaireImportId != id ) && (
+          {showDropdown && (
             <div className="flex items-center gap-3">
               <select
                 onChange={(e) => questionnaireUpdated(e.target.value)}

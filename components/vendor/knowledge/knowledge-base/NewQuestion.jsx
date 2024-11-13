@@ -8,7 +8,9 @@ import { Checkbox } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { handleResponse } from "../../../../helper";
 import { Tooltip } from "@nextui-org/tooltip";
-import { useMyContext } from "@/context"; 
+import { useMyContext } from "@/context";
+import { MultiSelect } from "primereact/multiselect";
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 const NewQuestion = () => {
   const categoryOption = [
@@ -35,24 +37,30 @@ const NewQuestion = () => {
   ];
 
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
-  const [company, setCompany] = useState("")
+  const [company, setCompany] = useState("");
   const cookiesData = cookies.myCookie;
-  const { companyUserData } = useMyContext();
+  const { companyUserData, documentData, companyProducts, onlineResourceData } =
+    useMyContext();
+  const [documentAndOnlineResourceData, setDocumentAndOnlineResourceData] =
+    useState([]);
+
   useEffect(() => {
     const hostname = window.location.hostname;
-    const parts = hostname.split('.');
+    const parts = hostname.split(".");
     if (parts.length >= 2) {
-      setCompany(parts[0])
+      setCompany(parts[0]);
     }
-  }, [])
-  const [companyProducts, setCompanyProducts] = useState([]);
-  const [documentData, setDocumentData] = useState([]);
+  }, []);
+
+  // const [companyProducts, setCompanyProducts] = useState([]);
+  // const [documentData, setDocumentData] = useState([]);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [dataLoaded, setDataIsLoaded] = useState(false);
   const router = useRouter();
   const { id } = router.query;
   const token = cookiesData?.token;
   const [isAiGenerating, setIsAiGenerating] = useState(false);
+  const [selectedReference, setSelectedReference] = useState([]);
   const [newQuestion, setNewQuestion] = useState({
     coverage: "",
     question: "",
@@ -62,7 +70,8 @@ const NewQuestion = () => {
     komcrestCategory: "",
     curator: "",
     language: "",
-    documentId: "",
+    documentIds: [],
+    onlineResourceIds: [],
   });
 
   const language = [
@@ -72,18 +81,18 @@ const NewQuestion = () => {
     { key: "German", label: "German" },
   ];
 
- 
   useEffect(() => {
-    if(!id){
+    if (!id) {
       setNewQuestion((prev) => ({
         ...prev,
-        language: "English", 
-        productIds: companyProducts.length === 1 ? [companyProducts[0].id] : prev.productIds, // Conditionally set productIds
+        language: "English",
+        productIds:
+          companyProducts.length === 1
+            ? [companyProducts[0].id]
+            : prev.productIds, // Conditionally set productIds
       }));
     }
-    
   }, [companyProducts]);
-
 
   const handleCheckboxChange = (id) => {
     setNewQuestion((prevData) => {
@@ -105,35 +114,6 @@ const NewQuestion = () => {
       [name]: value,
     }));
   };
-
-  const getCompanyProducts = async () => {
-    const token = cookiesData?.token;
-    const companyId = cookiesData?.companyId;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-    fetch(`${baseUrl}/companies/${companyId}`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          setCompanyProducts(data?.Products);
-          console.log("Products:", data?.Products);
-        } else {
-          toast.error(data?.error);
-          console.error("Error:", data);
-        }
-      })
-      .catch((error) => console.error(error));
-  };
-
-  useEffect(() => {
-    getCompanyProducts();
-    getUserDocument();
-  }, []);
 
   useEffect(() => {
     setDataIsLoaded(true);
@@ -163,10 +143,32 @@ const NewQuestion = () => {
         })
         .then(({ status, ok, data }) => {
           if (ok) {
-            setNewQuestion({
-              ...data,
-              productIds: data.Products.map((product) => product.id),
-            });
+            console.log("API Response Data:", data);
+
+            setNewQuestion(() => ({
+              coverage: data.coverage,
+              question: data.question,
+              answer: data.answer,
+              roadmap: data.roadmap,
+              komcrestCategory: data.komcrestCategory,
+              curator: data.curator,
+              language: data.language,
+              productIds: data.Products?.map((product) => product.id),
+            }));
+
+            const result = [
+              {
+                label: "Document",
+                code: "Document",
+                items: data.documents.map(doc => ({ id: doc.id, title: doc.title }))
+              },
+              {
+                label: "Online Resource",
+                code: "OnlineResource",
+                items: data.onlineResources.map(resource => ({ id: resource.id, title: resource.title }))
+              }
+            ];
+            setSelectedReference(result)
             setDataIsLoaded(true);
           } else {
             toast.error(data?.error);
@@ -179,7 +181,19 @@ const NewQuestion = () => {
 
   const handleSubmit = () => {
     console.log(newQuestion);
-    const jsonPayload = JSON.stringify(newQuestion);
+    const payload = {
+      ...newQuestion,
+      documentIds: selectedReference
+        .find(item => item.code === "Document")
+        ?.items?.map(doc => doc.id) ?? [],
+    
+      onlineResourceIds: selectedReference
+        .find(item => item.code === "OnlineResource")
+        ?.items?.map(resource => resource.id) ?? []
+    };
+    
+    const jsonPayload = JSON.stringify(payload);
+
     if (id) {
       let requestOptions = {
         method: "PUT",
@@ -260,50 +274,15 @@ const NewQuestion = () => {
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
 
-  const getUserDocument = async () => {
-    const token = cookiesData && cookiesData.token;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      redirect: "follow",
-    };
-
-    try {
-      const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
-      const data = await handleResponse(
-        response,
-        router,
-        cookies,
-        removeCookie
-      );
-      if (response.ok) {
-        const referenceOptions = data.map((item) => ({
-          id: item.id,
-          title: item.title,
-        }));
-        setDocumentData(referenceOptions);
-        console.log(">>>>>>,", referenceOptions);
-      } else {
-        toast.error(data?.error);
-      }
-    } catch (error) {
-      console.error("Error fetching user documents:", error);
-    }
-  };
-
   const generateAIAnswer = async () => {
-    if (
-      newQuestion.question
-    ) {
+    if (newQuestion.question) {
       setIsAiGenerating(true);
       let jsonPayload = JSON.stringify({
         question: newQuestion.question,
         coverage: newQuestion.coverage,
         answer: newQuestion.answer,
         komcrestCategory: newQuestion.komcrestCategory,
-        company: company
+        company: company,
       });
       let requestOptions = {
         method: "POST",
@@ -348,8 +327,60 @@ const NewQuestion = () => {
           setIsAiGenerating(false);
         });
     } else {
-      toast.error("An existing question is require to get your answer improved");
+      toast.error(
+        "An existing question is require to get your answer improved"
+      );
     }
+  };
+
+  useEffect(() => {
+    const groupedResources = [
+      {
+        label: "Document",
+        code: "Document",
+        items: documentData.map((doc) => ({
+          id: doc.id,
+          title: doc.title,
+        })),
+      },
+      {
+        label: "Online Resource",
+        code: "OnlineResource",
+        items: onlineResourceData.map((resource) => ({
+          id: resource.id,
+          title: resource.title,
+        })),
+      },
+    ];
+    setDocumentAndOnlineResourceData(groupedResources);
+  }, [onlineResourceData, documentData]);
+
+
+  const groupedItemTemplate = (option) => {
+    return (
+      <div className="flex align-items-center">
+        <div>{option.label}</div>
+      </div>
+    );
+  };
+
+  const handleSelectionChange = (e) => {
+    const selectedValues = e.value;
+
+    // Group selections based on `documentAndOnlineResourceData`
+    const groupedSelections = documentAndOnlineResourceData
+      .map((group) => {
+        return {
+          label: group.label,
+          code: group.code,
+          items: group.items.filter((item) =>
+            selectedValues.some((selected) => selected.id === item.id)
+          ),
+        };
+      })
+      .filter((group) => group.items.length > 0);
+
+    setSelectedReference(groupedSelections);
   };
 
   return (
@@ -435,22 +466,22 @@ const NewQuestion = () => {
                     </label>
 
                     {/* <Tooltip className="bg-gray-100 w-[150px] " content="Question, Answer, Komcrest Domain, Compliance, is required"> */}
-                      <div>
-                        <Button
-                          onClick={generateAIAnswer}
-                          size="sm"
-                          color="primary"
-                          // isDisabled={
-                          //   !newQuestion.question ||
-                          //   !newQuestion.coverage ||
-                          //   !newQuestion.answer ||
-                          //   !newQuestion.komcrestCategory
-                          // }
-                          className="rounded-md 2xl:text-[18px] cursor-pointer text-[16px] font-semibold mb-1"
-                        >
-                          {isAiGenerating ? "Improving..." : "Improve"}
-                        </Button>
-                      </div>
+                    <div>
+                      <Button
+                        onClick={generateAIAnswer}
+                        size="sm"
+                        color="primary"
+                        // isDisabled={
+                        //   !newQuestion.question ||
+                        //   !newQuestion.coverage ||
+                        //   !newQuestion.answer ||
+                        //   !newQuestion.komcrestCategory
+                        // }
+                        className="rounded-md 2xl:text-[18px] cursor-pointer text-[16px] font-semibold mb-1"
+                      >
+                        {isAiGenerating ? "Improving..." : "Improve"}
+                      </Button>
+                    </div>
                     {/* </Tooltip> */}
                   </div>
                   <Textarea
@@ -461,7 +492,7 @@ const NewQuestion = () => {
                     value={newQuestion.answer}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] text-gray-500",
+                      input: "2xl:text-[20px] text-[16px] text-gray-500 ",
                     }}
                   />
                 </div>
@@ -554,30 +585,20 @@ const NewQuestion = () => {
                   <label className="text-[16px] 2xl:text-[20px]">
                     Reference
                   </label>
-                  <Select
-                    variant="bordered"
-                    className="w-full bg-transparent text-[15px]"
-                    size="md"
-                    placeholder="Reference"
-                    name="documentId"
-                    value={newQuestion.documentId}
-                    onChange={(e) => handleData(e)}
-                    defaultSelectedKeys={
-                      newQuestion.documentId ? [newQuestion.documentId] : []
-                    }
-                    classNames={{ value: "text-[16px] 2xl:text-[18px]" }}
-                  >
-                    {documentData?.map((option) => (
-                      <SelectItem
-                        key={option.id}
-                        value={option.id}
-                        classNames={{ title: "text-[16px] 2xl:text-[20px]" }}
-                      >
-                        {option.title}
-                      </SelectItem>
-                    ))}
-                  </Select>
+                  <MultiSelect
+                    value={selectedReference.flatMap((group) => group.items)}
+                    options={documentAndOnlineResourceData}
+                    onChange={handleSelectionChange}
+                    optionLabel="title"
+                    optionGroupLabel="label"
+                    optionGroupChildren="items"
+                    optionGroupTemplate={groupedItemTemplate}
+                    placeholder="Select References"
+                    // display="chip"
+                    className="w-full md:w-20rem"
+                  />
                 </div>
+
                 <div>
                   <label className="text-[16px] 2xl:text-[20px]">
                     Language

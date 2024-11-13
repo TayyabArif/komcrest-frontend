@@ -18,8 +18,10 @@ import { toast } from "react-toastify";
 import { handleDownload } from "@/helper";
 import FileUploadModal from "../shared/FileUploadModal";
 import useSocket from "@/customHook/useSocket";
+import { useMyContext } from "@/context";
 
 const UpdateComponent = () => {
+  const {setOnlineResourceDataUpdate} = useMyContext();
   const socket = useSocket();
   const languageOptions = [
     { key: "French", label: "French" },
@@ -206,6 +208,7 @@ const UpdateComponent = () => {
 
       if (response.ok) {
         toast.success("Resource Updated");
+        setOnlineResourceDataUpdate((prev)=>!prev)
         router.push("/vendor/onlineResource");
       } else {
         toast.error(data?.error);
@@ -333,6 +336,7 @@ const UpdateComponent = () => {
             ...prevData,
             file: data.file,
           }));
+          setOnlineResourceDataUpdate((prev)=>!prev)
         } else {
           console.error("Error:", data);
         }

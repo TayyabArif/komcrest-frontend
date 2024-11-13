@@ -19,7 +19,7 @@ const NewDocument = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
-  const { companyProducts } = useMyContext();
+  const { companyProducts , setDocumentDataUpdate } = useMyContext();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
 
@@ -40,7 +40,6 @@ const NewDocument = () => {
   });
 
   useEffect(() => {
-    
       setDocumentData((prev) => ({
         ...prev,
         language: "English",
@@ -138,6 +137,7 @@ const NewDocument = () => {
         .then(({ status, ok, data }) => {
           if (ok) {
             toast.success("Document updated successfully");
+            setDocumentDataUpdate((prev)=>!prev)
             router.push("/vendor/document");
           } else {
             toast.error(data?.error);
@@ -173,6 +173,7 @@ const NewDocument = () => {
           if (ok) {
             console.log("Success:", data);
             toast.success("Document created successfully");
+            setDocumentDataUpdate((prev)=>!prev)
             router.push("/vendor/document");
           } else {
             toast.error(data?.error || "Document not Created");

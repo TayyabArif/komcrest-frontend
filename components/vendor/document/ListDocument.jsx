@@ -8,22 +8,24 @@ import ExampleCard from "./shared/ExampleCard";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import {handleResponse} from "../../../helper"
+import { useMyContext } from "@/context";
 
 
 const AddDocument = () => {
+  const {documentData, setDocumentData ,isLoading ,setDocumentDataUpdate ,dataIsLoaded} = useMyContext();
   const [cookies, setCookie, removeCookie] = useCookies(['myCookie']); 
   const cookiesData = cookies.myCookie;
   const router = useRouter();
-  const [documentData, setDocumentData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [dataIsLoaded, setDataIsLoaded] = useState(false);
+  // const [documentData, setDocumentData] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [dataIsLoaded, setDataIsLoaded] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  useEffect(() => {
-    getUserDocument();
-  }, [isDeleted]);
+  // useEffect(() => {
+  //   getUserDocument();
+  // }, [isDeleted]);
 
   const getUserDocument = async () => {
     setIsLoading(true);

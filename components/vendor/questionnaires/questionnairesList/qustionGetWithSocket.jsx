@@ -19,9 +19,9 @@ const SocketQuestionnairesList = () => {
   const token = cookiesData?.token;
 
   return (
-    <div>
-      <QuestionnairsListHeader questionnaireData={questionnaireData}/>
-      <div className="w-[86%] mx-auto">
+    <div className="h-full flex flex-col">
+      <QuestionnairsListHeader questionnaireData={questionnaireData}  showDropdown={false} />
+      <div className="w-[86%] mx-auto  flex-1  h-[0vh]  flex flex-col">
         <div className="flex justify-between items-center">
         <div className="flex items-center gap-1 my-2">
           <Input
@@ -46,9 +46,7 @@ const SocketQuestionnairesList = () => {
         <h1 className="text-blue-600">Komcrest AI is working to generate the best answers</h1>
         </div>
         </div>
-
-        <div className="flex gap-4">
-        <div className="overflow-auto w-full h-[75vh]  bg-white border">
+        <div className="overflow-auto w-full flex-1  bg-white border">
           <table className="min-w-full border-collapse border  text-gray-700">
             <thead className="border sticky -top-1 bg-[#E5E7EB] z-50">
               <tr className="2xl:text-[20px] text-[16px]">
@@ -113,7 +111,6 @@ const SocketQuestionnairesList = () => {
               ))}
             </tbody>
           </table>
-        </div>
         </div>
       </div>
     </div>
