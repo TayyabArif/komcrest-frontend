@@ -316,7 +316,7 @@ export const MyProvider = ({ children }) => {
       };
   
       try {
-        const response = await fetch(`${baseUrl}/userdocuments`, requestOptions);
+        const response = await fetch(`${baseUrl}/documents`, requestOptions);
         const data = await handleResponse(response, router, cookies,removeCookie);
         // const data = await response.json();
         if (response.ok) {
