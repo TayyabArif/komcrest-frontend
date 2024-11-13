@@ -52,12 +52,13 @@ const QuestionnairesView = () => {
   const [textAreaSize, setTextAreaSize] = useState("");
   const [selectedTextAreaId, setSelectedTextAreaId] = useState();
   const [getFilterData, setFilterData] = useState("");
-  const [referenceToggle , setReferenceToggle] = useState({
-    isKnowledgeOpen :true,
-    isDocumentOpen : true,
-    isOnlineOpen : true
-  })
-  const [seletedQuestionnaireReference , setSeletedQuestionnaireReference] = useState()
+  const [referenceToggle, setReferenceToggle] = useState({
+    isKnowledgeOpen: true,
+    isDocumentOpen: true,
+    isOnlineOpen: true,
+  });
+  const [seletedQuestionnaireReference, setSeletedQuestionnaireReference] =
+    useState();
 
   const [selectedQuestionnaireReference, setSelectedQuestionnaireReference] =
     useState();
@@ -229,17 +230,25 @@ const QuestionnairesView = () => {
         `${baseUrl}/questionnairerecord/${selectedId}`,
         requestOptions
       );
-      const result = await response.text();
+
+      const result = await response.json(); // parse response as JSON
 
       if (response.ok) {
-        toast.success("Question deleted successfully");
-        setDataUpdate(!dataUpdate);
-        setSelectedId("");
+        if (
+          result.message ===
+          "QuestionnaireRecord and its associated Questionnaire were deleted successfully"
+        ) {
+          toast.success(result.message);
+          setQuestionnaireUpdated((prev) => !prev);
+          router.push("/vendor/questionnaires");
+        } else {
+          toast.success(result.message);
+          setDataUpdate((prev) => !prev);
+          setSelectedId("");
+        }
       } else {
         toast.error("Failed to delete the question");
       }
-
-      console.log(result);
     } catch (error) {
       console.error("Error deleting the question:", error);
       toast.error("An error occurred while deleting the question");
@@ -268,13 +277,22 @@ const QuestionnairesView = () => {
         `${baseUrl}/questionnaire/delete`,
         requestOptions
       );
+      const result = await response.json();
 
       if (response.ok) {
-        const result = await response.json();
-        toast.success(result.message);
-        setBulkSelected([]);
-        setDataUpdate(!dataUpdate);
-        setSelectedId("");
+        if (
+          result.message ===
+          "QuestionnaireRecord and its associated Questionnaire were deleted successfully"
+        ) {
+          toast.success(result.message);
+          setQuestionnaireUpdated((prev) => !prev);
+          router.push("/vendor/questionnaires");
+        } else {
+          toast.success(result.message);
+          setBulkSelected([]);
+          setDataUpdate(!dataUpdate);
+          setSelectedId("");
+        }
       } else {
         toast.error("Failed to delete questions");
       }
@@ -314,22 +332,29 @@ const QuestionnairesView = () => {
       questionnaireRecords: questionnaireData.questionnaireRecords.map(
         (record) => {
           if (record.id === id[0]) {
-
-            let complianceStatus = record.complianceGeneratedBy
-            let answerStatus = record.generatedBy
-            if(record.complianceGeneratedBy == "AI" && property == "compliance"){
-              complianceStatus = "manual"
+            let complianceStatus = record.complianceGeneratedBy;
+            let answerStatus = record.generatedBy;
+            if (
+              record.complianceGeneratedBy == "AI" &&
+              property == "compliance"
+            ) {
+              complianceStatus = "manual";
             }
-            if(record.generatedBy == "AI" && property == "answer"){
-              answerStatus = "manual"
+            if (record.generatedBy == "AI" && property == "answer") {
+              answerStatus = "manual";
             }
-            return { ...record, [property]: value , complianceGeneratedBy : complianceStatus ,generatedBy : answerStatus  };
-          } 
+            return {
+              ...record,
+              [property]: value,
+              complianceGeneratedBy: complianceStatus,
+              generatedBy: answerStatus,
+            };
+          }
           return record;
         }
       ),
     });
- 
+
     const updatedData = {
       ids: id,
       field: property,
@@ -368,9 +393,17 @@ const QuestionnairesView = () => {
       .then(({ status, ok, data }) => {
         if (ok) {
           if (statusValue == "Flagged") {
-            toast.warning(`Selected Question${id.length > 1 ? "(s) are" : ' is'} move to "Require Attention"`);
+            toast.warning(
+              `Selected Question${
+                id.length > 1 ? "(s) are" : " is"
+              } move to "Require Attention"`
+            );
           } else if (statusValue == "approved") {
-            toast.success(`The selected question${id.length > 1 ? "(s) are" : ' is'} validated by the user`);
+            toast.success(
+              `The selected question${
+                id.length > 1 ? "(s) are" : " is"
+              } validated by the user`
+            );
           } else {
             toast.success(data.message);
           }
@@ -401,7 +434,7 @@ const QuestionnairesView = () => {
   };
 
   const reRunForAnswer = (ids) => {
-    toast.loading("It will take some time, please wait...")
+    toast.loading("It will take some time, please wait...");
     const token = cookiesData.token;
     let requestOptions = {
       method: "POST",
@@ -695,7 +728,8 @@ const QuestionnairesView = () => {
                                 className={`h-5 w-5 mx-auto rounded-full cursor-pointer border ${
                                   item.status === "approved"
                                     ? "bg-green-600"
-                                    : item.status === "Flagged" || item.confidence < 7
+                                    : item.status === "Flagged" ||
+                                      item.confidence < 7
                                     ? "bg-yellow-500"
                                     : "bg-blue-600"
                                 }`}
@@ -730,22 +764,18 @@ const QuestionnairesView = () => {
                                   }
                                   className="w-full  text-[16px] 2xl:text-[20px] rounded-lg bg-transparent"
                                 >
-                                  <option disabled>
-                                    Select
-                                  </option>
+                                  <option disabled>Select</option>
                                   <option value="yes">Yes</option>
                                   <option value="no">No</option>
-                                  <option value="">
-                                    Not applicable
-                                  </option>
+                                  <option value="">Not applicable</option>
                                 </select>
                               </div>
                             </td>
                             <td
-                             onClick={(e) => {
-                              setSelectedTextAreaId(item.id);
-                              setAnswerIsUpdate("single");
-                            }}
+                              onClick={(e) => {
+                                setSelectedTextAreaId(item.id);
+                                setAnswerIsUpdate("single");
+                              }}
                               className={`px-4 py-2  !min-w-[450px]   !text-wrap  border ${
                                 item.confidence < 7
                                   ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
@@ -769,7 +799,6 @@ const QuestionnairesView = () => {
                                     // Reset the height to auto to adjust downwards if needed
                                     // e.target.style.height = `${e.target.scrollHeight}px`;
                                   }}
-                                 
                                   style={{ height: `${textAreaSize}px` }}
                                   className={`w-full text-wrap !h-[${textAreaSize}px] rounded-md focus:outline-none ring-2 px-2  ${
                                     item.status == "approved" &&
@@ -809,7 +838,7 @@ const QuestionnairesView = () => {
                                   <>
                                     <p
                                       onClick={(e) => {
-                                        e.stopPropagation()
+                                        e.stopPropagation();
                                         setAnswerIsUpdate("");
                                         setSelectedTextAreaId("");
                                       }}
@@ -819,7 +848,7 @@ const QuestionnairesView = () => {
                                     </p>
                                     <p
                                       onClick={(e) => {
-                                        e.stopPropagation()
+                                        e.stopPropagation();
                                         UpdateRecord(
                                           [item.id],
                                           "answer",
@@ -842,7 +871,11 @@ const QuestionnairesView = () => {
                                 ) : null}
                               </div>
                             </td>
-                            <td className={`px-4 py-2  border w-[100px]   border-b-0  outline outline-[#E5E7EB] text-left sticky -right-[1px] ${index % 2 === 0 ? 'bg-gray-100':"bg-white"}`}>
+                            <td
+                              className={`px-4 py-2  border w-[100px]   border-b-0  outline outline-[#E5E7EB] text-left sticky -right-[1px] ${
+                                index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                              }`}
+                            >
                               <div className="inline-flex space-x-2 text-[#A5A5A5]">
                                 <Check
                                   size={17}
@@ -852,14 +885,13 @@ const QuestionnairesView = () => {
                                       ? "text-green-700"
                                       : ""
                                   }`}
-                                  onClick={() =>{
+                                  onClick={() => {
                                     UpdateRecord(
                                       [item.id],
                                       "status",
                                       "approved"
-                                    )
-                                  }
-                                  }
+                                    );
+                                  }}
                                 />
                                 <TriangleAlert
                                   size={17}
@@ -871,11 +903,12 @@ const QuestionnairesView = () => {
                                   }`}
                                   onClick={() => {
                                     {
-                                    UpdateRecord(
-                                      [item.id],
-                                      "status",
-                                      "Flagged"
-                                    );}
+                                      UpdateRecord(
+                                        [item.id],
+                                        "status",
+                                        "Flagged"
+                                      );
+                                    }
                                   }}
                                 />
                                 <Eye
@@ -969,7 +1002,8 @@ const QuestionnairesView = () => {
                               className={`my-2    text-left sticky -right-[1px] ${
                                 item.status === "approved"
                                   ? "bg-green-600"
-                                  : item.status === "Flagged" || item.confidence < 7
+                                  : item.status === "Flagged" ||
+                                    item.confidence < 7
                                   ? "bg-yellow-500"
                                   : "bg-blue-600"
                               }`}
@@ -1002,7 +1036,7 @@ const QuestionnairesView = () => {
                       selectedQuestionnaireReference
                     }
                     referenceToggle={referenceToggle}
-                    setReferenceToggle ={setReferenceToggle}
+                    setReferenceToggle={setReferenceToggle}
                     reRunForAnswer={reRunForAnswer}
                   />
                 </div>
