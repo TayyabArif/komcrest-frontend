@@ -255,20 +255,19 @@ const AddResource = () => {
   };
 
   return (
-    <div className="w-[100%] h-full">
-      <div className="w-[90%] mx-auto py-3 mt-[1rem]">
+    <div className="w-[100%] h-full flex flex-col">
+      <div className="w-[90%] mx-auto  mt-[1rem] flex-1 flex flex-col  h-[0vh]">
         <h1 className="font-semibold bg-slate-50 px-6 py-2 2xl:text-[20px]">
           {getTitle()}
         </h1>
-        <div className="w-full h-[80vh] bg-white p-6">
+        <div className="w-full bg-white p-6 flex-1 flex flex-col  h-[0vh]">
           <Progress
             aria-label="Loading..."
             value={progressBar}
             className="h-[8px]"
           />
 
-          <div className="flex flex-col justify-between h-full">
-            <div>
+          <div className="flex flex-col flex-1 justify-between h-full">
               <div className="my-3 flex gap-2">
                 {[
                   "Add URLs",
@@ -301,7 +300,7 @@ const AddResource = () => {
                   </div>
                 ))}
               </div>
-              <div className="overflow-auto max-h-[58vh]">
+              <div className="flex flex-col flex-1 h-[0vh] ">
                 {stepper === 0 && (
                   <AddUrls
                     setAllResources={setAllResources}
@@ -326,7 +325,6 @@ const AddResource = () => {
                 )}
                 {stepper === 4 && <Completed  content="Importing online resources"/>}
               </div>
-            </div>
             <div>
               {stepper >= 0 && stepper <= 3 && (
                 <div
@@ -336,7 +334,7 @@ const AddResource = () => {
                 >
                   {stepper === 2 && (
                     <div className="space-y-2">
-                      <div className=" mt-8 mb-2">
+                      <div className=" my-1">
                         <h1 className="font-semibold text-[16px] 2xl:text-[20px] ">
                           Select Language:
                         </h1>

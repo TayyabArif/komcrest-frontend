@@ -53,10 +53,10 @@ const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHea
   };
 
   return (
-    <div className='h-full'>
+    <div className='pb-2 overflow-auto w-[100%]'>
       {knowledgeData.questions ? (
-        <div>
-          <table className='text-sm'>
+        <div className='w-[100%]'>
+          <table className='text-sm w-[100%]'>
             <thead className=''>
               <tr className='bg-[#ebeef2]'>
                 {selectedHeader?.map((header, index) => (

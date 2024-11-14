@@ -44,7 +44,7 @@ const ReviewContent = ({
   };
 
   return (
-    <div className="overflow-x-auto xl:max-h-[50vh] max-h-[40vh]">
+    <div className="overflow-auto">
       <table className="min-w-full block md:table">
         <thead className="block md:table-header-group sticky -top-1 bg-[#EBEEF2]">
           <tr className="border text-[16px] 2xl:text-[20px] md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
@@ -68,7 +68,7 @@ const ReviewContent = ({
         <tbody className="block md:table-row-group">
           {resourceData?.resources?.map((item, index) => (
             <tr key={index} className="bg-white text-[16px] 2xl:text-[20px]">
-              <td className="p-2 border  text-left block md:table-cell py-3">
+              <td className="p-2 border  text-left block md:table-cell py-3 max-w-[350px] break-words">
                 {item.title}
               </td>
               <td className="p-2 border  text-left block md:table-cell py-3 max-w-[300px] break-words ">

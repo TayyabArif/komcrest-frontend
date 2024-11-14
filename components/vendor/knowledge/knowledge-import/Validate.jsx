@@ -23,9 +23,9 @@ const Validate = ({ knowledgeData, questions }) => {
   return (
     <div className="w-full overflow-x-auto">
     {questions ? (
-      <div className="overflow-x-auto relative">
+      <div className=" relative">
         <table className="min-w-max bg-white border border-gray-300 table-fixed text-sm w-full border-collapse">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 sticky -top-1  z-50">
             <tr className="bg-[#ebeef2]  ">
               {Object.keys(questions[0]).map((header) => (
                 <th

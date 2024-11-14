@@ -49,7 +49,7 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
   };
 
   return (
-    <div className='space-y-10'>
+    <div className='space-y-10 '>
       <table className="table-auto border-[1px] border-collapse border-gray-400 w-full text-sm">
         <thead>
           <tr className='text-left text-[16px] 2xl:text-[20px]'>
@@ -121,9 +121,9 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
             <Button onClick={onClose} radius="none" size="sm" className="text-red-700 px-3 h-[40px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-300 w-max rounded-[4px] my-3">
               Cancel
             </Button>
-            <Button onClick={onClose} radius="none" size="sm" className="text-white px-3 h-[40px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-3">
+            {/* <Button onClick={onClose} radius="none" size="sm" className="text-white px-3 h-[40px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-3">
               Upload
-            </Button>
+            </Button> */}
           </ModalFooter>
         </ModalContent>
       </Modal>

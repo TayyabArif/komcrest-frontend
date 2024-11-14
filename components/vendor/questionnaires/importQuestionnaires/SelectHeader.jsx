@@ -57,9 +57,9 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
   };
 
   return (
-    <div className="py-2 ">
+    <div className="py-2 h-[0vh] flex-1 flex flex-col  ">
       {excelFile && (
-        <>
+        <div className='flex flex-col flex-1 h-[0vh]'> 
           <div className="flex space-x-0 mb-2">
             {Object.keys(excelFile).map((sheetName) => (
               <div key={sheetName} className="relative">
@@ -78,8 +78,8 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
             ))}
           </div>
           {selectedSheet && excelFile[selectedSheet] && (
-            <div className="h-[53vh] overflow-auto">
-              <table className="min-w-full border-collapse border">
+            <div className="overflow-auto">
+              <table className="w-[100%]">
                 <thead className="bg-[#F6F7F9] sticky -top-1 z-10">
                   <tr className='text-[16px] 2xl:text-[20px]'>
                     <th className="border p-2 text-left">
@@ -120,8 +120,9 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
               </table>
             </div>
           )}
-        </>
+        </div>
       )}
+
     </div>
   );
 };
