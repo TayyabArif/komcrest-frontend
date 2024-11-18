@@ -39,11 +39,11 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
 
 
   return (
-    <form>
-      <div className="space-y-3 w-[80%] ml-10 mt-10">
+    
+      <div className="space-y-3 w-[100%] mt-10 flex flex-col  overflow-auto">
         {allResources.map((field, index) => (
           <div key={index} className="flex gap-3 items-end">
-            <div className="w-[50%] space-y-1 ">
+            <div className="w-[45%] space-y-1 ">
               {index === 0 && (
                 <label className="text-[16px] 2xl:text-[20px]">URL</label>
               )}
@@ -64,7 +64,7 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
               />
               </div>
             </div>
-            <div className="w-[50%] space-y-1 ">
+            <div className="w-[45%] space-y-1 ">
               {index === 0 && (
                 <label className="text-[16px] 2xl:text-[20px]">Title</label>
               )}
@@ -109,7 +109,6 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
           </div>
         ))}
       </div>
-    </form>
   );
 };
 

@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie";
 import { handleResponse } from "@/helper"; 
 import { toast } from "react-toastify";
 
-const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireProgressBar ,onCardDrop}) => {
+const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireProgressBar ,onCardDrop ,divHeight}) => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -23,7 +23,7 @@ const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireP
   });
 
   return (
-    <div className="w-full flex flex-col" >
+    <div style={{ height: `${divHeight-30}px` }}  className="w-full flex flex-col" >
       <div  ref={dropRef} className="space-y-4 flex-1 rounded-md"
       style={{
         backgroundColor: isOver ? '#F9FAFB' : '',

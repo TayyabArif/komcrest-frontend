@@ -29,11 +29,11 @@ const SelectHeaderRow = ({ knowledgeData, setSelectedHeader, selectedRowIndex, s
   };
 
   return (
-    <div className='w-full overflow-x-auto'>
+    <div className='w-full flex-1 h-full flex flex-col'>
       {knowledgeData.questions ? (
-        <div>
+        <div className='flex-1 overflow-auto'>
           <table className="text-sm w-full border-collapse">
-            <thead>
+            <thead className='sticky -top-1 bg-[#E5E7EB] z-50'>
               <tr className='bg-[#ebeef2] text-[16px] 2xl:text-[20px]'>
                 <th style={thStyle}>
                   <input

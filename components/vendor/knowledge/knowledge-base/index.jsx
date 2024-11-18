@@ -8,7 +8,12 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import VendorHeader from "../../shared/VendorHeader";
 import KnowledgeHeader from "../../shared/KnowledgeHeader";
-import { handleResponse, formatDateWithTime } from "../../../../helper";
+import {
+  handleResponse,
+  formatDateWithTime,
+  handleFileDownload,
+  handleDownload
+} from "../../../../helper";
 import KnowledgeFilter from "../knowledge-filter";
 import { Checkbox } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
@@ -198,25 +203,6 @@ const KnowledgeBase = ({
       .catch((error) => console.error(error));
   };
 
-  const handleFileDownload = async (filePath) => {
-    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-    const fileUrl = `${baseUrl}/${filePath}`;
-    try {
-      const response = await fetch(proxyUrl + fileUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", filePath.split("/").pop());
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      toast.success("Document Downloaded successfully");
-    } catch (error) {
-      console.error("Error downloading the file", error);
-    }
-  };
-
   const handleCheckboxChange = (id) => {
     let payload = [...bulkDeleted];
     if (bulkDeleted.includes(id)) {
@@ -381,11 +367,11 @@ const KnowledgeBase = ({
                   <th className="py-2 px-4 text-left !max-w-[320px]">
                     Komcrest Domain
                   </th>
-                  <th className="py-2 px-4 text-left !min-w-[650px]">
+                  <th className="py-2 px-4 text-left md:min-w-[250px]  lg:min-w-[350px] xl:min-w-[500px]">
                     Question
                   </th>
                   <th className="py-2 px-4 text-left">Compliance</th>
-                  <th className="py-2 px-4 text-left text-wrap !min-w-[500px]">
+                  <th className="py-2 px-4 text-left text-wrap md:min-w-[250px]  lg:min-w-[350px] xl:min-w-[500px]">
                     Answer
                   </th>
                   <th className="py-2 px-4 text-left !min-w-[250px]">
@@ -425,7 +411,7 @@ const KnowledgeBase = ({
                           classNames={{ wrapper: "!rounded-[3px]" }}
                         />
                       </td>
-                      <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+                      <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[150px] max-w-[550px]  break-words">
                         {data.category}
                       </td>
                       <td className="py-2 px-4 border bg-transparent !max-w-[320px]">
@@ -446,38 +432,50 @@ const KnowledgeBase = ({
                           ))}
                         </select>
                       </td>
-                      <td className="py-2 px-4 border max-w-xs">
+                      <td className="py-2 px-4 border  md:max-w-[250px]  lg:max-w-[350px] xl:max-w-[500px]  break-words">
                         {data.question}
                       </td>
                       <td className="py-2 px-4 border whitespace-rap">
                         {data.coverage}
                       </td>
-                      <td className="py-2 px-4 border text-wrap min-w-[500px]">
+                      <td className="py-2 px-4 border text-wrap md:max-w-[250px]  break-words  lg:max-w-[350px] xl:max-w-[500px]">
                         {data.answer}
                       </td>
-                      <td className="py-2 px-4 border max-w-xs">
+                      <td className="py-2 px-4 border md:max-w-[250px]  lg:max-w-[350px] xl:max-w-[500px]  break-words">
                         {data.Products.map((product) => product.name).join(
                           ", "
                         )}
                       </td>
-                      <td className="py-2 px-4 border max-w-xs !min-w-[250px]">
+                      <td className="py-2 px-4 border   md:max-w-[200px]  break-words  lg:max-w-[250px] xl:max-w-[300px]">
                         {data.roadmap}
                       </td>
-                      <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[250px] max-w-[550px]">
+                      <td className="py-2 px-4 border whitespace-nowrap  break-words text-wrap min-w-[250px] max-w-[550px]">
                         {data.curator}
                       </td>
-                      <td
-                        className="py-2 px-4 border whitespace-nowrap text-blue-600 cursor-pointer"
-                        onClick={() =>
-                          handleFileDownload(data.document?.filePath)
-                        }
-                      >
-                        {data.document?.title}
+                      <td className="py-2 px-4 border whitespace-wrap break-words text-blue-600 cursor-pointer md:max-w-[200px] lg:max-w-[250px] xl:max-w-[300px]">
+                        {[
+                          ...data.documents.map((item) => (
+                            <h1
+                              key={item.id} // Always provide a unique key when rendering lists
+                              className="cursor-pointer"
+                              onClick={() =>{ handleFileDownload(item?.filePath)}}
+                            >
+                              {item.title}
+                            </h1>
+                          )),
+                          ...data.onlineResources.map((item) => (
+                            <h1 
+                            onClick={() => handleDownload(item?.file)}
+                            
+                            key={item.id}>{item.title}</h1>
+                          )),
+                        ]}
                       </td>
-                      <td className="py-2 px-4 border whitespace-nowrap">
+
+                      <td className="py-2 px-4 border xl:min-w-[330px] lg:min-w-[250px] md:min-w-[200px] ">
                         {data.documentFile?.name}
                       </td>
-                      <td className="py-2 px-4 border whitespace-nowrap">
+                      <td className="py-2 px-4 border whitespace-nowrap ">
                         {formatDateWithTime(data.updatedAt)}
                       </td>
                       <td

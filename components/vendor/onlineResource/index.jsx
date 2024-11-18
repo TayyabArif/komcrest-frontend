@@ -235,11 +235,11 @@ const OnlineResourceComponent = () => {
                             {item.title}
                           </td>
 
-                          <td className="p-2 md:border md: text-left block md:table-cell">
+                          <td className="p-2 md:border xl:max-w-[450px] lg:max-w-[350px] md:max-w-[250px] break-words  text-left block md:table-cell">
                             {item.url}
                           </td>
 
-                          <td className="p-2 border md:  text-left block md:table-cell py-3">
+                          <td className="p-2 border   text-left block md:table-cell py-3">
                             {item.file ? (
                               <div className="flex flex-col">
                                 <span
@@ -262,7 +262,7 @@ const OnlineResourceComponent = () => {
                           <td className="p-2 md:border md: text-left block md:table-cell ">
                             {formatDateWithTime(item.updatedAt)}
                           </td>
-                          <td className="p-2 md:border md: text-left block md:table-cell">
+                          <td className="p-2 md:border md: text-left block md:table-cell min-w-[150px]">
                             {item.indexing}
                           </td>
                           <td

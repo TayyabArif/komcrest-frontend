@@ -19,11 +19,17 @@ import ValidateData from "./ValidateData";
 import { useMyContext } from "@/context";
 import useSocket from "@/customHook/useSocket";
 
-const Import = ({setNewQuestionnaireCreated}) => {
-
+const Import = ({ setNewQuestionnaireCreated }) => {
   const { companyProducts } = useMyContext();
   const [stepper, setStepper] = useState(0);
-  const { setQuestionnaireUpdated ,setQuestionList , setQuestionnaireData,setCurrentQuestionnaireImportId ,setIsSocketConnected } = useMyContext();
+  const {
+    setQuestionnaireUpdated,
+    setQuestionList,
+    setQuestionnaireData,
+    setCurrentQuestionnaireImportId,
+    setIsSocketConnected,
+    setIsFirstResponse
+  } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -58,10 +64,12 @@ const Import = ({setNewQuestionnaireCreated}) => {
     setImportQuestionnaire((prev) => ({
       ...prev,
       language: "English", // Always set language to English
-      productIds: companyProducts.length === 1 ? [companyProducts[0].id] : prev.productIds, // Conditionally set productIds
+      productIds:
+        companyProducts.length === 1
+          ? [companyProducts[0].id]
+          : prev.productIds, // Conditionally set productIds
     }));
   }, [companyProducts]);
-  
 
   const getDatafromChild = () => {
     let getData;
@@ -133,39 +141,37 @@ const Import = ({setNewQuestionnaireCreated}) => {
   //     if (!excelFile[sheetName] || !excelFile[sheetName][0]) {
   //       return false; // Return false if the sheet or the first row doesn't exist
   //     }
-  
+
   //     // For single-column sheets, check if only "Question" is selected
   //     if (excelFile[sheetName][0].length === 1) {
   //       return value[0] === "Question";  // Check if the first and only option is "Question"
   //     }
-  
+
   //     // For multiple columns, ensure both "Category" and "Question" are selected
-  //     return Object.keys(value).length === 2 
+  //     return Object.keys(value).length === 2
   //   });
   // };
-  
+
   const checkValuesLength = () => {
     if (Object.keys(columnMapping).length === 0) {
       return false;
     }
-  
+
     return Object.entries(columnMapping).every(([sheetName, value]) => {
       // Add null safety check for excelFile[sheetName] and excelFile[sheetName][0]
       if (!excelFile[sheetName] || !excelFile[sheetName][0]) {
         return false; // Return false if the sheet or the first row doesn't exist
       }
-  
+
       // For single-column sheets, check if only "Question" is selected
       if (excelFile[sheetName][0].length === 1) {
         return value[0] === "Question"; // Check if the first and only option is "Question"
       }
-  
+
       // For multiple columns, ensure that "Question" is selected, "Category" is optional
       return Object.values(value).includes("Question");
     });
   };
-  
-  
 
   const handleNextClick = () => {
     if (stepper === 0 && firstStepValidation()) {
@@ -190,7 +196,7 @@ const Import = ({setNewQuestionnaireCreated}) => {
       }
     } else if (stepper === 3) {
       const finalData = getDatafromChild();
-      console.log("finalDatafinalData",finalData)
+      console.log("finalDatafinalData", finalData);
       setStepper(stepper + 1);
       setProgressBar(progressBar + 27);
       const transformedData = {};
@@ -201,11 +207,11 @@ const Import = ({setNewQuestionnaireCreated}) => {
         transformedData[key] = dataRows.map((row) => {
           let obj = {};
           const mapping = columnMapping[key];
-  
+
           row.forEach((value, index) => {
-            const mappedHeader = mapping[index]; 
+            const mappedHeader = mapping[index];
             if (mappedHeader) {
-              obj[mappedHeader] = value; 
+              obj[mappedHeader] = value;
             }
           });
           return obj;
@@ -215,7 +221,6 @@ const Import = ({setNewQuestionnaireCreated}) => {
       console.log("transformedDatatransformedData", transformedData);
     }
   };
-
 
   const submitQuestions = (transformedData) => {
     // convert object data in array of object
@@ -244,10 +249,11 @@ const Import = ({setNewQuestionnaireCreated}) => {
 
     setQuestionList(result);
 
-    setQuestionnaireData({fileName : importQuestionnaires.fileName ,
-      customerName :importQuestionnaires.customerName,
-       originalFile :importQuestionnaires.originalFile
-    })
+    setQuestionnaireData({
+      fileName: importQuestionnaires.fileName,
+      customerName: importQuestionnaires.customerName,
+      originalFile: importQuestionnaires.originalFile,
+    });
     setTotalCount(payload.Questionnaires.length);
     const token = cookiesData.token;
 
@@ -264,56 +270,51 @@ const Import = ({setNewQuestionnaireCreated}) => {
     };
     // Introduce a 2-second delay before making the API call
     setTimeout(() => {
-      setIsSocketConnected (true);
-      setNewQuestionnaireCreated(false)
+      setIsSocketConnected(true);
+      setNewQuestionnaireCreated(false);
     }, 1500);
-     
-      fetch(`${baseUrl}/questionnaires`, requestOptions)
-      
-        .then(async (response) => {
-          const data = await handleResponse(
-            response,
-            router,
-            cookies,
-            removeCookie
+
+    fetch(`${baseUrl}/questionnaires`, requestOptions)
+      .then(async (response) => {
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          toast.success("Questionnaires created successfully");
+          setQuestionnaireUpdated((prev) => !prev);
+          localStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
+          setCurrentQuestionnaireImportId("");
+          setIsFirstResponse(true)
+          router.push(
+            `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`
           );
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
-            toast.success("Questionnaires created successfully");
-            setQuestionnaireUpdated((prev) => !prev);
-            localStorage.setItem(
-              "QuestionnaireId",
-              data?.fullQuestionnaire?.id
-            );
-            setCurrentQuestionnaireImportId("")
-            router.push(
-              `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`
-            ); 
-          } else {
-            toast.error(data?.error || "Questionnaires not Created");
-            console.error("Error:", data);
-          }
-        })
-        .catch((error) => {
-          if (error.response) {
-            console.error("API Error:", error.response);
-            toast.error(
-              error.response.data?.error ||
-                "An error occurred while creating the document"
-            );
-          }
-        });
- 
+        } else {
+          toast.error(data?.error || "Questionnaires not Created");
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error("API Error:", error.response);
+          toast.error(
+            error.response.data?.error ||
+              "An error occurred while creating the document"
+          );
+        }
+      });
   };
 
- 
- const handleCancelClick = () => {
+  const handleCancelClick = () => {
     if (stepper > 0) {
       setStepper(stepper - 1);
       setProgressBar(progressBar - 27);
@@ -323,69 +324,70 @@ const Import = ({setNewQuestionnaireCreated}) => {
   };
 
   return (
-    <div className="w-[100%] h-full ">
-      <div className="w-[90%] mx-auto py-4 mt-1 ">
-        <h1 className="font-semibold bg-slate-50 px-6 py-1 2xl:text-[20px] rounded-t-md">
-          {getTitle()} 
+    <div className="w-[100%] h-full  flex flex-col">
+      <div className="w-[90%] mx-auto pt-10 mt-1 flex-1  flex flex-col h-[0vh]">
+        <h1 className="font-semibold bg-slate-50 px-6 py-2 2xl:text-[20px] rounded-t-md">
+          {getTitle()}
         </h1>
-        <div className="w-full h-auto p-5 rounded-b-md bg-white">
+        <div className="w-full h-[0vh]  p-5 rounded-b-md bg-white flex-1 flex flex-col ">
           <Progress
             aria-label="Loading..."
             value={progressBar}
             className="h-[8px]"
           />
 
-          <div className=" space-y-0 h-full ">
-            <div className="my-3 flex gap-2">
-              {[
-                "Add questionnaire",
-                "Select header row",
-                "Select questions",
-                "Validate data",
-              ].map((title, index) => (
-                <div
-                  key={index}
-                  className="flex gap-3 items-center flex-1 border-2 py-[6px] px-2 rounded"
-                >
-                  <span
-                    className={`${
-                      stepper >= index + 1 ? "bg-blue-600" : "border-blue-600"
-                    } border-blue-600 flex items-center justify-center rounded-full w-[25px] h-[25px] text-center border-2`}
+          <div className=" space-y-0 flex-1 h-[0vh] flex flex-col justify-between  ">
+            <div className="flex-1 flex flex-col h-[0vh] ">
+              <div className="my-3 flex gap-2">
+                {[
+                  "Add questionnaire",
+                  "Select header row",
+                  "Select questions",
+                  "Validate data",
+                ].map((title, index) => (
+                  <div
+                    key={index}
+                    className="flex gap-3 items-center flex-1 border-2 py-[6px] px-2 rounded"
                   >
-                    {stepper >= index + 1 ? (
-                      <Check className="text-white font-bold size-65" />
-                    ) : (
-                      index + 1
-                    )}
-                  </span>
-                  <h1
-                    className={`text-[16px] 2xl:text-[20px] ${
-                      stepper === index ? "text-blue-600" : ""
-                    }`}
-                  >
-                    {title}
+                    <span
+                      className={`${
+                        stepper >= index + 1 ? "bg-blue-600" : "border-blue-600"
+                      } border-blue-600 flex items-center justify-center rounded-full w-[25px] h-[25px] text-center border-2`}
+                    >
+                      {stepper >= index + 1 ? (
+                        <Check className="text-white font-bold size-65" />
+                      ) : (
+                        index + 1
+                      )}
+                    </span>
+                    <h1
+                      className={`text-[16px] 2xl:text-[20px] ${
+                        stepper === index ? "text-blue-600" : ""
+                      }`}
+                    >
+                      {title}
+                    </h1>
+                  </div>
+                ))}
+              </div>
+              <div className=" flex flex-col  flex-1 h-[0vh]">
+                {stepper > 0 && stepper < 4 && (
+                  <h1 className="font-semibold text-[16px] 2xl:text-[20px]">
+                    {importQuestionnaires?.customerName} -{" "}
+                    {importQuestionnaires?.fileName?.replace(".xlsx", "")}
                   </h1>
-                </div>
-              ))}
-            </div>
-            <div className="min-h-[60vh]">
-              {stepper > 0 && stepper < 4 && (
-                <h1 className="font-semibold text-[16px] 2xl:text-[20px]">
-                  {importQuestionnaires?.customerName} -{" "}
-                  {importQuestionnaires?.fileName?.replace(".xlsx", "")}
-                </h1>
-              )}
-              {stepper === 0 && (
-                <Add
-                  importQuestionnaires={importQuestionnaires}
-                  setImportQuestionnaire={setImportQuestionnaire}
-                  setExcelFile={setExcelFile}
-                  excelFile={excelFile}
-                  errors={errors}
-                  setErrors={setErrors}
-                />
-              )}
-              {stepper === 1 && (
+                )}
+                {stepper === 0 && (
+                  <Add
+                    importQuestionnaires={importQuestionnaires}
+                    setImportQuestionnaire={setImportQuestionnaire}
+                    setExcelFile={setExcelFile}
+                    excelFile={excelFile}
+                    errors={errors}
+                    setErrors={setErrors}
+                  />
+                )}
+                {stepper === 1 && (
                 <SelectHeader
                   excelFile={excelFile}
                   setExcelFile={setExcelFile}
@@ -395,27 +397,29 @@ const Import = ({setNewQuestionnaireCreated}) => {
                   setColumnMapping={setColumnMapping}   
                 />
               )}
-              {stepper === 2 && (
-                <SelectQuestion
-                  excelFile={excelFile}
-                  selectedRows={selectedRows}
-                  setColumnMapping={setColumnMapping}
-                  columnMapping={columnMapping}
-                />
-              )}
-              {stepper === 3 && (
-                <ValidateData
-                  columnMapping={columnMapping}
-                  excelFile={excelFile}
-                  ref={ValidateComponentRef}
-                  setExcelFile={setExcelFile}
-                  setReamingData={setReamingData}
-                  selectedHeaderRow={selectedRows}
-                />
-              )}
-              {stepper === 4 && (
-                <Completed content={`Importing ${totalCount} questions`} />
-              )}
+                {stepper === 2 && (
+                  <SelectQuestion
+                    excelFile={excelFile}
+                    selectedRows={selectedRows}
+                    setColumnMapping={setColumnMapping}
+                    columnMapping={columnMapping}
+                  />
+                )}
+                {stepper === 3 && (
+                  <ValidateData
+                    columnMapping={columnMapping}
+                    excelFile={excelFile}
+                    ref={ValidateComponentRef}
+                    setExcelFile={setExcelFile}
+                    setReamingData={setReamingData}
+                    selectedHeaderRow={selectedRows}
+                  />
+                )}
+                {stepper === 4 && (
+                  <Completed content={`Importing ${totalCount} questions`} />
+                )}
+              
+              </div>
             </div>
 
             {stepper < 4 && (

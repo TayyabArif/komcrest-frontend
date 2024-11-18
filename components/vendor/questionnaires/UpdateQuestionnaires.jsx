@@ -288,7 +288,7 @@ const UpdateQuestionnaires = () => {
 
 
   return (
-    <div className="w-[100%] h-full ">
+    <div className="w-[100%] h-full">
       {dataIsLoaded && (
         <div className="w-[90%] mx-auto py-4 mt-[3rem]">
         <h1 className="py-2 px-4 bg-[#F6F7F9] text-[16px] 2xl:text-[20px] font-bold">

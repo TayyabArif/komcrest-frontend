@@ -295,7 +295,7 @@ const NewDocument = () => {
               <div className="flex my-2 mt-4 justify-between gap-4">
                 <div className="w-[50%]">
                   <label className="text-[16px] 2xl:text-[20px]">
-                    Title(max 50 characters) {JSON.stringify(fileError)}
+                    Title(max 50 characters)
                   </label>
                   <Input
                     type="text"

@@ -139,7 +139,7 @@ const SelectQuestion = ({
   };
 
   return (
-    <div className="py-2 h-[60vh]">
+    <div className="py-2">
       {/* Buttons for each sheet */}
       <div className="flex  mb-2">
         {Object.keys(excelFile).map((sheetName) => (
@@ -158,7 +158,7 @@ const SelectQuestion = ({
       </div>
       {/* Table for the selected sheet */}
       {visibleTable && excelFile[visibleTable] && (
-        <div className="h-[56vh] overflow-auto ">
+        <div className="">
           <table className="min-w-full mb-4">
             <thead className="bg-gray-200">
               <tr className="text-[16px] 2xl:text-[20px]">

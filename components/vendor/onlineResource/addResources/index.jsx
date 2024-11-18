@@ -30,6 +30,7 @@ const AddResource = () => {
   const [allResources, setAllResources] = useState([{ url: "", title: "" , status:"pending"}]);
   const [errors, setErrors] = useState([]);
   const {companyProducts ,setOnlineResourceDataUpdate } = useMyContext();
+  const [buttonIsDisable , setButtonIsDisable] = useState(false)
   const [resourceData, setResourceData] = useState({
     language: "",
     productIds: [],
@@ -114,6 +115,7 @@ const AddResource = () => {
 
  
   const handleUrlSubmit = (newUrlData) => {
+    setButtonIsDisable(true)
     // setResourceData({
     //   ...resourceData,
     //   resources : newUrlData
@@ -152,11 +154,14 @@ const AddResource = () => {
             ...prevState,
             resources: data,
           }));
+
+          setButtonIsDisable(false)
         } else {
           console.error("Error:", data);
         }
       })
       .catch((error) => console.error(error));
+      
   };
 
   const updateRecords = async () => {
@@ -255,20 +260,19 @@ const AddResource = () => {
   };
 
   return (
-    <div className="w-[100%] h-full">
-      <div className="w-[90%] mx-auto py-3 mt-[1rem]">
+    <div className="w-[100%] h-full flex flex-col">
+      <div className="w-[90%] mx-auto  mt-[1rem] flex-1 flex flex-col  h-[0vh]">
         <h1 className="font-semibold bg-slate-50 px-6 py-2 2xl:text-[20px]">
           {getTitle()}
         </h1>
-        <div className="w-full h-[80vh] bg-white p-6">
+        <div className="w-full bg-white p-6 flex-1 flex flex-col  h-[0vh]">
           <Progress
             aria-label="Loading..."
             value={progressBar}
             className="h-[8px]"
           />
 
-          <div className="flex flex-col justify-between h-full">
-            <div>
+          <div className="flex flex-col flex-1 justify-between h-full">
               <div className="my-3 flex gap-2">
                 {[
                   "Add URLs",
@@ -301,7 +305,7 @@ const AddResource = () => {
                   </div>
                 ))}
               </div>
-              <div className="overflow-auto max-h-[58vh]">
+              <div className="flex flex-col flex-1 h-[0vh] ">
                 {stepper === 0 && (
                   <AddUrls
                     setAllResources={setAllResources}
@@ -326,7 +330,6 @@ const AddResource = () => {
                 )}
                 {stepper === 4 && <Completed  content="Importing online resources"/>}
               </div>
-            </div>
             <div>
               {stepper >= 0 && stepper <= 3 && (
                 <div
@@ -336,7 +339,7 @@ const AddResource = () => {
                 >
                   {stepper === 2 && (
                     <div className="space-y-2">
-                      <div className=" mt-8 mb-2">
+                      <div className=" my-1">
                         <h1 className="font-semibold text-[16px] 2xl:text-[20px] ">
                           Select Language:
                         </h1>
@@ -408,6 +411,7 @@ const AddResource = () => {
                       radius="none"
                       size="sm"
                       className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                      isDisabled={buttonIsDisable}
                     >
                       {stepper === 3 ? "Confirm" : "Next"}
                     </Button>

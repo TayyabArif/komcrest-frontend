@@ -1,7 +1,8 @@
 
 import React from "react";
 
-const Validate = ({ knowledgeData, questions }) => {
+const Validate = ({ knowledgeData, questions , selectedRowIndex }) => {
+  debugger
   const thStyle = {
     border: "1px solid #dddddd",
     textAlign: "left",
@@ -23,9 +24,9 @@ const Validate = ({ knowledgeData, questions }) => {
   return (
     <div className="w-full overflow-x-auto">
     {questions ? (
-      <div className="overflow-x-auto relative">
+      <div className=" relative">
         <table className="min-w-max bg-white border border-gray-300 table-fixed text-sm w-full border-collapse">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 sticky -top-1  z-50">
             <tr className="bg-[#ebeef2]  ">
               {Object.keys(questions[0]).map((header) => (
                 <th
@@ -48,7 +49,7 @@ const Validate = ({ knowledgeData, questions }) => {
                     key={key}
                     className="px-2 py-2 border text-sm font-medium  text-gray-900 text-[16px] 2xl:text-[20px] text-wrap"
                   >
-                    {truncate(item[key], 30)}
+                    {truncate(item[key], 30)} 
                   </td>
                 ))}
               </tr>

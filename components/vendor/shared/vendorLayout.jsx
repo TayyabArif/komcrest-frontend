@@ -82,7 +82,7 @@ const VendorLayout = ({ children }) => {
         </div>
       </div>
       <div className="ml-[15%] w-[85%] fixed h-screen pb-4">
-        <div className="py-2 text-right flex justify-end gap-2 font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
+        <div className="py-[6px] text-right flex justify-end items-center gap-2 font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
         <h1>{loogedinUser}</h1>
         <Button
           radius="none"

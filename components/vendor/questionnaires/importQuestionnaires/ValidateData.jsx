@@ -101,7 +101,7 @@ const ValidateData = forwardRef(
     }));
 
     return (
-      <div className="py-1">
+      <div className="py-1 flex-1 flex flex-col h-[0vh]">
         {/* Buttons to switch between tables */}
         <div className="flex space-x-2 mb-2">
           {Object.keys(excelFile).map((sheetName) => (
@@ -120,7 +120,7 @@ const ValidateData = forwardRef(
         </div>
         {/* Only show the selected table */}
         {visibleTable && (
-          <div key={visibleTable} className="mb-8 overflow-auto  h-[45vh]">
+          <div key={visibleTable} className=" overflow-auto flex-1 h-[0vh]">
             <table className="min-w-full border-collapse border mb-4">
               <thead className="bg-gray-200 sticky -top-1 z-10">
                 <tr className="text-[16px] 2xl:text-[20px]">
@@ -173,7 +173,7 @@ const ValidateData = forwardRef(
           </div>
         )}
 
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2">
           <button
             onClick={removeSelectedRows}
             className="px-4 py-2 text-[15px] 2xl:text-[20px] bg-red-500 text-white rounded disabled:bg-red-300"
