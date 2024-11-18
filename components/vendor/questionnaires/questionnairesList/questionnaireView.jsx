@@ -673,7 +673,7 @@ const QuestionnairesView = () => {
                 <table className="min-w-[100%] border-2 text-gray-700 ">
                   <thead className="border  sticky -top-1 bg-[#E5E7EB] z-50">
                     <tr className="2xl:text-[20px] text-[16px]">
-                      <th className="px-4 py-2 text-center text-gray-600 border">
+                      <th className="px-4 py-2 text-center text-gray-600">
                         <Checkbox
                           isSelected={isHeaderChecked}
                           onChange={handleHeaderCheckboxChange}
@@ -683,20 +683,20 @@ const QuestionnairesView = () => {
                           classNames={{ wrapper: "!rounded-[3px]" }}
                         />
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 border">
+                      <th className="px-4 py-2 text-left text-gray-600 ">
                         {/* Status {selectedId} */}
                         Status
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 border ">
+                      <th className="px-4 py-2 text-left text-gray-600">
                         Question
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 border">
+                      <th className="px-4 py-2 text-left text-gray-600">
                         Compliance
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 border ">
+                      <th className="px-4 py-2 text-left text-gray-600 ">
                         Answer
                       </th>
-                      <th className="px-4 py-2  text-gray-600 bg-[#E5E7EB]  border  pr-7  text-left sticky -right-[1px]">
+                      <th className="px-4 py-2  text-gray-600 bg-[#E5E7EB] pr-7  text-left sticky -right-[1px]">
                         Actions
                       </th>
                       <th className="px-[2.5px] text-gray-600 sticky -right-[1px]"></th>

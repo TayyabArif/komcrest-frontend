@@ -80,7 +80,6 @@ export function getOnlyDate(dateString) {
 
 
 export const handleFileDownload = async (filePath) => {
-  alert(filePath)
   if (typeof filePath === "string") {
 
     const fileName = filePath.split("/").pop();

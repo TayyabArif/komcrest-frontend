@@ -487,9 +487,10 @@ const NewQuestion = () => {
                   </div>
                   <Textarea
                     variant="bordered"
-                    size="md"
+                    // size="md"
                     placeholder="Type the answer here"
                     name="answer"
+                    maxRows={5}
                     value={newQuestion.answer}
                     onChange={handleData}
                     classNames={{
