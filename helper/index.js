@@ -79,6 +79,34 @@ export function getOnlyDate(dateString) {
 };
 
 
+export const handleFileDownload = async (filePath) => {
+  alert(filePath)
+  if (typeof filePath === "string") {
+
+    const fileName = filePath.split("/").pop();
+    const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${fileName}`;
+
+    try {
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error("Network response was not ok");
+
+      const blob = await response.blob();
+ 
+      // Directly trigger download without asking location
+      saveAs(blob, fileName);
+
+      // Show success toast
+      toast.success("Document downloaded successfully");
+    } catch (error) {
+      console.error("Download failed:", error);
+      toast.error("Failed to download document");
+    }
+  } else {
+    alert("Invalid file path.");
+  }
+};
+
+
   export const urlPattern = new RegExp(
     "^(https?:\\/\\/)" + // Protocol
       "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // Domain name

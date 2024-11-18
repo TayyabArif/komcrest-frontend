@@ -687,13 +687,13 @@ const QuestionnairesView = () => {
                         {/* Status {selectedId} */}
                         Status
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 border !min-w-[450px]">
+                      <th className="px-4 py-2 text-left text-gray-600 border ">
                         Question
                       </th>
                       <th className="px-4 py-2 text-left text-gray-600 border">
                         Compliance
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 border !min-w-[450px]">
+                      <th className="px-4 py-2 text-left text-gray-600 border ">
                         Answer
                       </th>
                       <th className="px-4 py-2  text-gray-600 bg-[#E5E7EB]  border  pr-7  text-left sticky -right-[1px]">
@@ -735,7 +735,7 @@ const QuestionnairesView = () => {
                                 }`}
                               ></div>
                             </td>
-                            <td className="px-4 py-2 border   min-w-[350px] xl:min-w-[500px]">
+                            <td className="px-4 py-2 border  md:min-w-[250px]  lg:min-w-[350px] xl:min-w-[500px]">
                               {item.question}
                             </td>
                             <td
@@ -776,7 +776,7 @@ const QuestionnairesView = () => {
                                 setSelectedTextAreaId(item.id);
                                 setAnswerIsUpdate("single");
                               }}
-                              className={`px-4 py-2  !min-w-[450px]   !text-wrap  border ${
+                              className={`px-4 py-2 md:min-w-[250px]  lg:min-w-[400px] xl:min-w-[600px]   !text-wrap  border ${
                                 item.confidence < 7
                                   ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
                                   : ""
@@ -819,7 +819,7 @@ const QuestionnairesView = () => {
                               ) : (
                                 <div
                                   ref={divRef}
-                                  className="w-[600px] break-words overflow-hidden !h-auto !text-wrap"
+                                  className="w-full break-words overflow-hidden !h-auto !text-wrap"
                                   onClick={(e) => {
                                     toggleEdit(item.id);
                                     setTextAreaSize(e.target.scrollHeight);

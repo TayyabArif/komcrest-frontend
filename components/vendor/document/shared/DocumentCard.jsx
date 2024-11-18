@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { formatDate } from "../../../../helper";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import {  handleDownload} from "@/helper";
+import { handleFileDownload} from "@/helper";
 import { saveAs } from "file-saver";
 import { useMyContext } from "@/context";
 
@@ -61,35 +61,6 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
   };
   
  
-  
-  const handleDownload = async (filePath) => {
-    if (typeof filePath === "string") {
-      const fileName = filePath.split("/").pop();
-      const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${fileName}`;
-  
-      try {
-        const response = await fetch(downloadUrl);
-        if (!response.ok) throw new Error("Network response was not ok");
-  
-        const blob = await response.blob();
-   
-        // Directly trigger download without asking location
-        saveAs(blob, fileName);
-  
-        // Show success toast
-        toast.success("Document downloaded successfully");
-      } catch (error) {
-        console.error("Download failed:", error);
-        toast.error("Failed to download document");
-      }
-    } else {
-      alert("Invalid file path.");
-    }
-  };
-  
-  
-  
-
   const handleDocumentLink = (link) => {
     const formattedLink =
       link.startsWith("http://") || link.startsWith("https://")
@@ -146,7 +117,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                           <div
                             onClick={() => {
                               // handleDownload(item.filePath);
-                              handleDownload(item.filePath)
+                              handleFileDownload(item.filePath)
                               setOpenPopoverIndex(null);
                             }}
                             className="text-small cursor-pointer 2xl:text-[20px]"

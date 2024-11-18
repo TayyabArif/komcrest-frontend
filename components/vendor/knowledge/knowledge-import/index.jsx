@@ -93,7 +93,7 @@ const UploadQuestions = () => {
 
   const handleUpdateData = () => {
     // const [headers, ...rows] = knowledgeData.questions;
-    const rows = knowledgeData.questions.slice(1);
+    const rows = knowledgeData.questions.slice(selectedRowIndex + 1);
     const transformedData = rows.map((row) => {
       return mappedIndexValue.reduce((acc, header, index) => {
         if (header) {
@@ -162,7 +162,7 @@ const UploadQuestions = () => {
       body: jsonPayload,
       redirect: "follow",
     };
-
+  
     fetch(`${baseUrl}/document-files`, requestOptions)
       .then(async (response) => {
         const data = await handleResponse(
@@ -331,6 +331,7 @@ const UploadQuestions = () => {
                   <Validate
                     knowledgeData={knowledgeData}
                     questions={updatedData.questions}
+                    selectedRowIndex={selectedRowIndex}
                   />
                 )}
                 {stepper == 4 && (

@@ -334,6 +334,7 @@ const NewQuestion = () => {
   };
 
   useEffect(() => {
+    debugger
     const groupedResources = [
       {
         label: "Document",
@@ -346,7 +347,7 @@ const NewQuestion = () => {
       {
         label: "Online Resource",
         code: "OnlineResource",
-        items: onlineResourceData.map((resource) => ({
+        items: onlineResourceData.filter(item => item.file && item.file !== null).map((resource) => ({
           id: resource.id,
           title: resource.title,
         })),

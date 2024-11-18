@@ -49,7 +49,7 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
   };
 
   return (
-    <div className='space-y-10 '>
+    <div className='space-y-10 mt-2'>
       <table className="table-auto border-[1px] border-collapse border-gray-400 w-full text-sm">
         <thead>
           <tr className='text-left text-[16px] 2xl:text-[20px]'>

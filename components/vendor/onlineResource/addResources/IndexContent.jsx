@@ -8,8 +8,6 @@ const IndexContent = ({ resourceData, setResourceData }) => {
   useEffect(() => {
     if (socket) {
       socket.on('scrapingStatus', (statusUpdate) => {
-        console.log("Received status update:", statusUpdate); // Log received data
-
         setResourceData((prevState) => {
 
           const resourceIndex = prevState.resources.findIndex(

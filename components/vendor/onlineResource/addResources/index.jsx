@@ -30,6 +30,7 @@ const AddResource = () => {
   const [allResources, setAllResources] = useState([{ url: "", title: "" , status:"pending"}]);
   const [errors, setErrors] = useState([]);
   const {companyProducts ,setOnlineResourceDataUpdate } = useMyContext();
+  const [buttonIsDisable , setButtonIsDisable] = useState(false)
   const [resourceData, setResourceData] = useState({
     language: "",
     productIds: [],
@@ -114,6 +115,7 @@ const AddResource = () => {
 
  
   const handleUrlSubmit = (newUrlData) => {
+    setButtonIsDisable(true)
     // setResourceData({
     //   ...resourceData,
     //   resources : newUrlData
@@ -152,11 +154,14 @@ const AddResource = () => {
             ...prevState,
             resources: data,
           }));
+
+          setButtonIsDisable(false)
         } else {
           console.error("Error:", data);
         }
       })
       .catch((error) => console.error(error));
+      
   };
 
   const updateRecords = async () => {
@@ -406,6 +411,7 @@ const AddResource = () => {
                       radius="none"
                       size="sm"
                       className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                      isDisabled={buttonIsDisable}
                     >
                       {stepper === 3 ? "Confirm" : "Next"}
                     </Button>

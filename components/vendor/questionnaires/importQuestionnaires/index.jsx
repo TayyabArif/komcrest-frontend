@@ -28,6 +28,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     setQuestionnaireData,
     setCurrentQuestionnaireImportId,
     setIsSocketConnected,
+    setIsFirstResponse
   } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -293,6 +294,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
           setQuestionnaireUpdated((prev) => !prev);
           localStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
           setCurrentQuestionnaireImportId("");
+          setIsFirstResponse(true)
           router.push(
             `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`
           );
