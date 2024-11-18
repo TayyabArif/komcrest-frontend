@@ -35,11 +35,11 @@ const OnlineResourceHistory = ({
         onlineResourceReferenceData.map((doc, index) => (
           <div
             key={index}
-            className="bg-white shadow-md  rounded-md py-2 px-4 mb-4"
+            className="bg-white shadow-md  rounded-md py-2 px-4 mb-4 break-words"
           >
             <a
               href="#"
-              className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px]  "
+              className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] "
             >
               {doc.title}
             </a>

@@ -401,7 +401,7 @@ const NewQuestion = () => {
                   <Textarea
                     variant="bordered"
                     // size="sm"
-                    maxRows={5}
+                    maxRows={6}
                     placeholder="Type the question here"
                     name="question"
                     value={newQuestion.question}
@@ -490,7 +490,7 @@ const NewQuestion = () => {
                     // size="md"
                     placeholder="Type the answer here"
                     name="answer"
-                    maxRows={5}
+                    maxRows={6}
                     value={newQuestion.answer}
                     onChange={handleData}
                     classNames={{
