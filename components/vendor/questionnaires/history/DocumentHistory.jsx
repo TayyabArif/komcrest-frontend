@@ -32,10 +32,10 @@ const DocumentHistory = ({
     <div className="max-w-md mx-auto bg-bg-[#FFFFFF]">
       {documentReferenceData?.length > 0 ? (
         documentReferenceData.map((doc, index) => (
-          <div key={index} className="bg-white shadow-md rounded-md p-4 mb-4">
+          <div key={index} className="bg-white shadow-md rounded-md p-4 mb-4  break-words">
             <a
               href="#"
-              className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px]"
+              className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] "
             >
               {doc.title}
             </a>
