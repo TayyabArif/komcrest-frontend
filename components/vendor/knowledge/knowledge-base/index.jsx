@@ -452,7 +452,7 @@ const KnowledgeBase = ({
                       <td className="py-2 px-4 border whitespace-nowrap  break-words text-wrap min-w-[250px] max-w-[550px]">
                         {data.curator}
                       </td>
-                      <td className="py-2 px-4 border whitespace-wrap break-words text-blue-600 cursor-pointer md:max-w-[200px] lg:max-w-[250px] xl:max-w-[300px]">
+                      <td className="py-2 px-4 border whitespace-wrap break-words text-blue-600 cursor-pointer md:min-w-[200px] lg:min-w-[250px]  xl:min-w-[300px]">
                         {[
                           ...data.documents.map((item) => (
                             <h1

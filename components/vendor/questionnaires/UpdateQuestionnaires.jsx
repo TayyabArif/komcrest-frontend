@@ -36,7 +36,7 @@ const UpdateQuestionnaires = () => {
   const [dataIsLoaded , setDataIsLoaded] = useState(false)
   const [creatorId , setCreatorId] = useState()
   const [newCollaboratorsList , setNewCollaboratorList] = useState()
-
+  const currentYear = new Date().getFullYear();
   const [currentbaseUrl, setCurrentBaseUrl] = useState('');
 
   useEffect(() => {
@@ -201,7 +201,12 @@ const UpdateQuestionnaires = () => {
       newErrors.language = "Language is required";
     }
     if (!questionnaireData.returnDate) {
-      newErrors.returnDate = "Return Date is required";
+      newErrors.returnDate = "Return Date is required.";
+    } else {
+      const selectedDate = new Date(questionnaireData.returnDate);
+      if (selectedDate.getFullYear() < currentYear) {
+        newErrors.returnDate = "Year must not be earlier than the current year.";
+      }
     }
     if (!questionnaireData.customerName) {
       newErrors.customerName = "Customer Name is required";
