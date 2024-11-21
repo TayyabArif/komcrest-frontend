@@ -144,7 +144,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
             </div>
           ))
       ) : (
-        <p>No history found.</p>
+        <p className="2xl:text-[20px] text-[16px]">No history found.</p>
       )}
     </div>
   );

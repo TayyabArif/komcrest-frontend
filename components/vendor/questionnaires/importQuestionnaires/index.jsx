@@ -45,6 +45,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
   const [totalCount, setTotalCount] = useState("");
   const [reamingData, setReamingData] = useState();
   const ValidateComponentRef = useRef();
+  const currentYear = new Date().getFullYear();
   const [importQuestionnaires, setImportQuestionnaire] = useState({
     customerName: "",
     customerDomain: "",
@@ -116,6 +117,11 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     }
     if (!importQuestionnaires.returnDate) {
       newErrors.returnDate = "Return Date is required";
+    } else {
+      const selectedDate = new Date(importQuestionnaires.returnDate);
+      if (selectedDate.getFullYear() < currentYear) {
+        newErrors.returnDate = "Year must not be earlier than the current year.";
+      }
     }
     if (!importQuestionnaires.customerName) {
       newErrors.customerName = "Customer Name is required";
@@ -131,26 +137,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // const checkValuesLength = () => {
-  //   if (Object.keys(columnMapping).length === 0) {
-  //     return false;
-  //   }
-  //     // return true
-  //   return Object.entries(columnMapping).every(([sheetName, value]) => {
-  //     // Add null safety check for excelFile[sheetName] and excelFile[sheetName][0]
-  //     if (!excelFile[sheetName] || !excelFile[sheetName][0]) {
-  //       return false; // Return false if the sheet or the first row doesn't exist
-  //     }
-
-  //     // For single-column sheets, check if only "Question" is selected
-  //     if (excelFile[sheetName][0].length === 1) {
-  //       return value[0] === "Question";  // Check if the first and only option is "Question"
-  //     }
-
-  //     // For multiple columns, ensure both "Category" and "Question" are selected
-  //     return Object.keys(value).length === 2
-  //   });
-  // };
+ 
 
   const checkValuesLength = () => {
     if (Object.keys(columnMapping).length === 0) {

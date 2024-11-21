@@ -94,7 +94,7 @@ const DocumentHistory = ({
           </div>
         ))
       ) : (
-        <p>No reference found</p>
+        <p className="2xl:text-[20px] text-[16px]">No reference found</p>
       )}
     </div>
   );
