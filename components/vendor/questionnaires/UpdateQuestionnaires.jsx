@@ -417,7 +417,24 @@ const UpdateQuestionnaires = () => {
                     id="dateInput"
                     value={questionnaireData.returnDate}
                     name="returnDate"
-                    onChange={handleData}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const year = value.split('-')[0];
+                      if (year.length > 4) {
+                        // Trigger an error if year exceeds 4 characters
+                        setErrors((prev) => ({
+                          ...prev,
+                          returnDate: "Year cannot exceed 4 characters.",
+                        }));
+                      } else {
+                        // Reset errors and update the value
+                        setErrors((prev) => ({
+                          ...prev,
+                          returnDate: "",
+                        }));
+                        handleData(e);
+                      }
+                    }}
                     min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}
                     className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
                   />
