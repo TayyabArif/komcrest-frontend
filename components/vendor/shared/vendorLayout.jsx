@@ -30,12 +30,12 @@ const VendorLayout = ({ children }) => {
   return (
     <div className="flex w-full">
       <div className="flex flex-col  w-[15%]  fixed h-screen">
-        <p className="text-lg bg-slate-50 py-2 px-4 md:text-[19px] 2xl:text-[25px]">
+        <p className="text-lg bg-slate-50 py-3 px-4 md:text-[19px] 2xl:text-[25px]">
           <span className="font-bold">Komcrest</span> Vendor
         </p>
         <div className="flex flex-col justify-between h-full">
           <div className="flex flex-col gap-2">
-            <div className={`flex gap-1 items-center px-4 py-1 cursor-pointer ${selectedItem === "document" ? "bg-[#2457d7] text-white shadow-md rounded" : "hover:bg-gray-200 hover:shadow-md"}`} 
+            <div className={`flex gap-1 items-center px-4  cursor-pointer ${selectedItem === "document" ? "bg-[#2457d7] text-white shadow-md rounded" : "hover:bg-gray-200 hover:shadow-md"}`} 
               onClick={() => { 
                 router.push("/vendor/document");
               }}
@@ -82,12 +82,12 @@ const VendorLayout = ({ children }) => {
         </div>
       </div>
       <div className="ml-[15%] w-[85%] fixed h-screen pb-4">
-        <div className="py-[6px] text-right flex justify-end items-center gap-2 font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px]">
+        <div className="py-[6px] text-right flex justify-end items-center gap-2 font-bold cursor-pointer w-[85%] m-auto 2xl:text-[20px] text-[16px]">
         <h1>{loogedinUser}</h1>
         <Button
           radius="none"
-          size="sm"
-          className=" px-[20px] text-sm bg-[#D8D8D8] w-max rounded-[4px] 2xl:text-[20px]"
+          size="md"
+          className=" px-[20px] text-[16px] font-semibold bg-[#D8D8D8] w-max rounded-[4px] 2xl:text-[20px] "
           onPress={handleLogout}
         >
           Logout

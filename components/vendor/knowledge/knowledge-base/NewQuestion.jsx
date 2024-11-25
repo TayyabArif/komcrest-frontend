@@ -334,7 +334,6 @@ const NewQuestion = () => {
   };
 
   useEffect(() => {
-    debugger
     const groupedResources = [
       {
         label: "Document",
@@ -634,7 +633,7 @@ const NewQuestion = () => {
             <div className="flex justify-end mt-4 gap-3">
               <Button
                 size="md"
-                className="rounded-md 2xl:text-[20px] cursor-pointer bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
+                className="rounded-md 2xl:text-[20px] cursor-pointer bg-red-200 py-0 text-red-500 text-[16px] font-semibold"
                 onClick={() => router.push("/vendor/knowledge")}
               >
                 Cancel
@@ -642,7 +641,7 @@ const NewQuestion = () => {
               <Button
                 size="md"
                 color="primary"
-                className="rounded-md 2xl:text-[20px] cursor-pointer text-[13px] font-semibold"
+                className="rounded-md 2xl:text-[20px] cursor-pointer text-[16px] font-semibold"
                 onClick={handleSubmit}
               >
                 {`${id ? "Update" : "Add"}`}

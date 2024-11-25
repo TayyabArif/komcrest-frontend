@@ -22,8 +22,8 @@ const KnowledgeHeader = ({ buttonShow, headerData }) => {
               {headerData.addMultiple && (
                 <Button
                   radius="none"
-                  size="sm"
-                  className="bg-white text-gray-500 border text-sm  2xl:text-[20px] w-max rounded-[4px] my-4 mx-2"
+                  size="md"
+                  className="bg-white text-gray-500 border text-[16px]  2xl:text-[20px] w-max rounded-[4px] my-4 mx-2"
                   onClick={() => {
                     router.push(headerData.multiplelePath);
                   }}
@@ -35,8 +35,8 @@ const KnowledgeHeader = ({ buttonShow, headerData }) => {
               {headerData.addSingle && (
                 <Button
                   radius="none"
-                  size="sm"
-                  className="text-white text-sm  2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4"
+                  size="md"
+                  className="text-white text-[16px]  2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4"
                   onClick={() => {
                     router.push(headerData.singlePath);
                   }}

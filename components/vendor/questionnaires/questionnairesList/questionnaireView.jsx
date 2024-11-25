@@ -471,10 +471,12 @@ const QuestionnairesView = () => {
         }
       })
       .catch((error) => {
-        if (error.response) {
+        console.log("errorerrorerror",error)
+        if (error) {   
+          toast.dismiss();
           console.error("API Error:", error.response);
           toast.error(
-            error.response.data?.error ||
+            error.response?.data?.error ||
               "An error occurred while Re run AI answer"
           );
         }
@@ -746,7 +748,7 @@ const QuestionnairesView = () => {
                               }`}
                             >
                               <div className="w-[100%] mx-auto">
-                                <div className={`text-[12px] flex  my-2`}>
+                                <div className={`text-[12px] flex  my-2 px-1 `}>
                                   {item.complianceGeneratedBy == "AI" ? (
                                     <p className=" italic text-left">A.I.</p>
                                   ) : (
@@ -754,7 +756,7 @@ const QuestionnairesView = () => {
                                   )}
                                 </div>
                                 <select
-                                  value={item.compliance}
+                                  value={item.compliance || ""}
                                   onChange={(e) =>
                                     UpdateRecord(
                                       [item.id],
@@ -762,12 +764,18 @@ const QuestionnairesView = () => {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full  text-[16px] 2xl:text-[20px] rounded-lg bg-transparent"
+                                  className="w-full text-[16px] 2xl:text-[20px] rounded-lg bg-transparent"
                                 >
-                                  <option disabled>Select</option>
+                                  {/* Placeholder for "Select" */}
+                                  <option disabled value="">
+                                    {item.compliance ? "Select" : ""}
+                                  </option>
                                   <option value="yes">Yes</option>
                                   <option value="no">No</option>
-                                  <option value="">Not applicable</option>
+                                  <option value="Notapplicable">
+                                    Not applicable
+                                  </option>
+                                  {!item.compliance && <option value="">Empty</option>}
                                 </select>
                               </div>
                             </td>

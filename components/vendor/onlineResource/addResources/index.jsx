@@ -402,7 +402,7 @@ const AddResource = () => {
                       onClick={handleCancelClick}
                       radius="none"
                       size="sm"
-                      className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500  w-max rounded-[4px]"
+                      className="px-3 mx-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500  w-max rounded-[4px]"
                     >
                       {stepper === 0 ? "Cancel" : "Back"}
                     </Button>
@@ -410,7 +410,7 @@ const AddResource = () => {
                       onClick={handleNextClick}
                       radius="none"
                       size="sm"
-                      className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                      className="text-white px-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
                       isDisabled={buttonIsDisable}
                     >
                       {stepper === 3 ? "Confirm" : "Next"}
