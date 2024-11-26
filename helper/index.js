@@ -174,8 +174,6 @@ export const multipleSelectStyle = {
       if (typeof filePath === "string") {
           const fileName = filePath.split("/").pop();
           const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${fileName}`;
-          alert(downloadUrl);
-  
           try {
               const response = await fetch(downloadUrl);
               if (!response.ok) {
