@@ -415,7 +415,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
                   onClick={handleCancelClick}
                   radius="none"
                   size="md"
-                  className="px-3 mx-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500 w-max rounded-md"
+                  className="px-3 mx-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500 w-max rounded-md"
                 >
                   {stepper === 0 ? "Cancel" : "Back"}
                 </Button>
@@ -423,7 +423,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
                   onClick={handleNextClick}
                   radius="none"
                   size="md"
-                  className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-md"
+                  className="text-white px-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-md"
                 >
                   {stepper === 3 ? "Confirm" : "Next"}
                 </Button>

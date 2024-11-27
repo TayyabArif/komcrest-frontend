@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';
 import * as XLSX from 'xlsx';
+import ExcelJS from "exceljs";
+import stringSimilarity from "string-similarity";
+
 
 
 
@@ -88,7 +91,7 @@ export const handleFileDownload = async (filePath) => {
     try {
       const response = await fetch(downloadUrl);
       if (!response.ok) throw new Error("Network response was not ok");
-
+     console.log(":::::>>>>>>>",response)
       const blob = await response.blob();
  
       // Directly trigger download without asking location
@@ -161,58 +164,132 @@ export const multipleSelectStyle = {
 };
 
 
-
-  /// exoort questionnire data 
-  export const handleExport = (data , type) => {
-    // Group data by 'sheetTag'
-    const groupedData = data?.reduce((acc, record) => {
-      const { sheetTag } = record;
-      if (!acc[sheetTag]) {
-        acc[sheetTag] = [];
+  export const handleExport = async (data, filePath) => {
+      const extractedData = data.map(item => ({
+          question: item.question,
+          compliance: item.compliance,
+          answer: item.answer,
+          sheetTag: item.sheetTag
+      }));
+      if (typeof filePath === "string") {
+          const fileName = filePath.split("/").pop();
+          const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${fileName}`;
+          try {
+              const response = await fetch(downloadUrl);
+              if (!response.ok) {
+                  alert("File fetch failed!");
+                  return;
+              }
+  
+              const arrayBuffer = await response.arrayBuffer();
+              const workbook = new ExcelJS.Workbook();
+              await workbook.xlsx.load(arrayBuffer);
+  
+              // Define fixed column indices for "Compliance" and "Answer"
+              const complianceColIndex = 7; // Example: Column 7 for Compliance
+              const answerColIndex = 8;    // Example: Column 8 for Answer
+  
+              // Cleaning function
+              const strictCleanString = (str) =>
+                  str
+                      .trim()
+                      .replace(/\s+/g, " ") // Replace multiple spaces/newlines with a single space
+                      .normalize(); // Normalize Unicode representations
+  
+              for (const sheetData of extractedData) {
+                  const { sheetTag, question, compliance, answer } = sheetData;
+  
+                  const worksheet = workbook.getWorksheet(sheetTag);
+                  if (!worksheet) {
+                      console.warn(`Worksheet with tag "${sheetTag}" not found.`);
+                      continue;
+                  }
+  
+                  console.log(`Processing worksheet: ${worksheet.name}`);
+  
+                  // Ensure headers are set in the fixed columns
+                  worksheet.getRow(1).getCell(complianceColIndex).value = "Compliance";
+                  worksheet.getRow(1).getCell(answerColIndex).value = "Answer";
+  
+                  // Find the row where the question matches
+                  let matchedRow = null;
+                  worksheet.eachRow((row) => {
+                    row.eachCell((cell) => {
+                        if (cell.value) {
+                            let cleanedCellValue;
+                
+                            // Check if the value is a string, number, or other type
+                            if (typeof cell.value === "string") {
+                                cleanedCellValue = strictCleanString(cell.value);
+                            } else if (typeof cell.value === "number") {
+                                cleanedCellValue = cell.value.toString(); // Convert number to string
+                            } else if (typeof cell.value === "object" && cell.value.richText) {
+                                // Handle rich text objects (ExcelJS rich text)
+                                cleanedCellValue = strictCleanString(
+                                    cell.value.richText.map((part) => part.text).join("")
+                                );
+                            } else {
+                                cleanedCellValue = ""; // Fallback for unsupported types
+                            }
+                
+                            const cleanedQuestion = strictCleanString(question);
+                
+                            // Perform strict matching
+                            if (cleanedCellValue === cleanedQuestion) {
+                                matchedRow = row;
+                            }
+                        }
+                    });
+                });
+                
+  
+                  if (matchedRow) {
+                      console.log(`Question matched in row: ${matchedRow.number}`);
+  
+                      // Write "Compliance" and "Answer" to fixed columns
+                      matchedRow.getCell(complianceColIndex).value = compliance || "N/A";
+                      matchedRow.getCell(answerColIndex).value = answer || "N/A";
+                    
+                  } else {
+                      console.warn(`No match found for question: ${question}`);
+                  }
+              }
+  
+              // Save the modified workbook
+              const modifiedFileBuffer = await workbook.xlsx.writeBuffer();
+              const blob = new Blob([modifiedFileBuffer], {
+                  type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              });
+              const link = document.createElement("a");
+              link.href = URL.createObjectURL(blob);
+              link.download = `modified_${fileName}`;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+  
+              console.log("Compliance and Answer columns updated successfully!");
+          } catch (error) {
+              console.error("Error modifying the file:", error);
+              alert("An error occurred while processing the file.");
+          }
+      } else {
+          alert("Invalid file path.");
       }
-      
-      // Filter the record to only include the desired properties
-      const filteredRecord = {
-        Category: record.category,
-        Question: record.question,
-        ...(!type ? { Compliance: record.compliance, Answer: record.answer ,Status: record.status,} : {})        
-
-      };
-      
-      acc[sheetTag].push(filteredRecord);
-      return acc;
-    }, {});
-  
-    // Create a workbook
-    const workbook = XLSX.utils.book_new();
-  
-    // Add sheets to the workbook based on 'sheetTag'
-    Object.keys(groupedData).forEach(sheetName => {
-      const sheetData = groupedData[sheetName];
-      const worksheet = XLSX.utils.json_to_sheet(sheetData);
-      XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    });
-  
-    // Convert workbook to binary format
-    const workbookBinary = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
-  
-    // Function to create a Blob from the workbook binary
-    const s2ab = (s) => {
-      const buf = new ArrayBuffer(s.length);
-      const view = new Uint8Array(buf);
-      for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-      return buf;
-    };
-  
-    // Create a Blob from the workbook binary
-    const blob = new Blob([s2ab(workbookBinary)], { type: 'application/octet-stream' });
-  
-    // Create a link element to download the file
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'excel_data.xlsx'; // Use the file name provided
-    link.click();
-  
-    // Clean up and revoke the Object URL
-    URL.revokeObjectURL(link.href);
   };
+  
+  
+
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  

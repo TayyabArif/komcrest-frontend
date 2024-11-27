@@ -417,7 +417,24 @@ const UpdateQuestionnaires = () => {
                     id="dateInput"
                     value={questionnaireData.returnDate}
                     name="returnDate"
-                    onChange={handleData}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const year = value.split('-')[0];
+                      if (year.length > 4) {
+                        // Trigger an error if year exceeds 4 characters
+                        setErrors((prev) => ({
+                          ...prev,
+                          returnDate: "Year cannot exceed 4 characters.",
+                        }));
+                      } else {
+                        // Reset errors and update the value
+                        setErrors((prev) => ({
+                          ...prev,
+                          returnDate: "",
+                        }));
+                        handleData(e);
+                      }
+                    }}
                     min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}
                     className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
                   />
@@ -488,7 +505,7 @@ const UpdateQuestionnaires = () => {
           <div className="flex justify-end  gap-3">
             <Button
               size="md"
-              className="rounded-md 2xl:text-[20px] cursor-pointer bg-red-200 py-0 text-red-500 text-[13px] font-semibold"
+              className="rounded-md 2xl:text-[20px] cursor-pointer bg-red-200 py-0 text-red-500 text-[16px] font-semibold"
               onClick={()=>router.push("/vendor/questionnaires")}
             >
               Cancel
@@ -496,7 +513,7 @@ const UpdateQuestionnaires = () => {
             <Button
               size="md"
               color="primary"
-              className="rounded-md 2xl:text-[20px] cursor-pointer text-[13px] font-semibold"
+              className="rounded-md 2xl:text-[20px] cursor-pointer text-[16px] font-semibold"
               onClick={questionnaireUpdated}
             >
               Update

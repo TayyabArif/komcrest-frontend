@@ -51,6 +51,7 @@ const History = ({
           pageNumber: item.pageNumber,
           referenceStatus: item.likes,
           referenceRecordId: item.id,
+          referenceString: item.referenceString
         }))
     );
     setQuestionIds(
@@ -60,6 +61,7 @@ const History = ({
           referenceId: item.referenceId,
           referenceStatus: item.likes,
           referenceRecordId: item.id,
+          referenceString: item.referenceString
         }))
     );
     setDocumentIds(
@@ -70,6 +72,7 @@ const History = ({
           pageNumber: item.pageNumber,
           referenceStatus: item.likes,
           referenceRecordId: item.id,
+          referenceString: item.referenceString
         }))
     );
   }, [selectedQuestionnaireReference]);
@@ -109,6 +112,7 @@ const History = ({
               ...item,
               referenceStatus: match.referenceStatus[0]?.likeType,
               referenceRecordId: match.referenceRecordId,
+              referenceString : match.referenceString
             };
           }
           return item;
@@ -157,6 +161,7 @@ const History = ({
               pageNumber: match.pageNumber,
               referenceStatus: match.referenceStatus[0]?.likeType,
               referenceRecordId: match.referenceRecordId,
+              referenceString : match.referenceString
             };
           }
           return item;
@@ -202,6 +207,7 @@ const History = ({
               pageNumber: match.pageNumber,
               referenceStatus: match.referenceStatus[0]?.likeType,
               referenceRecordId: match.referenceRecordId,
+              referenceString : match.referenceString
             };
           }
           return item;

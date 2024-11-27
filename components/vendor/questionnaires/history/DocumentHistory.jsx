@@ -32,18 +32,19 @@ const DocumentHistory = ({
     <div className="max-w-md mx-auto bg-bg-[#FFFFFF]">
       {documentReferenceData?.length > 0 ? (
         documentReferenceData.map((doc, index) => (
-          <div key={index} className="bg-white shadow-md rounded-md p-4 mb-4  break-words">
+          <div key={index} className="bg-white shadow-md rounded-md py-2 px-4 break-words">
             <a
               href="#"
               className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] "
             >
               {doc.title}
             </a>
-            <div className="flex justify-between">
-              <p className="text-sm text-gray-600 mb-2 2xl:text-[20px] text-[16px]">
+            <p className="2xl:text-[20px] text-[16px] break-words text-gray-600">{doc.referenceString} </p>
+            <div className="flex justify-between items-center py-2">
+              <p className=" text-gray-600  2xl:text-[20px] text-[15px]">
                 Pages: {doc.pageNumber}
               </p>
-              <div className="flex justify-end space-x-4 mt-2">
+              <div className="flex justify-end space-x-4 ">
                 <FilePenLine
                   onClick={() =>
                     router.push(`/vendor/document/AddDocument?id=${doc?.id}`)

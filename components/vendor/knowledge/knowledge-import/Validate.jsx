@@ -2,7 +2,6 @@
 import React from "react";
 
 const Validate = ({ knowledgeData, questions , selectedRowIndex }) => {
-  debugger
   const thStyle = {
     border: "1px solid #dddddd",
     textAlign: "left",
