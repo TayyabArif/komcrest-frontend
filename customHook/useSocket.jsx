@@ -7,7 +7,6 @@ const useSocket = () => {
   useEffect(() => {
     if (url) {
       const socketInstance = io(url, {
-        path: '/api/socket.io',
         transports: ['websocket'],
       });
 
