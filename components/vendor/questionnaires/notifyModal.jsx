@@ -116,7 +116,7 @@ const urlWithParams = `${currentbaseUrl}/vendor/questionnaires/view?${queryParam
                 
               }}
               isLoading={isLoading}
-              // isDisabled={notifyPeople.length == 0}
+              isDisabled={notifyPeople.length == 0}
             >
               Notify
             </Button>
