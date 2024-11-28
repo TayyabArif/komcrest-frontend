@@ -44,11 +44,10 @@ export function getOnlyDate(dateString) {
     const data = await response.json();
     if (response.ok) {
       return data;
-    } else if (response.status === 401) {
+    } else if (response.status === 400) {
       // router.push("/vendor/login/access");
       removeCookie('myCookie', { path: '/' });
       router.push("/vendor/login/access");
-      toast.error(data?.error);
       throw new Error(data?.error);
     } else {
       throw new Error("An unexpected error occurred");
