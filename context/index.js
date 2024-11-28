@@ -296,7 +296,9 @@ export const MyProvider = ({ children }) => {
   };
 
   useEffect(()=>{
+    if (token) {
     getAllResourceData()
+    }
   },[onlineResourceDataUpdate ,dataUpdated])
 
 
@@ -332,7 +334,10 @@ export const MyProvider = ({ children }) => {
         setIsLoading(false);
       }
     };
+
+    if (token) {
     getUserDocument();
+    }
   }, [documentDataUpdate ,dataUpdated]);
 
  
