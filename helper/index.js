@@ -47,7 +47,7 @@ export function getOnlyDate(dateString) {
     } else if (response.status === 400) {
       // router.push("/vendor/login/access");
       removeCookie('myCookie', { path: '/' });
-      router.push("/vendor/login/access");
+      // router.push("/vendor/login/access");
       throw new Error(data?.error);
     } else {
       throw new Error("An unexpected error occurred");
