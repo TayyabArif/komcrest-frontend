@@ -3,10 +3,13 @@ import io from 'socket.io-client';
 
 const useSocket = () => {
   const [socket, setSocket] = useState(null);
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL.split('/api')[0]
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const socketUrl = baseUrl ? `${baseUrl.split('/api')[0]}/api` : null;
+
   useEffect(() => {
-    if (url) {
-      const socketInstance = io(url, {
+    if (socketUrl) {
+      const socketInstance = io(process.env.NEXT_PUBLIC_BACKEND_URL.split('/api')[0], {
+        path: '/api/socket.io',
         transports: ['websocket'],
       });
 
@@ -28,9 +31,9 @@ const useSocket = () => {
         socketInstance.disconnect();
       };
     } else {
-      console.error('URL is not defined');
+      console.error('Socket URL is not defined');
     }
-  }, [url]);
+  }, [socketUrl]);
 
   return socket;
 };
