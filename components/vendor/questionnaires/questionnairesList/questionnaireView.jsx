@@ -20,6 +20,7 @@ import DeleteModal from "../../shared/DeleteModal";
 import { toast } from "react-toastify";
 import QuestionnairFilter from "./Questionnire-filter";
 import { useMyContext } from "@/context";
+import ResizableHeader from "../../shared/ResizeTbaleHeader";
 
 const deleteModalContent = "Are you sure to delete Questions";
 
@@ -471,8 +472,8 @@ const QuestionnairesView = () => {
         }
       })
       .catch((error) => {
-        console.log("errorerrorerror",error)
-        if (error) {   
+        console.log("errorerrorerror", error);
+        if (error) {
           toast.dismiss();
           console.error("API Error:", error.response);
           toast.error(
@@ -527,6 +528,32 @@ const QuestionnairesView = () => {
     console.log("Found item:", filetrSingleQuestionnisre);
     setSelectedQuestionnaireReference(filetrSingleQuestionnisre?.references);
   }, [selectedId, questionnaireData]);
+
+  const [columnWidths, setColumnWidths] = useState({
+    status: 50,
+    question: 500, 
+    compliance: 130, 
+    answer: 500, 
+  });
+
+  useEffect(() => {
+    const storedWidths = localStorage.getItem("questionnaircolumnWidths");
+    if (storedWidths) {
+      setColumnWidths(JSON.parse(storedWidths));
+    }
+  }, []);
+
+  // Function to handle resizing columns and updating local storage
+  const handleResize = (columnName, deltaX) => {
+    setColumnWidths((prevWidths) => {
+      const newWidths = {
+        ...prevWidths,
+        [columnName]: Math.max(50, prevWidths[columnName] + deltaX), // Ensure minimum width of 50px
+      };
+      localStorage.setItem("questionnaircolumnWidths", JSON.stringify(newWidths));
+      return newWidths;
+    });
+  };
 
   return (
     <>
@@ -685,19 +712,46 @@ const QuestionnairesView = () => {
                           classNames={{ wrapper: "!rounded-[3px]" }}
                         />
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 ">
-                        {/* Status {selectedId} */}
+                      {/* <th
+                      className="  px-4 py-2 text-left text-gray-600 ">
                         Status
-                      </th>
-                      <th className="px-4 py-2 text-left text-gray-600">
-                        Question
-                      </th>
-                      <th className="px-4 py-2 text-left text-gray-600">
+                      </th> */}
+                      <ResizableHeader
+                        columnName="status"
+                        columnWidth={columnWidths.status}
+                        onResize={handleResize}
+                      >
+                        Status
+                      </ResizableHeader>
+                      <ResizableHeader
+                        columnName="question"
+                        columnWidth={columnWidths.question}
+                        onResize={handleResize}
+                      >
+                         Question
+                      </ResizableHeader>
+                      <ResizableHeader
+                        columnName="compliance"
+                        columnWidth={columnWidths.compliance}
+                        onResize={handleResize}
+                      >
+                         Compliance
+                      </ResizableHeader>
+                      <ResizableHeader
+                        columnName="answer"
+                        columnWidth={columnWidths.answer}
+                        onResize={handleResize}
+                      >
+                         Answer
+                      </ResizableHeader>
+
+                     
+                      {/* <th className="px-4 py-2 text-left text-gray-600">
                         Compliance
-                      </th>
-                      <th className="px-4 py-2 text-left text-gray-600 ">
+                      </th> */}
+                      {/* <th className="px-4 py-2 text-left text-gray-600 ">
                         Answer
-                      </th>
+                      </th> */}
                       <th className="px-4 py-2  text-gray-600 bg-[#E5E7EB] pr-7  text-left sticky -right-[1px]">
                         Actions
                       </th>
@@ -725,7 +779,7 @@ const QuestionnairesView = () => {
                                 classNames={{ wrapper: "!rounded-[3px]" }}
                               />
                             </td>
-                            <td className="px-4 py-2 text-center border w-[70px]">
+                            <td className="px-4 py-2 text-center border ">
                               <div
                                 className={`h-5 w-5 mx-auto rounded-full cursor-pointer border ${
                                   item.status === "approved"
@@ -737,11 +791,11 @@ const QuestionnairesView = () => {
                                 }`}
                               ></div>
                             </td>
-                            <td className="px-4 py-2 border  md:min-w-[250px]  lg:min-w-[350px] xl:min-w-[500px]">
+                            <td className="px-4 py-2 border  ">
                               {item.question}
                             </td>
                             <td
-                              className={`py-2 items-center min-w-[150px] ${
+                              className={`py-2 items-center  ${
                                 item.confidence == 0
                                   ? "outline outline-[#FFC001] text-[#FFC001]  shadow-inner"
                                   : ""
@@ -775,7 +829,9 @@ const QuestionnairesView = () => {
                                   <option value="Notapplicable">
                                     Not applicable
                                   </option>
-                                  {!item.compliance && <option value="">Empty</option>}
+                                  {!item.compliance && (
+                                    <option value="">Empty</option>
+                                  )}
                                 </select>
                               </div>
                             </td>
@@ -784,7 +840,7 @@ const QuestionnairesView = () => {
                                 setSelectedTextAreaId(item.id);
                                 setAnswerIsUpdate("single");
                               }}
-                              className={`px-4 py-2 md:min-w-[250px]  lg:min-w-[400px] xl:min-w-[600px]   !text-wrap  border ${
+                              className={`px-4 py-2    !text-wrap  border ${
                                 item.confidence < 7
                                   ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
                                   : ""
