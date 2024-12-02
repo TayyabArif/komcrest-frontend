@@ -47,7 +47,7 @@ const KnowledgeHistory = ({
             <div className="flex justify-end space-x-4 mt-2">
               <FilePenLine
                 onClick={() =>
-                  router.push(`/vendor/knowledge/UpdateQuestion?id=${item?.id}`)
+                  window.open(`/vendor/knowledge/UpdateQuestion?id=${item?.id}` , "_blank")
                 }
                 className="cursor-pointer text-gray-500"
                 size={18}

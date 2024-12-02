@@ -20,6 +20,7 @@ import DeleteModal from "../../shared/DeleteModal";
 import { toast } from "react-toastify";
 import QuestionnairFilter from "./Questionnire-filter";
 import { useMyContext } from "@/context";
+import ResizableHeader from "../../shared/ResizeTbaleHeader";
 
 const deleteModalContent = "Are you sure to delete Questions";
 
@@ -197,6 +198,9 @@ const QuestionnairesView = () => {
     let payload = [...bulkSelected];
     if (bulkSelected.includes(id)) {
       payload = bulkSelected.filter((item) => item !== id);
+      if(bulkSelected.length === 1){
+        setIsHeaderChecked(false)
+      }
     } else {
       payload = [...payload, id];
     }
@@ -287,11 +291,13 @@ const QuestionnairesView = () => {
           toast.success(result.message);
           setQuestionnaireUpdated((prev) => !prev);
           router.push("/vendor/questionnaires");
+          setIsHeaderChecked(false)
         } else {
           toast.success(result.message);
           setBulkSelected([]);
           setDataUpdate(!dataUpdate);
           setSelectedId("");
+          setIsHeaderChecked(false)
         }
       } else {
         toast.error("Failed to delete questions");
@@ -471,8 +477,8 @@ const QuestionnairesView = () => {
         }
       })
       .catch((error) => {
-        console.log("errorerrorerror",error)
-        if (error) {   
+        console.log("errorerrorerror", error);
+        if (error) {
           toast.dismiss();
           console.error("API Error:", error.response);
           toast.error(
@@ -528,6 +534,32 @@ const QuestionnairesView = () => {
     setSelectedQuestionnaireReference(filetrSingleQuestionnisre?.references);
   }, [selectedId, questionnaireData]);
 
+  const [columnWidths, setColumnWidths] = useState({
+    status: 50,
+    question: 500, 
+    compliance: 130, 
+    answer: 500, 
+  });
+
+  useEffect(() => {
+    const storedWidths = localStorage.getItem("questionnaircolumnWidths");
+    if (storedWidths) {
+      setColumnWidths(JSON.parse(storedWidths));
+    }
+  }, []);
+
+  // Function to handle resizing columns and updating local storage
+  const handleResize = (columnName, deltaX) => {
+    setColumnWidths((prevWidths) => {
+      const newWidths = {
+        ...prevWidths,
+        [columnName]: Math.max(50, prevWidths[columnName] + deltaX), // Ensure minimum width of 50px
+      };
+      localStorage.setItem("questionnaircolumnWidths", JSON.stringify(newWidths));
+      return newWidths;
+    });
+  };
+
   return (
     <>
       {dataLoaded ? (
@@ -579,6 +611,7 @@ const QuestionnairesView = () => {
                     className="text-red-600 cursor-pointer"
                     onClick={() => {
                       setBulkSelected([]);
+                      setIsHeaderChecked(false)
                     }}
                   >
                     Clear Selection
@@ -677,7 +710,7 @@ const QuestionnairesView = () => {
                     <tr className="2xl:text-[20px] text-[16px]">
                       <th className="px-4 py-2 text-center text-gray-600">
                         <Checkbox
-                          isSelected={isHeaderChecked}
+                          isSelected={isHeaderChecked && bulkSelected.length > 0}
                           onChange={handleHeaderCheckboxChange}
                           className="2xl:text-[20px] !text-[50px]"
                           radius="none"
@@ -685,19 +718,38 @@ const QuestionnairesView = () => {
                           classNames={{ wrapper: "!rounded-[3px]" }}
                         />
                       </th>
-                      <th className="px-4 py-2 text-left text-gray-600 ">
-                        {/* Status {selectedId} */}
+                      {/* <th
+                      className="  px-4 py-2 text-left text-gray-600 ">
                         Status
-                      </th>
-                      <th className="px-4 py-2 text-left text-gray-600">
-                        Question
-                      </th>
-                      <th className="px-4 py-2 text-left text-gray-600">
-                        Compliance
-                      </th>
-                      <th className="px-4 py-2 text-left text-gray-600 ">
-                        Answer
-                      </th>
+                      </th> */}
+                      <ResizableHeader
+                        columnName="status"
+                        columnWidth={columnWidths.status}
+                        onResize={handleResize}
+                      >
+                        Status
+                      </ResizableHeader>
+                      <ResizableHeader
+                        columnName="question"
+                        columnWidth={columnWidths.question}
+                        onResize={handleResize}
+                      >
+                         Question
+                      </ResizableHeader>
+                      <ResizableHeader
+                        columnName="compliance"
+                        columnWidth={columnWidths.compliance}
+                        onResize={handleResize}
+                      >
+                         Compliance
+                      </ResizableHeader>
+                      <ResizableHeader
+                        columnName="answer"
+                        columnWidth={columnWidths.answer}
+                        onResize={handleResize}
+                      >
+                         Answer
+                      </ResizableHeader>
                       <th className="px-4 py-2  text-gray-600 bg-[#E5E7EB] pr-7  text-left sticky -right-[1px]">
                         Actions
                       </th>
@@ -725,7 +777,7 @@ const QuestionnairesView = () => {
                                 classNames={{ wrapper: "!rounded-[3px]" }}
                               />
                             </td>
-                            <td className="px-4 py-2 text-center border w-[70px]">
+                            <td className="px-4 py-2 text-center border ">
                               <div
                                 className={`h-5 w-5 mx-auto rounded-full cursor-pointer border ${
                                   item.status === "approved"
@@ -737,11 +789,11 @@ const QuestionnairesView = () => {
                                 }`}
                               ></div>
                             </td>
-                            <td className="px-4 py-2 border  md:min-w-[250px]  lg:min-w-[350px] xl:min-w-[500px]">
+                            <td className="px-4 py-2 border  ">
                               {item.question}
                             </td>
                             <td
-                              className={`py-2 items-center min-w-[150px] ${
+                              className={`py-2 items-center  ${
                                 item.confidence == 0
                                   ? "outline outline-[#FFC001] text-[#FFC001]  shadow-inner"
                                   : ""
@@ -772,10 +824,12 @@ const QuestionnairesView = () => {
                                   </option>
                                   <option value="yes">Yes</option>
                                   <option value="no">No</option>
-                                  <option value="Notapplicable">
+                                  <option value="non-applicable">
                                     Not applicable
                                   </option>
-                                  {!item.compliance && <option value="">Empty</option>}
+                                  {!item.compliance && (
+                                    <option value="">Empty</option>
+                                  )}
                                 </select>
                               </div>
                             </td>
@@ -784,7 +838,7 @@ const QuestionnairesView = () => {
                                 setSelectedTextAreaId(item.id);
                                 setAnswerIsUpdate("single");
                               }}
-                              className={`px-4 py-2 md:min-w-[250px]  lg:min-w-[400px] xl:min-w-[600px]   !text-wrap  border ${
+                              className={`px-4 py-2    !text-wrap  border ${
                                 item.confidence < 7
                                   ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
                                   : ""

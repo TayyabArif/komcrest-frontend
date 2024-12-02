@@ -1,5 +1,6 @@
 import React from "react";
 import { ThumbsUp, ThumbsDown, FilePenLine } from "lucide-react";
+import { handleDownload } from "@/helper";
 
 import {
   FaRegThumbsDown,
@@ -39,9 +40,10 @@ const OnlineResourceHistory = ({
           >
             <a
               href="#"
+              onClick={() => handleDownload(doc.file)}
               className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] "
             >
-              {doc.title}
+              {doc.title} 
             </a>
             <p className="2xl:text-[20px] text-[16px] break-words text-gray-600">{doc.referenceString} </p>
             <div className="flex justify-between items-center py-2">
@@ -51,7 +53,7 @@ const OnlineResourceHistory = ({
               <div className="flex justify-end space-x-4">
                 <FilePenLine
                  onClick={() =>
-                  router.push(`/vendor/onlineResource/update?id=${doc?.id}`)
+                  window.open(`/vendor/onlineResource/update?id=${doc?.id}`,'_blank')
                 }
                   className="cursor-pointer text-gray-500"
                   size={18}

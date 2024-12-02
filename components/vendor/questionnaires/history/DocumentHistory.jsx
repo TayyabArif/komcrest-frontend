@@ -7,6 +7,7 @@ import {
   FaThumbsUp,
 } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { handleFileDownload } from "@/helper";
 
 const DocumentHistory = ({
   documentReferenceData,
@@ -35,6 +36,7 @@ const DocumentHistory = ({
           <div key={index} className="bg-white shadow-md rounded-md py-2 px-4 break-words">
             <a
               href="#"
+              onClick={()=> handleFileDownload(doc.filePath)}
               className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] "
             >
               {doc.title}
@@ -47,7 +49,7 @@ const DocumentHistory = ({
               <div className="flex justify-end space-x-4 ">
                 <FilePenLine
                   onClick={() =>
-                    router.push(`/vendor/document/AddDocument?id=${doc?.id}`)
+                    window.open(`/vendor/document/AddDocument?id=${doc?.id}`, '_blank')
                   }
                   className="cursor-pointer text-gray-500"
                   size={18}
