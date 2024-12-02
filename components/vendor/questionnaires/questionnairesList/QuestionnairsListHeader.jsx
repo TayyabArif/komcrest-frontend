@@ -136,7 +136,7 @@ const QuestionnairsListHeader = ({
               <select
                 onChange={(e) => questionnaireUpdated(e.target.value)}
                 value={currentStatus}
-                className="w-[150px] cursor-pointer  bg-[#D8D8D8] text-[16px] 2xl:text-[20px] font-semibold border  rounded-[6px] p-2"
+                className="w-[150px] cursor-pointer  bg-[#D8D8D8] text-[16px] 2xl:text-[20px] font-semibold border  rounded-[6px] p-2 2xl:px-2 2xl:py-[6px]"
               >
                 <option disabled>Change Status</option>
                 <option value="To Process">To Process</option>
@@ -148,7 +148,7 @@ const QuestionnairsListHeader = ({
               <Button
                 radius="none"
                 size="md"
-                className="text-white text-[17px] 2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4"
+                className="text-white text-[17px] 2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4 py-2"
                 onClick={() =>
                   handleExport(questionnaireData?.questionnaireRecords  , questionnaireData.filePath)
                 }
@@ -165,8 +165,8 @@ const QuestionnairsListHeader = ({
                 >
                   <PopoverTrigger>
                     <Settings
-                       size={30}
-                      className="text-[#252525]  cursor-pointer p-0"
+                       size={32}
+                      className="text-[#252525]  cursor-pointer "
                       onClick={() => setDropDownOpen(true)}
                     />
                   </PopoverTrigger>

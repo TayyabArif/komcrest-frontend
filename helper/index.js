@@ -246,7 +246,7 @@ export const multipleSelectStyle = {
                       console.log(`Question matched in row: ${matchedRow.number}`);
   
                       // Write "Compliance" and "Answer" to fixed columns
-                      matchedRow.getCell(complianceColIndex).value = compliance || "N/A";
+                      matchedRow.getCell(complianceColIndex).value = compliance || "";
                       matchedRow.getCell(answerColIndex).value = answer || "N/A";
                     
                   } else {

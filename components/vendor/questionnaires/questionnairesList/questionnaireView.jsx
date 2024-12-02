@@ -198,6 +198,9 @@ const QuestionnairesView = () => {
     let payload = [...bulkSelected];
     if (bulkSelected.includes(id)) {
       payload = bulkSelected.filter((item) => item !== id);
+      if(bulkSelected.length === 1){
+        setIsHeaderChecked(false)
+      }
     } else {
       payload = [...payload, id];
     }
@@ -288,11 +291,13 @@ const QuestionnairesView = () => {
           toast.success(result.message);
           setQuestionnaireUpdated((prev) => !prev);
           router.push("/vendor/questionnaires");
+          setIsHeaderChecked(false)
         } else {
           toast.success(result.message);
           setBulkSelected([]);
           setDataUpdate(!dataUpdate);
           setSelectedId("");
+          setIsHeaderChecked(false)
         }
       } else {
         toast.error("Failed to delete questions");
@@ -606,6 +611,7 @@ const QuestionnairesView = () => {
                     className="text-red-600 cursor-pointer"
                     onClick={() => {
                       setBulkSelected([]);
+                      setIsHeaderChecked(false)
                     }}
                   >
                     Clear Selection
@@ -704,7 +710,7 @@ const QuestionnairesView = () => {
                     <tr className="2xl:text-[20px] text-[16px]">
                       <th className="px-4 py-2 text-center text-gray-600">
                         <Checkbox
-                          isSelected={isHeaderChecked}
+                          isSelected={isHeaderChecked && bulkSelected.length > 0}
                           onChange={handleHeaderCheckboxChange}
                           className="2xl:text-[20px] !text-[50px]"
                           radius="none"
@@ -744,14 +750,6 @@ const QuestionnairesView = () => {
                       >
                          Answer
                       </ResizableHeader>
-
-                     
-                      {/* <th className="px-4 py-2 text-left text-gray-600">
-                        Compliance
-                      </th> */}
-                      {/* <th className="px-4 py-2 text-left text-gray-600 ">
-                        Answer
-                      </th> */}
                       <th className="px-4 py-2  text-gray-600 bg-[#E5E7EB] pr-7  text-left sticky -right-[1px]">
                         Actions
                       </th>
@@ -826,7 +824,7 @@ const QuestionnairesView = () => {
                                   </option>
                                   <option value="yes">Yes</option>
                                   <option value="no">No</option>
-                                  <option value="Notapplicable">
+                                  <option value="non-applicable">
                                     Not applicable
                                   </option>
                                   {!item.compliance && (

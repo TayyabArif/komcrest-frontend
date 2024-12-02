@@ -263,6 +263,7 @@ const KnowledgeBase = ({
         setDataUpdate(!dataUpdate);
         setBulkDeleted([]);
         setFilters([]);
+        setIsHeaderChecked(false)
       })
       .catch((error) => console.error(error));
   };
@@ -355,7 +356,7 @@ const KnowledgeBase = ({
                 <tr className="text-[16px] 2xl:text-[20px]">
                   <th className="py-2 px-4 border text-left">
                     <Checkbox
-                      isSelected={isHeaderChecked}
+                      isSelected={isHeaderChecked && bulkDeleted.length > 0}
                       onChange={handleHeaderCheckboxChange}
                       className="2xl:text-[20px] !text-[50px]"
                       radius="none"

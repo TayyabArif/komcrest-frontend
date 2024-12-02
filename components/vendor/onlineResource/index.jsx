@@ -102,6 +102,7 @@ const OnlineResourceComponent = () => {
         toast.success("Online Resources deleted successfully");
         setOnlineResourceDataUpdate((prevState) => !prevState);
         setBulkDeleted([]);
+        setIsHeaderChecked(false)
       } else {
         const errorMessage = result?.message || "Failed to delete resources";
         toast.error(errorMessage);
@@ -176,7 +177,7 @@ const OnlineResourceComponent = () => {
                     <tr className="border text-[16px] 2xl:text-[20px] ">
                       <th className="py-2 px-4 border  text-left bg-gray-200">
                         <Checkbox
-                          isSelected={isHeaderChecked}
+                          isSelected={isHeaderChecked && bulkDeleted.length > 0}
                           onChange={handleHeaderCheckboxChange}
                           className="2xl:text-[20px] !text-[50px]"
                           radius="none"
