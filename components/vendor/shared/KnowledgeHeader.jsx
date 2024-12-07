@@ -19,29 +19,29 @@ const KnowledgeHeader = ({ buttonShow, headerData }) => {
         <div>
           {buttonShow && (
             <div>
-              {headerData.addMultiple && (
+              {headerData.leftButtonText && (
                 <Button
                   radius="none"
                   size="md"
                   className="bg-white text-gray-500 border text-[16px]  2xl:text-[20px] w-max rounded-[4px] my-4 mx-2"
                   onClick={() => {
-                    router.push(headerData.multiplelePath);
+                    router.push(headerData?.leftButtonPath);
                   }}
                 >
-                  {headerData.addMultiple}
+                  {headerData.leftButtonText}
                 </Button>
               )}
 
-              {headerData.addSingle && (
+              {headerData.rightButtonText && (
                 <Button
                   radius="none"
                   size="md"
                   className="text-white text-[16px]  2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4"
                   onClick={() => {
-                    router.push(headerData.singlePath);
+                    router.push(headerData.rightButtonPath);
                   }}
                 >
-                  {headerData.addSingle}
+                  {headerData.rightButtonText}
                 </Button>
               )}
             </div>

@@ -14,7 +14,7 @@ const modalData = {
   desc: "Verify information before confirming",
   confirmText: "Send invitation"
 }
-const InviteUser = () => {
+const UserManagement = () => {
     const { companyProducts } = useMyContext();
   const [cookies] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -37,7 +37,6 @@ const InviteUser = () => {
   });
 
   useEffect(() => {
-   
     if (cookiesData?.companyId) {
         setFormData(prevState => ({
             ...prevState,
@@ -147,12 +146,13 @@ const InviteUser = () => {
         setIsLoading(false);
       });
   }
+
   return (
     <>
     {isMounted && (
-    <div className="flex flex-col w-full bg-white">
-      <div className="flex flex-col justify-between w-full gap-5 pl-20 pr-10 py-10 bg-gray-200 min-h-screen ">
-        <div className="flex items-start justify-start w-full gap-10 pl-20 h-full">
+    <div className="flex flex-col   w-[80%] mx-auto">
+      <div className="flex flex-col w-full gap-5   py-10  min-h-screen">
+        <div className="flex items-start justify-between w-full h-full">
           <UsersDetailsCard action="create"
             isDisabled={true}
             formData={formData}
@@ -167,21 +167,21 @@ const InviteUser = () => {
             selectedProducts={selectedProducts}
           />
         </div>
-        <div className="flex justify-end mb-5 pr-16">
+        <div className="flex justify-end mb-5 ">
           <div>
             <div className="flex items-center gap-5">
-              {/* <Button
-                radius="none"
-                size="sm"
-                className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
-                onClick={() => router.push("/admin/user-management")}
-              >
-                Cancel
-              </Button> */}
               <Button
                 radius="none"
-                size="sm"
-                className="text-white px-5 h-[28px] text-sm bg-btn-primary w-max rounded-[4px]"
+                size="md"
+                className="rounded-md 2xl:text-[20px] text-[16px] bg-red-200 text-red-500 font-semibold"
+                onClick={() => router.push("/vendor/user-management")}
+              >
+                Cancel
+              </Button>
+              <Button
+                radius="none"
+                size="md"
+                className="text-white rounded-md 2xl:text-[20px] text-[16px]  bg-btn-primary "
                 onPress={onOpen}
                 isLoading={isLoading}
                 isDisabled={!formData?.firstName || !formData?.lastName || !formData?.position || !formData?.role || !formData?.email || isLoading}
@@ -192,11 +192,11 @@ const InviteUser = () => {
           </div>
         </div>
       </div>
-      <ConfirmationModal isOpen={isOpen} onOpenChange={onOpenChange} data={modalData} handleSubmit={handleSubmit} isLoading={isLoading} />
+      {/* <ConfirmationModal isOpen={isOpen} onOpenChange={onOpenChange} data={modalData} handleSubmit={handleSubmit} isLoading={isLoading} /> */}
     </div>
 )}
 </>
   );
 };
 
-export default InviteUser;
+export default UserManagement;

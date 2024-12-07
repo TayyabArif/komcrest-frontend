@@ -26,12 +26,12 @@ const deleteModalContent = "Are you sure to delete Questions";
 
 const QuestionnairesView = () => {
   const router = useRouter();
-  const { setQuestionnaireUpdated } = useMyContext();
+  const { setQuestionnaireUpdated ,  dataUpdate,  setDataUpdate} = useMyContext();
   let id;
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [dataUpdate, setDataUpdate] = useState(false);
+  // const [dataUpdate, setDataUpdate] = useState(false);
   const notifyDisclosure = useDisclosure();
   const deleteDisclosure = useDisclosure();
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);

@@ -19,8 +19,10 @@ const headerData = {
     "Streamline the process of responding to complex IT security assessments thanks to our AI-powered assistant.",
   desc2:
     "Upload your questionnaire and Komcrest will provides accurate and tailored answers, saving time and ensuring consistency.",
-  addSingle: "Add questionnaire",
-  singlePath: "/vendor/questionnaires/import",
+  rightButtonText: "Add questionnaire",
+  rightButtonPath: "/vendor/questionnaires/import",
+  leftButtonText: "Ask a Question",
+  leftButtonPath: "/vendor/questionnaires/askQuestion",
 };
 
 const Questionnaires = () => {
@@ -115,7 +117,7 @@ const Questionnaires = () => {
 
     updateDivHeight();
     window.addEventListener("resize", updateDivHeight); 
-    divRef.current.addEventListener("scroll", updateDivHeight); 
+    divRef?.current?.addEventListener("scroll", updateDivHeight); 
     return () => {
       window.removeEventListener("resize", updateDivHeight);
       if (divRef.current) {
@@ -191,7 +193,7 @@ const Questionnaires = () => {
                 </DndProvider>
               </div>
             ) : (
-              <div className="flex flex-wrap gap-5">
+              <div className="flex flex-wrap gap-5 w-[25%] overflow-auto">
                 {filterStatus("Completed").length > 0
                   ? filterStatus("Completed")?.map((data, index) => {
                       return (

@@ -12,6 +12,7 @@ import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { Button } from "@nextui-org/react";
+import { useMyContext } from "@/context";
 
 const VendorLayout = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -20,6 +21,7 @@ const VendorLayout = ({ children }) => {
   const route = router.route;
   const [loogedinUser, setLoggdinUser] = useState();
   const [selectedItem, setSelectedItem] = useState("");
+  const { setIsKnowledgeBaseOpenDirect } = useMyContext();
   useEffect(() => {
     const parts = route.split("/");
     const segment = parts[2];
@@ -88,6 +90,7 @@ const VendorLayout = ({ children }) => {
                   : "hover:bg-gray-200 hover:shadow-md"
               }`}
               onClick={(e) => {
+                setIsKnowledgeBaseOpenDirect(true);
                 if (e.metaKey || e.ctrlKey) {
                   window.open("/vendor/knowledge", "_blank");
                 } else {
@@ -123,24 +126,20 @@ const VendorLayout = ({ children }) => {
           <div className="flex flex-col gap-2 cursor-pointer">
             <div className="flex gap-1 items-center px-4">
               <CircleHelp size={20} />
-              <h1 className="text-lg text-[16px] 2xl:text-[20px] py-2">
-                Help Center
-              </h1>
+              <h1 className=" text-[16px] 2xl:text-[20px] py-2">Help Center</h1>
             </div>
             <div
               className={`flex gap-1 items-center px-4 cursor-pointer ${
-                selectedItem === "invite-user"
+                selectedItem === "user-management"
                   ? "bg-[#2457d7] text-white shadow-md rounded"
                   : "hover:bg-gray-200 hover:shadow-md"
               }`}
               onClick={() => {
-                router.push("/vendor/invite-user");
+                router.push("/vendor/user-management");
               }}
             >
               <Settings size={20} />
-              <h1 className="font-normal text-[16px] 2xl:text-[20px] py-2">
-                Settings
-              </h1>
+              <h1 className="text-[16px] 2xl:text-[20px] py-2">Settings</h1>
             </div>
           </div>
         </div>
@@ -157,6 +156,7 @@ const VendorLayout = ({ children }) => {
             Logout
           </Button>
         </div>
+
         <div className="flex flex-col bg-[#ebeef2] h-full  pb-10">
           {children}
         </div>

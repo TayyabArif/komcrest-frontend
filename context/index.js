@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { handleResponse } from "@/helper";
 import { useCookies } from "react-cookie";
 import useSocket from "@/customHook/useSocket";
+import { toast } from "react-toastify";
 
 const MyContext = createContext();
 
@@ -26,6 +27,16 @@ export const MyProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [dataIsLoaded, setDataIsLoaded] = useState(false);
 
+ // knowledge base module states
+  const [knowledgeBasePayloadData , setKnowledgeBasePayloadData ] = useState({})
+  const [knowledgeBaseStepperStart ,setKnowledgeBaseStepperStart] = useState(0)
+  const [isKnowledgeBaseOpenDirect ,setIsKnowledgeBaseOpenDirect] = useState(true)
+  const [dataUpdate, setDataUpdate] = useState(false);
+  
+  
+
+
+  // questionnaire module states
   const [questionnaireData, setQuestionnaireData] = useState({
     filename: "",
     customerName: "",
@@ -340,6 +351,59 @@ export const MyProvider = ({ children }) => {
     }
   }, [documentDataUpdate ,dataUpdated]);
 
+
+  const questionnaireStatusUpdated = (value , id) => {
+    const jsonPayload = JSON.stringify({
+      status: value,
+    });
+    const token = cookiesData.token;
+    let requestOptions = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: jsonPayload,
+      redirect: "follow",
+    };
+
+    fetch(`${baseUrl}/questionnaires/${id}`, requestOptions)
+      .then(async (response) => {
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          
+          toast.success(data.message);
+          setQuestionnaireUpdated((prev) => !prev);
+          setDataUpdate((prev) => !prev);
+          
+        } else {
+          toast.error(data?.error || "Questionnaires status not Updated");
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error("API Error:", error.response);
+          toast.error(
+            error.response.data?.error ||
+              "An error occurred while Updated  Questionnaires status"
+          );
+        }
+      });
+  };
+
  
 
   return (
@@ -371,8 +435,16 @@ export const MyProvider = ({ children }) => {
         setDocumentData,
         setDocumentDataUpdate,
         dataIsLoaded,
-        setIsFirstResponse
-        
+        setIsFirstResponse,
+        knowledgeBasePayloadData,
+        setKnowledgeBasePayloadData,
+        knowledgeBaseStepperStart,
+        setKnowledgeBaseStepperStart,
+        isKnowledgeBaseOpenDirect,
+        setIsKnowledgeBaseOpenDirect,
+        questionnaireStatusUpdated,
+        dataUpdate,
+        setDataUpdate
       }}
     >
       {children}

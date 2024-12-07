@@ -14,10 +14,10 @@ const headerData = {
   desc1: "Quickly add requirements, questions and answers to your account. ",
   desc2:
     "They will be used by Komcrest AI to automatically provide the best answer to your future questions.",
-  addSingle: "Add new question",
-  addMultiple: "Import questions",
-  singlePath: "/vendor/knowledge/AddQuestion",
-  multiplelePath: "/vendor/knowledge/Import",
+  rightButtonText: "Add new question",
+  leftButtonText: "Import questions",
+  rightButtonPath: "/vendor/knowledge/AddQuestion",
+  leftButtonPath: "/vendor/knowledge/Import",
 };
 
 const Knowledge = () => {
@@ -76,29 +76,29 @@ const Knowledge = () => {
   return (
     <VendorLayout>
       <div className="h-full flex flex-col">
-      <KnowledgeHeader
-        buttonShow={questionData.length > 0 ? true : false}
-        headerData={headerData}
-      />
-      {dataLoaded ? (
-        questionData.length > 0 || filters.length > 0 ? (
-          <KnowledgeBase
-            questionData={questionData}
-            setQuestionData={setQuestionData}
-            setDataUpdate={setDataUpdate}
-            dataUpdate={dataUpdate}
-            setFilters={setFilters}
-            filters={filters}
-            dataLoaded={dataLoaded}
-          />
+        <KnowledgeHeader
+          buttonShow={questionData.length > 0 ? true : false}
+          headerData={headerData}
+        />
+        {dataLoaded ? (
+          questionData.length > 0 || filters.length > 0 ? (
+            <KnowledgeBase
+              questionData={questionData}
+              setQuestionData={setQuestionData}
+              setDataUpdate={setDataUpdate}
+              dataUpdate={dataUpdate}
+              setFilters={setFilters}
+              filters={filters}
+              dataLoaded={dataLoaded}
+            />
+          ) : (
+            <KnowledgeHome />
+          )
         ) : (
-          <KnowledgeHome />
-        )
-      ) : (
-        <div className="flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen">
-          <CircularProgress label="Fetching Data..." size="lg" />
-        </div>
-      )}
+          <div className="flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen">
+            <CircularProgress label="Fetching Data..." size="lg" />
+          </div>
+        )}
       </div>
     </VendorLayout>
   );

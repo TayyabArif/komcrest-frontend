@@ -24,7 +24,12 @@ const UploadQuestions = () => {
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [updateHeader, setUpdateHeader] = useState([]);
   const [mappedIndexValue, setMappedIndexValue] = useState([]);
-  const { companyProducts } = useMyContext();
+  const {
+    companyProducts,
+    knowledgeBasePayloadData,
+    setKnowledgeBasePayloadData,
+    isKnowledgeBaseOpenDirect,
+  } = useMyContext();
 
   const [knowledgeData, setKnowledgeData] = useState({
     name: "",
@@ -33,7 +38,14 @@ const UploadQuestions = () => {
     questions: [],
   });
 
-  const [updatedData, setUpdatedData] = useState({});
+  useEffect(() => {
+    if(isKnowledgeBaseOpenDirect){
+        setStepper(0);
+    }else{
+        setStepper(3);
+        setProgressBar(90);
+    }
+  }, [isKnowledgeBaseOpenDirect]);
 
   const [selectedValues, setSelectedVsalues] = useState(
     knowledgeData.questions.length > 0 ? knowledgeData.questions[0] : []
@@ -121,7 +133,7 @@ const UploadQuestions = () => {
       questions: updatedData,
     };
     console.log("Transformed Data:", newObj);
-    setUpdatedData(newObj);
+    setKnowledgeBasePayloadData(newObj);
     setStepper(stepper + 1);
     setProgressBar(progressBar + 27);
   };
@@ -141,15 +153,13 @@ const UploadQuestions = () => {
 
     // change compliance to coverage
 
-    let payloadData = updatedData;
+    let payloadData = knowledgeBasePayloadData;
     payloadData.questions.forEach((question) => {
       if (question.compliance !== undefined) {
         question.coverage = question.compliance;
         delete question.compliance;
       }
     });
-
-    console.log(">>>>>>>>>>:::::::", payloadData);
     const jsonPayload = JSON.stringify(payloadData);
 
     const token = cookiesData.token;
@@ -162,7 +172,7 @@ const UploadQuestions = () => {
       body: jsonPayload,
       redirect: "follow",
     };
-  
+
     fetch(`${baseUrl}/document-files`, requestOptions)
       .then(async (response) => {
         const data = await handleResponse(
@@ -290,12 +300,12 @@ const UploadQuestions = () => {
                   <h1 className="text-[16px] 2xl:text-[20px]">Validate data</h1>
                 </div>
               </div>
-              {( stepper > 0 && stepper < 4)  &&  (
+              {stepper > 0 && stepper < 4 && (
                 <h1 className="my-2 font-semibold text-[16px] 2xl:text-[20px]">
-                  Your table - {knowledgeData.name.replace(".xlsx", "")}
+                  Your table - {(isKnowledgeBaseOpenDirect ? knowledgeData.name : knowledgeBasePayloadData?.name).replace(".xlsx", "")}
                 </h1>
               )}
-              
+
               <div className=" h-[0vh] flex-1 flex flex-col">
                 {stepper == 0 && (
                   <UploadFile
@@ -330,7 +340,7 @@ const UploadQuestions = () => {
                 {stepper == 3 && (
                   <Validate
                     knowledgeData={knowledgeData}
-                    questions={updatedData.questions}
+                    questions={knowledgeBasePayloadData.questions}
                     selectedRowIndex={selectedRowIndex}
                   />
                 )}
@@ -409,8 +419,13 @@ const UploadQuestions = () => {
                   <div className="mt-5">
                     <Button
                       onClick={() => {
-                        setStepper(stepper - 1);
-                        setProgressBar(progressBar - 27);
+                        if(isKnowledgeBaseOpenDirect){
+                          setStepper(stepper - 1);
+                          setProgressBar(progressBar - 27);
+                        }else{
+                          router.push("/vendor/questionnaires")
+                        }
+                       
                       }}
                       radius="none"
                       size="sm"
