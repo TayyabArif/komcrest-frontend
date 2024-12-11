@@ -8,124 +8,129 @@ import {
   PopoverContent,
   CircularProgress,
   Checkbox,
+  Tooltip,
   Button,
 } from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/react";
 import DeleteModal from "../shared/DeleteModal";
 import { useRouter } from "next/router";
+import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
+import { EditIcon } from "@/public/icons/EditIcon";
 
 const AllUserList = () => {
-  const { companyUserData } = useMyContext();
-  const [selectedId, setSelectedId] = useState();
+  const { realFormatCompanyUserData, removeCompanyUser } = useMyContext();
+  const [selectedId, setSelectedId] = useState("");
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
   const router = useRouter();
-  console.log(">>>>>>>>>>>>>,", companyUserData);
   const deleteModalContent = "Are you sure to delete user?";
+  const [cookies] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const userID = cookiesData?.userId;
 
-
-  const handleDelete = () => {
-    alert("ok")
-  }
+  const handleDelete = async () => {
+    removeCompanyUser(selectedId);
+  };
 
   return (
     <div>
       <UserManagementHeader />
-
-      <div className="overflow-auto flex-1 relative  ">
-        <table className="w-[82%] mx-auto mt-10">
+      <div className="flex-1 relative  ">
+        <table className="w-[82%] mx-auto mt-10 ">
           <thead className="block md:table-header-group sticky -top-1 z-30 ">
             <tr className="border text-[16px] 2xl:text-[20px] ">
-              <th className="bg-gray-200  px-2 py-2 font-bold md:border md: text-left ">
+              <th className="bg-gray-200  px-2 py-3 font-bold  md: text-left ">
                 First Name
               </th>
-              <th className="bg-gray-200 p-1  font-bold md:border md: text-left ">
+              <th className="bg-gray-200 p-1  font-bold  md: text-left ">
                 Last Name
               </th>
-              <th className="bg-gray-200 p-1  font-bold md:border md: text-left ">
+              <th className="bg-gray-200 p-1  font-bold  md: text-left ">
                 Email
               </th>
-              <th className="bg-gray-200 p-1  font-bold md:border md: text-left ">
+              <th className="bg-gray-200 p-1  font-bold  md: text-left ">
                 Role
               </th>
               <th
-                className="px-4    pr-9  text-center  bg-gray-200"
+                className=" text-center  bg-gray-200"
                 style={{ outlineWidth: "1px" }}
               >
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="block md:table-row-group overflow-none">
-            {companyUserData
+          <tbody className="block md:table-row-group overflow-auto">
+            {realFormatCompanyUserData
               ?.sort((a, b) => b.id - a.id)
-              ?.map((item, index) => (
+              ?.map((user, index) => (
                 <tr
                   key={index}
-                  className={` ${
+                  className={` ${user.id == userID ? "text-gray-400" : ""} ${
                     index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                  }  border  md:border-none block md:table-row text-[16px] 2xl:text-[20px]`}
+                  }  border    block md:table-row text-[16px] 2xl:text-[20px]`}
                 >
-                  <td className="p-2 md:border md: text-left break-words">
-                    aaa
+                  <td className="p-2  text-left break-words">
+                    {user.firstName}
                   </td>
 
-                  <td className="p-2 md:border  break-words  text-left ">
-                    llll
+                  <td className="p-2   break-words  text-left ">
+                    {user.lastName}
                   </td>
 
-                  <td className="p-2 border   text-left py-3">DLWDWDLD</td>
+                  <td className="p-2   text-left py-4">{user.email}</td>
 
-                  <td className="p-2 md:border md: text-left ">dwdw</td>
+                  <td className="p-2  text-left ">{user.role}</td>
 
                   <td
-                    className={`${
-                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                    }`}
-                    style={{ outlineWidth: "1px" }}
+                    className={`text-center  flex-col flex-1 justify-center items-center`}
                   >
-                    <Popover
-                      className="rounded-[0px]"
-                      isOpen={openPopoverIndex === index}
+                    <div className=" flex items-center gap-2">
+
+                       {user.id !== userID && (
+                      <Popover placement="bottom" showArrow={true}  isOpen={openPopoverIndex === index}
                       onOpenChange={(open) =>
                         setOpenPopoverIndex(open ? index : null)
-                      }
-                    >
-                      <PopoverTrigger>
-                        <FilePenLine
-                          size={25}
-                          className="cursor-pointer"
-                          color="#2457d7"
-                          strokeWidth={2}
-                        />
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <div className="px-3 py-2 space-y-2">
-                          <div
-                            className="text-small cursor-pointer 2xl:text-[20px]"
-                            onClick={() =>
-                              router.push(
-                                `/vendor/onlineResource/update?id=${item.id}`
-                              )
-                            }
-                          >
-                            Update
+                      }>
+                        <PopoverTrigger>
+                          <Button className="" size="sm">
+                            <Tooltip content="Edit user">
+                              <span className="text-lg cursor-pointer">
+                                <EditIcon />
+                              </span>
+                            </Tooltip>
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="rounded-md w-[120px] items-start text-start">
+                          <div className="px-2 py-2">
+                            <div
+                              className="text-sm font-bold cursor-pointer"
+                              onClick={() =>
+                                router.push(
+                                  `/vendor/setting/user-management/update-user?id=${user.id}`
+                                )
+                              }
+                            >
+                              Update
+                            </div>
+                            <div
+                              className="text-sm mt-2 text-red-500 font-bold cursor-pointer"
+                              onClick={() => {
+                                // setSelectedQuestion(data);
+                                setSelectedId(user.id);
+                                onOpen();
+                                setOpenPopoverIndex(null);
+                              }}
+                            >
+                              Remove
+                            </div>
                           </div>
-                          <div
-                            className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
-                            onClick={() => {
-                              // setSelectedQuestion(data);
-                              setSelectedId(item.id);
-                              onOpen();
-                              setOpenPopoverIndex(null);
-                            }}
-                          >
-                            Delete
-                          </div>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
+                        </PopoverContent>
+                      </Popover>
+
+                            )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -134,11 +139,11 @@ const AllUserList = () => {
       </div>
 
       <DeleteModal
-              isOpen={isOpen}
-              onOpenChange={onOpenChange}
-              handleSubmit={handleDelete}
-              deleteModalContent={deleteModalContent}
-            />
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        handleSubmit={handleDelete}
+        deleteModalContent={deleteModalContent}
+      />
     </div>
   );
 };

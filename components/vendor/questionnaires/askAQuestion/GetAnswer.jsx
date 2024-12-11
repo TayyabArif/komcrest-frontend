@@ -2,7 +2,7 @@ import React from "react";
 
 import { Textarea, Input } from "@nextui-org/react";
 
-const GetAnswer = () => {
+const GetAnswer = ({answerData}) => {
   return (
     <div className="w-[32%] bg-white h-[500px] px-5 py-3">
       <h1 className="p-2 font-semibold">Get an answer</h1>
@@ -19,7 +19,7 @@ const GetAnswer = () => {
             placeholder=""
             size="md"
             name="customerDomain"
-            //   value={questionnaireData.customerDomain}
+              value={answerData?.compliance}
             //   onChange={handleData}
             classNames={{
               input: "2xl:text-[20px] text-[16px] text-gray-500",
@@ -34,7 +34,7 @@ const GetAnswer = () => {
             minRows={8}
             placeholder=""
             name="description"
-            //   value={questionnaireData.description}
+              value={answerData?.answer}
             //   onChange={handleData}
             classNames={{
               input: "text-[16px] 2xl:text-[20px]  text-gray-500",

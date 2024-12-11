@@ -19,6 +19,7 @@ const VendorLayout = ({ children }) => {
   const cookiesData = cookies.myCookie;
   const router = useRouter();
   const route = router.route;
+  const userID = cookiesData?.userId;
   const [loogedinUser, setLoggdinUser] = useState();
   const [selectedItem, setSelectedItem] = useState("");
   const { setIsKnowledgeBaseOpenDirect } = useMyContext();
@@ -130,12 +131,12 @@ const VendorLayout = ({ children }) => {
             </div>
             <div
               className={`flex gap-1 items-center px-4 cursor-pointer ${
-                selectedItem === "user-management"
+                selectedItem === "setting"
                   ? "bg-[#2457d7] text-white shadow-md rounded"
                   : "hover:bg-gray-200 hover:shadow-md"
               }`}
               onClick={() => {
-                router.push("/vendor/user-management");
+                router.push(`/vendor/setting/update-account?id=${userID}`);
               }}
             >
               <Settings size={20} />

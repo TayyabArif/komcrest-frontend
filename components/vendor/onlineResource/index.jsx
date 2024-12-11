@@ -233,7 +233,7 @@ const OnlineResourceComponent = () => {
                           </td>
 
                           <td className="p-2 min-w-[130px] max-w-[180px] md:border md: text-left block md:table-cell break-words">
-                            {item.title}
+                            {item.title} =={item.id}
                           </td>
 
                           <td className="p-2 md:border xl:max-w-[450px] lg:max-w-[350px] md:max-w-[250px] break-words  text-left block md:table-cell">

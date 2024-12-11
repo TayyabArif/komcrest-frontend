@@ -240,11 +240,12 @@ const QuestionnairesView = () => {
       if (response.ok) {
         if (
           result.message ===
-          "QuestionnaireRecord and its associated Questionnaire were deleted successfully"
+          "Record and associated Questionnaire deleted successfully"
         ) {
           toast.success(result.message);
-          setQuestionnaireUpdated((prev) => !prev);
           router.push("/vendor/questionnaires");
+          setQuestionnaireUpdated((prev) => !prev);
+       
         } else {
           toast.success(result.message);
           setDataUpdate((prev) => !prev);
@@ -286,7 +287,7 @@ const QuestionnairesView = () => {
       if (response.ok) {
         if (
           result.message ===
-          "QuestionnaireRecord and its associated Questionnaire were deleted successfully"
+          "Record and associated Questionnaire deleted successfully"
         ) {
           toast.success(result.message);
           setQuestionnaireUpdated((prev) => !prev);

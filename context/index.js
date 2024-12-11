@@ -26,6 +26,7 @@ export const MyProvider = ({ children }) => {
   const [documentDataUpdate, setDocumentDataUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [dataIsLoaded, setDataIsLoaded] = useState(false);
+  const [realFormatCompanyUserData , setRealFormatCompanyUserData] = useState([])
 
  // knowledge base module states
   const [knowledgeBasePayloadData , setKnowledgeBasePayloadData ] = useState({})
@@ -97,6 +98,7 @@ export const MyProvider = ({ children }) => {
       );
       if (response.ok) {
         //remove unapproved user
+        setRealFormatCompanyUserData(data)
         const approvedUser = data.filter(
           (user) => user.invitationStatus == "activated"
         );
@@ -404,6 +406,37 @@ export const MyProvider = ({ children }) => {
       });
   };
 
+  const removeCompanyUser = async (selectedId) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const token = cookiesData.token;
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+
+    fetch(`${baseUrl}/users/${selectedId}`, requestOptions)
+      .then((response) => {
+        return {
+          status: response.status,
+          ok: response.ok,
+        };
+      })
+      .then(({ status, ok }) => {
+        if (ok) {
+          toast.success("User deleted successfully");
+          setDataUpdated((prev) => !prev);
+          router.push("/vendor/setting/user-management")
+        } else {
+          toast.error("Error While deactivating company");
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
  
 
   return (
@@ -444,7 +477,9 @@ export const MyProvider = ({ children }) => {
         setIsKnowledgeBaseOpenDirect,
         questionnaireStatusUpdated,
         dataUpdate,
-        setDataUpdate
+        setDataUpdate,
+        realFormatCompanyUserData,
+        removeCompanyUser
       }}
     >
       {children}

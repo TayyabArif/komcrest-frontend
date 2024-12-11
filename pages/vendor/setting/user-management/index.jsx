@@ -1,5 +1,5 @@
 import React from "react";
-import VendorLayout from "../../../components/vendor/shared/vendorLayout";
+import VendorLayout from "@/components/vendor/shared/vendorLayout";
 import AllUserList from "@/components/vendor/setting/AllUserList";
 import UserManagementSideBar from "@/components/vendor/setting/UserManagementSideBar";
 
