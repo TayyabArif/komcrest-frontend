@@ -6,9 +6,9 @@ import UserManagementSideBar from "@/components/vendor/setting/UserManagementSid
 const UserManagementUserList = () => {
   return (
     <VendorLayout>
-      <div className="flex h-full ">
+      <div className="flex h-full">
         <UserManagementSideBar />
-        <div className="flex-1">
+        <div className="flex-1 h-full flex flex-col">
         <AllUserList />
         </div>
       </div>

@@ -287,7 +287,7 @@ const QuestionnairesView = () => {
       if (response.ok) {
         if (
           result.message ===
-          "Record and associated Questionnaire deleted successfully"
+          "QuestionnaireRecord and its associated Questionnaire were deleted successfully"
         ) {
           toast.success(result.message);
           setQuestionnaireUpdated((prev) => !prev);

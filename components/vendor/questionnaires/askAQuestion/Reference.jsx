@@ -218,22 +218,9 @@ const Reference = ({reference}) => {
     }
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     <div className="w-[23%] bg-[#F2F2F2] h-[500px] px-5 py-3">
-      <h1 className="p-2 font-semibold">Reference</h1>
+      <h1 className="py-2 font-semibold">Reference</h1>
       <hr
         style={{ height: "2px", backgroundColor: "#D8D8D8", border: "none" }}
       />
@@ -257,7 +244,7 @@ const Reference = ({reference}) => {
         </div>
         {referenceToggle.isDocumentOpen && (
           <DocumentHistory
-          //   documentReferenceData={documentReferenceData}
+            documentReferenceData={documentReferenceData}
           //   statusUpdate={statusUpdate}
           //   setDocumentReferenceData={setDocumentReferenceData}
           />
@@ -310,7 +297,7 @@ const Reference = ({reference}) => {
         </div>
         {referenceToggle.isOnlineOpen && (
           <OnlineResourceHistory
-          //   onlineResourceReferenceData={onlineResourceReferenceData}
+            onlineResourceReferenceData={onlineResourceReferenceData}
           //   statusUpdate={statusUpdate}
           //   setOnlineResourceReferenceData={setOnlineResourceReferenceData}
           />
