@@ -47,6 +47,7 @@ export function middleware(request) {
       const adminRoutes = ['/admin', '/admin/*'];
       const vendorRoutes = ['/vendor', '/vendor/*'];
 
+      const isVendorUserManagementRoute = pathname.startsWith('/vendor/setting/user-management');
       const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route));
       const isVendorRoute = vendorRoutes.some(route => pathname.startsWith(route));
 
@@ -62,6 +63,10 @@ export function middleware(request) {
       if (isVendorRoute) {
         // Only users with role 'Admin' and company type 'vendor' can access vendor routes
         if (companyType !== 'vendor') {
+          return NextResponse.redirect(new URL('/vendor/login/access', request.url));
+        }
+        
+        if (isVendorUserManagementRoute && (role !== 'Admin')) {
           return NextResponse.redirect(new URL('/vendor/login/access', request.url));
         }
       }
