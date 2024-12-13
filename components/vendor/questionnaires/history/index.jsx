@@ -382,6 +382,7 @@ const History = ({
               documentReferenceData={documentReferenceData}
               statusUpdate={statusUpdate}
               setDocumentReferenceData={setDocumentReferenceData}
+              isButtonClickAble={true}
             />
           )}
 
@@ -409,6 +410,7 @@ const History = ({
               questionReferenceData={questionReferenceData}
               statusUpdate={statusUpdate}
               setQuestionReferenceData={setQuestionReferenceData}
+              isButtonClickAble={true}
             />
           )}
 
@@ -435,6 +437,7 @@ const History = ({
               onlineResourceReferenceData={onlineResourceReferenceData}
               statusUpdate={statusUpdate}
               setOnlineResourceReferenceData={setOnlineResourceReferenceData}
+              isButtonClickAble={true}
             />
           )}
         </div>

@@ -12,6 +12,7 @@ const KnowledgeHistory = ({
   questionReferenceData,
   setQuestionReferenceData,
   statusUpdate,
+  isButtonClickAble
 }) => {
   const router = useRouter();
   const ReferenceStatusUpdate = (referenceRecordId, type) => {
@@ -57,15 +58,18 @@ const KnowledgeHistory = ({
                   className="text-blue-700"
                   size={18}
                   onClick={() =>
-                    ReferenceStatusUpdate(item.referenceRecordId, "removeLike")
+                    {  isButtonClickAble &&  ReferenceStatusUpdate(item.referenceRecordId, "removeLike")}
+                 
                   }
                 />
               ) : (
                 <FaRegThumbsUp
                   className="cursor-pointer text-gray-500"
                   size={18}
-                  onClick={() =>
-                    ReferenceStatusUpdate(item.referenceRecordId, "like")
+                  onClick={() =>{
+                    isButtonClickAble &&  ReferenceStatusUpdate(item.referenceRecordId, "like")
+                  }
+                   
                   }
                 />
               )}
@@ -75,10 +79,11 @@ const KnowledgeHistory = ({
                   className="text-blue-700"
                   size={18}
                   onClick={() =>
-                    ReferenceStatusUpdate(
+                    {isButtonClickAble &&  ReferenceStatusUpdate(
                       item.referenceRecordId,
                       "removeDislike"
-                    )
+                    )}
+                   
                   }
                 />
               ) : (
@@ -86,7 +91,10 @@ const KnowledgeHistory = ({
                   className="cursor-pointer text-gray-500"
                   size={18}
                   onClick={() =>
-                    ReferenceStatusUpdate(item.referenceRecordId, "dislike")
+                    {
+                      isButtonClickAble &&  ReferenceStatusUpdate(item.referenceRecordId, "dislike")
+                    }
+                  
                   }
                 />
               )}

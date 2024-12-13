@@ -48,7 +48,7 @@ const Reference = ({reference}) => {
     // Set state
 
 
-    console.log("updatedQuestionIdsupdatedQuestionIds",updatedQuestionIds)
+    // console.log("updatedQuestionIdsupdatedQuestionIds",updatedQuestionIds)
     setQuestionIds(updatedQuestionIds);
     setOnlineResourceIds(updatedOnlineResourceIds);
     setDocumentIds(updatedDocumentIds);
@@ -219,11 +219,13 @@ const Reference = ({reference}) => {
   };
 
   return (
-    <div className="w-[23%] bg-[#F2F2F2] h-[500px] px-5 py-3">
-      <h1 className="py-2 font-semibold">Reference</h1>
+    <div className="w-[23%] bg-[#F2F2F2] h-[500px] px-5 pb-3 overflow-auto">
+      <div className="sticky top-0 bg-[#F2F2F2]  z-50"> 
+      <h1 className="pb-2 py-5 font-semibold ">Reference</h1>
       <hr
         style={{ height: "2px", backgroundColor: "#D8D8D8", border: "none" }}
       />
+      </div>
 
       <div className="space-y-4 mt-5">
         <div
@@ -245,8 +247,6 @@ const Reference = ({reference}) => {
         {referenceToggle.isDocumentOpen && (
           <DocumentHistory
             documentReferenceData={documentReferenceData}
-          //   statusUpdate={statusUpdate}
-          //   setDocumentReferenceData={setDocumentReferenceData}
           />
         )}
 
@@ -272,8 +272,7 @@ const Reference = ({reference}) => {
         {referenceToggle.isKnowledgeOpen && (
           <KnowledgeHistory
             questionReferenceData={questionReferenceData}
-          //   statusUpdate={statusUpdate}
-          //   setQuestionReferenceData={setQuestionReferenceData}
+          
           />
         )}
 
@@ -298,8 +297,7 @@ const Reference = ({reference}) => {
         {referenceToggle.isOnlineOpen && (
           <OnlineResourceHistory
             onlineResourceReferenceData={onlineResourceReferenceData}
-          //   statusUpdate={statusUpdate}
-          //   setOnlineResourceReferenceData={setOnlineResourceReferenceData}
+        
           />
         )}
       </div>
