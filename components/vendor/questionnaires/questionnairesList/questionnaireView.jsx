@@ -26,12 +26,12 @@ const deleteModalContent = "Are you sure to delete Questions";
 
 const QuestionnairesView = () => {
   const router = useRouter();
-  const { setQuestionnaireUpdated } = useMyContext();
+  const { setQuestionnaireUpdated ,  dataUpdate,  setDataUpdate} = useMyContext();
   let id;
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [dataUpdate, setDataUpdate] = useState(false);
+  // const [dataUpdate, setDataUpdate] = useState(false);
   const notifyDisclosure = useDisclosure();
   const deleteDisclosure = useDisclosure();
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
@@ -240,11 +240,12 @@ const QuestionnairesView = () => {
       if (response.ok) {
         if (
           result.message ===
-          "QuestionnaireRecord and its associated Questionnaire were deleted successfully"
+          "Record and associated Questionnaire deleted successfully"
         ) {
           toast.success(result.message);
-          setQuestionnaireUpdated((prev) => !prev);
           router.push("/vendor/questionnaires");
+          setQuestionnaireUpdated((prev) => !prev);
+       
         } else {
           toast.success(result.message);
           setDataUpdate((prev) => !prev);

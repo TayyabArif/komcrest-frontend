@@ -32,7 +32,7 @@ const Validate = ({ knowledgeData, questions , selectedRowIndex }) => {
                   key={header}
                   className="px-2 py-3 border text-left text-xs text-black font-semibold uppercase tracking-wider text-[16px] 2xl:text-[20px]"
                 >
-                  {header}
+                  {header == "coverage" ? "Compliance" : header}
                 </th>
               ))}
             </tr>

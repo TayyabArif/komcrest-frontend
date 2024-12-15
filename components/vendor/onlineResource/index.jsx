@@ -25,8 +25,8 @@ const headerData = {
   desc1: "Seamlessly integrate external information into your account.",
   desc2:
     "This ensures that Komcrest AI draws upon the most up-to-date and pertinent answers when addressing your questions.",
-  addSingle: "Add new URLs",
-  singlePath: "/vendor/onlineResource/addResources",
+    rightButtonText: "Add new URLs",
+  rightButtonPath: "/vendor/onlineResource/addResources",
 };
 
 const deleteModalContent = "Are you sure to delete this online resource?";
@@ -233,7 +233,7 @@ const OnlineResourceComponent = () => {
                           </td>
 
                           <td className="p-2 min-w-[130px] max-w-[180px] md:border md: text-left block md:table-cell break-words">
-                            {item.title}
+                            {item.title} 
                           </td>
 
                           <td className="p-2 md:border xl:max-w-[450px] lg:max-w-[350px] md:max-w-[250px] break-words  text-left block md:table-cell">

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { handleResponse } from "@/helper";
 import { useCookies } from "react-cookie";
 import useSocket from "@/customHook/useSocket";
+import { toast } from "react-toastify";
 
 const MyContext = createContext();
 
@@ -25,7 +26,18 @@ export const MyProvider = ({ children }) => {
   const [documentDataUpdate, setDocumentDataUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [dataIsLoaded, setDataIsLoaded] = useState(false);
+  const [realFormatCompanyUserData , setRealFormatCompanyUserData] = useState([])
 
+ // knowledge base module states
+  const [knowledgeBasePayloadData , setKnowledgeBasePayloadData ] = useState({})
+  const [knowledgeBaseStepperStart ,setKnowledgeBaseStepperStart] = useState(0)
+  const [isKnowledgeBaseOpenDirect ,setIsKnowledgeBaseOpenDirect] = useState(true)
+  const [dataUpdate, setDataUpdate] = useState(false);
+  
+  
+
+
+  // questionnaire module states
   const [questionnaireData, setQuestionnaireData] = useState({
     filename: "",
     customerName: "",
@@ -86,6 +98,7 @@ export const MyProvider = ({ children }) => {
       );
       if (response.ok) {
         //remove unapproved user
+        setRealFormatCompanyUserData(data)
         const approvedUser = data.filter(
           (user) => user.invitationStatus == "activated"
         );
@@ -340,6 +353,90 @@ export const MyProvider = ({ children }) => {
     }
   }, [documentDataUpdate ,dataUpdated]);
 
+
+  const questionnaireStatusUpdated = (value , id) => {
+    const jsonPayload = JSON.stringify({
+      status: value,
+    });
+    const token = cookiesData.token;
+    let requestOptions = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: jsonPayload,
+      redirect: "follow",
+    };
+
+    fetch(`${baseUrl}/questionnaires/${id}`, requestOptions)
+      .then(async (response) => {
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          
+          toast.success(data.message);
+          setQuestionnaireUpdated((prev) => !prev);
+          setDataUpdate((prev) => !prev);
+          
+        } else {
+          toast.error(data?.error || "Questionnaires status not Updated");
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error("API Error:", error.response);
+          toast.error(
+            error.response.data?.error ||
+              "An error occurred while Updated  Questionnaires status"
+          );
+        }
+      });
+  };
+
+  const removeCompanyUser = async (selectedId) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const token = cookiesData.token;
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+
+    fetch(`${baseUrl}/users/${selectedId}`, requestOptions)
+      .then((response) => {
+        return {
+          status: response.status,
+          ok: response.ok,
+        };
+      })
+      .then(({ status, ok }) => {
+        if (ok) {
+          toast.success("User deleted successfully");
+          setDataUpdated((prev) => !prev);
+          router.push("/vendor/setting/user-management")
+        } else {
+          toast.error("Error While deactivating company");
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
  
 
   return (
@@ -371,8 +468,18 @@ export const MyProvider = ({ children }) => {
         setDocumentData,
         setDocumentDataUpdate,
         dataIsLoaded,
-        setIsFirstResponse
-        
+        setIsFirstResponse,
+        knowledgeBasePayloadData,
+        setKnowledgeBasePayloadData,
+        knowledgeBaseStepperStart,
+        setKnowledgeBaseStepperStart,
+        isKnowledgeBaseOpenDirect,
+        setIsKnowledgeBaseOpenDirect,
+        questionnaireStatusUpdated,
+        dataUpdate,
+        setDataUpdate,
+        realFormatCompanyUserData,
+        removeCompanyUser
       }}
     >
       {children}

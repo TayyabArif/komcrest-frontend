@@ -12,6 +12,7 @@ const KnowledgeHistory = ({
   questionReferenceData,
   setQuestionReferenceData,
   statusUpdate,
+  isButtonClickAble,
 }) => {
   const router = useRouter();
   const ReferenceStatusUpdate = (referenceRecordId, type) => {
@@ -47,48 +48,62 @@ const KnowledgeHistory = ({
             <div className="flex justify-end space-x-4 mt-2">
               <FilePenLine
                 onClick={() =>
-                  window.open(`/vendor/knowledge/UpdateQuestion?id=${item?.id}` , "_blank")
+                  window.open(
+                    `/vendor/knowledge/UpdateQuestion?id=${item?.id}`,
+                    "_blank"
+                  )
                 }
                 className="cursor-pointer text-gray-500"
                 size={18}
               />
-              {item.referenceStatus == "like" ? (
-                <FaThumbsUp
-                  className="text-blue-700"
-                  size={18}
-                  onClick={() =>
-                    ReferenceStatusUpdate(item.referenceRecordId, "removeLike")
-                  }
-                />
-              ) : (
-                <FaRegThumbsUp
-                  className="cursor-pointer text-gray-500"
-                  size={18}
-                  onClick={() =>
-                    ReferenceStatusUpdate(item.referenceRecordId, "like")
-                  }
-                />
-              )}
 
-              {item.referenceStatus == "dislike" ? (
-                <FaThumbsDown
-                  className="text-blue-700"
-                  size={18}
-                  onClick={() =>
-                    ReferenceStatusUpdate(
-                      item.referenceRecordId,
-                      "removeDislike"
-                    )
-                  }
-                />
-              ) : (
-                <FaRegThumbsDown
-                  className="cursor-pointer text-gray-500"
-                  size={18}
-                  onClick={() =>
-                    ReferenceStatusUpdate(item.referenceRecordId, "dislike")
-                  }
-                />
+              {isButtonClickAble && (
+                <div className="flex items-center gap-3">
+                  {item.referenceStatus == "like" ? (
+                    <FaThumbsUp
+                      className="text-blue-700"
+                      size={18}
+                      onClick={() => {
+                        ReferenceStatusUpdate(
+                          item.referenceRecordId,
+                          "removeLike"
+                        );
+                      }}
+                    />
+                  ) : (
+                    <FaRegThumbsUp
+                      className="cursor-pointer text-gray-500"
+                      size={18}
+                      onClick={() => {
+                        ReferenceStatusUpdate(item.referenceRecordId, "like");
+                      }}
+                    />
+                  )}
+
+                  {item.referenceStatus == "dislike" ? (
+                    <FaThumbsDown
+                      className="text-blue-700"
+                      size={18}
+                      onClick={() => {
+                        ReferenceStatusUpdate(
+                          item.referenceRecordId,
+                          "removeDislike"
+                        );
+                      }}
+                    />
+                  ) : (
+                    <FaRegThumbsDown
+                      className="cursor-pointer text-gray-500"
+                      size={18}
+                      onClick={() => {
+                        ReferenceStatusUpdate(
+                          item.referenceRecordId,
+                          "dislike"
+                        );
+                      }}
+                    />
+                  )}
+                </div>
               )}
             </div>
           </div>

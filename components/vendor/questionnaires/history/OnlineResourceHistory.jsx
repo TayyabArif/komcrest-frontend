@@ -14,6 +14,7 @@ const OnlineResourceHistory = ({
   onlineResourceReferenceData,
   statusUpdate,
   setOnlineResourceReferenceData,
+  isButtonClickAble,
 }) => {
   const router = useRouter();
 
@@ -43,58 +44,74 @@ const OnlineResourceHistory = ({
               onClick={() => handleDownload(doc.file)}
               className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] "
             >
-              {doc.title} 
+              {doc.title}
             </a>
-            <p className="2xl:text-[20px] text-[16px] break-words text-gray-600">{doc.referenceString} </p>
+            <p className="2xl:text-[20px] text-[16px] break-words text-gray-600">
+              {doc.referenceString}{" "}
+            </p>
             <div className="flex justify-between items-center py-2">
               <p className="text-gray-600 2xl:text-[20px] text-[15px]">
                 Pages: {doc.pageNumber}
               </p>
               <div className="flex justify-end space-x-4">
                 <FilePenLine
-                 onClick={() =>
-                  window.open(`/vendor/onlineResource/update?id=${doc?.id}`,'_blank')
-                }
+                  onClick={() =>
+                    window.open(
+                      `/vendor/onlineResource/update?id=${doc?.id}`,
+                      "_blank"
+                    )
+                  }
                   className="cursor-pointer text-gray-500"
                   size={18}
                 />
-                {doc.referenceStatus == "like" ? (
-                  <FaThumbsUp
-                    className="text-blue-700"
-                    size={18}
-                    onClick={() =>
-                      ReferenceStatusUpdate(doc.referenceRecordId, "removeLike")
-                    }
-                  />
-                ) : (
-                  <FaRegThumbsUp
-                    className="cursor-pointer text-gray-500"
-                    size={18}
-                    onClick={() =>
-                      ReferenceStatusUpdate(doc.referenceRecordId, "like")
-                    }
-                  />
-                )}
 
-                {doc.referenceStatus == "dislike" ? (
-                  <FaThumbsDown
-                    className="text-blue-700"
-                    size={18}
-                    onClick={() =>
-                      ReferenceStatusUpdate(
-                        doc.referenceRecordId,
-                        "removeDislike"
-                      )
-                    }
-                  />
-                ) : (
-                  <FaRegThumbsDown
-                    className="cursor-pointer text-gray-500"
-                    size={18}
-                    onClick={() =>
-                      ReferenceStatusUpdate(doc.referenceRecordId, "dislike")
-                    }
-                  />
+                {isButtonClickAble && (
+                  <div className="flex items-center gap-3">
+                    {doc.referenceStatus == "like" ? (
+                      <FaThumbsUp
+                        className="text-blue-700"
+                        size={18}
+                        onClick={() => {
+                          ReferenceStatusUpdate(
+                            doc.referenceRecordId,
+                            "removeLike"
+                          );
+                        }}
+                      />
+                    ) : (
+                      <FaRegThumbsUp
+                        className="cursor-pointer text-gray-500"
+                        size={18}
+                        onClick={() => {
+                          ReferenceStatusUpdate(doc.referenceRecordId, "like");
+                        }}
+                      />
+                    )}
+
+                    {doc.referenceStatus == "dislike" ? (
+                      <FaThumbsDown
+                        className="text-blue-700"
+                        size={18}
+                        onClick={() => {
+                          ReferenceStatusUpdate(
+                            doc.referenceRecordId,
+                            "removeDislike"
+                          );
+                        }}
+                      />
+                    ) : (
+                      <FaRegThumbsDown
+                        className="cursor-pointer text-gray-500"
+                        size={18}
+                        onClick={() => {
+                          ReferenceStatusUpdate(
+                            doc.referenceRecordId,
+                            "dislike"
+                          );
+                        }}
+                      />
+                    )}
+                  </div>
                 )}
               </div>
             </div>
