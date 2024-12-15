@@ -434,7 +434,7 @@ const KnowledgeBase = ({
                         </select>
                       </td>
                       <td className="py-2 px-4 border  md:max-w-[250px]  lg:max-w-[350px] xl:max-w-[500px]  break-words">
-                        {data.question}
+                        {data.question} 
                       </td>
                       <td className="py-2 px-4 border whitespace-rap">
                         {data.coverage}

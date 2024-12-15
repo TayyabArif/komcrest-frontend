@@ -64,50 +64,54 @@ const OnlineResourceHistory = ({
                   className="cursor-pointer text-gray-500"
                   size={18}
                 />
-                {doc.referenceStatus == "like" ? (
-                  <FaThumbsUp
-                    className="text-blue-700"
-                    size={18}
-                    onClick={() => {
-                      isButtonClickAble &&
-                        ReferenceStatusUpdate(
-                          doc.referenceRecordId,
-                          "removeLike"
-                        );
-                    }}
-                  />
-                ) : (
-                  <FaRegThumbsUp
-                    className="cursor-pointer text-gray-500"
-                    size={18}
-                    onClick={() => {
-                      isButtonClickAble &&
-                        ReferenceStatusUpdate(doc.referenceRecordId, "like");
-                    }}
-                  />
-                )}
 
-                {doc.referenceStatus == "dislike" ? (
-                  <FaThumbsDown
-                    className="text-blue-700"
-                    size={18}
-                    onClick={() => {
-                      isButtonClickAble &&
-                        ReferenceStatusUpdate(
-                          doc.referenceRecordId,
-                          "removeDislike"
-                        );
-                    }}
-                  />
-                ) : (
-                  <FaRegThumbsDown
-                    className="cursor-pointer text-gray-500"
-                    size={18}
-                    onClick={() => {
-                      isButtonClickAble &&
-                        ReferenceStatusUpdate(doc.referenceRecordId, "dislike");
-                    }}
-                  />
+                {isButtonClickAble && (
+                  <div className="flex items-center gap-3">
+                    {doc.referenceStatus == "like" ? (
+                      <FaThumbsUp
+                        className="text-blue-700"
+                        size={18}
+                        onClick={() => {
+                          ReferenceStatusUpdate(
+                            doc.referenceRecordId,
+                            "removeLike"
+                          );
+                        }}
+                      />
+                    ) : (
+                      <FaRegThumbsUp
+                        className="cursor-pointer text-gray-500"
+                        size={18}
+                        onClick={() => {
+                          ReferenceStatusUpdate(doc.referenceRecordId, "like");
+                        }}
+                      />
+                    )}
+
+                    {doc.referenceStatus == "dislike" ? (
+                      <FaThumbsDown
+                        className="text-blue-700"
+                        size={18}
+                        onClick={() => {
+                          ReferenceStatusUpdate(
+                            doc.referenceRecordId,
+                            "removeDislike"
+                          );
+                        }}
+                      />
+                    ) : (
+                      <FaRegThumbsDown
+                        className="cursor-pointer text-gray-500"
+                        size={18}
+                        onClick={() => {
+                          ReferenceStatusUpdate(
+                            doc.referenceRecordId,
+                            "dislike"
+                          );
+                        }}
+                      />
+                    )}
+                  </div>
                 )}
               </div>
             </div>
