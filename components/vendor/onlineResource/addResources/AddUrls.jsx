@@ -91,8 +91,8 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
                  <Button
                  onClick={addResource}
                  radius="none"
-                 size="sm"
-                 className="text-white px-3 text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                 size="md"
+                 className="text-white px-3  text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
                >
                  Add
                </Button>

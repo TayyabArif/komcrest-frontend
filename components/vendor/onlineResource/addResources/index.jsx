@@ -69,7 +69,7 @@ const AddResource = () => {
       setResourceData((prev) => ({
         ...prev,
         language : "English",
-        productIds: companyProducts.length === 1 ?  [companyProducts[0].id] : prev.productIds, 
+        productIds: companyProducts && companyProducts.map((item)=> item.id)
       }));
   
   }, [companyProducts]);
@@ -282,7 +282,7 @@ const AddResource = () => {
                 ].map((title, index) => (
                   <div
                     key={index}
-                    className="flex gap-3 items-center flex-1 border py-1 px-2 rounded"
+                    className="flex gap-3 items-center flex-1 border py-2 px-2 rounded"
                   >
                     <span
                       className={`${
@@ -401,7 +401,7 @@ const AddResource = () => {
                     <Button
                       onClick={handleCancelClick}
                       radius="none"
-                      size="sm"
+                      size="md"
                       className="px-3 mx-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500  w-max rounded-[4px]"
                     >
                       {stepper === 0 ? "Cancel" : "Back"}
@@ -409,7 +409,7 @@ const AddResource = () => {
                     <Button
                       onClick={handleNextClick}
                       radius="none"
-                      size="sm"
+                      size="md"
                       className="text-white px-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
                       isDisabled={buttonIsDisable}
                     >

@@ -22,7 +22,7 @@ const NewDocument = () => {
   const { companyProducts , setDocumentDataUpdate } = useMyContext();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-
+debugger
   const router = useRouter();
   const { id } = router.query;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -43,7 +43,7 @@ const NewDocument = () => {
       setDocumentData((prev) => ({
         ...prev,
         language: "English",
-        productIds:companyProducts.length === 1 ?  [companyProducts[0].id] : prev.productIds,
+        productIds:companyProducts && companyProducts.map((item)=> item.id),
       }));
   }, [companyProducts]);
 
@@ -391,7 +391,7 @@ const NewDocument = () => {
                   Select associated product(s)
                 </h1>
                 <div className="gap-x-6 gap-y-2 flex flex-wrap my-1 ">
-                  {companyProducts.map((item, index) => (
+                  {companyProducts?.map((item, index) => (
                     <Checkbox
                       key={index}
                       radius="sm"

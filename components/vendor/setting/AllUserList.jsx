@@ -85,9 +85,9 @@ const AllUserList = () => {
                     <td className="p-2  text-left ">{user.role}</td>
 
                     <td
-                      className={`text-center  flex-col flex-1 justify-center items-center`}
+                      className={`text-center   flex-col flex-1 justify-center items-center`}
                     >
-                      <div className=" flex items-center gap-2">
+                      <div className=" flex items-center justify-center gap-2 ">
                         {user.id !== userID && (
                           <Popover
                             placement="bottom"

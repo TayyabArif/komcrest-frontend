@@ -32,11 +32,11 @@ const UsersSettingsCard = ({
   return (
     <div className="w-[45%]">
       <div className="flex flex-col bg-white shadow-md w-full pb-20 mt-12  min-h-[550px]">
-        <p className="px-6 py-4 border border-1.5 border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold">
-          {`${isEdit ? "Update" : "Set up" }`} user setting
+        <p className="px-6 py-4 border border-1.5 text-[16px] 2xl:text-[20px] border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold">
+          {`${isEdit ? "Update" : "" }`} User settings
         </p>
         <div className="flex flex-col mt-7 px-6">
-          <p className="mb-2 font-[550]">User role</p>
+          <p className="mb-2 font-[550] text-[16px] 2xl:text-[20px]">User role</p>
           <div className="flex flex-col gap-5">
             {/* <Checkbox radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>Admin</Checkbox>
             <Checkbox defaultSelected radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>Contributor</Checkbox>
@@ -45,9 +45,10 @@ const UsersSettingsCard = ({
               name="Admin"
               isSelected={formData.role === "Admin"}
               onChange={handleChange}
-              radius="none"
+              radius="sm"
+              size="lg"
               isDisabled={role ? true : false}
-              classNames={{ wrapper: "!rounded-[3px] bg-gray-100" }}
+              classNames={{ wrapper: "!rounded-[3px] text-[16px] 2xl:text-[20px] bg-gray-100" }}
             >
               Admin 
             </Checkbox>
@@ -55,9 +56,10 @@ const UsersSettingsCard = ({
               name="Contributor"
               isSelected={formData.role === "Contributor"}
               onChange={handleChange}
-              radius="none"
+              radius="sm"
+              size="lg"
               isDisabled={role ? true : false}
-              classNames={{ wrapper: "!rounded-[3px] bg-gray-100" }}
+              classNames={{ wrapper: "!rounded-[3px] text-[16px] 2xl:text-[20px] bg-gray-100" }}
             >
               Contributor
             </Checkbox>
@@ -65,27 +67,30 @@ const UsersSettingsCard = ({
               name="Viewer"
               isSelected={formData.role === "Viewer"}
               onChange={handleChange}
-              radius="none"
+              radius="sm"
+              size="lg"
               isDisabled={role ? true : false}
-              classNames={{ wrapper: "!rounded-[3px] bg-gray-100" }}
+              classNames={{ wrapper: "!rounded-[3px] text-[16px] 2xl:text-[20px] bg-gray-100" }}
             >
               Viewer
             </Checkbox>
           </div>
         </div>
         <div className="flex flex-col mt-8 px-6">
-          <p className="mb-2 font-[550]">Associated products</p>
+          <p className="mb-2 font-[550] text-[16px] 2xl:text-[20px]">Associated products</p>
           <div className="flex flex-col gap-5">
             {products?.map((item, index) => (
               <Checkbox
                 key={index}
-                isDisabled={role && role !== "Admin"}
+                // isDisabled={role && role !== "Admin"}
+                 isDisabled={true}
                 onChange={handleProductsChange}
                 value={item.id}
                 isSelected={selectedProducts.includes(item.id)}
                 name="products"
-                radius="none"
-                classNames={{ wrapper: "!rounded-[3px] bg-gray-100" }}
+                radius="sm"
+                size="lg"
+                classNames={{ wrapper: "!rounded-[3px] text-[16px] 2xl:text-[20px] bg-gray-100" }}
               >
                 {item.name}
               </Checkbox>

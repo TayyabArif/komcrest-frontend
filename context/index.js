@@ -67,12 +67,15 @@ export const MyProvider = ({ children }) => {
   const [allCompanyUserData, setAllCompanyUserData] = useState([]);
 
   const [companyProducts, setCompanyProducts] = useState([]);
+
+  const [allCompanyProducts, setAllCompanyProducts] = useState([]);
   const [questionnaireList, setQuestionnaireList] = useState([]);
 
   useEffect(() => {
     if (token) {
       getCompanyUser();
-      getCompanyProducts();
+      getUserCompanyProducts();
+      getAllCompanyProducts()
     }
   }, [dataUpdated]);
 
@@ -122,7 +125,41 @@ export const MyProvider = ({ children }) => {
     }
   };
 
-  const getCompanyProducts = async () => {
+  const getUserCompanyProducts = async () => {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+    fetch(`${baseUrl}/user/products`, requestOptions)
+      .then(async (response) => {
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          setCompanyProducts(data);
+        } else {
+          toast.error(data?.error);
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
+
+  const getAllCompanyProducts = async () => {
     const requestOptions = {
       method: "GET",
       headers: {
@@ -146,7 +183,7 @@ export const MyProvider = ({ children }) => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          setCompanyProducts(data?.Products);
+          setAllCompanyProducts(data?.Products);
         } else {
           toast.error(data?.error);
           console.error("Error:", data);
@@ -479,7 +516,8 @@ export const MyProvider = ({ children }) => {
         dataUpdate,
         setDataUpdate,
         realFormatCompanyUserData,
-        removeCompanyUser
+        removeCompanyUser,
+        allCompanyProducts
       }}
     >
       {children}

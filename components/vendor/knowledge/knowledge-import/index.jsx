@@ -76,10 +76,7 @@ const UploadQuestions = () => {
     setKnowledgeData((prev) => ({
       ...prev,
       language: "English",
-      productIds:
-        companyProducts.length === 1
-          ? [companyProducts[0].id]
-          : prev.productIds, // Conditionally set productIds
+      productIds: companyProducts && companyProducts.map((item)=> item.id)
     }));
   }, [companyProducts]);
 

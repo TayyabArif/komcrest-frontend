@@ -1,4 +1,4 @@
-import React ,{useState} from 'react'
+import React ,{useState , useEffect} from 'react'
 import EnterQuestion from './EnterQuestion'
 import GetAnswer from './GetAnswer'
 import Reference from './Reference'
@@ -6,9 +6,10 @@ import { useCookies } from "react-cookie";
 import { handleResponse } from '@/helper';
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useMyContext } from "@/context";
 
 const AskAQuestion = () => {
-
+  const { companyProducts } = useMyContext();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -21,6 +22,22 @@ const AskAQuestion = () => {
     question: "",
   });
   const [answerData , setAnswerData] = useState({})
+
+
+
+
+  useEffect(() => {
+    setAskQuestion((prev) => ({
+      ...prev,
+      productIds: companyProducts && companyProducts.map((item)=> item.id)
+    }));
+  }, [companyProducts]);
+
+
+
+
+
+
 
     const handleSubmit = async (e) => {
       e.preventDefault()

@@ -43,7 +43,7 @@ const DocumentHistory = ({
               onClick={() => handleFileDownload(doc.filePath)}
               className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] "
             >
-              {doc.title}
+              {doc.title} 
             </a>
             <p className="2xl:text-[20px] text-[16px] break-words text-gray-600">
               {doc.referenceString}{" "}

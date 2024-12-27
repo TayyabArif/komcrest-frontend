@@ -11,7 +11,7 @@ const CompanyInfoCard = ({ action, handleChange, formData }) => {
     return firstChar === firstChar?.toUpperCase() || includesDotCom;
   }, [formData.companyDomain]);
   return (
-    <div className="flex flex-col bg-white shadow-md w-[45%] min-h-[500px] pb-10 mt-12">
+    <div className="flex flex-col bg-white shadow-md w-[50%] min-h-[500px] pb-10 mt-12">
       <p className="px-4 py-4 border border-1.5 border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold">
         Company info
       </p>

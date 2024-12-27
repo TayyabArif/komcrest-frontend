@@ -11,7 +11,7 @@ import { useMyContext } from "@/context";
 
 
 const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
-  const { companyProducts, setDataUpdated } = useMyContext();
+  const { companyProducts, setDataUpdated ,allCompanyProducts } = useMyContext();
   const [cookies] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [isClick, setClick] = useState(false);
@@ -38,6 +38,11 @@ const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
     role: "Contributor",
     companyId: "",
   });
+
+  useEffect(() => {
+    const ids = allCompanyProducts && allCompanyProducts.map(item => item.id);
+    setSelectedProducts(ids);
+}, [allCompanyProducts]);
 
   useEffect(() => {
     if (cookiesData?.companyId) {

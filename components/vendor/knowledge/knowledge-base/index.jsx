@@ -12,13 +12,14 @@ import {
   handleResponse,
   formatDateWithTime,
   handleFileDownload,
-  handleDownload
+  handleDownload,
 } from "../../../../helper";
 import KnowledgeFilter from "../knowledge-filter";
 import { Checkbox } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { CircularProgress } from "@nextui-org/react";
 import DeleteModal from "../../shared/DeleteModal";
+import ResizableHeader from "../../shared/ResizeTbaleHeader";
 
 const komcrestCategories = [
   { value: "", text: "Select a Category" },
@@ -70,6 +71,20 @@ const KnowledgeBase = ({
   const [DocumentFile, setDocumentFile] = useState([]);
   const childRef = useRef();
   const triggerFunction = useRef(null);
+
+  const [columnWidths, setColumnWidths] = useState({
+    komcrestDomain: 150,
+    question: 500,
+    compliance: 100,
+    answer: 500,
+    category: 150,
+    products: 200,
+    roadmap: 120,
+    curator: 100,
+    reference: 150,
+    source: 200,
+    latestUpdate: 100,
+  });
 
   const handleClearFilter = () => {
     if (triggerFunction.current) {
@@ -263,7 +278,7 @@ const KnowledgeBase = ({
         setDataUpdate(!dataUpdate);
         setBulkDeleted([]);
         setFilters([]);
-        setIsHeaderChecked(false)
+        setIsHeaderChecked(false);
       })
       .catch((error) => console.error(error));
   };
@@ -285,6 +300,28 @@ const KnowledgeBase = ({
       setBulkDeleted(allIds);
       setIsHeaderChecked(true);
     }
+  };
+
+  useEffect(() => {
+    const storedWidths = localStorage.getItem("knowledgeBaseColumnWidths");
+    if (storedWidths) {
+      setColumnWidths(JSON.parse(storedWidths));
+    }
+  }, []);
+
+  // Function to handle resizing columns and updating local storage
+  const handleResize = (columnName, deltaX) => {
+    setColumnWidths((prevWidths) => {
+      const newWidths = {
+        ...prevWidths,
+        [columnName]: Math.max(50, prevWidths[columnName] + deltaX), // Ensure minimum width of 50px
+      };
+      localStorage.setItem(
+        "knowledgeBaseColumnWidths",
+        JSON.stringify(newWidths)
+      );
+      return newWidths;
+    });
   };
 
   return (
@@ -364,27 +401,85 @@ const KnowledgeBase = ({
                       classNames={{ wrapper: "!rounded-[3px]" }}
                     />
                   </th>
-                  <th className="py-2 px-4 text-left">Category</th>
-                  <th className="py-2 px-4 text-left !max-w-[320px]">
+                  <ResizableHeader
+                    columnName="category"
+                    columnWidth={columnWidths.category}
+                    onResize={handleResize}
+                  >
+                    Category
+                  </ResizableHeader>
+
+                  <ResizableHeader
+                    columnName="komcrestDomain"
+                    columnWidth={columnWidths.komcrestDomain}
+                    onResize={handleResize}
+                  >
                     Komcrest Domain
-                  </th>
-                  <th className="py-2 px-4 text-left md:min-w-[250px]  lg:min-w-[350px] xl:min-w-[500px]">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnName="question"
+                    columnWidth={columnWidths.question}
+                    onResize={handleResize}
+                  >
                     Question
-                  </th>
-                  <th className="py-2 px-4 text-left">Compliance</th>
-                  <th className="py-2 px-4 text-left text-wrap md:min-w-[250px]  lg:min-w-[350px] xl:min-w-[500px]">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnName="compliance"
+                    columnWidth={columnWidths.compliance}
+                    onResize={handleResize}
+                  >
+                    Compliance
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnName="answer"
+                    columnWidth={columnWidths.answer}
+                    onResize={handleResize}
+                  >
                     Answer
-                  </th>
-                  <th className="py-2 px-4 text-left !min-w-[250px]">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnName="products"
+                    columnWidth={columnWidths.products}
+                    onResize={handleResize}
+                  >
                     Products
-                  </th>
-                  <th className="py-2 px-4 text-left !min-w-[250px]">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnName="roadmap"
+                    columnWidth={columnWidths.roadmap}
+                    onResize={handleResize}
+                  >
                     Roadmap
-                  </th>
-                  <th className="py-2 px-4 text-left w-[50px]">Curator</th>
-                  <th className="py-2 px-4 text-left">Reference</th>
-                  <th className="py-2 px-4 text-left">Source</th>
-                  <th className="py-2 px-4 text-left">Latest Update</th>
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnName="curator"
+                    columnWidth={columnWidths.curator}
+                    onResize={handleResize}
+                  >
+                    Curator
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnName="reference"
+                    columnWidth={columnWidths.reference}
+                    onResize={handleResize}
+                  >
+                    Reference
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnName="source"
+                    columnWidth={columnWidths.source}
+                    onResize={handleResize}
+                  >
+                    Source
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnName="latestUpdate"
+                    columnWidth={columnWidths.latestUpdate}
+                    onResize={handleResize}
+                  >
+                    Latest Update
+                  </ResizableHeader>
+
                   <th
                     className="px-4    pr-7  text-left sticky -right-[1px] bg-gray-200"
                     style={{ outlineWidth: "1px" }}
@@ -412,10 +507,8 @@ const KnowledgeBase = ({
                           classNames={{ wrapper: "!rounded-[3px]" }}
                         />
                       </td>
-                      <td className="py-2 px-4 border whitespace-nowrap text-wrap min-w-[150px] max-w-[550px]  break-words">
-                        {data.category}
-                      </td>
-                      <td className="py-2 px-4 border bg-transparent !max-w-[320px]">
+                      <td className="py-2 px-4 border">{data.category}</td>
+                      <td className="py-2 px-4 border bg-transparent">
                         <select
                           value={data.komcrestCategory}
                           onChange={(e) =>
@@ -424,7 +517,8 @@ const KnowledgeBase = ({
                               e.target.value
                             )
                           }
-                          className="py-1 px-2 max-w-[250px] bg-transparent"
+                          className={`py-1 px-2  bg-transparent w-${columnWidths.komcrestDomain}px`}
+                          style={{ width: `${columnWidths.komcrestDomain}px` }}
                         >
                           {komcrestCategories?.map((item, index) => (
                             <option key={index} value={item?.value}>
@@ -433,47 +527,51 @@ const KnowledgeBase = ({
                           ))}
                         </select>
                       </td>
-                      <td className="py-2 px-4 border  md:max-w-[250px]  lg:max-w-[350px] xl:max-w-[500px]  break-words">
-                        {data.question} 
+                      <td className="py-2 px-4 border  break-words">
+                        {data.question}
                       </td>
-                      <td className="py-2 px-4 border whitespace-rap">
+                      <td className="py-2 px-4 border whitespace-rap text-center">
                         {data.coverage}
                       </td>
-                      <td className="py-2 px-4 border text-wrap md:max-w-[250px]  break-words  lg:max-w-[350px] xl:max-w-[500px]">
+                      <td className="py-2 px-4 border text-wrap   break-words  ">
                         {data.answer}
                       </td>
-                      <td className="py-2 px-4 border md:max-w-[250px]  lg:max-w-[350px] xl:max-w-[500px]  break-words">
+                      <td className="py-2 px-4 border  break-words">
                         {data.Products.map((product) => product.name).join(
                           ", "
                         )}
                       </td>
-                      <td className="py-2 px-4 border   md:max-w-[200px]  break-words  lg:max-w-[250px] xl:max-w-[300px]">
+                      <td className="py-2 px-4 border break-words  ">
                         {data.roadmap}
                       </td>
-                      <td className="py-2 px-4 border whitespace-nowrap  break-words text-wrap min-w-[250px] max-w-[550px]">
+                      <td className="py-2 px-4 border whitespace-nowrap  break-words text-wrap">
                         {data.curator}
                       </td>
-                      <td className="py-2 px-4 border whitespace-wrap break-words text-blue-600 cursor-pointer md:min-w-[200px] lg:min-w-[250px]  xl:min-w-[300px]">
+                      <td className="py-2 px-4 border whitespace-wrap break-words text-blue-600 cursor-pointer">
                         {[
                           ...data.documents.map((item) => (
                             <h1
                               key={item.id} // Always provide a unique key when rendering lists
                               className="cursor-pointer"
-                              onClick={() =>{ handleFileDownload(item?.filePath)}}
+                              onClick={() => {
+                                handleFileDownload(item?.filePath);
+                              }}
                             >
                               {item.title}
                             </h1>
                           )),
                           ...data.onlineResources.map((item) => (
-                            <h1 
-                            onClick={() => handleDownload(item?.file)}
-                            
-                            key={item.id}>{item.title}</h1>
+                            <h1
+                              onClick={() => handleDownload(item?.file)}
+                              key={item.id}
+                            >
+                              {item.title}
+                            </h1>
                           )),
                         ]}
                       </td>
 
-                      <td className="py-2 px-4 border xl:min-w-[330px] lg:min-w-[250px] md:min-w-[200px] ">
+                      <td className="py-2 px-4 border">
                         {data.documentFile?.name}
                       </td>
                       <td className="py-2 px-4 border whitespace-nowrap ">
