@@ -3,55 +3,49 @@ import AuthLayout from "./AuthLayout";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const FindDomain = ({ type }) => {
-  // State to manage the domain input
   const [domain, setDomain] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   const [error, setError] = useState("");
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  // Handle input change
   const handleChange = (e) => {
-    setDomain(e.target.value);
+    setError("");
+    setDomain(e.target.value.trim());
   };
 
-  // Handle form submission
   const handleSubmit = async () => {
-    console.log("domain",domain)
-    setError("");
-    router.push(`http://${domain}.localhost:3000/vendor/login/access`)
+    try {
+      setIsLoading(true);
 
-    setError("Domain not register");
-    // if (!domain) {
-    //   alert("Please enter a domain.");
-    //   return;
-    // }
-    // setIsLoading(true);
-    // try {
-    //   // Example: API call to validate the domain
-    //   const response = await fetch("/api/validate-domain", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ domain }),
-    //   });
+      const payLoad = JSON.stringify({ subdomain: domain });
 
-    //   const result = await response.json();
+      const response = await fetch(`${baseUrl}/checkdomain`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payLoad,
+        redirect: "follow",
+      });
 
-    //   if (response.ok) {
-    //     alert("Domain validated successfully!");
-    //     // Redirect or perform another action
-    //   } else {
-    //     alert(`Error: ${result.message}`);
-    //   }
-    // } catch (error) {
-    //   console.error("Error validating domain:", error);
-    //   alert("An error occurred. Please try again.");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      const data = await response.json();
+
+      if (response.ok) {
+        setError("");
+        router.push(
+          `http://${domain}.${process.env.NEXT_PUBLIC_FRONTEND_URL}/vendor/login/access`
+        );
+      } else {
+        setError("Domain not registered");
+      }
+    } catch (error) {
+      console.error("Error during domain check:", error);
+      setError("An unexpected error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -82,17 +76,13 @@ const FindDomain = ({ type }) => {
           />
           <span>.komcrest.com</span>
         </div>
-        {error && (
-          <span className="text-red-500 text-sm mt-1">
-            {error}
-          </span>
-        )}
+        {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
 
         <Button
           radius="none"
           size="sm"
           className="mt-6 text-white px-[45px] text-base 2xl:text-[20px] bg-[#4fa82e] w-max rounded-[6px] -ml-1"
-          isDisabled={!domain || isLoading}
+          isDisabled={!domain}
           isLoading={isLoading}
           onPress={handleSubmit}
         >

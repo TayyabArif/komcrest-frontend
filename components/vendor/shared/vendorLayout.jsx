@@ -20,14 +20,15 @@ const VendorLayout = ({ children }) => {
   const router = useRouter();
   const route = router.route;
   const userID = cookiesData?.userId;
-  const [loogedinUser, setLoggdinUser] = useState();
+  const [loggedInUser, setLoggedInUser] = useState();
+
   const [selectedItem, setSelectedItem] = useState("");
   const { setIsKnowledgeBaseOpenDirect } = useMyContext();
   useEffect(() => {
     const parts = route.split("/");
     const segment = parts[2];
     setSelectedItem(segment);
-    setLoggdinUser(cookiesData && cookiesData.userName);
+    setLoggedInUser(cookiesData && cookiesData.userName);
   }, [route]);
 
   function handleLogout() {
@@ -152,8 +153,8 @@ const VendorLayout = ({ children }) => {
               radius="none"
               size="md"
               className=" px-[20px]  bg-btn-primary text-[16px] font-semibold text-white w-max rounded-[4px] 2xl:text-[20px] "
-              onPress={handleLogout}
-            >
+               onClick={()=>router.push("/vendor/setting/upgrade-subscription")}
+           >
               Activate Plan
             </Button>
             <h1 className="text-blue-700">
@@ -163,7 +164,7 @@ const VendorLayout = ({ children }) => {
           </div>
 
           <div className="py-[6px]   justify-end text-right flex  items-center gap-2 font-bold cursor-pointer m-auto 2xl:text-[20px] text-[16px]">
-            <h1>{loogedinUser}</h1>
+            <h1>{loggedInUser}</h1>
             <Button
               radius="none"
               size="md"

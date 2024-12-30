@@ -839,11 +839,14 @@ const QuestionnairesView = () => {
                                 setSelectedTextAreaId(item.id);
                                 setAnswerIsUpdate("single");
                               }}
-                              className={`px-4 py-2    !text-wrap  border ${
-                                item.confidence < 7
-                                  ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
+                              className={`px-4 py-2 !text-wrap border ${
+                                item.status === "approved"
+                                  ? "" 
+                                  : item.confidence < 7
+                                  ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner" // Confidence condition ke liye styling
                                   : ""
                               }`}
+                              
                             >
                               <div className={`text-[12px] flex  my-2`}>
                                 {item.generatedBy == "AI" ? (

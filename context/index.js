@@ -33,10 +33,8 @@ export const MyProvider = ({ children }) => {
   const [knowledgeBaseStepperStart ,setKnowledgeBaseStepperStart] = useState(0)
   const [isKnowledgeBaseOpenDirect ,setIsKnowledgeBaseOpenDirect] = useState(true)
   const [dataUpdate, setDataUpdate] = useState(false);
-  
-  
 
-
+  
   // questionnaire module states
   const [questionnaireData, setQuestionnaireData] = useState({
     filename: "",
