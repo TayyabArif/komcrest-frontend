@@ -16,7 +16,7 @@ const RegistrationForm = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState("");
-  const [companyPlan, setCompanyPlan] = useState({});
+  const [planId, setPlanId] = useState("");
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter()
@@ -66,18 +66,27 @@ const RegistrationForm = () => {
   };
 
   const handleFormSubmit = () => {
-    setIsLoading(true)
-    if (!companyPlan) {
+
+    if (!planId) {
       setFormErrors({ plan: "Please select a subscription plan." });
       return;
+    } if (products.length == 0 ) {
+      setFormErrors({ products: "Please add products." });
+      return;
     }
+
+
+
+    setIsLoading(true)
+
+
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const payLoad = JSON.stringify({
       ...registerFormData,
       products,
-      companyPlan,
+      planId,
     });
     const requestOptions = {
       method: "POST",
@@ -130,8 +139,8 @@ const RegistrationForm = () => {
       <div className="bg-blue-600 my-10">
         <div className="w-full relative bottom-2  -ml-2 border-2 bg-white border-black text-center p-5 px-10">
           <ChoosePlan
-            companyPlan={companyPlan}
-            setCompanyPlan={setCompanyPlan}
+            setPlanId={setPlanId}
+            planId={planId}
           />
           {formErrors.plan && <p className="text-red-500">{formErrors.plan}</p>}
           <div className="text-left mt-10 space-y-10">
@@ -265,6 +274,9 @@ const RegistrationForm = () => {
                   Add
                 </Button>
               </div>
+              {formErrors.products && (
+                  <p className="text-red-500 text-sm">{formErrors.products}</p>
+                )}
               <div className="flex flex-col px-4 gap-2 my-4">
                 {products.map((product, index) => (
                   <div key={index} className="flex items-center gap-2">

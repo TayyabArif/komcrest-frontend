@@ -31,7 +31,7 @@ const CreateCompany = () => {
     companyType: "vendor",
     displayTOS: false,
     displayPrivacyPolicy: false,
-    companyPlan : ""
+    planId : ""
   });
   const [products, setProducts] = useState([]);
   const handleChange = (e) => {

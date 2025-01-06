@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { handleFileDownload } from "@/helper";
+import Link from "next/link";
 
 const DocumentHistory = ({
   documentReferenceData,
@@ -53,16 +54,16 @@ const DocumentHistory = ({
                 Pages: {doc.pageNumber}
               </p>
               <div className="flex justify-end space-x-4 ">
-                <FilePenLine
-                  onClick={() =>
-                    window.open(
-                      `/vendor/document/AddDocument?id=${doc?.id}`,
-                      "_blank"
-                    )
-                  }
-                  className="cursor-pointer text-gray-500"
-                  size={18}
-                />
+                <Link
+                  href={`/vendor/document/AddDocument?id=${doc?.id}`}
+                  target="_blank" 
+                >
+                  <FilePenLine
+                    className="cursor-pointer text-gray-500"
+                    size={18}
+                  />
+                </Link>
+              
 
                 {isButtonClickAble && (
                   <div className="flex items-center gap-3">

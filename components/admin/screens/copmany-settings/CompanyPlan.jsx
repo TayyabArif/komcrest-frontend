@@ -1,7 +1,9 @@
 import React from "react";
 import { Input, Checkbox } from "@nextui-org/react";
+import { useMyContext } from "@/context";
 
 const CompanyPlan = ({ formData, setFormData }) => {
+  const {  plansData } = useMyContext()
   const companyPlan = [
     { key: "Free", label: "Free" },
     { key: "Essential", label: "Essential" },
@@ -9,10 +11,10 @@ const CompanyPlan = ({ formData, setFormData }) => {
     { key: "Professional", label: "Professional" },
   ];
 
-  const handleCheckboxChange = (key) => {
+  const handleCheckboxChange = (id) => {
     setFormData((prev) => ({
       ...prev,
-      companyPlan: key, 
+      planId: id, 
     }));
   };
 
@@ -22,17 +24,17 @@ const CompanyPlan = ({ formData, setFormData }) => {
         Company Plan
       </p>
       <div className="gap-x-6 px-4 py-5 flex flex-col gap-4">
-        {companyPlan.map((item, index) => (
+        {plansData?.slice(0,4)?.map((item, index) => (
           <Checkbox
             key={index}
             size="md"
-            isSelected={formData.companyPlan === item.key} 
-            onChange={() => handleCheckboxChange(item.key)}
+            isSelected={formData.planId == item.id} 
+            onChange={() => handleCheckboxChange(item.id)}
             className="2xl:text-[20px] text-[16px]"
             radius="none"
             classNames={{ wrapper: "!rounded-[3px]" }}
           >
-            {item.label}
+            {item.name}
           </Checkbox>
         ))}
       </div>

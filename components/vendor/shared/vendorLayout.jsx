@@ -13,14 +13,18 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { Button } from "@nextui-org/react";
 import { useMyContext } from "@/context";
+import FreeTrialCompletedModal from "./FreeTrialCompletedModal";
+import { useDisclosure } from "@nextui-org/react";
 
 const VendorLayout = ({ children }) => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const router = useRouter();
   const route = router.route;
   const userID = cookiesData?.userId;
   const [loggedInUser, setLoggedInUser] = useState();
+  const [isFreeTrialEnd , setIsFreeTrialEnd] = useState(false)
 
   const [selectedItem, setSelectedItem] = useState("");
   const { setIsKnowledgeBaseOpenDirect } = useMyContext();
@@ -180,6 +184,11 @@ const VendorLayout = ({ children }) => {
           {children}
         </div>
       </div>
+
+      <FreeTrialCompletedModal 
+        isOpen={isFreeTrialEnd && route !== "/vendor/setting/upgrade-subscription"}
+        onOpen={onOpen}
+        onOpenChange={onOpenChange}/>
     </div>
   );
 };

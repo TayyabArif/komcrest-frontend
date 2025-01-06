@@ -27,6 +27,7 @@ export const MyProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [dataIsLoaded, setDataIsLoaded] = useState(false);
   const [realFormatCompanyUserData , setRealFormatCompanyUserData] = useState([])
+  const [plansData , setPlansData] = useState([])
 
  // knowledge base module states
   const [knowledgeBasePayloadData , setKnowledgeBasePayloadData ] = useState({})
@@ -472,7 +473,41 @@ export const MyProvider = ({ children }) => {
       .catch((error) => console.error(error));
   };
 
- 
+    const getPlansData = async () => {
+      const token = cookiesData && cookiesData.token;
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+      };
+  
+      try {
+        const response = await fetch(`${baseUrl}/plans`, requestOptions);
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        if (response.ok) {
+          setPlansData(data)
+        } else {
+          toast.error(data?.error);
+        }
+      } catch (error) {
+        console.error("Error fetching user documents:", error);
+      }
+    };
+   
+    useEffect(()=>{
+      getPlansData ()
+    },[])
+
+  
+
+  
 
   return (
     <MyContext.Provider
@@ -515,7 +550,8 @@ export const MyProvider = ({ children }) => {
         setDataUpdate,
         realFormatCompanyUserData,
         removeCompanyUser,
-        allCompanyProducts
+        allCompanyProducts,
+        plansData
       }}
     >
       {children}
