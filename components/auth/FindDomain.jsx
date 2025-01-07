@@ -35,7 +35,7 @@ const FindDomain = ({ type }) => {
       if (response.ok) {
         setError("");
         router.push(
-          `http://${domain}.${process.env.NEXT_PUBLIC_FRONTEND_URL}/vendor/login/access`
+          `http://${domain}.komcrest.com/vendor/login/access`
         );
       } else {
         setError("Domain not registered");

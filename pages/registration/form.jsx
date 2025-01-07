@@ -106,7 +106,7 @@ const RegistrationForm = () => {
       .then(({ status, ok, data }) => {
         if (ok) {
           router.push(
-            `http://app.${process.env.NEXT_PUBLIC_FRONTEND_URL}/registration/thank-you`
+            `http://app.komcrest.com/registration/thank-you`
           );
         } else {
           setFormErrors({
