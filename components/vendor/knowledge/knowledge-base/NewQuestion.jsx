@@ -385,7 +385,7 @@ const NewQuestion = () => {
       {dataLoaded && (
         <div className="w-[85%] mx-auto py-4 mt-[2rem]">
           <div className="px-4 bg-white pb-6 rounded-sm">
-            <h1 className="py-2 border-b-2 text-[16px] 2xl:text-[20px] font-semibold">
+            <h1 className="py-2 border-b-2 text-[16px] 2xl:text-[20px] font-bold">
               {`${id ? "Update" : "New"}`} Question
             </h1>
             <div className="flex justify-between">
@@ -404,7 +404,7 @@ const NewQuestion = () => {
                     onChange={handleData}
                     classNames={{
                       input:
-                        "text-[16px] 2xl:text-[20px] h-[150px] text-gray-500",
+                        "text-[16px] 2xl:text-[20px] h-[150px] ",
                     }}
                   />
                 </div>
@@ -451,7 +451,7 @@ const NewQuestion = () => {
                     value={newQuestion.coverage}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] text-gray-500",
+                      input: "2xl:text-[20px] text-[16px] ",
                     }}
                   />
                 </div>
@@ -490,7 +490,7 @@ const NewQuestion = () => {
                     value={newQuestion.answer}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] text-gray-500 ",
+                      input: "2xl:text-[20px] text-[16px]  ",
                     }}
                   />
                 </div>
@@ -529,7 +529,7 @@ const NewQuestion = () => {
                     value={newQuestion.roadmap}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] text-gray-500",
+                      input: "2xl:text-[20px] text-[16px] ",
                     }}
                   />
                 </div>
@@ -546,7 +546,7 @@ const NewQuestion = () => {
                       value={newQuestion.documentFile?.name}
                       onChange={handleData}
                       classNames={{
-                        input: "2xl:text-[20px] text-[16px] text-gray-500",
+                        input: "2xl:text-[20px] text-[16px] ",
                       }}
                     />
                   </div>

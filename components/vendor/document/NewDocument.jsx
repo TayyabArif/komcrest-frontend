@@ -281,7 +281,7 @@ debugger
                         </p>
                       </div>
                     ) : (
-                      <p className="text-center text-gray-700 font-bold italic 2xl:text-[20px]">
+                      <p className="text-center font-bold italic 2xl:text-[20px]">
                         Drop file or click here to upload file
                       </p>
                     )}

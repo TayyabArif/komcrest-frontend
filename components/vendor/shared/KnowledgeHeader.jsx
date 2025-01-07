@@ -13,7 +13,7 @@ const KnowledgeHeader = ({ buttonShow, headerData }) => {
           </h1>
           <p className="text-[16px] 2xl:text-[20px]">{headerData?.desc1}</p>
           <p className="text-[15px] 2xl:text-[20px] mt-1">
-            {headerData?.desc2}
+            {headerData?.desc2} 
           </p>
         </div>
         <div>
@@ -23,7 +23,7 @@ const KnowledgeHeader = ({ buttonShow, headerData }) => {
                 <Button
                   radius="none"
                   size="md"
-                  className="bg-white text-gray-500 border text-[16px]  2xl:text-[20px] w-max rounded-[4px] my-4 mx-2"
+                  className="bg-white border text-[16px]  2xl:text-[20px] w-max rounded-[4px] my-4 mx-2"
                   onClick={() => {
                     router.push(headerData?.leftButtonPath);
                   }}

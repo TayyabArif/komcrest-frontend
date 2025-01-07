@@ -37,7 +37,7 @@ const FileUploadModal = ({ isOpen ,onClose ,handleFileData ,allowedFileTypes }) 
               className="flex justify-center items-center border-2 border-dashed border-gray-300 rounded-lg p-7 bg-gray-100 cursor-pointer"
             >
               <input {...getInputProps()} />
-              <p className="text-center text-gray-700 font-bold italic 2xl:text-[20px]">
+              <p className="text-center  font-bold italic 2xl:text-[20px]">
                {file.name ? file.name : " Drop file or click here to upload file"} 
               </p>
             </div>
