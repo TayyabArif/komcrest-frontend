@@ -58,7 +58,7 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
                 name="url"
                 onChange={(e) => handleData(e, index)}
                 classNames={{
-                  input: "2xl:text-[20px] text-[16px] text-gray-800 ",
+                  input: "2xl:text-[20px] text-[16px] ",
                 }}
                 value={field.url}
               />
@@ -79,7 +79,7 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
                 name="title"
                 onChange={(e) => handleData(e, index)}
                 classNames={{
-                  input: "2xl:text-[20px] text-[16px] text-gray-800 ",
+                  input: "2xl:text-[20px] text-[16px] ",
                 }}
                 value={field.title}
               />

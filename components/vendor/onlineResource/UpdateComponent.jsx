@@ -367,7 +367,7 @@ const UpdateComponent = () => {
                     value={onlineResource.title}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] text-gray-500",
+                      input: "2xl:text-[20px] text-[16px] ",
                     }}
                   />
                 </div>
@@ -383,7 +383,7 @@ const UpdateComponent = () => {
                     value={onlineResource.url}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] text-gray-500",
+                      input: "2xl:text-[20px] text-[16px] ",
                     }}
                   />
                 </div>
@@ -484,7 +484,7 @@ const UpdateComponent = () => {
                               .split("T")[0]
                           : ""
                       }
-                      className="border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
+                      className="border-2 px-2 w-full py-1 border-gray-200 rounded-lg"
                       readOnly
                     />
                   </div>
@@ -499,7 +499,7 @@ const UpdateComponent = () => {
                         <input
                           type="date"
                           value={getNextIndexationData()}
-                          className="border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg"
+                          className="border-2 px-2 w-full py-1 border-gray-200 rounded-lg"
                           readOnly
                         />
                       </div>

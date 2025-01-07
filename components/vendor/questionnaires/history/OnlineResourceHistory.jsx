@@ -47,11 +47,11 @@ const OnlineResourceHistory = ({
             >
               {doc.title}
             </a>
-            <p className="2xl:text-[20px] text-[16px] break-words text-gray-600">
+            <p className="2xl:text-[20px] text-[16px] break-words">
               {doc.referenceString}{" "}
             </p>
             <div className="flex justify-between items-center py-2">
-              <p className="text-gray-600 2xl:text-[20px] text-[15px]">
+              <p className=" 2xl:text-[20px] text-[15px]">
                 Pages: {doc.pageNumber}
               </p>
               <div className="flex justify-end space-x-4">

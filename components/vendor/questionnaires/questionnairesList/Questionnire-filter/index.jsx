@@ -327,7 +327,7 @@ const QuestionnairFilter = ({
       <div className="flex flex-col gap-2 p-5  border-t-2">
         <h1>Entries {getEntries()}</h1>
         <button
-          className="border rounded-md border-gray-300 px-3 py-1 text-gray-500 2xl:text-[20px] text-[16px]"
+          className="border rounded-md border-gray-300 px-3 py-1  2xl:text-[20px] text-[16px]"
           onClick={() => handleClearAll()}
         >
           Clear all

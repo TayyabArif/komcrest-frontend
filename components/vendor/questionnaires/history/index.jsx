@@ -330,7 +330,7 @@ const History = ({
                 setReferenceSelect("document");
               }}
               className={` font-bold cursor-pointer 2xl:text-[20px] text-[16px]  ${
-                selectedOption === "references" ? "text-blue-600" : "text-gray-700"
+                selectedOption === "references" ? "text-blue-600" : ""
               } `}
             >
               References 
@@ -338,7 +338,7 @@ const History = ({
             <h1
               onClick={() => setSelectedOption("history")}
               className={`font-bold  cursor-pointer 2xl:text-[20px] text-[16px]  ${
-                selectedOption === "history" ? "text-blue-600" : "text-gray-700"
+                selectedOption === "history" ? "text-blue-600" : ""
               } `}
             >
               History

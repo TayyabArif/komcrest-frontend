@@ -706,10 +706,10 @@ const QuestionnairesView = () => {
                 </div>
               )}
               <div className="overflow-auto w-[100%] flex-1 bg-white">
-                <table className="min-w-[100%] border-2 text-gray-700 ">
+                <table className="min-w-[100%] border-2  ">
                   <thead className="border  sticky -top-1 bg-[#E5E7EB] z-50">
                     <tr className="2xl:text-[20px] text-[16px]">
-                      <th className="px-4 py-2 text-center text-gray-600">
+                      <th className="px-4 py-2 text-center ">
                         <Checkbox
                           isSelected={isHeaderChecked && bulkSelected.length > 0}
                           onChange={handleHeaderCheckboxChange}
@@ -751,10 +751,10 @@ const QuestionnairesView = () => {
                       >
                          Answer
                       </ResizableHeader>
-                      <th className="px-4 py-2  text-gray-600 bg-[#E5E7EB] pr-7  text-left sticky -right-[1px]">
+                      <th className="px-4 py-2   bg-[#E5E7EB] pr-7  text-left sticky -right-[1px]">
                         Actions
                       </th>
-                      <th className="px-[2.5px] text-gray-600 sticky -right-[1px]"></th>
+                      <th className="px-[2.5px]  sticky -right-[1px]"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1080,7 +1080,7 @@ const QuestionnairesView = () => {
                       <tr>
                         <td
                           colSpan={6}
-                          className="py-5  px-4 text-center text-gray-500 text-18px"
+                          className="py-5  px-4 text-center text-18px"
                         >
                           No question found
                         </td>

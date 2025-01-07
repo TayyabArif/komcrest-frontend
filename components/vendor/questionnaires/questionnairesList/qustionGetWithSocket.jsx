@@ -47,23 +47,23 @@ const SocketQuestionnairesList = () => {
         </div>
         </div>
         <div className="overflow-auto w-full flex-1  bg-white border">
-          <table className="min-w-full border-collapse border  text-gray-700">
+          <table className="min-w-full border-collapse border ">
             <thead className="border sticky -top-1 bg-[#E5E7EB] z-50">
               <tr className="2xl:text-[20px] text-[16px]">
-                <th className="px-4 py-2 text-left text-gray-600 border"></th>
-                <th className="px-4 py-2 text-left text-gray-600 border">
+                <th className="px-4 py-2 text-left  border"></th>
+                <th className="px-4 py-2 text-left  border">
                   Status
                 </th>
-                <th className="px-4 py-2 text-left text-gray-600 border">
+                <th className="px-4 py-2 text-left  border">
                   Question
                 </th>
-                <th className="px-4 py-2 text-left text-gray-600 border">
+                <th className="px-4 py-2 text-left  border">
                   Compliance
                 </th>
-                <th className="px-4 py-2 text-left text-gray-600 border min-w-[400px]">
+                <th className="px-4 py-2 text-left border min-w-[400px]">
                   Answer
                 </th>
-                <th className="px-4 py-2 text-center text-gray-600 border">
+                <th className="px-4 py-2 text-center  border">
                   Actions
                 </th>
               </tr>

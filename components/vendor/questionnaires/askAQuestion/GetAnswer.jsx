@@ -5,7 +5,7 @@ import { Textarea, Input } from "@nextui-org/react";
 const GetAnswer = ({answerData}) => {
   return (
     <div className="w-[32%] bg-white h-[500px] px-5 py-3">
-      <h1 className="p-2 font-semibold">Get an answer</h1>
+      <h1 className="p-2 font-bold">Get an answer</h1>
       <hr
         style={{ height: "2px", backgroundColor: "#D8D8D8", border: "none" }}
       />
@@ -22,7 +22,7 @@ const GetAnswer = ({answerData}) => {
               value={answerData?.compliance}
             //   onChange={handleData}
             classNames={{
-              input: "2xl:text-[20px] text-[16px] text-gray-500",
+              input: "2xl:text-[20px] text-[16px]",
             }}
           />
         </div>
@@ -37,7 +37,7 @@ const GetAnswer = ({answerData}) => {
               value={answerData?.answer}
             //   onChange={handleData}
             classNames={{
-              input: "text-[16px] 2xl:text-[20px]  text-gray-500",
+              input: "text-[16px] 2xl:text-[20px] ",
             }}
           />
         </div>

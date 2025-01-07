@@ -28,7 +28,7 @@ const EnterQuestion = ({setAskQuestion, askQuestion, handleSubmit ,isLoading}) =
 
   return (
     <div className="w-[32%] bg-white h-[500px] px-5 py-3">
-      <h1 className="p-2 font-semibold">Ask a question</h1>
+      <h1 className="p-2 font-bold">Ask a question</h1>
       <hr
         style={{ height: "2px", backgroundColor: "#D8D8D8", border: "none" }}
       />
@@ -66,7 +66,7 @@ const EnterQuestion = ({setAskQuestion, askQuestion, handleSubmit ,isLoading}) =
               value={askQuestion.question} // Bind value to state
               onChange={handleQuestionChange} // Handle textarea change
               classNames={{
-                input: "text-[16px] 2xl:text-[20px] text-gray-500",
+                input: "text-[16px] 2xl:text-[20px] ",
               }}
             />
           </div>

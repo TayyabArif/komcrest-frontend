@@ -221,7 +221,7 @@ const Reference = ({reference}) => {
   return (
     <div className="w-[23%] bg-[#F2F2F2] h-[500px] px-5 pb-3 overflow-auto">
       <div className="sticky top-0 bg-[#F2F2F2]  z-50"> 
-      <h1 className="pb-2 py-5 font-semibold ">Reference</h1>
+      <h1 className="pb-2 py-5 font-bold ">Reference</h1>
       <hr
         style={{ height: "2px", backgroundColor: "#D8D8D8", border: "none" }}
       />

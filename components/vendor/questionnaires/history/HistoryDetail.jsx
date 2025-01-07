@@ -143,7 +143,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
         historyRecord
           ?.sort((a, b) => b.id - a.id)
           ?.map((record, index) => (
-            <div key={index} className="my-4 bg-white p-3 2xl:text-[20px] text-[16px] text-gray-600    break-words rounded-md">
+            <div key={index} className="my-4 bg-white p-3 2xl:text-[20px] text-[16px]     break-words rounded-md">
               <div className="flex gap-2">
                 <p className="font-bold text-wrap">
                   {record.user.firstName} -{" "}

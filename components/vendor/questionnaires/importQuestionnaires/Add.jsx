@@ -219,7 +219,7 @@ const Add = ({
             value={importQuestionnaires.customerDomain}
             onChange={handleData}
             classNames={{
-              input: "2xl:text-[20px] text-[16px] text-gray-500",
+              input: "2xl:text-[20px] text-[16px]",
             }}
           />
             {errors.customerDomain && <p className="text-red-500">{errors.customerDomain}</p>}
@@ -281,7 +281,7 @@ const Add = ({
             value={importQuestionnaires.description}
             onChange={handleData}
             classNames={{
-              input: "text-[16px] 2xl:text-[20px] h-[150px] text-gray-500",
+              input: "text-[16px] 2xl:text-[20px] h-[150px]",
             }}
           />
         </div>
