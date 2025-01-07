@@ -39,11 +39,11 @@ const UploadQuestions = () => {
   });
 
   useEffect(() => {
-    if(isKnowledgeBaseOpenDirect){
-        setStepper(0);
-    }else{
-        setStepper(3);
-        setProgressBar(90);
+    if (isKnowledgeBaseOpenDirect) {
+      setStepper(0);
+    } else {
+      setStepper(3);
+      setProgressBar(90);
     }
   }, [isKnowledgeBaseOpenDirect]);
 
@@ -76,10 +76,7 @@ const UploadQuestions = () => {
     setKnowledgeData((prev) => ({
       ...prev,
       language: "English",
-      productIds:
-        companyProducts.length === 1
-          ? [companyProducts[0].id]
-          : prev.productIds, // Conditionally set productIds
+      productIds: companyProducts && companyProducts.map((item) => item.id),
     }));
   }, [companyProducts]);
 
@@ -212,6 +209,41 @@ const UploadQuestions = () => {
       });
   };
 
+  const reverseDataFormation = () => {
+    if (stepper > 1) {
+      const ReVerseTransformDataForMatchColum =
+        knowledgeBasePayloadData?.questions?.map((item) => [
+          item.question,
+          item.coverage,
+          item.answer,
+          item.curator,
+        ]);
+
+      setKnowledgeData({
+        name: knowledgeBasePayloadData.name,
+        language: knowledgeBasePayloadData.language,
+        productIds: knowledgeBasePayloadData.productIds,
+        questions: ReVerseTransformDataForMatchColum,
+      });
+
+      const keys = Object.keys(knowledgeBasePayloadData?.questions[0]);
+      let capitalizedKeys = keys.map(
+        (key) => key.charAt(0).toUpperCase() + key.slice(1)
+      );
+
+      capitalizedKeys = capitalizedKeys.map(key => key === "Coverage" ? "Compliance" : key);
+      setMappedIndexValue(capitalizedKeys);
+      console.log(ReVerseTransformDataForMatchColum);
+      setSelectedRowIndex(0);
+      setSelectedHeader(ReVerseTransformDataForMatchColum[0]);
+
+      setProgressBar(progressBar - 27);
+      setStepper(stepper - 1);
+    } else {
+       router.push("/vendor/questionnaires")
+    }
+  };
+
   return (
     <div className="w-[100%] h-full flex flex-col">
       <div className="w-[90%] mx-auto pt-10 mt-[1rem] h-[0vh] flex-1 flex flex-col">
@@ -302,7 +334,11 @@ const UploadQuestions = () => {
               </div>
               {stepper > 0 && stepper < 4 && (
                 <h1 className="my-2 font-semibold text-[16px] 2xl:text-[20px]">
-                  Your table - {(isKnowledgeBaseOpenDirect ? knowledgeData.name : knowledgeBasePayloadData?.name).replace(".xlsx", "")}
+                  Your table -{" "}
+                  {(isKnowledgeBaseOpenDirect
+                    ? knowledgeData.name
+                    : knowledgeBasePayloadData?.name
+                  ).replace(".xlsx", "")}
                 </h1>
               )}
 
@@ -366,7 +402,7 @@ const UploadQuestions = () => {
                           {companyProducts.map((item, index) => (
                             <Checkbox
                               key={index}
-                              radius="md"
+                              radius="sm"
                               size="lg"
                               isSelected={knowledgeData.productIds.includes(
                                 item.id
@@ -419,16 +455,15 @@ const UploadQuestions = () => {
                   <div className="mt-5">
                     <Button
                       onClick={() => {
-                        if(isKnowledgeBaseOpenDirect){
+                        if (isKnowledgeBaseOpenDirect) {
                           setStepper(stepper - 1);
                           setProgressBar(progressBar - 27);
-                        }else{
-                          router.push("/vendor/questionnaires")
+                        } else {
+                          reverseDataFormation();
                         }
-                       
                       }}
                       radius="none"
-                      size="sm"
+                      size="md"
                       className="px-3 mx-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200  text-red-500   w-max rounded-[4px] "
                     >
                       {stepper === 0 ? "Cancel" : "Back"}
@@ -457,7 +492,7 @@ const UploadQuestions = () => {
                         }
                       }}
                       radius="none"
-                      size="sm"
+                      size="md"
                       className="text-white px-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
                     >
                       {stepper == 3 ? "Confirm" : " Next"}

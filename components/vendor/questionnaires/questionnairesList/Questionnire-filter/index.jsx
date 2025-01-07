@@ -1,27 +1,29 @@
-import React, { useEffect, useState ,forwardRef, useImperativeHandle  } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { X, ChevronRight, ArrowBigLeft, Circle } from "lucide-react";
 import Search from "./Search";
 import CheckboxComponent from "./Checkbox";
 import { toast } from "react-toastify";
-import { formatCamelCaseString } from "@/helper"; 
+import { formatCamelCaseString } from "@/helper";
 import { useCookies } from "react-cookie";
-import { handleResponse } from "@/helper"; 
+import { handleResponse } from "@/helper";
 import { useRouter } from "next/router";
 import { useMyContext } from "@/context";
 
-
 const filterHeader = [
-   
-    { name: "Question", value: "question" },
-    { name: "Compliance", value: "compliance" },
-    { name: "Answer", value: "answer" },
-    { name: "Status", value: "status" },
-    { name: "Notified Users", value: "notifiedUserIds" },
-  ];
+  { name: "Question", value: "question" },
+  { name: "Compliance", value: "compliance" },
+  { name: "Answer", value: "answer" },
+  { name: "Status", value: "status" },
+  { name: "Notified Users", value: "notifiedUserIds" },
+];
 
-
-  const questionnairStatus = [
-    {
+const questionnairStatus = [
+  {
     value: "approved",
     text: "Approved",
   },
@@ -33,40 +35,53 @@ const filterHeader = [
     value: "processed",
     text: "Processed",
   },
-]
+];
 
 const ComplianceOptions = [
   {
-  value: "yes",
-  text: "Yes",
-},
-{
-  value: "No",
-  text: "No",
-},
-{
-  value: "Partial",
-  text: "Partial",
-},
-]
-  
-  const createInitialFilters = (headers) => {
-    return headers.map((header) => ({
-      name: header.value,
-      value: [],
-    }));
-  };
-  
-const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filters, setShow ,komcrestCategories ,questionData ,companyProducts ,documentData , DocumentFile}) => {
+    value: "yes",
+    text: "Yes",
+  },
+  {
+    value: "no",
+    text: "No",
+  },
+  {
+    value: "",
+    text: "Empty",
+  },
+  {
+    value: "non-applicable",
+    text: "Non Applicable",
+  },
+];
+
+const createInitialFilters = (headers) => {
+  return headers.map((header) => ({
+    name: header.value,
+    value: [],
+  }));
+};
+
+const QuestionnairFilter = ({
+  triggerFunction,
+  setShowFilter,
+  setFilters,
+  filters,
+  setShow,
+  komcrestCategories,
+  questionData,
+  companyProducts,
+  documentData,
+  DocumentFile,
+}) => {
   const [selectedOne, setSelectedOne] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
-  const [compnayUserList , setCompanyUserList] = useState([])
+  const [compnayUserList, setCompanyUserList] = useState([]);
   const { companyUserData } = useMyContext();
-  
-
 
   const childFunction = () => {
-    handleClearAll()
+    handleClearAll();
   };
 
   // React.useEffect(() => {
@@ -74,37 +89,42 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
   // }, [triggerFunction]);
 
   useEffect(() => {
-
     //transform compnay userdata
     setCompanyUserList(
       companyUserData.map((data) => ({
         text: data.label,
-        value: data.value
+        value: data.value,
       }))
     );
-    
-    if(filters?.length === 0 ){
-        setFilters(createInitialFilters(filterHeader));
+
+    if (filters?.length === 0) {
+      setFilters(createInitialFilters(filterHeader));
     }
   }, [setFilters]);
 
   const handleFilterChange = (filterType, value) => {
-    console.log('Current Filters:', filterType); // Add this line
-    console.log('Selected Value:', value); 
+    console.log("Current Filters:", filterType); // Add this line
+    console.log("Selected Value:", value);
     setFilters((prevFilters) => {
-      const isSpecialFilter = [ "status","compliance","notifiedUserIds"].includes(filterType);
+      const isSpecialFilter = [
+        "status",
+        "compliance",
+        "notifiedUserIds",
+      ].includes(filterType);
       let updatedFilters = [...prevFilters];
-      const filterIndex = updatedFilters.findIndex((filter) => filter.name === filterType);
-  
+      const filterIndex = updatedFilters.findIndex(
+        (filter) => filter.name === filterType
+      );
+
       if (filterIndex === -1) {
         return prevFilters;
       }
-  
+
       if (isSpecialFilter) {
         if (updatedFilters[filterIndex].value.includes(value)) {
-          updatedFilters[filterIndex].value = updatedFilters[filterIndex].value.filter(
-            (item) => item !== value
-          );
+          updatedFilters[filterIndex].value = updatedFilters[
+            filterIndex
+          ].value.filter((item) => item !== value);
         } else {
           updatedFilters[filterIndex].value.push(value);
         }
@@ -139,17 +159,18 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
   const getEntries = () => {
     let totalEntries = 0;
     if (isSelected) {
-      totalEntries = filters.filter((item)=> item.name == selectedOne)[0]?.value?.length
+      totalEntries = filters.filter((item) => item.name == selectedOne)[0]
+        ?.value?.length;
     } else {
-      console.log("filtersfilters",filters)
-      filters?.forEach(obj => {
+      console.log("filtersfilters", filters);
+      filters?.forEach((obj) => {
         const valueLength = obj.value.length;
         totalEntries += valueLength;
-    })
+      });
     }
 
-    return totalEntries
-  }
+    return totalEntries;
+  };
 
   const removeFilterValue = (index) => {
     setFilters((prevFilters) => {
@@ -162,19 +183,20 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
         return prevFilters;
       }
 
-      updatedFilters[filterIndex].value = updatedFilters[filterIndex].value.filter(
-        (_, i) => i !== index
-      );
+      updatedFilters[filterIndex].value = updatedFilters[
+        filterIndex
+      ].value.filter((_, i) => i !== index);
       return updatedFilters;
     });
   };
 
   const renderFilterComponent = () => {
-    const selectedFilter = filterHeader.find((header) => header.value === selectedOne);
+    const selectedFilter = filterHeader.find(
+      (header) => header.value === selectedOne
+    );
     if (!selectedFilter) return null;
-  
+
     switch (selectedFilter.value) {
-     
       case "status":
         return (
           <CheckboxComponent
@@ -185,33 +207,42 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
             options={questionnairStatus}
           />
         );
-        case "compliance":
-          return (
-            <CheckboxComponent
-              selectedValues={
-                filters?.find((filter) => filter.name === "compliance")?.value || []
-              }
-              handleFilterChange={(value) => handleFilterChange("compliance", value)}
-              options={ComplianceOptions}
-            />
-          );
-          case "notifiedUserIds":
-            return (
-              <CheckboxComponent
-                selectedValues={
-                  filters?.find((filter) => filter.name === "notifiedUserIds")?.value || []
-                }
-                handleFilterChange={(value) => handleFilterChange("notifiedUserIds", value)}
-                options={compnayUserList}
-              />
-            );
+      case "compliance":
+        return (
+          <CheckboxComponent
+            selectedValues={
+              filters?.find((filter) => filter.name === "compliance")?.value ||
+              []
+            }
+            handleFilterChange={(value) =>
+              handleFilterChange("compliance", value)
+            }
+            options={ComplianceOptions}
+          />
+        );
+      case "notifiedUserIds":
+        return (
+          <CheckboxComponent
+            selectedValues={
+              filters?.find((filter) => filter.name === "notifiedUserIds")
+                ?.value || []
+            }
+            handleFilterChange={(value) =>
+              handleFilterChange("notifiedUserIds", value)
+            }
+            options={compnayUserList}
+          />
+        );
       default:
         return (
           <Search
             selectedValues={
-              filters?.find((filter) => filter.name === selectedOne)?.value || []
+              filters?.find((filter) => filter.name === selectedOne)?.value ||
+              []
             }
-            handleFilterChange={(value) => handleFilterChange(selectedOne, value)}
+            handleFilterChange={(value) =>
+              handleFilterChange(selectedOne, value)
+            }
             removeFilterValue={removeFilterValue}
           />
         );
@@ -219,16 +250,21 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
   };
 
   const getSelectedOneName = () => {
-    const selectedHeader = filterHeader.find((header) => header.value === selectedOne);
-    return selectedHeader ? selectedHeader.name : formatCamelCaseString(selectedOne);
+    const selectedHeader = filterHeader.find(
+      (header) => header.value === selectedOne
+    );
+    return selectedHeader
+      ? selectedHeader.name
+      : formatCamelCaseString(selectedOne);
   };
-  
 
   return (
     <div className="w-full h-full bg-white flex flex-col justify-between">
       <div className="text-[18px]">
         <div className="flex justify-between p-5 items-center border-b-2">
-          <h1 className="2xl:text-[20px] text-[16px] font-bold ">Filter {selectedOne}</h1>
+          <h1 className="2xl:text-[20px] text-[16px] font-bold ">
+            Filter {selectedOne}
+          </h1>
           <X
             className="size-[16px] cursor-pointer"
             color="#2457d7"
@@ -248,10 +284,9 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
               }}
             >
               <ArrowBigLeft size="30" color="#2457d7" />
-             
-           
+
               <h1 className="font-bold 2xl:text-[20px] text-[16px]">
-                {getSelectedOneName()}      
+                {getSelectedOneName()}
               </h1>
             </div>
           )}
@@ -259,30 +294,33 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
             renderFilterComponent()
           ) : (
             <div>
-            {filterHeader.map((data, index) => (
-              <div
-                key={index}
-                className="flex justify-between px-5 py-3 border-b-2 items-center cursor-pointer "
-                onClick={() => {
-                  setSelectedOne(data.value);
-                  setIsSelected(true);
-                }}
-              >
-                <h1 className="2xl:text-[20px] text-[16px]">
-                  {data.name}
-                </h1>
-                <div className="flex gap-3 ">
-                  {filters?.find((filter) => filter.name === data.value)?.value.length > 0 ? (
-                    <Circle size={15} strokeWidth={4} color="#2457d7" className="w-[35px]" />
-                  ) : (
-                    ""
-                  )}
-                  <ChevronRight className="size-[16px]" color="#2457d7" />
+              {filterHeader.map((data, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between px-5 py-3 border-b-2 items-center cursor-pointer "
+                  onClick={() => {
+                    setSelectedOne(data.value);
+                    setIsSelected(true);
+                  }}
+                >
+                  <h1 className="2xl:text-[20px] text-[16px]">{data.name}</h1>
+                  <div className="flex gap-3 ">
+                    {filters?.find((filter) => filter.name === data.value)
+                      ?.value.length > 0 ? (
+                      <Circle
+                        size={15}
+                        strokeWidth={4}
+                        color="#2457d7"
+                        className="w-[35px]"
+                      />
+                    ) : (
+                      ""
+                    )}
+                    <ChevronRight className="size-[16px]" color="#2457d7" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          
+              ))}
+            </div>
           )}
         </div>
       </div>
@@ -300,4 +338,3 @@ const QuestionnairFilter = ({ triggerFunction, setShowFilter, setFilters, filter
 };
 
 export default QuestionnairFilter;
-

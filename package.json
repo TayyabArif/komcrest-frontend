@@ -39,7 +39,8 @@
     "react-toastify": "^10.0.5",
     "socket.io-client": "^4.7.5",
     "string-similarity": "^4.0.4",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "eslint": "^8",

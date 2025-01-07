@@ -35,55 +35,6 @@ const QuestionnairsListHeader = ({
     setId(storedId);
   }, []);
 
-  //  const questionnaireUpdated = (value) => {
-  //   const jsonPayload = JSON.stringify({
-  //     status: value,
-  //   });
-  //   const token = cookiesData.token;
-  //   let requestOptions = {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     body: jsonPayload,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`${baseUrl}/questionnaires/${id}`, requestOptions)
-  //     .then(async (response) => {
-  //       const data = await handleResponse(
-  //         response,
-  //         router,
-  //         cookies,
-  //         removeCookie
-  //       );
-  //       return {
-  //         status: response.status,
-  //         ok: response.ok,
-  //         data,
-  //       };
-  //     })
-  //     .then(({ status, ok, data }) => {
-  //       if (ok) {
-  //         toast.success(data.message);
-  //         setDataUpdate((prev) => !prev);
-  //         setQuestionnaireUpdated((prev) => !prev);
-  //       } else {
-  //         toast.error(data?.error || "Questionnaires status not Updated");
-  //         console.error("Error:", data);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       if (error.response) {
-  //         console.error("API Error:", error.response);
-  //         toast.error(
-  //           error.response.data?.error ||
-  //             "An error occurred while Updated  Questionnaires status"
-  //         );
-  //       }
-  //     });
-  // };
 
   const handleDelete = async () => {
     const token = cookiesData.token;
@@ -136,7 +87,7 @@ const QuestionnairsListHeader = ({
               <select
                 onChange={(e) => questionnaireStatusUpdated(e.target.value , id)}
                 value={currentStatus}
-                className="w-[150px] cursor-pointer  bg-[#D8D8D8] text-[16px] 2xl:text-[20px] font-semibold border  rounded-[6px] p-2 2xl:px-2 2xl:py-[6px]"
+                className=" cursor-pointer  bg-[#D8D8D8] text-[16px] 2xl:text-[20px] font-semibold border  rounded-[6px] h-[2.5rem]  px-2"
               >
                 <option disabled>Change Status</option>
                 <option value="To Process">To Process</option>

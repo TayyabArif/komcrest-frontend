@@ -26,3 +26,6 @@ export const QuestionnaireStepsContent = {
   Approved:
     "No questionnaires have received approval yet. The approved list is currently empty.",
 };
+
+
+export const publicDomain = ["onbording" , "app"]

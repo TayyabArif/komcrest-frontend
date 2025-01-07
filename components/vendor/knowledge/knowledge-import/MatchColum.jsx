@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Select, SelectItem } from "@nextui-org/react";
 
-const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHeader, setMappedIndexValue, mappedIndexValue , selectedRowIndex }) => {
+const MatchColum = ({ knowledgeData, selectedHeader, setMappedIndexValue, mappedIndexValue , selectedRowIndex }) => {
   const [availableOptions, setAvailableOptions] = useState([]);
   const thStyle = {
     border: '1px solid #dddddd',
@@ -52,6 +52,13 @@ const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHea
     return filterOption;
   };
 
+
+  const truncate = (str, maxLength) => {
+    if (str?.length > maxLength) {
+      return str.slice(0, maxLength) + '...';
+    }
+    return str;
+  };
   return (
     <div className='pb-2 overflow-auto w-[100%]'>
       {knowledgeData.questions ? (
@@ -60,7 +67,7 @@ const MatchColum = ({ setKnowledgeData, knowledgeData, selectedHeader, updateHea
             <thead className=''>
               <tr className='bg-[#ebeef2]'>
                 {selectedHeader?.map((header, index) => (
-                  <th key={index} style={thStyle} className='h-[30px] text-[16px] 2xl:text-[20px] min-w-[150px]'>{header}</th>
+                  <th key={index} style={thStyle} className='h-[30px] text-[16px] 2xl:text-[20px] min-w-[150px]'>{truncate(header, 20)}</th>
                 ))}
               </tr>
             </thead>

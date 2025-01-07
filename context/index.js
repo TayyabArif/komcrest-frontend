@@ -27,16 +27,15 @@ export const MyProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [dataIsLoaded, setDataIsLoaded] = useState(false);
   const [realFormatCompanyUserData , setRealFormatCompanyUserData] = useState([])
+  const [plansData , setPlansData] = useState([])
 
  // knowledge base module states
   const [knowledgeBasePayloadData , setKnowledgeBasePayloadData ] = useState({})
   const [knowledgeBaseStepperStart ,setKnowledgeBaseStepperStart] = useState(0)
   const [isKnowledgeBaseOpenDirect ,setIsKnowledgeBaseOpenDirect] = useState(true)
   const [dataUpdate, setDataUpdate] = useState(false);
-  
-  
 
-
+  
   // questionnaire module states
   const [questionnaireData, setQuestionnaireData] = useState({
     filename: "",
@@ -67,12 +66,15 @@ export const MyProvider = ({ children }) => {
   const [allCompanyUserData, setAllCompanyUserData] = useState([]);
 
   const [companyProducts, setCompanyProducts] = useState([]);
+
+  const [allCompanyProducts, setAllCompanyProducts] = useState([]);
   const [questionnaireList, setQuestionnaireList] = useState([]);
 
   useEffect(() => {
     if (token) {
       getCompanyUser();
-      getCompanyProducts();
+      getUserCompanyProducts();
+      getAllCompanyProducts()
     }
   }, [dataUpdated]);
 
@@ -122,7 +124,41 @@ export const MyProvider = ({ children }) => {
     }
   };
 
-  const getCompanyProducts = async () => {
+  const getUserCompanyProducts = async () => {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+    fetch(`${baseUrl}/user/products`, requestOptions)
+      .then(async (response) => {
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          setCompanyProducts(data);
+        } else {
+          toast.error(data?.error);
+          console.error("Error:", data);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
+
+  const getAllCompanyProducts = async () => {
     const requestOptions = {
       method: "GET",
       headers: {
@@ -146,7 +182,7 @@ export const MyProvider = ({ children }) => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          setCompanyProducts(data?.Products);
+          setAllCompanyProducts(data?.Products);
         } else {
           toast.error(data?.error);
           console.error("Error:", data);
@@ -437,7 +473,41 @@ export const MyProvider = ({ children }) => {
       .catch((error) => console.error(error));
   };
 
- 
+    const getPlansData = async () => {
+      const token = cookiesData && cookiesData.token;
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+      };
+  
+      try {
+        const response = await fetch(`${baseUrl}/plans`, requestOptions);
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
+        if (response.ok) {
+          setPlansData(data)
+        } else {
+          toast.error(data?.error);
+        }
+      } catch (error) {
+        console.error("Error fetching user documents:", error);
+      }
+    };
+   
+    useEffect(()=>{
+      getPlansData ()
+    },[])
+
+  
+
+  
 
   return (
     <MyContext.Provider
@@ -479,7 +549,9 @@ export const MyProvider = ({ children }) => {
         dataUpdate,
         setDataUpdate,
         realFormatCompanyUserData,
-        removeCompanyUser
+        removeCompanyUser,
+        allCompanyProducts,
+        plansData
       }}
     >
       {children}

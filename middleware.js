@@ -16,7 +16,9 @@ export function middleware(request) {
     '/unauthorized',
     '/vendor/login/access',
     '/vendor/login/password-recovery/request',
-    '/vendor/login/password-confimation' // Added this route to unprotectedRoutes
+    '/vendor/login/password-confimation',
+    '/vendor/login/password-recovery/password-update',
+    '/vendor/login/valid-domain'
   ];
 
   if (unprotectedRoutes.includes(pathname)) {

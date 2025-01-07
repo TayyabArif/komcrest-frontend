@@ -440,7 +440,7 @@ const QuestionnairesView = () => {
       });
   };
 
-  const reRunForAnswer = (ids) => {
+  const reRunForAnswer = (ids , eventType = "" ) => {
     toast.loading("It will take some time, please wait...");
     const token = cookiesData.token;
     let requestOptions = {
@@ -449,7 +449,7 @@ const QuestionnairesView = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ ids }),
+      body: JSON.stringify({ ids , historyMessage : eventType }),
       redirect: "follow",
     };
 
@@ -654,7 +654,7 @@ const QuestionnairesView = () => {
                           //   setDropDownOpen(false);
                           // }}
                           onClick={() => {
-                            reRunForAnswer(bulkSelected);
+                            reRunForAnswer(bulkSelected ,"improveAnswer");
                             setDropDownOpen(false);
                           }}
                         >
@@ -839,11 +839,14 @@ const QuestionnairesView = () => {
                                 setSelectedTextAreaId(item.id);
                                 setAnswerIsUpdate("single");
                               }}
-                              className={`px-4 py-2    !text-wrap  border ${
-                                item.confidence < 7
-                                  ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner"
+                              className={`px-4 py-2 !text-wrap border ${
+                                item.status === "approved"
+                                  ? "" 
+                                  : item.confidence < 7
+                                  ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner" // Confidence condition ke liye styling
                                   : ""
                               }`}
+                              
                             >
                               <div className={`text-[12px] flex  my-2`}>
                                 {item.generatedBy == "AI" ? (
@@ -1017,7 +1020,7 @@ const QuestionnairesView = () => {
                                         // }}
                                         onClick={() => {
                                           setOpenPopoverIndex(null);
-                                          reRunForAnswer([item.id]);
+                                          reRunForAnswer([item.id] ,"improveAnswer");
                                         }}
                                         className="text-sm 2xl:text-[18px] cursor-pointer "
                                       >

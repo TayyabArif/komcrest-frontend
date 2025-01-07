@@ -86,10 +86,7 @@ const NewQuestion = () => {
       setNewQuestion((prev) => ({
         ...prev,
         language: "English",
-        productIds:
-          companyProducts.length === 1
-            ? [companyProducts[0].id]
-            : prev.productIds, // Conditionally set productIds
+        productIds: companyProducts && companyProducts.map((item)=> item.id)
       }));
     }
   }, [companyProducts]);
@@ -388,7 +385,7 @@ const NewQuestion = () => {
       {dataLoaded && (
         <div className="w-[85%] mx-auto py-4 mt-[2rem]">
           <div className="px-4 bg-white pb-6 rounded-sm">
-            <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[20px] font-semibold">
+            <h1 className="py-2 border-b-2 text-[16px] 2xl:text-[20px] font-semibold">
               {`${id ? "Update" : "New"}`} Question
             </h1>
             <div className="flex justify-between">

@@ -7,6 +7,7 @@ import {
   FaThumbsUp,
 } from "react-icons/fa";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const KnowledgeHistory = ({
   questionReferenceData,
@@ -46,7 +47,7 @@ const KnowledgeHistory = ({
               Answer: <span className="font-normal">{item.answer}</span>
             </p>
             <div className="flex justify-end space-x-4 mt-2">
-              <FilePenLine
+              {/* <FilePenLine
                 onClick={() =>
                   window.open(
                     `/vendor/knowledge/UpdateQuestion?id=${item?.id}`,
@@ -55,7 +56,17 @@ const KnowledgeHistory = ({
                 }
                 className="cursor-pointer text-gray-500"
                 size={18}
-              />
+              /> */}
+
+                <Link
+                  href={`/vendor/knowledge/UpdateQuestion?id=${item?.id}`}
+                  target="_blank" 
+                >
+                  <FilePenLine
+                    className="cursor-pointer text-gray-500"
+                    size={18}
+                  />
+                </Link>
 
               {isButtonClickAble && (
                 <div className="flex items-center gap-3">

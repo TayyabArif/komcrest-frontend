@@ -196,14 +196,14 @@ const UpdateUser = () => {
               formData={formData}
               handleChange={(value) => handleChange(value)}
               allCompanies={allCompanies}
-              isEdit={isEdit}
+              isEdit
             />
             <UsersSettingsCard 
               formData={formData}
               handleProductsChange={handleProductsChange}
               products={products}
               selectedProducts={selectedProducts}
-              isEdit={isEdit}
+              isEdit
             />
           </>
         )}

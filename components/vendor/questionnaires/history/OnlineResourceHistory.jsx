@@ -9,6 +9,7 @@ import {
   FaThumbsUp,
 } from "react-icons/fa";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const OnlineResourceHistory = ({
   onlineResourceReferenceData,
@@ -54,7 +55,7 @@ const OnlineResourceHistory = ({
                 Pages: {doc.pageNumber}
               </p>
               <div className="flex justify-end space-x-4">
-                <FilePenLine
+                {/* <FilePenLine
                   onClick={() =>
                     window.open(
                       `/vendor/onlineResource/update?id=${doc?.id}`,
@@ -63,7 +64,17 @@ const OnlineResourceHistory = ({
                   }
                   className="cursor-pointer text-gray-500"
                   size={18}
-                />
+                /> */}
+
+                <Link
+                  href={`/vendor/onlineResource/update?id=${doc?.id}`}
+                  target="_blank"
+                >
+                  <FilePenLine
+                    className="cursor-pointer text-gray-500"
+                    size={18}
+                  />
+                </Link>
 
                 {isButtonClickAble && (
                   <div className="flex items-center gap-3">

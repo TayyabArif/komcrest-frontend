@@ -105,7 +105,17 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
             </div>
           </div>
         );
+        case "improveAnswer":
+          return (
+            <div className="">
+              <div className="flex gap-3 2xl:text-[20px] text-[16px]">
+                {/* <h1>Improved the answered using Komcrest AI.</h1>           */}
+                <h1>Improved the answer.</h1>
+              </div>
+            </div>
+          );
 
+       
       case "Notification Sent":
         return (
           <div className="">

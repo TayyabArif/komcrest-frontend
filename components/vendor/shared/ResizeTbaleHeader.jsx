@@ -30,7 +30,7 @@ const ResizableHeader = ({ columnName, columnWidth, onResize, children }) => {
         {children}
         <div
           ref={resizerRef}
-          className="absolute right-0 top-0 h-full w-[10px] bg-[#E5E7EB] cursor-col-resize"
+          className="absolute right-0 top-0 h-full w-[15px] bg-[#E5E7EB] cursor-col-resize"
           onMouseDown={onMouseDown}
         ></div>
       </div>

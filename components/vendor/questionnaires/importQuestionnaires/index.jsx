@@ -65,10 +65,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     setImportQuestionnaire((prev) => ({
       ...prev,
       language: "English", // Always set language to English
-      productIds:
-        companyProducts.length === 1
-          ? [companyProducts[0].id]
-          : prev.productIds, // Conditionally set productIds
+      productIds: companyProducts && companyProducts.map((item)=> item.id)
     }));
   }, [companyProducts]);
 
