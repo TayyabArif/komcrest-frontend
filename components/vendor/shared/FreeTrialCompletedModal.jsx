@@ -21,11 +21,11 @@ const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange }) => {
               You have reached the limits of your trial period!
             </h1>
             <div>
-            <p>We hope you enjoyed Komcrest!</p>
-            <p className="w-[90%] mx-auto">
-              To reactivate your account based on your selected plan please
-              click on the button below:
-            </p>
+              <p>We hope you enjoyed Komcrest!</p>
+              <p className="w-[90%] mx-auto">
+                To reactivate your account based on your selected plan please
+                click on the button below:
+              </p>
             </div>
             <Button
               size="md"
@@ -40,8 +40,8 @@ const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange }) => {
             <div className="text-[16px] font-semibold leading-5">
               <p className="2xl:text-[20px] text-[16px] w-[80%] mx-auto">
                 Your data is safe with us. If you need more time to decide,
-                don't worry — we’ll keep your data secure, and it will only be
-                erased after 1 month if you choose not to reactivate your
+                don&apos;t worry — we’ll keep your data secure, and it will only
+                be erased after 1 month if you choose not to reactivate your
                 account.
               </p>
             </div>
