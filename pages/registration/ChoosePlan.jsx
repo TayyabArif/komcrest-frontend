@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Euro } from "lucide-react";
-import { PRICING_DATA } from "@/constants";
 import { useMyContext } from "@/context";
 
 const ChoosePlan = ({ planId, setPlanId}) => {

@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import CompanyPlan from "./CompanyPlan";
+import { publicDomain } from "@/constants";
 
 const modalData = {
   heading: "Create Company",
@@ -65,6 +66,11 @@ const CreateCompany = () => {
     }
   };
   const handleSubmit = async () => {
+    if (publicDomain.includes(formData.companyDomain)) {
+      toast.error("Domain not Available")
+      return;
+    }
+
     const token = cookiesData.token;
     setIsLoading(true);
     const myHeaders = new Headers();

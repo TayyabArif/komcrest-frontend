@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { PRICING_DATA } from "@/constants";
 import { Button } from "@nextui-org/react";
 import { CircleCheckBig } from "lucide-react";
 
