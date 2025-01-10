@@ -7,11 +7,10 @@ const ThankYou = () => {
       <div className="flex justify-center">
           <Image src="/logo.png" alt="Komcrest Logo" width={230} height={230} />
         </div>
-        <h1 className="text-xl">Free trial</h1>
+        <h1 className="md:text-[35px] text-[30px]">Essai gratuit</h1>
         <div className="bg-blue-600 w-[70%] mx-auto rounded">
           <p className="text-[16px] py-2 px-10 text-white">
-            Awesome! You will receive an email to confirm the creation of your
-            account and activate your trial period.
+          Génial ! Vous recevrez un email pour confirmer la création de votre compte et activer votre période d'essaie.
           </p>
         </div>
       </div>

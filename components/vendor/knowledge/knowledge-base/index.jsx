@@ -413,6 +413,7 @@ const KnowledgeBase = ({
                     columnName="komcrestDomain"
                     columnWidth={columnWidths.komcrestDomain}
                     onResize={handleResize}
+                  
                   >
                     Komcrest Domain
                   </ResizableHeader>

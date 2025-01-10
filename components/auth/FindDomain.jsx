@@ -66,6 +66,7 @@ const FindDomain = ({ type }) => {
             onChange={handleChange}
             name="domain"
             size="md"
+            radius="sm"
             type="text"
             placeholder="Your Domain"
             className="w-[50%]"
@@ -74,14 +75,14 @@ const FindDomain = ({ type }) => {
               input: "text-base 2xl:text-[20px]",
             }}
           />
-          <span>.komcrest.com</span>
+          <span className="text-standard">.komcrest.com</span>
         </div>
         {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
 
         <Button
           radius="none"
           size="sm"
-          className="mt-6 text-white px-[45px] text-base 2xl:text-[20px] bg-[#4fa82e] w-max rounded-[6px] -ml-1"
+          className="mt-6 text-white px-[45px] text-base 2xl:text-[20px] bg-[#4fa82e] w-max rounded-[4px]"
           isDisabled={!domain}
           isLoading={isLoading}
           onPress={handleSubmit}
