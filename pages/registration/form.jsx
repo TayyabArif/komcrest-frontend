@@ -131,11 +131,12 @@ const RegistrationForm = () => {
         </div>
         <h1 className="md:text-[35px] text-[30px]">Essai gratuit</h1>
         <p className="text-standard">
-        Merci pour l'intérêt que vous portez à notre solution de réponse automatisée aux questionnaires de sécurité et de conformité.
-        </p>
-        <p className="text-standard">
-        Dans quelques instants vous allez pouvoir tester gratuitement l'intégralité des fonctionnalités qu'offre Komcrest, et ce pendant 7 jours.
-        </p>
+    Merci pour l&apos;intérêt que vous portez à notre solution de réponse automatisée aux questionnaires de sécurité et de conformité.
+</p>
+<p className="text-standard">
+    Dans quelques instants vous allez pouvoir tester gratuitement l&apos;intégralité des fonctionnalités qu&apos;offre Komcrest, et ce pendant 7 jours.
+</p>
+
       </div>
       <div className="bg-blue-600 my-10">
         <div className="w-full relative bottom-2  -ml-2 border-2 bg-white border-black text-center md:p-5 p-2  lg:px-10">
