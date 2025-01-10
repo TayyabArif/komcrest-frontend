@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import KnowledgeHeader from "../shared/KnowledgeHeader";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
@@ -37,7 +37,6 @@ const Questionnaires = () => {
   const [dataLoaded, setDataLoaded] = useState(true);
   const { questionnaireList, setQuestionnaireList, setQuestionnaireUpdated } =
     useMyContext();
-
 
   const filterStatus = (status) => {
     const filteredData = questionnaireList?.filter(
@@ -104,20 +103,19 @@ const Questionnaires = () => {
       });
   };
 
-
   const divRef = useRef(null);
   const [divHeight, setDivHeight] = useState(0);
-// get scrollable hight of parent div
+  // get scrollable hight of parent div
   useEffect(() => {
     const updateDivHeight = () => {
       if (divRef.current) {
-        setDivHeight(divRef.current.scrollHeight); 
+        setDivHeight(divRef.current.scrollHeight);
       }
     };
 
     updateDivHeight();
-    window.addEventListener("resize", updateDivHeight); 
-    divRef?.current?.addEventListener("scroll", updateDivHeight); 
+    window.addEventListener("resize", updateDivHeight);
+    divRef?.current?.addEventListener("scroll", updateDivHeight);
     return () => {
       window.removeEventListener("resize", updateDivHeight);
       if (divRef.current) {
@@ -151,45 +149,43 @@ const Questionnaires = () => {
               </h1>
             </div>
             {filterValue == "progress" ? (
-              <div   ref={divRef} className="flex flex-1  gap-3 overflow-auto">
+              <div ref={divRef} className="flex flex-1  gap-3 overflow-auto">
                 <DndProvider backend={HTML5Backend}>
-                 
-                    <FilterStatus
-                      onCardDrop={handleCardDrop}
-                      title="To Process"
-                      data={filterStatus("To Process")}
-                      stepsContent={QuestionnaireStepsContent.process}
-                      setDataUpdate={setDataUpdate}
-                      divHeight={divHeight}
-                    />
-                 
-                    <FilterStatus
-                      onCardDrop={handleCardDrop}
-                      title="Started"
-                      data={filterStatus("Started")}
-                      stepsContent={QuestionnaireStepsContent.Started}
-                      setDataUpdate={setDataUpdate}
-                      divHeight={divHeight}
-                    />
-              
-                    <FilterStatus
-                      onCardDrop={handleCardDrop}
-                      title="For Review"
-                      data={filterStatus("For Review")}
-                      stepsContent={QuestionnaireStepsContent.Review}
-                      setDataUpdate={setDataUpdate}
-                      divHeight={divHeight}
-                    />
-              
-                    <FilterStatus
-                      onCardDrop={handleCardDrop}
-                      title="Approved"
-                      data={filterStatus("Approved")}
-                      stepsContent={QuestionnaireStepsContent.Approved}
-                      setDataUpdate={setDataUpdate}
-                      divHeight={divHeight}
-                    />
-                
+                  <FilterStatus
+                    onCardDrop={handleCardDrop}
+                    title="To Process"
+                    data={filterStatus("To Process")}
+                    stepsContent={QuestionnaireStepsContent.process}
+                    setDataUpdate={setDataUpdate}
+                    divHeight={divHeight}
+                  />
+
+                  <FilterStatus
+                    onCardDrop={handleCardDrop}
+                    title="Started"
+                    data={filterStatus("Started")}
+                    stepsContent={QuestionnaireStepsContent.Started}
+                    setDataUpdate={setDataUpdate}
+                    divHeight={divHeight}
+                  />
+
+                  <FilterStatus
+                    onCardDrop={handleCardDrop}
+                    title="For Review"
+                    data={filterStatus("For Review")}
+                    stepsContent={QuestionnaireStepsContent.Review}
+                    setDataUpdate={setDataUpdate}
+                    divHeight={divHeight}
+                  />
+
+                  <FilterStatus
+                    onCardDrop={handleCardDrop}
+                    title="Approved"
+                    data={filterStatus("Approved")}
+                    stepsContent={QuestionnaireStepsContent.Approved}
+                    setDataUpdate={setDataUpdate}
+                    divHeight={divHeight}
+                  />
                 </DndProvider>
               </div>
             ) : (

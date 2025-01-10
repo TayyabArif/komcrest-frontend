@@ -41,23 +41,14 @@ const AllUserList = () => {
         <div className=" flex-1 relative  overflow-auto">
           <table className="w-[100%] mx-auto">
             <thead className="block md:table-header-group sticky -top-1 z-30 ">
-              <tr className="border text-[16px] 2xl:text-[20px] ">
-                <th className="bg-gray-200  px-2 py-3 font-bold  md: text-left ">
+              <tr className="border text-standard bg-[#E5E7EB]">
+                <th className="px-5 py-3 font-bold  md: text-left ">
                   First Name
                 </th>
-                <th className="bg-gray-200 p-1  font-bold  md: text-left ">
-                  Last Name
-                </th>
-                <th className="bg-gray-200 p-1  font-bold  md: text-left ">
-                  Email
-                </th>
-                <th className="bg-gray-200 p-1  font-bold  md: text-left ">
-                  Role
-                </th>
-                <th
-                  className=" text-center  bg-gray-200"
-                  style={{ outlineWidth: "1px" }}
-                >
+                <th className="p-1  font-bold  md:text-left ">Last Name</th>
+                <th className="p-1  font-bold  md:text-left ">Email</th>
+                <th className="p-1  font-bold  md:text-left ">Role</th>
+                <th className=" text-center" style={{ outlineWidth: "1px" }}>
                   Actions
                 </th>
               </tr>
@@ -70,24 +61,24 @@ const AllUserList = () => {
                     key={index}
                     className={` ${user.id == userID ? "text-gray-400" : ""} ${
                       index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                    }  border    block md:table-row text-[16px] 2xl:text-[20px]`}
+                    }  border block md:table-row text-standard`}
                   >
-                    <td className="p-2  text-left break-words">
+                    <td className="p-2 px-5 text-left break-words">
                       {user.firstName}
                     </td>
 
-                    <td className="p-2   break-words  text-left ">
+                    <td className="p-2 break-words  text-left ">
                       {user.lastName}
                     </td>
 
-                    <td className="p-2   text-left py-4">{user.email}</td>
+                    <td className="p-2 text-left py-4">{user.email}</td>
 
                     <td className="p-2  text-left ">{user.role}</td>
 
                     <td
-                      className={`text-center   flex-col flex-1 justify-center items-center`}
+                      className={`text-center flex-col flex-1 justify-center items-center`}
                     >
-                      <div className=" flex items-center justify-center gap-2 ">
+                      <div className="flex px-5 items-center justify-center gap-2 ">
                         {user.id !== userID && (
                           <Popover
                             placement="bottom"
@@ -109,7 +100,7 @@ const AllUserList = () => {
                             <PopoverContent className="rounded-md w-[120px] items-start text-start">
                               <div className="px-2 py-2">
                                 <div
-                                  className="text-sm font-bold cursor-pointer"
+                                  className="text-standard font-bold cursor-pointer"
                                   onClick={() =>
                                     router.push(
                                       `/vendor/setting/user-management/update-user?id=${user.id}`
@@ -119,7 +110,7 @@ const AllUserList = () => {
                                   Update
                                 </div>
                                 <div
-                                  className="text-sm mt-2 text-red-500 font-bold cursor-pointer"
+                                  className="text-standard mt-2 text-red-500 font-bold cursor-pointer"
                                   onClick={() => {
                                     // setSelectedQuestion(data);
                                     setSelectedId(user.id);

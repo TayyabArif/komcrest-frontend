@@ -21,10 +21,10 @@ const ChoosePlan = ({ planId, setPlanId}) => {
   };
 
   return (
-    <div>
-      <h1 className="text-[40px]">Your subscription</h1>
+    <div className="w-full">
+      <h1 className="md:text-[40px] text-[33px]">Your subscription</h1>
       <h4>Select the desired subscription level</h4>
-      <div className="flex gap-6 justify-center my-5">
+      <div className="flex gap-6 justify-center md:my-5 my-3">
         <button
           className={`px-4 py-2 text-[18px] font-semibold cursor-pointer border-b-2 ${
             billingType === "monthly" ? "border-blue-700" : "border-transparent"
@@ -43,13 +43,13 @@ const ChoosePlan = ({ planId, setPlanId}) => {
         </button>
       </div>
 
-      <div className="flex justify-evenly gap-10 my-5">
+      <div className="sm:flex justify-evenly flex-wrap lg:gap-10 gap-5 w-full  my-5 md:space-y-0 space-y-3">
         {plansData
           .filter((item) => item.billingCycle == billingType)
           .map((item) => (
             <div
               key={item.name}
-              className={`w-[250px] rounded text-center p-5 space-y-1 cursor-pointer ${planId == item.id ? "border-4 border-black" : "" }`}
+              className={`md:w-[28%] sm:w-[30%]  w-full  rounded text-center p-5 space-y-1 cursor-pointer ${planId == item.id ? "border-4 border-black" : "" }`}
               style={{ backgroundColor: getCardColor(item.name) }}
               onClick={() => setPlanId(item.id)}
             >

@@ -80,8 +80,8 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
           {selectedSheet && excelFile[selectedSheet] && (
             <div className="overflow-auto">
               <table className="w-[100%]">
-                <thead className="bg-[#F6F7F9] sticky -top-1 z-10">
-                  <tr className='text-[16px] 2xl:text-[20px]'>
+                <thead className="bg-[#E5E7EB] sticky -top-1 z-10">
+                  <tr className='text-standard'>
                     <th className="border p-2 text-left">
                       <input
                         type="radio"
@@ -91,7 +91,7 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
                       />
                     </th>
                     {excelFile[selectedSheet][0].map((header, index) => (
-                      <th key={index} className="border p-2 text-left text-[16px] 2xl:text-[18px]">
+                      <th key={index} className="border p-2 text-left text-standard">
                         {header}
                       </th>
                     ))}
@@ -99,7 +99,7 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
                 </thead>
                 <tbody>
                   {excelFile[selectedSheet].slice(1).map((row, rowIndex) => (
-                    <tr key={rowIndex} className="even:bg-gray-100 text-[16px] 2xl:text-[20px]">
+                    <tr key={rowIndex} className="even:bg-gray-100 text-standard">
                       <td className="border p-2">
                         <input
                           type="radio"
@@ -110,7 +110,7 @@ const SelectHeader = ({ excelFile, setExcelFile , selectedRows, setSelectedRows,
                         />
                       </td>
                       {row.map((cell, cellIndex) => (
-                        <td key={cellIndex} className="border p-2 text-[16px] 2xl:text-[20px]">
+                        <td key={cellIndex} className="border p-2 text-standard">
                           {truncateText(cell, 70)}
                         </td>
                       ))}

@@ -122,8 +122,8 @@ const ValidateData = forwardRef(
         {visibleTable && (
           <div key={visibleTable} className=" overflow-auto flex-1 h-[0vh]">
             <table className="min-w-full border-collapse border mb-4">
-              <thead className="bg-gray-200 sticky -top-1 z-10">
-                <tr className="text-[16px] 2xl:text-[20px]">
+              <thead className="bg-[#E5E7EB] sticky -top-1 z-10">
+                <tr className="text-standard">
                   <th className="border p-2 text-left w-[100px] ">
                     Rows to remove
                   </th>
@@ -142,7 +142,7 @@ const ValidateData = forwardRef(
                       isRowRemoved(visibleTable, rowIndex + 1)
                         ? "bg-red-100"
                         : "bg-white"
-                    } text-[16px] 2xl:text-[20px]`}
+                    } text-standard`}
                   >
                     <td className="border p-2 text-left w-[100px]">
                       <input
@@ -176,7 +176,7 @@ const ValidateData = forwardRef(
         <div className="flex gap-2">
           <button
             onClick={removeSelectedRows}
-            className="px-4 py-2 text-[15px] 2xl:text-[20px] bg-red-500 text-white rounded disabled:bg-red-300"
+            className="px-4 py-2 text-standard bg-red-500 text-white rounded disabled:bg-red-300"
             disabled={!Object.keys(selectedRows).length}
           >
             Mark{" "}
@@ -188,7 +188,7 @@ const ValidateData = forwardRef(
           </button>
           <button
             onClick={() => restoreRemovedRows(visibleTable)} // Restore only for the visible table
-            className="px-4 py-2  text-[15px] 2xl:text-[20px] bg-gray-500 text-white rounded disabled:bg-gray-300"
+            className="px-4 py-2  text-standard bg-gray-500 text-white rounded disabled:bg-gray-300"
             disabled={!removedRows[visibleTable]?.size}
           >
             Restore {removedRows[visibleTable]?.size || 0} rows

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
 import VendorHeader from "../shared/VendorHeader";
-import DocumentCard from "./shared/DocumentCard";
+import DocumentCard from "./DocumentCard";
 import { useRouter } from "next/router";
-import ExampleCard from "./shared/ExampleCard";
+import ExampleCard from "./ExampleCard";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import {handleResponse} from "../../../helper"

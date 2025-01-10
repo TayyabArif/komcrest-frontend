@@ -296,14 +296,14 @@ const UpdateQuestionnaires = () => {
     <div className="w-[100%] h-full">
       {dataIsLoaded && (
         <div className="w-[90%] mx-auto py-4 mt-[3rem]">
-        <h1 className="py-2 px-4 bg-[#F6F7F9] text-[16px] 2xl:text-[20px] font-bold">
+        <h1 className="py-2 px-4 bg-slate-50 text-standard font-bold">
           Update questionnaire information 
         </h1>
         <div className="px-4 bg-white py-10">
           <div className="flex justify-between pb-10">
             <div className="w-[45%] space-y-6 ">
               <div>
-                <label className="text-[16px] 2xl:text-[20px]">
+                <label className="text-standard">
                   Customer or prospect name <span className="text-red-500">*</span>
                 </label>
                 <Input
@@ -311,6 +311,7 @@ const UpdateQuestionnaires = () => {
                   variant="bordered"
                   placeholder=""
                   size="md"
+                  radius="sm"
                   name="customerName"
                   value={questionnaireData.customerName}
                   onChange={handleData}
@@ -321,7 +322,7 @@ const UpdateQuestionnaires = () => {
                  {errors.customerName && <p className="text-red-500">{errors.customerName}</p>}
               </div>
               <div>
-                <label className="text-[16px] 2xl:text-[20px]">
+                <label className="text-standard">
                   Customer or prospect domain name <span className="text-red-500">*</span>
                 </label>
                 <Input
@@ -329,6 +330,7 @@ const UpdateQuestionnaires = () => {
                   variant="bordered"
                   placeholder=""
                   size="md"
+                  radius="sm"
                   name="customerDomain"
                   value={questionnaireData.customerDomain}
                   onChange={handleData}
@@ -339,7 +341,7 @@ const UpdateQuestionnaires = () => {
                  {errors.customerDomain && <p className="text-red-500">{errors.customerDomain}</p>}
               </div>
               <div>
-                <label className="text-[16px] 2xl:text-[20px]">
+                <label className="text-standard">
                   Questionnaire type <span className="text-red-500">*</span>
                 </label>
                 <div className="gap-y-2 gap-10 flex flex-wrap my-1">
@@ -350,11 +352,14 @@ const UpdateQuestionnaires = () => {
                         questionnaireData.questionnaireType === item.id
                       }
                       onChange={() => handleCheckboxChange("type", item.id)}
-                      className="2xl:text-[20px] !text-[50px]"
                       name="indexationMethod"
                       radius="none"
                       size="lg"
-                      classNames={{ wrapper: "!rounded-[3px]" }}
+                      classNames={{
+                        label: "!rounded-[3px] text-standard",
+                        wrapper: "!rounded-[3px]" 
+                      }}
+                   
                     >
                       {item.label}
                     </Checkbox>
@@ -364,7 +369,7 @@ const UpdateQuestionnaires = () => {
               </div>
 
               <div className="mt-2 mb-3">
-                <label className="text-[16px] 2xl:text-[20px]">
+                <label className="text-standard">
                   Add a description to help identify it in the future
                 </label>
                 <Textarea
@@ -373,18 +378,19 @@ const UpdateQuestionnaires = () => {
                   maxRows={5}
                   placeholder="Type the question here"
                   name="description"
+                  radius="sm"
                   value={questionnaireData.description}
                   onChange={handleData}
                   classNames={{
                     input:
-                      "text-[16px] 2xl:text-[20px] h-[150px]",
+                      "text-standard h-[150px]",
                   }}
                 />
               </div>
             </div>
             <div className="w-[45%] space-y-6 pt-3">
               <div>
-                <label className="text-[16px] 2xl:text-[20px]">
+                <label className="text-standard">
                   In scope product(s) <span className="text-red-500">*</span>
                 </label>
                 <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
@@ -395,10 +401,12 @@ const UpdateQuestionnaires = () => {
                         item.id
                       )}
                       onChange={() => handleCheckboxChange("products", item.id)}
-                      className="2xl:text-[20px] !text-[50px]"
                       radius="none"
                       size="lg"
-                      classNames={{ wrapper: "!rounded-[3px]" }}
+                      classNames={{
+                        label: "!rounded-[3px] text-standard",
+                        wrapper: "!rounded-[3px]" 
+                      }}
                     >
                       {item.name}
                     </Checkbox>
@@ -408,7 +416,7 @@ const UpdateQuestionnaires = () => {
               </div>
 
               <div>
-                <label className="text-[16px] 2xl:text-[20px]">
+                <label className="text-standard">
                   Date to return the questionnaire to the client or prospect <span className="text-red-500">*</span>
                 </label>
                 <div className="">
@@ -442,13 +450,14 @@ const UpdateQuestionnaires = () => {
                 {errors.returnDate && <p className="text-red-500">{errors.returnDate}</p>}
               </div>
               <div>
-                <label className="text-[16px] 2xl:text-[20px]">Language <span className="text-red-500">*</span></label>
+                <label className="text-standard">Language <span className="text-red-500">*</span></label>
                 <SingleSelect
                   variant="bordered"
                   className="w-full bg-transparent text-[15px]"
                   size="md"
                   placeholder="language"
                   name="language"
+                  radius="sm"
                   value={questionnaireData.language}
                   onChange={(e) => handleData(e)}
                   defaultSelectedKeys={
@@ -456,7 +465,7 @@ const UpdateQuestionnaires = () => {
                       ? [questionnaireData?.language]
                       : []
                   }
-                  classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                  classNames={{ value: "text-standard" }}
                 >
                   {languageOptions?.map((option) => (
                     <SelectItem
@@ -470,7 +479,7 @@ const UpdateQuestionnaires = () => {
                 </SingleSelect>
               </div>
               <div>
-                <label className="text-[16px] 2xl:text-[20px]">
+                <label className="text-standard">
                   Collaborators who will work on this questionnaire
                 </label>
                 <Select
@@ -486,7 +495,7 @@ const UpdateQuestionnaires = () => {
                 />
               </div>
               {/* <div>
-                <label className="text-[16px] 2xl:text-[20px]">
+                <label className="text-standard">
                   Assignees – Who will review and validate the questionnaire
                 </label>
                 <Select
@@ -505,15 +514,14 @@ const UpdateQuestionnaires = () => {
           <div className="flex justify-end  gap-3">
             <Button
               size="md"
-              className="rounded-md 2xl:text-[20px] cursor-pointer bg-red-200 py-0 text-red-500 text-[16px] font-semibold"
+              className="global-cancel-btn"
               onClick={()=>router.push("/vendor/questionnaires")}
             >
               Cancel
             </Button>
             <Button
               size="md"
-              color="primary"
-              className="rounded-md 2xl:text-[20px] cursor-pointer text-[16px] font-semibold"
+              className="global-success-btn"
               onClick={questionnaireUpdated}
             >
               Update

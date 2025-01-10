@@ -247,10 +247,10 @@ const UploadQuestions = () => {
   return (
     <div className="w-[100%] h-full flex flex-col">
       <div className="w-[90%] mx-auto pt-10 mt-[1rem] h-[0vh] flex-1 flex flex-col">
-        <h1 className="font-semibold bg-slate-50 px-6 py-2 2xl:text-[20px]">
+        <h1 className="font-bold bg-slate-50 px-6 py-2 text-standard rounded-t">
           {getTitle()}
         </h1>
-        <div className="w-full  bg-white p-6 flex-1 flex flex-col h-[0vh] ">
+        <div className="w-full  bg-white p-6 flex-1 flex flex-col h-[0vh] rounded-b">
           <Progress
             aria-label="Loading..."
             value={progressBar}
@@ -260,7 +260,7 @@ const UploadQuestions = () => {
           <div className="flex flex-1 flex-col justify-between  h-full">
             <div className="flex flex-1 h-[0vh] flex-col">
               <div className="mt-3 flex gap-2">
-                <div className="flex gap-3 items-center flex-1 border py-2 px-2 rounded">
+                <div className="flex gap-3 items-center flex-1 border-2 py-[6px] px-2 rounded">
                   <span
                     className={`${
                       stepper == 1 || stepper > 1
@@ -277,13 +277,13 @@ const UploadQuestions = () => {
                   <h1
                     className={`${
                       stepper == !1 ? "text-blue-600" : ""
-                    } font-semibold text-[16px] 2xl:text-[20px]`}
+                    } font-semibold text-standard`}
                   >
                     Uplaod File
                   </h1>
                 </div>
 
-                <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
+                <div className="flex gap-3 items-center flex-1 border-2 py-[6px] px-2 rounded">
                   <span
                     className={`${
                       stepper == 2 || stepper > 2
@@ -297,12 +297,12 @@ const UploadQuestions = () => {
                       2
                     )}
                   </span>
-                  <h1 className="text-[16px] 2xl:text-[20px]">
+                  <h1 className="text-standard">
                     Select header row
                   </h1>
                 </div>
 
-                <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
+                <div className="flex gap-3 items-center flex-1 border-2 py-[6px] px-2 rounded">
                   <span
                     className={`${
                       stepper == 3 || stepper > 3 ? "bg-blue-600" : ""
@@ -314,10 +314,10 @@ const UploadQuestions = () => {
                       3
                     )}
                   </span>
-                  <h1 className="text-[16px] 2xl:text-[20px]">Match Columns</h1>
+                  <h1 className="text-standard">Match Columns</h1>
                 </div>
 
-                <div className="flex gap-3 items-center flex-1 border py-1 px-2 rounded">
+                <div className="flex gap-3 items-center flex-1 border-2 py-[6px] px-2 rounded">
                   <span
                     className={`${
                       stepper == 4 || stepper > 4 ? "bg-blue-600" : ""
@@ -329,11 +329,11 @@ const UploadQuestions = () => {
                       4
                     )}
                   </span>
-                  <h1 className="text-[16px] 2xl:text-[20px]">Validate data</h1>
+                  <h1 className="text-standard">Validate data</h1>
                 </div>
               </div>
               {stepper > 0 && stepper < 4 && (
-                <h1 className="my-2 font-semibold text-[16px] 2xl:text-[20px]">
+                <h1 className="my-2 font-semibold text-standard">
                   Your table -{" "}
                   {(isKnowledgeBaseOpenDirect
                     ? knowledgeData.name
@@ -394,24 +394,23 @@ const UploadQuestions = () => {
                 >
                   {stepper == 2 && (
                     <div className="">
-                      <div className="flex itemx-center gap-4">
-                        <h1 className="font-semibold text-[16px] 2xl:text-[20px]">
+                      <div className="flex itemx-center gap-2">
+                        <h1 className="font-semibold text-standard">
                           Select associated products:
                         </h1>
                         <div className="gap-x-6 gap-y-2 flex flex-wrap">
                           {companyProducts.map((item, index) => (
                             <Checkbox
                               key={index}
-                              radius="sm"
-                              size="lg"
                               isSelected={knowledgeData.productIds.includes(
                                 item.id
                               )}
                               onChange={() => handleCheckboxChange(item.id)}
-                              className="2xl:text-[42px]"
+                              radius="none"
+                              size="lg"
                               classNames={{
-                                label:
-                                  "!rounded-[3px] text-[16px] 2xl:text-[20px]",
+                                label: "!rounded-[3px] text-standard",
+                                wrapper: "!rounded-[3px]" 
                               }}
                             >
                               {item.name}
@@ -420,7 +419,7 @@ const UploadQuestions = () => {
                         </div>
                       </div>
                       <div className="flex items-center mt-5 mb-2">
-                        <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-60">
+                        <h1 className="font-semibold text-standard w-60">
                           {" "}
                           Select Language:{" "}
                         </h1>
@@ -428,20 +427,21 @@ const UploadQuestions = () => {
                           variant="bordered"
                           className="w-full bg-transparent"
                           size="md"
+                          radius="sm"
                           placeholder="Select Language"
                           value={knowledgeData.language}
                           onChange={(e) => handleSelectChange(e.target.value)}
                           defaultSelectedKeys={
                             knowledgeData ? [knowledgeData.language] : []
                           }
-                          classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                          classNames={{ value: "text-standard" }}
                         >
                           {language.map((option) => (
                             <SelectItem
                               key={option.key}
                               value={option.label}
                               classNames={{
-                                title: "text-[16px] 2xl:text-[20px]",
+                                title: "text-standard",
                               }}
                             >
                               {option.label}
@@ -452,7 +452,7 @@ const UploadQuestions = () => {
                     </div>
                   )}
 
-                  <div className="mt-5">
+                  <div className="mt-5 flex gap-3">
                     <Button
                       onClick={() => {
                         if (isKnowledgeBaseOpenDirect) {
@@ -464,7 +464,7 @@ const UploadQuestions = () => {
                       }}
                       radius="none"
                       size="md"
-                      className="px-3 mx-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200  text-red-500   w-max rounded-[4px] "
+                      className="global-cancel-btn"
                     >
                       {stepper === 0 ? "Cancel" : "Back"}
                     </Button>
@@ -493,7 +493,7 @@ const UploadQuestions = () => {
                       }}
                       radius="none"
                       size="md"
-                      className="text-white px-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                      className="global-success-btn"
                     >
                       {stepper == 3 ? "Confirm" : " Next"}
                     </Button>

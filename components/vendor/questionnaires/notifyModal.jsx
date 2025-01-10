@@ -98,9 +98,9 @@ const urlWithParams = `${currentbaseUrl}/vendor/questionnaires/view?${queryParam
               
             />
           </div>
-          <div className="space-x-10">
+          <div className="space-x-5">
             <Button
-              className="bg-[#f5c8d1] text-[#c51317]  font-bold w-max text-[18px] 2xl:text-[20px]"
+              className="global-cancel-btn"
               onPress={onOpenChange}
               size="sm"
               onClick={()=>setBulkSelected([])}
@@ -108,7 +108,7 @@ const urlWithParams = `${currentbaseUrl}/vendor/questionnaires/view?${queryParam
               Cancel
             </Button>
             <Button
-              className="bg-primary text-white w-max text-[18px] 2xl:text-[20px]"
+              className="global-success-btn"
               size="sm"
               onPress={() => {
                 onOpenChange();

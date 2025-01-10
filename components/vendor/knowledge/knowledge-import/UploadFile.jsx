@@ -52,31 +52,31 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
     <div className='space-y-10 mt-2'>
       <table className="table-auto border-[1px] border-collapse border-gray-400 w-full text-sm">
         <thead>
-          <tr className='text-left text-[16px] 2xl:text-[20px]'>
-            <th className="border border-black px-2 py-2">Product</th>
-            <th className="border border-black px-2 py-2">Category</th>
-            <th className="border border-black px-2 py-2">Question</th>
-            <th className="border border-black px-2 py-2">Coverage</th>
-            <th className="border border-black px-2 py-2">Answer</th>
-            <th className="border border-black px-2 py-2">Roadmap</th>
-            <th className="border border-black px-2 py-2">Curator</th>
+          <tr className='text-left text-standard'>
+            <th className="border  px-2 py-2">Product</th>
+            <th className="border  px-2 py-2">Category</th>
+            <th className="border  px-2 py-2">Question</th>
+            <th className="border  px-2 py-2">Coverage</th>
+            <th className="border  px-2 py-2">Answer</th>
+            <th className="border  px-2 py-2">Roadmap</th>
+            <th className="border  px-2 py-2">Curator</th>
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-gray-100 text-[16px] 2xl:text-[20px]">
-            <td className="border border-black px-2 py-2">Komcrest</td>
-            <td className="border border-black px-2 py-2">Organization</td>
-            <td className="border border-black px-2 py-2 leading-7">Do you have a team or resources dedicated to IT Security?</td>
-            <td className="border border-black px-2 py-2">Yes</td>
-            <td className="border border-black px-2 py-2 leading-7">The team is composed of 2 experts dedicated to drive the IT security roadmap. Plan to recruit a dedicated Security Architect</td>
-            <td className="border border-black px-2 py-2">Q4 2024</td>
-            <td className="border border-black px-2 py-2 leading-7">Richard Branco</td>
+          <tr className="bg-gray-100 text-standard">
+            <td className="border  px-2 py-2">Komcrest</td>
+            <td className="border  px-2 py-2">Organization</td>
+            <td className="border  px-2 py-2 leading-7">Do you have a team or resources dedicated to IT Security?</td>
+            <td className="border  px-2 py-2">Yes</td>
+            <td className="border  px-2 py-2 leading-7">The team is composed of 2 experts dedicated to drive the IT security roadmap. Plan to recruit a dedicated Security Architect</td>
+            <td className="border  px-2 py-2">Q4 2024</td>
+            <td className="border  px-2 py-2 leading-7">Richard Branco</td>
           </tr>
         </tbody>
       </table>
       <div className='space-y-6'>
         <div className='w-[37%] mx-auto text-center'>
-          <p className="leading-7 text-[16px] 2xl:text-[20px]">
+          <p className="leading-7 text-standard">
             Two columns are required for import: question and answer. Columns don&apos;t need to be in a specific order. You&apos;ll be able to map, rename, or remove columns in the next step.
             Upload .xlsx, .xls or .csv file
           </p>
@@ -85,16 +85,16 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
           <Button
             onClick={() => router.push("/vendor/knowledge")}
             radius="none"
-            size="sm"
-            className="text-white px-3 h-[40px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-300 w-max rounded-[4px]"
+            size="md"
+            className="global-cancel-btn"
           >
             Cancel
           </Button>
           <Button
             onPress={onOpen}
             radius="none"
-            size="sm"
-            className="text-white px-3 h-[40px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+            size="md"
+            className="global-success-btn"
           >
             Upload file
           </Button>
@@ -105,7 +105,7 @@ const UploadFile = ({ setStepper, setProgressBar, setKnowledgeData, knowledgeDat
         <ModalContent>
           <ModalHeader>Upload File</ModalHeader>
           <ModalBody>
-            <p className='font-[600] text-[16px] 2xl:text-[20px] mb-2'>Select the questionnaire you want to index</p>
+            <p className='font-[600] text-standard mb-2'>Select the questionnaire you want to index</p>
             <Dropzone onDrop={handleDrop} accept=".xlsx, .xls">
               {({ getRootProps, getInputProps }) => (
                 <div {...getRootProps()}  className="flex justify-center items-center border-2  border-dashed border-gray-300 rounded-lg p-7 bg-gray-100 cursor-pointer">

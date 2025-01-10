@@ -384,14 +384,14 @@ const NewQuestion = () => {
     <div className="w-[100%] h-full">
       {dataLoaded && (
         <div className="w-[85%] mx-auto py-4 mt-[2rem]">
-          <div className="px-4 bg-white pb-6 rounded-sm">
-            <h1 className="py-2 border-b-2 text-[16px] 2xl:text-[20px] font-bold">
+          <div className="px-4 bg-white pb-6 rounded">
+            <h1 className="py-2 border-b-2 text-standard font-bold">
               {`${id ? "Update" : "New"}`} Question
             </h1>
             <div className="flex justify-between">
               <div className=" w-[45%] space-y-3">
                 <div className="mt-2 mb-3">
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-standard">
                     Question
                   </label>
                   <Textarea
@@ -402,20 +402,22 @@ const NewQuestion = () => {
                     name="question"
                     value={newQuestion.question}
                     onChange={handleData}
+                    radius="sm"
                     classNames={{
                       input:
-                        "text-[16px] 2xl:text-[20px] h-[150px] ",
+                        "text-standard h-[150px] ",
                     }}
                   />
                 </div>
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-standard">
                     Komcrest Domain
                   </label>
                   <Select
                     variant="bordered"
                     className="w-full bg-transparent text-[20px] "
                     size="md"
+                    radius="sm"
                     placeholder="Select"
                     name="komcrestCategory"
                     value={newQuestion.komcrestCategory}
@@ -425,13 +427,13 @@ const NewQuestion = () => {
                         ? [newQuestion.komcrestCategory]
                         : []
                     }
-                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                    classNames={{ value: "text-standard" }}
                   >
                     {categoryOption?.map((option) => (
                       <SelectItem
                         key={option.key}
                         value={option.label}
-                        classNames={{ title: "text-[16px] 2xl:text-[18px]" }}
+                        classNames={{ title: "text-standard" }}
                       >
                         {option.label}
                       </SelectItem>
@@ -439,7 +441,7 @@ const NewQuestion = () => {
                   </Select>
                 </div>
                 <div className="my-2">
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-standard">
                     Compliance
                   </label>
                   <Input
@@ -447,18 +449,19 @@ const NewQuestion = () => {
                     variant="bordered"
                     placeholder=""
                     size="md"
+                    radius="sm"
                     name="coverage"
                     value={newQuestion.coverage}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] ",
+                      input: "text-standard",
                     }}
                   />
                 </div>
 
                 <div className="">
                   <div className="flex justify-between items-end">
-                    <label className="text-[16px] 2xl:text-[20px]">
+                    <label className="text-standard">
                       Answer
                     </label>
 
@@ -487,6 +490,7 @@ const NewQuestion = () => {
                     placeholder="Type the answer here"
                     name="answer"
                     maxRows={6}
+                    radius="sm"
                     value={newQuestion.answer}
                     onChange={handleData}
                     classNames={{
@@ -496,7 +500,7 @@ const NewQuestion = () => {
                 </div>
 
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-standard">
                     Associated Products
                   </label>
 
@@ -506,10 +510,12 @@ const NewQuestion = () => {
                         key={index}
                         isSelected={newQuestion.productIds.includes(item.id)}
                         onChange={() => handleCheckboxChange(item.id)}
-                        className="2xl:text-[20px] !text-[50px]"
                         radius="none"
                         size="lg"
-                        classNames={{ wrapper: "!rounded-[3px]" }}
+                        classNames={{
+                          label: "!rounded-[3px] text-standard",
+                          wrapper: "!rounded-[3px]" 
+                        }}
                       >
                         {item.name}
                       </Checkbox>
@@ -519,59 +525,62 @@ const NewQuestion = () => {
               </div>
               <div className="w-[45%] space-y-3">
                 <div className="my-2">
-                  <label className="text-[16px] 2xl:text-[20px]">Roadmap</label>
+                  <label className="text-standard">Roadmap</label>
                   <Input
                     type="text"
                     variant="bordered"
                     placeholder="If it is in your roadmap, provide details, e.g. “Q2 2025”"
                     size="md"
+                    radius="sm"
                     name="roadmap"
                     value={newQuestion.roadmap}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] ",
+                      input: "text-standard",
                     }}
                   />
                 </div>
                 {id && (
                   <div className="">
-                    <label className="text-[16px] 2xl:text-[20px]">
+                    <label className="text-standard">
                       Source
                     </label>
                     <Input
                       type="text"
                       variant="bordered"
                       size="md"
+                      radius="sm"
                       name="source"
                       value={newQuestion.documentFile?.name}
                       onChange={handleData}
                       classNames={{
-                        input: "2xl:text-[20px] text-[16px] ",
+                        input: "text-standard",
                       }}
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">Curator</label>
+                  <label className="text-standard">Curator</label>
                   <Select
                     variant="bordered"
-                    className="w-full bg-transparent text-[15px]"
+                    className="w-full bg-transparent "
                     size="md"
                     placeholder="Select"
                     name="curator"
+                    radius="sm"
                     value={newQuestion.curator}
                     onChange={(e) => handleData(e)}
                     defaultSelectedKeys={
                       newQuestion.curator ? [newQuestion.curator] : []
                     }
-                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                    classNames={{ value: "text-standard" }}
                   >
                     {companyUserData?.map((option) => (
                       <SelectItem
                         key={option.label}
                         value={option.label}
-                        classNames={{ title: "text-[16px] 2xl:text-[18px]" }}
+                        classNames={{ title: "text-standard" }}
                       >
                         {option.label}
                       </SelectItem>
@@ -580,7 +589,7 @@ const NewQuestion = () => {
                 </div>
 
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-standard">
                     Reference
                   </label>
                   <MultiSelect
@@ -593,18 +602,19 @@ const NewQuestion = () => {
                     optionGroupTemplate={groupedItemTemplate}
                     placeholder="Select References"
                     // display="chip"
-                    className="w-full md:w-20rem"
+                    className="w-full md:w-20rem text-standard"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-standard">
                     Language
                   </label>
                   <Select
                     variant="bordered"
-                    className="w-full bg-transparent text-[15px]"
+                    className="w-full bg-transparent text-standard "
                     size="md"
+                    radius="sm"
                     placeholder="language"
                     name="language"
                     value={newQuestion.language}
@@ -612,13 +622,13 @@ const NewQuestion = () => {
                     defaultSelectedKeys={
                       newQuestion.language ? [newQuestion.language] : []
                     }
-                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                    classNames={{ value: "text-standard" }}
                   >
                     {language?.map((option) => (
                       <SelectItem
                         key={option.key}
                         value={option.key}
-                        classNames={{ title: "text-[16px] 2xl:text-[18px]" }}
+                        classNames={{ title: "text-standard" }}
                       >
                         {option.label}
                       </SelectItem>
@@ -630,15 +640,14 @@ const NewQuestion = () => {
             <div className="flex justify-end mt-4 gap-3">
               <Button
                 size="md"
-                className="rounded-md 2xl:text-[20px] cursor-pointer bg-red-200 py-0 text-red-500 text-[16px] font-semibold"
+                className="global-cancel-btn"
                 onClick={() => router.push("/vendor/knowledge")}
               >
                 Cancel
               </Button>
               <Button
                 size="md"
-                color="primary"
-                className="rounded-md 2xl:text-[20px] cursor-pointer text-[16px] font-semibold"
+                className="global-success-btn"
                 onClick={handleSubmit}
               >
                 {`${id ? "Update" : "Add"}`}

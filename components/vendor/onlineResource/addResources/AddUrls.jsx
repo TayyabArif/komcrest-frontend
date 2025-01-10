@@ -45,7 +45,7 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
           <div key={index} className="flex gap-3 items-end">
             <div className="w-[45%] space-y-1 ">
               {index === 0 && (
-                <label className="text-[16px] 2xl:text-[20px]">URL</label>
+                <label className="text-standard">URL</label>
               )}
               <div className="h-[56px]">
               <Input
@@ -58,7 +58,7 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
                 name="url"
                 onChange={(e) => handleData(e, index)}
                 classNames={{
-                  input: "2xl:text-[20px] text-[16px] ",
+                  input: "text-standard",
                 }}
                 value={field.url}
               />
@@ -66,7 +66,7 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
             </div>
             <div className="w-[45%] space-y-1 ">
               {index === 0 && (
-                <label className="text-[16px] 2xl:text-[20px]">Title</label>
+                <label className="text-standard">Title</label>
               )}
                 <div className=" h-[56px]">
               <Input
@@ -79,7 +79,7 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
                 name="title"
                 onChange={(e) => handleData(e, index)}
                 classNames={{
-                  input: "2xl:text-[20px] text-[16px] ",
+                  input: "text-standard",
                 }}
                 value={field.title}
               />
@@ -92,7 +92,7 @@ const AddUrls = ({ allResources, setAllResources, errors }) => {
                  onClick={addResource}
                  radius="none"
                  size="md"
-                 className="text-white px-3  text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                 className="global-success-btn"
                >
                  Add
                </Button>

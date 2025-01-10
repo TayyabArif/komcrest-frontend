@@ -16,8 +16,8 @@ const UsersDetailsCard = ({handleChange, formData, allCompanies ,isDisabled , ro
 
 const id = 50
   return (
-    <div className='flex flex-col bg-white shadow-md w-[45%] min-h-[550px] mt-12 pb-10'>
-    <p className='px-4 py-4 border border-1.5 border-b-gray-200 text-[16px] 2xl:text-[20px] border-r-0 border-l-0 border-t-0 font-semibold'> {`${isEdit ? "Update" : "Invite new"} user`}</p>
+    <div className='flex flex-col bg-white rounded w-[45%] min-h-[550px] mt-12 pb-10'>
+    <p className='px-4 py-4 border border-1.5 border-b-gray-200 text-standard  border-r-0 border-l-0 border-t-0 font-semibold'> {`${isEdit ? "Update" : "Invite new"} user`}</p>
     <div className='mt-7 px-4'>
       <Select
         label="Company"
@@ -26,10 +26,11 @@ const id = 50
         className="max-w-sm"
         labelPlacement='outside'
         variant="bordered"
+        radius='sm'
         scrollShadowProps={{
           isEnabled: false
         }}
-        classNames={{label: "font-[550] text-[16px] 2xl:text-[20px] ml-0.5 pb-1", trigger: "rounded-md"}}
+        classNames={{label: "text-standard ml-0.5"}}
         onChange={handleChange}
         name="companyId"
         defaultSelectedKeys={formData.companyId ? [formData.companyId] : []}
@@ -48,12 +49,13 @@ const id = 50
       onChange={handleChange}
       name="firstName"
       type="text"
+      radius='sm'
       label="First name"
       labelPlacement="outside"
       placeholder='Enter first name'
       variant="bordered"
       className="max-w-sm"
-      classNames={{label: "font-[550] text-[16px] 2xl:text-[20px] ml-0.5", inputWrapper: "rounded-md"}}
+      classNames={{label: "text-standard ml-0.5"}}
     />
     </div>
     <div className='mt-6 px-4'>
@@ -64,11 +66,12 @@ const id = 50
       name="lastName"
       type="text"
       label="Last name"
+      radius='sm'
       labelPlacement="outside"
       placeholder='Enter last name'
       variant="bordered"
       className="max-w-sm"
-      classNames={{label: "font-[550] text-[16px] 2xl:text-[20px] ml-0.5", inputWrapper: "rounded-md"}}
+      classNames={{label: "text-standard ml-0.5"}}
     />
     </div>
     <div className='mt-6 px-4'>
@@ -84,7 +87,8 @@ const id = 50
       placeholder='Enter email'
       variant="bordered"
       className="max-w-sm"
-      classNames={{label: "font-[550] text-[16px] 2xl:text-[20px] ml-0.5", inputWrapper: "rounded-md"}}
+      radius='sm'
+      classNames={{label: "text-standard ml-0.5"}}
     />
     </div>
     <div className='mt-6 px-4'>
@@ -100,7 +104,8 @@ const id = 50
       placeholder='Enter user position in the company email'
       variant="bordered"
       className="max-w-sm"
-      classNames={{label: "font-[550] text-[16px] 2xl:text-[20px] ml-0.5", inputWrapper: "rounded-md"}}
+      radius='sm'
+      classNames={{label: "text-standard ml-0.5"}}
     />
     </div>
   </div>

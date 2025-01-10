@@ -41,7 +41,7 @@ const SelectQuestion = ({
     if (excelFile[sheetName][0].length === 1) {
       return (
         <select
-          className="w-[250px] bg-transparent text-[16px] 2xl:text-[20px] border rounded-lg pr-3 p-2"
+          className="w-[250px] bg-transparent text-standard border rounded-lg pr-3 p-2"
           name={`mapping-${sheetName}-${columnIndex}`}
           value={columnMapping[sheetName]?.[columnIndex] || ""} // Set the default value
           onChange={(e) => {
@@ -81,7 +81,7 @@ const SelectQuestion = ({
 
     return (
       <select
-        className="w-[250px] bg-transparent text-[16px] 2xl:text-[20px] border rounded-lg pr-3 p-2"
+        className="w-[250px] bg-transparent text-standard border rounded-lg pr-3 p-2"
         name={`mapping-${sheetName}-${columnIndex}`}
         value={currentSelection || ""}
         onChange={(e) => {
@@ -139,7 +139,7 @@ const SelectQuestion = ({
   };
 
   return (
-    <div className="py-2">
+    <div className="py-2 overflow-auto">
       {/* Buttons for each sheet */}
       <div className="flex  mb-2">
         {Object.keys(excelFile).map((sheetName) => (
@@ -160,8 +160,8 @@ const SelectQuestion = ({
       {visibleTable && excelFile[visibleTable] && (
         <div className="">
           <table className="min-w-full mb-4">
-            <thead className="bg-gray-200">
-              <tr className="text-[16px] 2xl:text-[20px]">
+            <thead className="bg-[#E5E7EB]">
+              <tr className="text-standard">
                 {excelFile[visibleTable][selectedRows[visibleTable]]?.map(
                   (header, index) => (
                     <th key={index} className="border p-2 text-left">
@@ -181,7 +181,7 @@ const SelectQuestion = ({
                 .map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    className="even:bg-gray-100 text-[16px] 2xl:text-[20px]"
+                    className="even:bg-gray-100 text-standard"
                   >
                     {row.map((cell, cellIndex) => (
                       <td key={cellIndex} className="border p-2 text-left">
@@ -192,7 +192,7 @@ const SelectQuestion = ({
                 ))}
 
               {/* Last two rows */}
-              <tr className="font-bold  border-0 text-[16px] 2xl:text-[20px]">
+              <tr className="font-bold  border-0 text-standard">
                 <td className=" pt-3 text-left">Will be mapped with:</td>
               </tr>
               <tr className="border-0">

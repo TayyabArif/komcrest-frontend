@@ -32,7 +32,7 @@ const SocketQuestionnairesList = () => {
             type="text"
             classNames={{
               inputWrapper: "bg-white rounded-md",
-              input: "2xl:text-[20px] text-[16px]",
+              input: "text-standard",
             }}
             className="max-w-xs"
           />
@@ -49,7 +49,7 @@ const SocketQuestionnairesList = () => {
         <div className="overflow-auto w-full flex-1  bg-white border">
           <table className="min-w-full border-collapse border ">
             <thead className="border sticky -top-1 bg-[#E5E7EB] z-50">
-              <tr className="2xl:text-[20px] text-[16px]">
+              <tr className="text-standard">
                 <th className="px-4 py-2 text-left  border"></th>
                 <th className="px-4 py-2 text-left  border">
                   Status
@@ -72,7 +72,7 @@ const SocketQuestionnairesList = () => {
               {allQuestionnaireList?.map((item, index) => (
                 <tr
                   key={index}
-                  className="border-b 2xl:text-[20px] text-[16px]"
+                  className="border-b text-standard"
                 >
                   <td className="px-4 py-2 text-center border w-[70px]">
                     <input

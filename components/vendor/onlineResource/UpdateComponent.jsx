@@ -21,7 +21,7 @@ import useSocket from "@/customHook/useSocket";
 import { useMyContext } from "@/context";
 
 const UpdateComponent = () => {
-  const {setOnlineResourceDataUpdate} = useMyContext();
+  const { setOnlineResourceDataUpdate } = useMyContext();
   const socket = useSocket();
   const languageOptions = [
     { key: "French", label: "French" },
@@ -208,7 +208,7 @@ const UpdateComponent = () => {
 
       if (response.ok) {
         toast.success("Resource Updated");
-        setOnlineResourceDataUpdate((prev)=>!prev)
+        setOnlineResourceDataUpdate((prev) => !prev);
         router.push("/vendor/onlineResource");
       } else {
         toast.error(data?.error);
@@ -336,7 +336,7 @@ const UpdateComponent = () => {
             ...prevData,
             file: data.file,
           }));
-          setOnlineResourceDataUpdate((prev)=>!prev)
+          setOnlineResourceDataUpdate((prev) => !prev);
         } else {
           console.error("Error:", data);
         }
@@ -350,48 +350,48 @@ const UpdateComponent = () => {
     <div className="w-[100%] h-full">
       {dataLoaded && (
         <div className="w-[80%] mx-auto py-4 mt-[4rem]">
-          <div className="px-4 bg-white pb-6">
-            <h1 className="py-2 border-b-2 text-[16px] 2xl:text-[20px] font-bold">
+          <div className="px-4 bg-white pb-6 rounded">
+            <h1 className="py-2 border-b-2 text-standard font-bold">
               Update online resource
             </h1>
             <div className="flex justify-between">
               <div className="w-[45%] space-y-4 pt-3">
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">Title</label>
+                  <label className="text-standard">Title</label>
                   <Input
                     type="text"
                     variant="bordered"
                     placeholder=""
                     size="md"
+                    radius="sm"
                     name="title"
                     value={onlineResource.title}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] ",
+                      input: "text-standard",
                     }}
                   />
                 </div>
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">URL</label>
+                  <label className="text-standard">URL</label>
                   <Input
                     type="text"
                     variant="bordered"
                     placeholder=""
                     size="md"
+                    radius="sm"
                     name="url"
                     isReadOnly
                     value={onlineResource.url}
                     onChange={handleData}
                     classNames={{
-                      input: "2xl:text-[20px] text-[16px] ",
+                      input: "text-standard",
                     }}
                   />
                 </div>
                 <div className="flex-1">
                   <div className="flex justify-between">
-                    <label className="text-[16px] 2xl:text-[20px]">
-                      Indexation file
-                    </label>
+                    <label className="text-standard">Indexation file</label>
                     <Button
                       size="sm"
                       color="primary"
@@ -421,19 +421,19 @@ const UpdateComponent = () => {
                   </Dropzone>
                 </div>
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
-                    Associated Products
-                  </label>
+                  <label className="text-standard">Associated Products</label>
                   <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
                     {companyProducts?.map((item, index) => (
                       <Checkbox
                         key={index}
                         isSelected={onlineResource.productIds.includes(item.id)}
                         onChange={() => handleCheckboxChange(item.id)}
-                        className="2xl:text-[20px] !text-[50px]"
                         radius="none"
                         size="lg"
-                        classNames={{ wrapper: "!rounded-[3px]" }}
+                        classNames={{
+                          label: "!rounded-[3px] text-standard",
+                          wrapper: "!rounded-[3px]",
+                        }}
                       >
                         {item.name}
                       </Checkbox>
@@ -441,13 +441,12 @@ const UpdateComponent = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
-                    Language
-                  </label>
+                  <label className="text-standard">Language</label>
                   <Select
                     variant="bordered"
                     className="w-full bg-transparent text-[15px]"
                     size="md"
+                    radius="sm"
                     placeholder="language"
                     name="language"
                     value={onlineResource.language}
@@ -455,7 +454,7 @@ const UpdateComponent = () => {
                     defaultSelectedKeys={
                       onlineResource.language ? [onlineResource.language] : []
                     }
-                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                    classNames={{ value: "text-[16px] 2xl:text-[20px] text-black " }}
                   >
                     {languageOptions?.map((option) => (
                       <SelectItem
@@ -471,9 +470,7 @@ const UpdateComponent = () => {
               </div>
               <div className="w-[45%] space-y-4 pt-3">
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
-                    Last Indexation Date
-                  </label>
+                  <label className="text-standard">Last Indexation Date</label>
                   <div className="">
                     <input
                       type="date"
@@ -484,7 +481,7 @@ const UpdateComponent = () => {
                               .split("T")[0]
                           : ""
                       }
-                      className="border-2 px-2 w-full py-1 border-gray-200 rounded-lg"
+                      className="border-2 px-2 w-full py-[5px] border-[#E4E4E7] rounded-[8px] focus:ring-2 focus:ring-black focus:border-none focus:outline-none"
                       readOnly
                     />
                   </div>
@@ -492,14 +489,14 @@ const UpdateComponent = () => {
                 {onlineResource.indexing !== "On demand" &&
                   onlineResource.indexing !== "Manual" && (
                     <div>
-                      <label className="text-[16px] 2xl:text-[20px]">
+                      <label className="text-standard">
                         Next Indexation Date
                       </label>
                       <div className="">
                         <input
                           type="date"
                           value={getNextIndexationData()}
-                          className="border-2 px-2 w-full py-1 border-gray-200 rounded-lg"
+                          className="border-2 px-2 w-full py-[5px] border-[#E4E4E7] rounded-[8px] focus:ring-2 focus:ring-black focus:border-none focus:outline-none"
                           readOnly
                         />
                       </div>
@@ -507,9 +504,7 @@ const UpdateComponent = () => {
                   )}
 
                 <div>
-                  <label className="text-[16px] 2xl:text-[20px]">
-                    Re-indexation method
-                  </label>
+                  <label className="text-standard">Re-indexation method</label>
                   <div className="gap-y-2 gap-10 flex flex-wrap my-1">
                     {reIndexationMethods?.map((item, index) => (
                       <Checkbox
@@ -518,11 +513,14 @@ const UpdateComponent = () => {
                         onChange={() =>
                           handleIndexationMethodChange(item.label)
                         }
-                        className="2xl:text-[20px] !text-[50px]"
                         name="indexationMethod"
                         radius="none"
                         size="lg"
-                        classNames={{ wrapper: "!rounded-[3px]" }}
+                        classNames={{
+                          label: "!rounded-[3px] text-standard",
+                          wrapper: "!rounded-[3px]",
+                        }}
+                       
                       >
                         {item.label}
                       </Checkbox>
@@ -533,9 +531,9 @@ const UpdateComponent = () => {
                     <>
                       <Button
                         radius="none"
-                        size="sm"
+                        size="md"
                         isDisabled={IsIndexing}
-                        className={`text-white text-sm 2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4 ${
+                        className={`global-success-btn my-4 ${
                           IsIndexing ? "bg-gray-500" : "bg-btn-primary"
                         }`}
                         onClick={reIndexation}
@@ -548,9 +546,9 @@ const UpdateComponent = () => {
                   {onlineResource.indexing === "Manual" && (
                     <Button
                       radius="none"
-                      size="sm"
+                      size="md"
                       // isDisabled={true}
-                      className="text-white text-sm 2xl:text-[20px] bg-btn-primary  w-max rounded-[4px] my-4"
+                      className="global-success-btn my-4"
                       onClick={() => {
                         onOpen();
                       }}
@@ -564,7 +562,7 @@ const UpdateComponent = () => {
             <div className="flex justify-end mt-4 gap-3">
               <Button
                 size="md"
-                className="rounded-md 2xl:text-[20px] cursor-pointer bg-red-200 py-0 text-red-500 text-[16px] font-semibold"
+                className="global-cancel-btn"
                 onClick={() => router.push("/vendor/onlineResource")}
               >
                 Cancel
@@ -572,7 +570,7 @@ const UpdateComponent = () => {
               <Button
                 size="md"
                 color="primary"
-                className="rounded-md 2xl:text-[20px] cursor-pointer text-[16px] font-semibold"
+                className="global-success-btn"
                 onClick={handleSubmit}
               >
                 Update

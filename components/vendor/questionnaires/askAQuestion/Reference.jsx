@@ -219,17 +219,17 @@ const Reference = ({reference}) => {
   };
 
   return (
-    <div className="w-[23%] bg-[#F2F2F2] h-[500px] px-5 pb-3 overflow-auto">
+    <div className="w-[23%] bg-[#F2F2F2] h-[500px] px-5 pb-3 overflow-auto rounded">
       <div className="sticky top-0 bg-[#F2F2F2]  z-50"> 
       <h1 className="pb-2 py-5 font-bold ">Reference</h1>
       <hr
-        style={{ height: "2px", backgroundColor: "#D8D8D8", border: "none" }}
+        style={{ height: "2px", backgroundColor: "#E4E4E7", border: "none" }}
       />
       </div>
 
       <div className="space-y-4 mt-5">
         <div
-          className="flex justify-between items-center 2xl:text-[20px] text-[16px] cursor-pointer w-[60%]"
+          className="flex justify-between items-center text-standard cursor-pointer w-[60%]"
           onClick={() =>
             setReferenceToggle((prevState) => ({
               ...prevState,
@@ -237,7 +237,7 @@ const Reference = ({reference}) => {
             }))
           }
         >
-          <h1 className="2xl:text-[20px] text-[16px] font-bold">Documents</h1>
+          <h1 className="text-standard font-bold">Documents</h1>
           {referenceToggle.isDocumentOpen ? (
             <ChevronDown {...iconProps} />
           ) : (
@@ -251,7 +251,7 @@ const Reference = ({reference}) => {
         )}
 
         <div
-          className="flex justify-between items-center 2xl:text-[20px] text-[16px] cursor-pointer w-[60%]"
+          className="flex justify-between items-center text-standard cursor-pointer w-[60%]"
           onClick={() =>
             setReferenceToggle((prevState) => ({
               ...prevState,
@@ -260,7 +260,7 @@ const Reference = ({reference}) => {
           }
         >
           {" "}
-          <h1 className="2xl:text-[20px] text-[16px] font-bold">
+          <h1 className="text-standard font-bold">
             Knowledge Base
           </h1>
           {referenceToggle.isKnowledgeOpen ? (
@@ -277,7 +277,7 @@ const Reference = ({reference}) => {
         )}
 
         <div
-          className="flex justify-between items-center 2xl:text-[20px] text-[16px] cursor-pointer w-[60%]"
+          className="flex justify-between items-center text-standard cursor-pointer w-[60%]"
           onClick={() =>
             setReferenceToggle((prevState) => ({
               ...prevState,
@@ -285,7 +285,7 @@ const Reference = ({reference}) => {
             }))
           }
         >
-          <h1 className="2xl:text-[20px] text-[16px] font-bold">
+          <h1 className="text-standard font-bold">
             Online Reference
           </h1>
           {referenceToggle.isOnlineOpen ? (

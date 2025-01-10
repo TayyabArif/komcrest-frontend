@@ -19,10 +19,10 @@ const NewDocument = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
   });
-  const { companyProducts , setDocumentDataUpdate } = useMyContext();
+  const { companyProducts, setDocumentDataUpdate } = useMyContext();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-debugger
+  debugger;
   const router = useRouter();
   const { id } = router.query;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -33,18 +33,18 @@ debugger
   const [documentData, setDocumentData] = useState({
     title: "",
     description: "",
-    language : "",
+    language: "",
     file: null,
     productIds: [],
     documentLink: "",
   });
 
   useEffect(() => {
-      setDocumentData((prev) => ({
-        ...prev,
-        language: "English",
-        productIds:companyProducts && companyProducts.map((item)=> item.id),
-      }));
+    setDocumentData((prev) => ({
+      ...prev,
+      language: "English",
+      productIds: companyProducts && companyProducts.map((item) => item.id),
+    }));
   }, [companyProducts]);
 
   const handleData = (e) => {
@@ -137,7 +137,7 @@ debugger
         .then(({ status, ok, data }) => {
           if (ok) {
             toast.success("Document updated successfully");
-            setDocumentDataUpdate((prev)=>!prev)
+            setDocumentDataUpdate((prev) => !prev);
             router.push("/vendor/document");
           } else {
             toast.error(data?.error);
@@ -173,7 +173,7 @@ debugger
           if (ok) {
             console.log("Success:", data);
             toast.success("Document created successfully");
-            setDocumentDataUpdate((prev)=>!prev)
+            setDocumentDataUpdate((prev) => !prev);
             router.push("/vendor/document");
           } else {
             toast.error(data?.error || "Document not Created");
@@ -214,8 +214,7 @@ debugger
             setDocumentData({
               ...data,
               productIds: data.Products.map((product) => product.id),
-              file : data.filePath
-            
+              file: data.filePath,
             });
             setDataIsLoaded(true);
           } else {
@@ -244,19 +243,19 @@ debugger
 
   return (
     <div className="w-[100%] h-full">
-      <div className="w-[80%] mx-auto py-4 mt-[4rem]">
-        <h1 className="font-semibold bg-slate-50 px-4 py-1 2xl:text-[20px]">
+      <div className="w-[80%] mx-auto  mt-[4rem]">
+        <h1 className="font-bold rounded-t bg-slate-50 px-4 py-2 text-standard">
           Dropzone
         </h1>
         {dataIsLoaded && (
-          <div className="px-4 bg-white pb-6">
-            <h1 className="py-1 border-b-2 text-[16px] 2xl:text-[20px]">
+          <div className="px-4 rounded-b bg-white pb-6">
+            <h1 className="py-2 border-b-2 text-standard">
               {id ? "Update Document" : "Add New Document"}
             </h1>
             <div className="my-3">
               <div className="flex  space-y-3 items-center gap-2">
                 <div className="w-[50%]">
-                  <p className="text-[15px] leading-7 2xl:text-[20px]">
+                  <p className="text-standard leading-6">
                     Drag and drop sections for your file uploads or click and
                     select file to upload to be indexed by Komcrest AI.
                     Alternatively, you can add the link to the document, but it
@@ -281,7 +280,7 @@ debugger
                         </p>
                       </div>
                     ) : (
-                      <p className="text-center font-bold italic 2xl:text-[20px]">
+                      <p className="text-center font-bold italic text-standard">
                         Drop file or click here to upload file
                       </p>
                     )}
@@ -294,7 +293,7 @@ debugger
 
               <div className="flex my-2 mt-4 justify-between gap-4">
                 <div className="w-[50%]">
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-standard">
                     Title(max 50 characters)
                   </label>
                   <Input
@@ -309,7 +308,7 @@ debugger
                     value={documentData.title}
                     onChange={handleData}
                     classNames={{
-                      input: "text-base 2xl:text-[20px]",
+                      input: "text-standard",
                     }}
                   />
                   <p className="text-red-500">
@@ -318,9 +317,7 @@ debugger
                 </div>
 
                 <div className="w-[50%]">
-                  <label className="text-[16px] 2xl:text-[20px]">
-                    Document link
-                  </label>
+                  <label className="text-standard">Document link</label>
                   <Input
                     type="text"
                     variant="bordered"
@@ -330,14 +327,14 @@ debugger
                     value={documentData.documentLink}
                     onChange={handleData}
                     classNames={{
-                      input: "text-base 2xl:text-[20px]",
+                      input: "text-standard",
                     }}
                   />
                 </div>
               </div>
               <div className="flex gap-5">
                 <div className="my-2 w-[49%]">
-                  <label className="text-[16px] 2xl:text-[20px]">
+                  <label className="text-standard">
                     Description(max 150 characters)
                   </label>
                   <Textarea
@@ -351,17 +348,15 @@ debugger
                     value={documentData.description}
                     onChange={handleData}
                     classNames={{
-                      input: "text-base 2xl:text-[20px]",
+                      input: "text-standard",
                     }}
                   />
                 </div>
                 <div className="flex-1 mt-2">
-                  <label className="text-[16px] 2xl:text-[20px]">
-                    Language
-                  </label>
+                  <label className="text-standard">Language</label>
                   <Select
                     variant="bordered"
-                    className="w-full bg-transparent text-[15px]"
+                    className="w-full bg-transparent text-standard "
                     size="md"
                     radius="sm"
                     placeholder="language"
@@ -371,7 +366,9 @@ debugger
                     defaultSelectedKeys={
                       documentData?.language ? [documentData?.language] : []
                     }
-                    classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+                    classNames={{
+                      value: "text-[16px] 2xl:text-[20px] text-black ",
+                    }}
                   >
                     {language?.map((option) => (
                       <SelectItem
@@ -387,19 +384,20 @@ debugger
               </div>
 
               <div>
-                <h1 className="text-[16px] 2xl:text-[20px]">
-                  Select associated product(s)
-                </h1>
+                <h1 className="text-standard">Select associated product(s)</h1>
                 <div className="gap-x-6 gap-y-2 flex flex-wrap my-1 ">
                   {companyProducts?.map((item, index) => (
                     <Checkbox
                       key={index}
-                      radius="sm"
-                      size="lg"
                       // isSelected={item.check}
                       isSelected={documentData.productIds.includes(item.id)}
                       onChange={() => handleCheckboxChange(item.id)}
-                      className="2xl:text-[20px] text-[16px] "
+                      radius="none"
+                      size="lg"
+                      classNames={{
+                        label: "!rounded-[3px] text-standard",
+                        wrapper: "!rounded-[3px]" 
+                      }}
                     >
                       {item.name}
                     </Checkbox>
@@ -409,21 +407,19 @@ debugger
               <div className="flex justify-end mt-4  gap-3">
                 <Button
                   size="md"
-                  className="rounded-md 2xl:text-[20px] text-[16px] bg-red-200 text-red-500 font-semibold"
+                  className="global-cancel-btn"
                   onClick={() => router.push("/vendor/document")}
                 >
                   Cancel
                 </Button>
                 <Button
-                   size="md"
-                  color="primary"
+                  size="md"
                   onPress={SubmitDocument}
-                  className="rounded-md 2xl:text-[20px]  text-[16px]"
+                  className="global-success-btn"
                   isDisabled={isDescriptionInvalid || isTitleInvalid}
                 >
                   {id ? "Update Document" : "Add Document"}
                 </Button>
-                
               </div>
             </div>
           </div>
