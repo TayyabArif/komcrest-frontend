@@ -51,9 +51,9 @@ const IndexContent = ({ resourceData, setResourceData }) => {
 
   return (
     <div className="overflow-x-auto mt-2">
-      <table className="min-w-full block md:table">
+      <table className="min-w-full block md:table ">
         <thead className="block md:table-header-group  sticky -top-1 bg-[#E5E7EB] z-50">
-          <tr className="border text-[16px] 2xl:text-[20px] md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
+          <tr className="border text-standard md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative">
             <th className="p-2 font-bold py-3 border  text-left block md:table-cell">
               Title
             </th>
@@ -67,7 +67,7 @@ const IndexContent = ({ resourceData, setResourceData }) => {
         </thead>
         <tbody className="block md:table-row-group">
           {resourceData?.resources?.map((item, index) => (
-            <tr key={index} className="bg-white text-[16px] 2xl:text-[20px]">
+            <tr key={index} className="bg-white text-standard">
               <td className="p-2 border  text-left block md:table-cell py-3 max-w-[350px] break-words">{item.title}</td>
               <td className="p-2 border  text-left block md:table-cell py-3 max-w-[350px] break-words">{item.url}</td>
               <td className="p-2 border  text-left md:table-cell py-3 flex">

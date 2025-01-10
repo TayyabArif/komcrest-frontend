@@ -69,7 +69,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
           <div>
             <h1>Modified the compliance.</h1>
             <div>
-              <h1 className="flex items-center gap-1  text-nowrap 2xl:text-[20px] text-[16px]">
+              <h1 className="flex items-center gap-1  text-nowrap text-standard">
                 Compliance : {capitalizeFirstLetter(record?.previousValue  == "Not applicable" ? "N/A" : record?.previousValue )} <ArrowRight size={15} />{" "}
                 {record.currentValue == "Not applicable" ? "N/A" : record.currentValue}
               </h1>
@@ -87,7 +87,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
       case "answerChanged":
         return (
           <div className="">
-            <div className="flex gap-3 2xl:text-[20px] text-[16px]">
+            <div className="flex gap-3 text-standard">
             {/* "Improved the answer" is only when improve from AI */}
               <h1>Updated the answer.</h1>
             </div>
@@ -99,7 +99,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
       case "answerUpdatedByAI":
         return (
           <div className="">
-            <div className="flex gap-3 2xl:text-[20px] text-[16px]">
+            <div className="flex gap-3 text-standard">
               {/* <h1>Improved the answered using Komcrest AI.</h1>           */}
               <h1>Re-ran AI for compliance & answer.</h1>
             </div>
@@ -108,7 +108,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
         case "improveAnswer":
           return (
             <div className="">
-              <div className="flex gap-3 2xl:text-[20px] text-[16px]">
+              <div className="flex gap-3 text-standard">
                 {/* <h1>Improved the answered using Komcrest AI.</h1>           */}
                 <h1>Improved the answer.</h1>
               </div>
@@ -124,7 +124,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
                 Notified{" "}
                 <span className="font-bold">
                   {record?.recipients?.map((recipient, index) => (
-                    <span className="text-bold 2xl:text-[20px] text-[16px]" key={index}>{recipient.firstName} {index+1 == record?.recipients.length ? "" : ","} </span>
+                    <span className="text-bold text-standard" key={index}>{recipient.firstName} {index+1 == record?.recipients.length ? "" : ","} </span>
                   ))}
                 </span>{" "}
                 for help
@@ -143,7 +143,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
         historyRecord
           ?.sort((a, b) => b.id - a.id)
           ?.map((record, index) => (
-            <div key={index} className="my-4 bg-white p-3 2xl:text-[20px] text-[16px]     break-words rounded-md">
+            <div key={index} className="my-4 bg-white p-3 text-standard break-words rounded-md">
               <div className="flex gap-2">
                 <p className="font-bold text-wrap">
                   {record.user.firstName} -{" "}
@@ -154,7 +154,7 @@ const HistoryDetail = ({ selectedId, dataUpdate }) => {
             </div>
           ))
       ) : (
-        <p className="2xl:text-[20px] text-[16px]">No history found.</p>
+        <p className="text-standard">No history found.</p>
       )}
     </div>
   );

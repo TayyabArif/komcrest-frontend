@@ -189,7 +189,7 @@ const Add = ({
       <div className="flex justify-between">
       <div className="w-[45%] space-y-3 ">
         <div>
-          <label className="text-[16px] 2xl:text-[20px]">
+          <label className="text-standard">
             Customer or prospect name <span className="text-red-500">*</span>
           </label>
           <Input
@@ -197,17 +197,18 @@ const Add = ({
             variant="bordered"
             placeholder=""
             size="md"
+            radius="sm"
             name="customerName"
             value={importQuestionnaires.customerName}
             onChange={handleData}
             classNames={{
-              input: "2xl:text-[20px] text-[16px] text-gray-500",
+              input: "text-standard text-gray-500",
             }}
           />
           {errors.customerName && <p className="text-red-500">{errors.customerName}</p>}
         </div>
         <div>
-          <label className="text-[16px] 2xl:text-[20px]">
+          <label className="text-standard">
             Customer or prospect domain name <span className="text-red-500">*</span>
           </label>
           <Input
@@ -215,30 +216,33 @@ const Add = ({
             variant="bordered"
             placeholder=""
             size="md"
+            radius="sm"
             name="customerDomain"
             value={importQuestionnaires.customerDomain}
             onChange={handleData}
             classNames={{
-              input: "2xl:text-[20px] text-[16px]",
+              input: "text-standard",
             }}
           />
             {errors.customerDomain && <p className="text-red-500">{errors.customerDomain}</p>}
         </div>
         <div>
-          <label className="text-[16px] 2xl:text-[20px]">
+          <label className="text-standard">
             Questionnaire type <span className="text-red-500">*</span>
           </label>
-          <div className="gap-y-2 gap-10 flex flex-wrap my-1">
+          <div className="gap-y-2 gap-10 flex flex-wrap">
             {questionnaireTypeList?.map((item, index) => (
               <Checkbox
                 key={index}
                 isSelected={importQuestionnaires.questionnaireType === item.id}
                 onChange={() => handleCheckboxChange("type", item.id)}
-                className="2xl:text-[20px] !text-[50px]"
                 name="indexationMethod"
                 radius="none"
                 size="lg"
-                classNames={{ wrapper: "!rounded-[3px]" }}
+                classNames={{
+                  label: "!rounded-[3px] text-standard",
+                  wrapper: "!rounded-[3px]" 
+                }}
               >
                 {item.label}
               </Checkbox>
@@ -248,7 +252,7 @@ const Add = ({
           {errors.questionnaireType && <p className="text-red-500">{errors.questionnaireType}</p>}
         </div>
         <div className="flex-1">
-          <label className="text-[16px] 2xl:text-[20px]">
+          <label className="text-standard">
             Spreadsheet (Excel, CSV) <span className="text-red-500">*</span>
           </label>
           <Dropzone onDrop={handleDrop}>
@@ -269,7 +273,7 @@ const Add = ({
           {errors.fileName && <p className="text-red-500">{errors.fileName}</p>}
         </div>
         <div className="mt-2 mb-3">
-          <label className="text-[16px] 2xl:text-[20px]">
+          <label className="text-standard">
             Add a description to help identify it in the future
           </label>
           <Textarea
@@ -280,27 +284,30 @@ const Add = ({
             name="description"
             value={importQuestionnaires.description}
             onChange={handleData}
+            radius="sm"
             classNames={{
-              input: "text-[16px] 2xl:text-[20px] h-[150px]",
+              input: "text-standard h-[150px]",
             }}
           />
         </div>
       </div>
       <div className="w-[45%] space-y-3 pt-3">
         <div>
-          <label className="text-[16px] 2xl:text-[20px]">
+          <label className="text-standard">
             In scope product(s) <span className="text-red-500">*</span>
           </label>
-          <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
+          <div className="gap-x-6 gap-y-2 flex flex-wrap">
             {companyProducts?.map((item, index) => (
               <Checkbox
                 key={index}
                 isSelected={importQuestionnaires.productIds.includes(item.id)}
                 onChange={() => handleCheckboxChange("products", item.id)}
-                className="2xl:text-[20px] !text-[50px]"
                 radius="none"
                 size="lg"
-                classNames={{ wrapper: "!rounded-[3px]" }}
+                classNames={{
+                  label: "!rounded-[3px] text-standard",
+                  wrapper: "!rounded-[3px]" 
+                }}
               >
                 {item.name}
               </Checkbox>
@@ -310,7 +317,7 @@ const Add = ({
         </div>
 
         <div>
-          <label className="text-[16px] 2xl:text-[20px]">
+          <label className="text-standard">
             Date to return the questionnaire to the client or prospect <span className="text-red-500">*</span>
           </label>
           <div className="">
@@ -338,20 +345,21 @@ const Add = ({
             }
           }}
           min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}  
-          className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg text-[16px] 2xl:text-[20px]"
+          className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg text-standard"
         />
           </div>
           {errors.returnDate && <p className="text-red-500">{errors.returnDate}</p>}
         </div>
         
         <div>
-          <label className="text-[16px] 2xl:text-[20px]">Language <span className="text-red-500">*</span></label>
+          <label className="text-standard">Language <span className="text-red-500">*</span></label>
           <SingleSelect
             variant="bordered"
             className="w-full bg-transparent text-[15px]"
             size="md"
             placeholder="language"
             name="language"
+            radius="sm"
             value={importQuestionnaires.language}
             onChange={(e) => handleData(e)}
             defaultSelectedKeys={
@@ -359,13 +367,13 @@ const Add = ({
                 ? [importQuestionnaires.language]
                 : []
             }
-            classNames={{ value: "text-[16px] 2xl:text-[20px]" }}
+            classNames={{ value: "text-standard" }}
           >
             {languageOptions?.map((option) => (
               <SelectItem
                 key={option.key}
                 value={option.key}
-                classNames={{ title: "text-[16px] 2xl:text-[17px]" }}
+                classNames={{ title: "text-standard" }}
               >
                 {option.label}
               </SelectItem>
@@ -375,7 +383,7 @@ const Add = ({
         </div>
 
         <div>
-          <label className="text-[16px] 2xl:text-[20px]">
+          <label className="text-standard">
             Collaborators who will work on this questionnaire 
           </label>
           <Select
@@ -383,7 +391,7 @@ const Add = ({
             options={companyUserDataOptions}
             styles={multipleSelectStyle}
             name="collaborators"
-            className="text-[20px]"
+            className="text-standard"
             value={companyUserDataOptions.filter((option) =>
               importQuestionnaires.collaborators.includes(option.value)
             )}
@@ -392,7 +400,7 @@ const Add = ({
           />
         </div>
         {/* <div>
-          <label className="text-[16px] 2xl:text-[20px]">
+          <label className="text-standard">
             Assignees – Who will review and validate the questionnaire
           </label>
           <Select

@@ -24,7 +24,7 @@ const VendorLayout = ({ children }) => {
   const route = router.route;
   const userID = cookiesData?.userId;
   const [loggedInUser, setLoggedInUser] = useState();
-  const [isFreeTrialEnd , setIsFreeTrialEnd] = useState(false)
+  const [isFreeTrialEnd, setIsFreeTrialEnd] = useState(false);
 
   const [selectedItem, setSelectedItem] = useState("");
   const { setIsKnowledgeBaseOpenDirect } = useMyContext();
@@ -66,7 +66,7 @@ const VendorLayout = ({ children }) => {
               }}
             >
               <FileText size={20} />
-              <h1 className="text-[16px] 2xl:text-[20px] py-2">Documents</h1>
+              <h1 className="text-standard py-2">Documents</h1>
             </div>
 
             <div
@@ -84,9 +84,7 @@ const VendorLayout = ({ children }) => {
               }}
             >
               <MonitorDown size={20} />
-              <h1 className="text-[16px] 2xl:text-[20px] py-2">
-                Online Resources
-              </h1>
+              <h1 className="text-standard py-2">Online Resources</h1>
             </div>
 
             <div
@@ -105,7 +103,7 @@ const VendorLayout = ({ children }) => {
               }}
             >
               <AlignLeft size={20} />
-              <h1 className="text-[16px] 2xl:text-[20px] py-2">Knowledge</h1>
+              <h1 className="text-standard py-2">Knowledge</h1>
             </div>
 
             <div
@@ -123,16 +121,14 @@ const VendorLayout = ({ children }) => {
               }}
             >
               <SquareCheck size={20} />
-              <h1 className="text-[16px] 2xl:text-[20px] py-2">
-                Questionnaires
-              </h1>
+              <h1 className="text-standard py-2 ">Questionnaires</h1>
             </div>
           </div>
 
           <div className="flex flex-col gap-2 cursor-pointer">
             <div className="flex gap-1 items-center px-4">
               <CircleHelp size={20} />
-              <h1 className=" text-[16px] 2xl:text-[20px] py-2">Help Center</h1>
+              <h1 className=" text-standard py-2">Help Center</h1>
             </div>
             <div
               className={`flex gap-1 items-center px-4 cursor-pointer ${
@@ -145,34 +141,36 @@ const VendorLayout = ({ children }) => {
               }}
             >
               <Settings size={20} />
-              <h1 className="text-[16px] 2xl:text-[20px] py-2">Settings</h1>
+              <h1 className="text-standard py-2">Settings</h1>
             </div>
           </div>
         </div>
       </div>
       <div className="ml-[15%] w-[85%] fixed h-screen pb-4">
         <div className=" flex justify-between w-[85%] mx-auto">
-          <div className="py-[6px] flex-1  bg-y text-right flex items-center gap-2 font-bold cursor-pointer  m-auto 2xl:text-[20px] text-[16px]">
+          <div className="py-[6px] flex-1  bg-y text-right flex items-center gap-2 font-bold cursor-pointer  m-auto text-standard">
             <Button
               radius="none"
               size="md"
-              className=" px-[20px]  bg-btn-primary text-[16px] font-semibold text-white w-max rounded-[4px] 2xl:text-[20px] "
-               onClick={()=>router.push("/vendor/setting/upgrade-subscription")}
-           >
+              className=" px-[20px]  bg-btn-primary text-standard font-semibold text-white w-max rounded-[4px] "
+              onClick={() =>
+                router.push("/vendor/setting/upgrade-subscription")
+              }
+            >
               Activate Plan
             </Button>
-            <h1 className="text-blue-700">
+            <h1 className="text-blue-700 text-standard">
               Trial period: 7 days & 200 questions left (unlimited documents &
               knowledge base entries)
             </h1>
           </div>
 
-          <div className="py-[6px]   justify-end text-right flex  items-center gap-2 font-bold cursor-pointer m-auto 2xl:text-[20px] text-[16px]">
+          <div className="py-[6px]   justify-end text-right flex  items-center gap-2 font-bold cursor-pointer m-auto text-standard">
             <h1>{loggedInUser}</h1>
             <Button
               radius="none"
               size="md"
-              className=" px-[20px] text-[16px] font-semibold bg-[#D8D8D8] w-max rounded-[4px] 2xl:text-[20px] "
+              className=" px-[20px] text-standard font-semibold bg-[#D8D8D8] w-max rounded-[4px]"
               onPress={handleLogout}
             >
               Logout
@@ -185,10 +183,13 @@ const VendorLayout = ({ children }) => {
         </div>
       </div>
 
-      <FreeTrialCompletedModal 
-        isOpen={isFreeTrialEnd && route !== "/vendor/setting/upgrade-subscription"}
+      <FreeTrialCompletedModal
+        isOpen={
+          isFreeTrialEnd && route !== "/vendor/setting/upgrade-subscription"
+        }
         onOpen={onOpen}
-        onOpenChange={onOpenChange}/>
+        onOpenChange={onOpenChange}
+      />
     </div>
   );
 };

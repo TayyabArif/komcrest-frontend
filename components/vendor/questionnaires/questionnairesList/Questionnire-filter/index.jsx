@@ -262,7 +262,7 @@ const QuestionnairFilter = ({
     <div className="w-full h-full bg-white flex flex-col justify-between">
       <div className="text-[18px]">
         <div className="flex justify-between p-5 items-center border-b-2">
-          <h1 className="2xl:text-[20px] text-[16px] font-bold ">
+          <h1 className="text-standard font-bold ">
             Filter {selectedOne}
           </h1>
           <X
@@ -285,7 +285,7 @@ const QuestionnairFilter = ({
             >
               <ArrowBigLeft size="30" color="#2457d7" />
 
-              <h1 className="font-bold 2xl:text-[20px] text-[16px]">
+              <h1 className="font-bold text-standard">
                 {getSelectedOneName()}
               </h1>
             </div>
@@ -303,7 +303,7 @@ const QuestionnairFilter = ({
                     setIsSelected(true);
                   }}
                 >
-                  <h1 className="2xl:text-[20px] text-[16px]">{data.name}</h1>
+                  <h1 className="text-standard">{data.name}</h1>
                   <div className="flex gap-3 ">
                     {filters?.find((filter) => filter.name === data.value)
                       ?.value.length > 0 ? (
@@ -327,7 +327,7 @@ const QuestionnairFilter = ({
       <div className="flex flex-col gap-2 p-5  border-t-2">
         <h1>Entries {getEntries()}</h1>
         <button
-          className="border rounded-md border-gray-300 px-3 py-1  2xl:text-[20px] text-[16px]"
+          className="border rounded-md border-gray-300 px-3 py-1  text-standard"
           onClick={() => handleClearAll()}
         >
           Clear all

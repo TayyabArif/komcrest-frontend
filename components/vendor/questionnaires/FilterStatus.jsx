@@ -28,13 +28,13 @@ const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireP
       style={{
         backgroundColor: isOver ? '#F9FAFB' : '',
       }}>
-        <div className="flex gap-3 items-center border-2 py-[6px] px-2 rounded-md bg-white   sticky top-0  z-50">
+        <div className="flex gap-3 items-center border-2 py-[6px] px-2 rounded-md bg-white  sticky top-0  z-50">
           <span
             className={`flex items-center justify-center rounded-full w-[27px] h-[27px] text-center border-2 bg-[#EBEEF2]`}
           >
             {data.length}
           </span>
-          <h1 className="text-[16px] 2xl:text-[20px]">{title}</h1>
+          <h1 className="text-standard">{title}</h1>
         </div>
       
         {data?.length > 0 ? (
@@ -43,7 +43,7 @@ const FilterStatus = ({ data, title, stepsContent, setDataUpdate ,questionnaireP
           })
           
         ) : (
-          <h1 className="px-2 text-[15px] 2xl:text-[20px]">{stepsContent}</h1>
+          <h1 className="px-2 text-standard">{stepsContent}</h1>
         )}
         
       </div>

@@ -358,7 +358,7 @@ const KnowledgeBase = ({
         {bulkDeleted.length > 0 && (
           <Button
             size="md"
-            className="rounded-md 2xl:text-[20px] cursor-pointer text-red-600 bg-transparent  text-[13px] font-semibold"
+            className="rounded-md text-standard cursor-pointer text-red-600 bg-transparent   font-semibold"
             onClick={() => {
               onOpen();
               setDeleteAction("bulk");
@@ -390,7 +390,7 @@ const KnowledgeBase = ({
           <div className="w-[100%] flex-1 overflow-auto relative">
             <table style={{ width: "100%" }} className=" bg-white border ">
               <thead className="bg-gray-200 sticky -top-1 z-30">
-                <tr className="text-[16px] 2xl:text-[20px]">
+                <tr className="text-standard">
                   <th className="py-2 px-4 border text-left">
                     <Checkbox
                       isSelected={isHeaderChecked && bulkDeleted.length > 0}
@@ -481,7 +481,7 @@ const KnowledgeBase = ({
                   </ResizableHeader>
 
                   <th
-                    className="px-4    pr-7  text-left sticky -right-[1px] bg-gray-200"
+                    className="px-4 pr-7 text-left sticky -right-[1px] bg-gray-200"
                     style={{ outlineWidth: "1px" }}
                   >
                     Actions
@@ -493,7 +493,7 @@ const KnowledgeBase = ({
                   filterData.map((data, index) => (
                     <tr
                       key={data.id}
-                      className={` h-[100px] text-[16px] 2xl:text-[20px] ${
+                      className={` h-[100px] text-standard ${
                         index % 2 === 0 ? "bg-gray-100" : "bg-white"
                       }`}
                     >
@@ -508,7 +508,7 @@ const KnowledgeBase = ({
                         />
                       </td>
                       <td className="py-2 px-4 border">{data.category}</td>
-                      <td className="py-2 px-4 border bg-transparent">
+                      <td className="py-2 px-2 border bg-transparent">
                         <select
                           value={data.komcrestCategory}
                           onChange={(e) =>
@@ -517,7 +517,8 @@ const KnowledgeBase = ({
                               e.target.value
                             )
                           }
-                          className={`py-1 px-2  bg-transparent w-${columnWidths.komcrestDomain}px`}
+                        
+                          className={`py-1 px-2 text-wrap  bg-transparent w-${columnWidths.komcrestDomain}px`}
                           style={{ width: `${columnWidths.komcrestDomain}px` }}
                         >
                           {komcrestCategories?.map((item, index) => (
@@ -533,15 +534,15 @@ const KnowledgeBase = ({
                       <td className="py-2 px-4 border whitespace-rap text-center">
                         {data.coverage}
                       </td>
-                      <td className="py-2 px-4 border text-wrap   break-words  ">
+                      <td className="py-2 px-4 border text-wrap break-words">
                         {data.answer}
                       </td>
-                      <td className="py-2 px-4 border  break-words">
+                      <td className="py-2 px-4 border break-words">
                         {data.Products.map((product) => product.name).join(
                           ", "
                         )}
                       </td>
-                      <td className="py-2 px-4 border break-words  ">
+                      <td className="py-2 px-4 border break-words">
                         {data.roadmap}
                       </td>
                       <td className="py-2 px-4 border whitespace-nowrap  break-words text-wrap">
@@ -601,7 +602,7 @@ const KnowledgeBase = ({
                           <PopoverContent>
                             <div className="px-3 py-2 space-y-2">
                               <div
-                                className="text-small cursor-pointer 2xl:text-[20px]"
+                                className="cursor-pointer text-standard"
                                 onClick={() =>
                                   router.push(
                                     `/vendor/knowledge/UpdateQuestion?id=${data.id}`
@@ -611,7 +612,7 @@ const KnowledgeBase = ({
                                 Update
                               </div>
                               <div
-                                className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
+                                className="text-standard text-red-600 cursor-pointer"
                                 onClick={() => {
                                   setSelectedQuestion(data);
                                   onOpen();

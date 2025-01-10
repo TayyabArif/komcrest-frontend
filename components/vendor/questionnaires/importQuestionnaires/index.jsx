@@ -28,7 +28,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     setQuestionnaireData,
     setCurrentQuestionnaireImportId,
     setIsSocketConnected,
-    setIsFirstResponse
+    setIsFirstResponse,
   } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -65,7 +65,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     setImportQuestionnaire((prev) => ({
       ...prev,
       language: "English", // Always set language to English
-      productIds: companyProducts && companyProducts.map((item)=> item.id)
+      productIds: companyProducts && companyProducts.map((item) => item.id),
     }));
   }, [companyProducts]);
 
@@ -117,7 +117,8 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     } else {
       const selectedDate = new Date(importQuestionnaires.returnDate);
       if (selectedDate.getFullYear() < currentYear) {
-        newErrors.returnDate = "Year must not be earlier than the current year.";
+        newErrors.returnDate =
+          "Year must not be earlier than the current year.";
       }
     }
     if (!importQuestionnaires.customerName) {
@@ -133,8 +134,6 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
- 
 
   const checkValuesLength = () => {
     if (Object.keys(columnMapping).length === 0) {
@@ -278,7 +277,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
           setQuestionnaireUpdated((prev) => !prev);
           localStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
           setCurrentQuestionnaireImportId("");
-          setIsFirstResponse(true)
+          setIsFirstResponse(true);
           router.push(
             `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`
           );
@@ -310,10 +309,10 @@ const Import = ({ setNewQuestionnaireCreated }) => {
   return (
     <div className="w-[100%] h-full  flex flex-col">
       <div className="w-[90%] mx-auto pt-10 mt-1 flex-1  flex flex-col h-[0vh]">
-        <h1 className="font-semibold bg-slate-50 px-6 py-2 2xl:text-[20px] rounded-t-md">
+        <h1 className="font-bold bg-slate-50 px-6 py-2 text-standard rounded-t">
           {getTitle()}
         </h1>
-        <div className="w-full h-[0vh]  p-5 rounded-b-md bg-white flex-1 flex flex-col ">
+        <div className="w-full h-[0vh]  p-5 rounded-b bg-white flex-1 flex flex-col ">
           <Progress
             aria-label="Loading..."
             value={progressBar}
@@ -345,7 +344,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
                       )}
                     </span>
                     <h1
-                      className={`text-[16px] 2xl:text-[20px] ${
+                      className={`text-standard ${
                         stepper === index ? "text-blue-600" : ""
                       }`}
                     >
@@ -356,7 +355,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
               </div>
               <div className=" flex flex-col  flex-1 h-[0vh]">
                 {stepper > 0 && stepper < 4 && (
-                  <h1 className="font-semibold text-[16px] 2xl:text-[20px]">
+                  <h1 className="font-semibold text-standard">
                     {importQuestionnaires?.customerName} -{" "}
                     {importQuestionnaires?.fileName?.replace(".xlsx", "")}
                   </h1>
@@ -372,15 +371,15 @@ const Import = ({ setNewQuestionnaireCreated }) => {
                   />
                 )}
                 {stepper === 1 && (
-                <SelectHeader
-                  excelFile={excelFile}
-                  setExcelFile={setExcelFile}
-                  setSelectedRows={setSelectedRows}
-                  selectedRows={selectedRows}
-                  columnMapping={columnMapping}          
-                  setColumnMapping={setColumnMapping}   
-                />
-              )}
+                  <SelectHeader
+                    excelFile={excelFile}
+                    setExcelFile={setExcelFile}
+                    setSelectedRows={setSelectedRows}
+                    selectedRows={selectedRows}
+                    columnMapping={columnMapping}
+                    setColumnMapping={setColumnMapping}
+                  />
+                )}
                 {stepper === 2 && (
                   <SelectQuestion
                     excelFile={excelFile}
@@ -402,17 +401,16 @@ const Import = ({ setNewQuestionnaireCreated }) => {
                 {stepper === 4 && (
                   <Completed content={`Importing ${totalCount} questions`} />
                 )}
-              
               </div>
             </div>
 
             {stepper < 4 && (
-              <div className="flex justify-end !mt-15">
+              <div className="flex justify-end gap-3 !mt-15">
                 <Button
                   onClick={handleCancelClick}
                   radius="none"
                   size="md"
-                  className="px-3 mx-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500 w-max rounded-md"
+                  className="global-cancel-btn"
                 >
                   {stepper === 0 ? "Cancel" : "Back"}
                 </Button>
@@ -420,7 +418,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
                   onClick={handleNextClick}
                   radius="none"
                   size="md"
-                  className="text-white px-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-md"
+                  className="global-success-btn"
                 >
                   {stepper === 3 ? "Confirm" : "Next"}
                 </Button>

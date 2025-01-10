@@ -261,11 +261,11 @@ const AddResource = () => {
 
   return (
     <div className="w-[100%] h-full flex flex-col">
-      <div className="w-[90%] mx-auto  mt-[1rem] flex-1 flex flex-col  h-[0vh]">
-        <h1 className="font-semibold bg-slate-50 px-6 py-2 2xl:text-[20px]">
+      <div className="w-[90%] mx-auto  mt-[1rem] flex-1 flex flex-col  h-[0vh] ">
+        <h1 className="font-bold bg-slate-50 px-6 py-2 text-standard rounded-t">
           {getTitle()}
         </h1>
-        <div className="w-full bg-white p-6 flex-1 flex flex-col  h-[0vh]">
+        <div className="w-full bg-white p-6 flex-1 flex flex-col  h-[0vh] rounded-b">
           <Progress
             aria-label="Loading..."
             value={progressBar}
@@ -282,7 +282,7 @@ const AddResource = () => {
                 ].map((title, index) => (
                   <div
                     key={index}
-                    className="flex gap-3 items-center flex-1 border py-2 px-2 rounded"
+                    className="flex gap-3 items-center flex-1 border-2 py-[6px] px-2 rounded"
                   >
                     <span
                       className={`${
@@ -296,7 +296,7 @@ const AddResource = () => {
                       )}
                     </span>
                     <h1
-                      className={`text-[16px] 2xl:text-[20px] ${
+                      className={`text-standard ${
                         stepper === index ? "text-blue-600" : ""
                       }`}
                     >
@@ -340,13 +340,14 @@ const AddResource = () => {
                   {stepper === 2 && (
                     <div className="space-y-2">
                       <div className=" my-1">
-                        <h1 className="font-semibold text-[16px] 2xl:text-[20px] ">
+                        <h1 className="font-semibold text-standard">
                           Select Language:
                         </h1>
                         <Select
                           variant="bordered"
                           className="min-w-[80px] bg-transparent"
                           size="md"
+                          radius="sm"
                           placeholder="Select Language"
                           value={resourceData.language}
                           onChange={(e) =>
@@ -371,23 +372,22 @@ const AddResource = () => {
                         </Select>
                       </div>
                       <div className="flex itemx-center gap-4">
-                        <h1 className="font-semibold text-[16px] 2xl:text-[20px]">
+                        <h1 className="font-semibold text-standard">
                           Select associated products:
                         </h1>
                         <div className="gap-x-6 gap-y-2 flex flex-wrap">
                           {companyProducts.map((item, index) => (
                             <Checkbox
                               key={index}
-                              radius="md"
-                              size="lg"
                               isSelected={resourceData.productIds.includes(
                                 item.id
                               )}
                               onChange={() => handleCheckboxChange(item.id)}
-                              className="2xl:text-[42px]"
+                              radius="none"
+                              size="lg"
                               classNames={{
-                                label:
-                                  "!rounded-[3px] text-[16px] 2xl:text-[20px]",
+                                label: "!rounded-[3px] text-standard",
+                                wrapper: "!rounded-[3px]" 
                               }}
                             >
                               {item.name}
@@ -397,12 +397,12 @@ const AddResource = () => {
                       </div>
                     </div>
                   )}
-                  <div className="mt-3">
+                  <div className="mt-3 flex gap-3">
                     <Button
                       onClick={handleCancelClick}
                       radius="none"
                       size="md"
-                      className="px-3 mx-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-red-200 py-0 text-red-500  w-max rounded-[4px]"
+                      className="global-cancel-btn"
                     >
                       {stepper === 0 ? "Cancel" : "Back"}
                     </Button>
@@ -410,7 +410,7 @@ const AddResource = () => {
                       onClick={handleNextClick}
                       radius="none"
                       size="md"
-                      className="text-white px-3 text-[16px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px]"
+                      className="global-success-btn"
                       isDisabled={buttonIsDisable}
                     >
                       {stepper === 3 ? "Confirm" : "Next"}

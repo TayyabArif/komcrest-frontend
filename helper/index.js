@@ -121,9 +121,9 @@ export const handleFileDownload = async (filePath) => {
 export const multipleSelectStyle = {
   control: (provided) => ({
     ...provided,
-    borderRadius: "0.80rem",
+    borderRadius: "0.60rem",
     border: "2.2px solid #E5E7EB",
-    fontSize: "20px",
+    fontSize: "18px",
   }),
   menu: (provided) => ({
     ...provided,

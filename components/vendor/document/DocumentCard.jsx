@@ -6,7 +6,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import ConfirmationModal from "@/components/admin/shared/ConfirmationModal";
 import { useDisclosure } from "@nextui-org/react";
 import { useRouter } from "next/router";
-import { formatDate } from "../../../../helper";
+import { formatDate } from "../../../helper";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { handleFileDownload} from "@/helper";
@@ -72,7 +72,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
 
   return (
     <div className="overflow-auto">
-      <div className="flex flex-wrap   w-[85%] mx-auto py-6 gap-[3.4rem]">
+      <div className="flex flex-wrap w-[85%] mx-auto py-6 gap-[3.4rem]">
         {cardData &&
           cardData.map((item, index) => {
             return (
@@ -87,14 +87,14 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                     overflowWrap: "break-word",
                   }}
                 >
-                  <h1 className="text-[16px] font-semibold 2xl:text-[20px]">{item.title}</h1>
-                  <p className="text-[15px] 2xl:text-[20px]">{item.description}</p>
+                  <h1 className="text-standard font-semibold ">{item.title}</h1>
+                  <p className="text-standard">{item.description}</p>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-[14px] 2xl:text-[20px]">
+                  <span className="text-standard">
                     {item.filePath.split('.').pop().toUpperCase()} -
-                    <span className="mx-2 text-[14px] 2xl:text-[20px]">{formatDate(item.createdAt)}</span>
+                    <span className="mx-2 text-standard">{formatDate(item.createdAt)}</span>
                   </span>
                   <Popover
                     className="rounded-[0px]"
@@ -120,7 +120,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                               handleFileDownload(item.filePath)
                               setOpenPopoverIndex(null);
                             }}
-                            className="text-small cursor-pointer 2xl:text-[20px]"
+                            className="cursor-pointer text-standard"
                           >
                             Download
                           </div>
@@ -132,14 +132,14 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                               handleDocumentLink(item.documentLink);
                               setOpenPopoverIndex(null);
                             }}
-                            className="text-small cursor-pointer 2xl:text-[20px]"
+                            className="text-standard cursor-pointer "
                           >
                             Link
                           </div>
                         )}
 
                         <div
-                          className="text-small cursor-pointer 2xl:text-[20px]"
+                          className="text-standard cursor-pointer "
                           onClick={() => {
                             router.push(
                               `/vendor/document/AddDocument?id=${item.id}`
@@ -150,7 +150,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                         </div>
 
                         <div
-                          className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
+                          className=" text-red-600 cursor-pointer text-standard"
                           onClick={() => {
                             setSelectedDocument(item);
                             onOpen();

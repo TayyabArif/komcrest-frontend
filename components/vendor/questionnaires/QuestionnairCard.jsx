@@ -128,7 +128,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
           router.push(`/vendor/questionnaires/view?name=${data.customerName}`);
           localStorage.setItem("QuestionnaireId", data.id);
         }}
-        className=" bg-white  shadow-lg rounded-lg cursor-pointer"
+        className=" bg-white rounded-lg cursor-pointer"
       >
         <div ref={dragRef} className="p-4 ">
           <div className="font-semibold  text-black mb-2 ">
@@ -247,14 +247,14 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                     onClick={(e)=>{
                       e.stopPropagation()
                       questionnaireStatusUpdated("Completed" , data?.id)}}
-                    className="text-small cursor-pointer  2xl:text-[18px]">
+                    className="text-standard cursor-pointer  ">
                       Mark as completed
                     </div>
                     <div 
                      onClick={(e)=>{
                       e.stopPropagation()
                       QuestionnaireAddKnowledgeBase(e)}}
-                     className="text-small cursor-pointer  2xl:text-[18px]">
+                     className="text-standard cursor-pointer">
                       Add to knowledge base
                     </div>
                   </>
@@ -262,7 +262,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                 {(data?.status == "Approved" ||
                   data?.status == "Completed") && (
                   <>
-                    <div className="text-small cursor-pointer  2xl:text-[18px]"
+                    <div className="text-standard cursor-pointer"
                     onClick={(e) =>{
                       e.stopPropagation()
                       handleExport(data?.questionnaireRecords  , data.filePath)
@@ -273,7 +273,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                   </>
                 )}
                 <div
-                  className="text-small cursor-pointer  2xl:text-[18px]"
+                  className="text-standard cursor-pointer"
                   onClick={(e) => {
                     console.log("data?.filePath", data);
                     e.stopPropagation();
@@ -285,7 +285,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                 </div>
 
                 <div
-                  className="text-small cursor-pointer  2xl:text-[18px]"
+                  className="text-standard cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     router.push(`/vendor/questionnaires/update?id=${data.id}`);
@@ -295,7 +295,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                 </div>
 
                 <div
-                  className="text-small text-red-600 cursor-pointer 2xl:text-[18px]"
+                  className=" text-red-600 cursor-pointer text-standard"
                   onClick={(e) => {
                     e.stopPropagation();
                     onOpen();

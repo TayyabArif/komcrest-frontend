@@ -18,9 +18,9 @@ const UserManagementSideBar = () => {
   }, [route]);
 
   return (
-    <div className="bg-[#F6F7F9] w-[20%] h-full">
+    <div className="bg-[#F8FAFC] w-[20%] h-full">
       <div
-        className={`flex gap-1 items-center px-4 my-2 cursor-pointer ${
+        className={`flex gap-1 items-center px-4 cursor-pointer ${
           selectedItem == "update-account"
             ? "bg-[#2457d7] text-white shadow-md rounded"
             : "hover:bg-gray-200 hover:shadow-md"
@@ -29,7 +29,7 @@ const UserManagementSideBar = () => {
           router.push(`/vendor/setting/update-account?id=${userID}`);
         }}
       >
-        <h1 className="text-[16px] 2xl:text-[20px] py-2">Account Info</h1>
+        <h1 className="text-standard py-2">Account Info</h1>
       </div>
 
       {role == "Admin" && (
@@ -43,7 +43,7 @@ const UserManagementSideBar = () => {
             router.push("/vendor/setting/user-management");
           }}
         >
-          <h1 className="text-[16px] 2xl:text-[20px] py-2">User Management</h1>
+          <h1 className="text-standard py-2">User Management</h1>
         </div>
       )}
       <div
@@ -56,7 +56,7 @@ const UserManagementSideBar = () => {
           router.push("/vendor/setting/subscription-plan");
         }}
       >
-        <h1 className="text-[16px] 2xl:text-[20px] py-2">Your Plan</h1>
+        <h1 className="text-standard py-2">Your Plan</h1>
       </div>
 
       <div
@@ -69,7 +69,7 @@ const UserManagementSideBar = () => {
           router.push("/vendor/setting/upgrade-subscription");
         }}
       >
-        <h1 className="text-[16px] 2xl:text-[20px] py-2">Upgrade Plan</h1>
+        <h1 className="text-standard py-2">Upgrade Plan</h1>
       </div>
     </div>
   );

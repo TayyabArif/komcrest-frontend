@@ -123,35 +123,35 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div className="w-[65%] mx-auto my-10">
+    <div className="w-[90%] lg:w-[80%] xl:w-[70%]  mx-auto my-10">
       {/* {JSON.stringify(companyPlan)} */}
       <div className="text-center">
         <div className="flex justify-center">
           <Image src="/logo.png" alt="Komcrest Logo" width={230} height={230} />
         </div>
-        <h1 className="text-[40px]">Free trial</h1>
-        <p className="text-[22px]">
+        <h1 className="md:text-[40px] text-[33px]">Free trial</h1>
+        <p className=" md:text-[22px] text-[18px]">
           Thank you for your interest in our automated security and compliance
           questionnaire response solution.
         </p>
-        <p className="text-[22px]">
+        <p className="md:text-[22px] text-[18px]">
           In a few moments, you will be able to test all of the features that
           Komcrest offers for free, for 7 days.
         </p>
       </div>
       <div className="bg-blue-600 my-10">
-        <div className="w-full relative bottom-2  -ml-2 border-2 bg-white border-black text-center p-5 px-10">
+        <div className="w-full relative bottom-2  -ml-2 border-2 bg-white border-black text-center md:p-5 p-2  lg:px-10">
           <ChoosePlan setPlanId={setPlanId} planId={planId} />
           {formErrors.plan && <p className="text-red-500">{formErrors.plan}</p>}
-          <div className="text-left mt-10 space-y-10">
+          <div className="text-left mt-10 space-y-10 ">
             <div>
-              <h1 className="text-[30px] font-bold">Name of your company</h1>
+              <h1 className="md:text-[30px] text-[25px] font-bold">Name of your company</h1>
               <p>
                 Your company name will be used for your domain
                 societe.komcrest.com
               </p>
-              <div className="flex gap-10">
-                <div className="w-[30%]">
+              <div className="md:flex gap-10">
+                <div className="md:w-[30%]">
                   <div className="flex items-end gap-4">
                     <Input
                       label="Domain Name"
@@ -173,7 +173,7 @@ const RegistrationForm = () => {
                     </p>
                   )}
                 </div>
-                <div className="flex w-[30%] items-end gap-4">
+                <div className="flex md:w-[30%] items-end gap-4">
                   <Input
                     label="Company Name"
                     name="name"
@@ -190,12 +190,12 @@ const RegistrationForm = () => {
               </div>
             </div>
             <div>
-              <h1 className="text-[30px] font-bold">Your information</h1>
+              <h1 className="md:text-[30px] text-[25px] font-bold">Your information</h1>
               <p>
                 To ensure your request is processed quickly, please provide your
                 email and professional telephone number.
               </p>
-              <div className="flex w-[70%] gap-4">
+              <div className="md:flex md:w-[70%] gap-4">
                 <Input
                   label="Your first name"
                   name="firstName"
@@ -221,7 +221,7 @@ const RegistrationForm = () => {
                   }}
                 />
               </div>
-              <div className="flex w-[70%] gap-4">
+              <div className="md:flex md:w-[70%] gap-4">
                 <div className="w-full">
                   <Input
                     label="Your professional email"
@@ -255,12 +255,12 @@ const RegistrationForm = () => {
             </div>
 
             <div>
-              <h1 className="text-[30px] font-bold">Your products</h1>
+              <h1 className="md:text-[30px] text-[25px] font-bold">Your products</h1>
               <p>
                 Provide information on the different products you sell that
                 require you to answer dedicated questionnaires.
               </p>
-              <div className="flex items-center gap-4 mt-2 w-[70%]">
+              <div className="flex items-center gap-4 mt-2 md:w-[70%]">
                 <Input
                   type="text"
                   placeholder="Enter Product"
@@ -275,6 +275,7 @@ const RegistrationForm = () => {
                 <Button
                   className="text-white px-[10px] text-sm bg-btn-primary w-max rounded-[4px]"
                   onPress={handleAddProduct}
+                  size="sm"
                 >
                   Add
                 </Button>

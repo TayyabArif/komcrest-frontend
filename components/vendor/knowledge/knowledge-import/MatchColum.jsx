@@ -67,13 +67,13 @@ const MatchColum = ({ knowledgeData, selectedHeader, setMappedIndexValue, mapped
             <thead className=''>
               <tr className='bg-[#ebeef2]'>
                 {selectedHeader?.map((header, index) => (
-                  <th key={index} style={thStyle} className='h-[30px] text-[16px] 2xl:text-[20px] min-w-[150px]'>{truncate(header, 20)}</th>
+                  <th key={index} style={thStyle} className='h-[30px] text-standard min-w-[150px]'>{truncate(header, 20)}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {knowledgeData.questions.slice(selectedRowIndex).slice(1, 3).map((row, rowIndex) => (
-                <tr key={rowIndex} className='text-[16px] 2xl:text-[20px]'>
+                <tr key={rowIndex} className='text-standard'>
                   {selectedHeader.map((_, cellIndex) => (
                     <td key={cellIndex} style={tdStyle} className='h-[30px] min-w-[150px]'>
                       {row[cellIndex] ? (row[cellIndex].length > 15 ? `${row[cellIndex].substring(0, 15)}...` : row[cellIndex]) : ''}
@@ -82,7 +82,7 @@ const MatchColum = ({ knowledgeData, selectedHeader, setMappedIndexValue, mapped
                 </tr>
               ))}
               <tr>
-                <td colSpan={selectedHeader.length} className='pt-5 pb-2 font-semibold text-[16px] 2xl:text-[20px] h-[30px]'>Will be mapped with</td>
+                <td colSpan={selectedHeader.length} className='pt-5 pb-2 font-semibold text-standard h-[30px]'>Will be mapped with</td>
               </tr>
               <tr className=''>
                 {selectedHeader?.map((header, index) => {
@@ -93,16 +93,16 @@ const MatchColum = ({ knowledgeData, selectedHeader, setMappedIndexValue, mapped
                     <td key={index} className='h-[30px] min-w-[150px]'>
                       <Select
                         variant="bordered"
-                        className="w-full bg-transparent text-[16px] 2xl:text-[20px]"
+                        className="w-full bg-transparent text-standard"
                         size="md"
                         placeholder="Select"
                         value={currentSelectedValue}
                         onChange={(e) => handleSelectChange(e.target.value, index)}
                         defaultSelectedKeys={defaultKey ? [defaultKey.key] : []}
-                        classNames={{value: "text-[16px] 2xl:text-[20px]"}}
+                        classNames={{value: "text-standard"}}
                       >
                         {getAvailableOptions().concat(currentSelectedValue ? [{ key: currentSelectedValue, label: currentSelectedValue }] : []).map((option) => (
-                          <SelectItem key={option.key} value={option.label} classNames={{title: "text-[16px] 2xl:text-[20px]"}}>
+                          <SelectItem key={option.key} value={option.label} classNames={{title: "text-standard"}}>
                             {option.label}
                           </SelectItem>
                         ))}
@@ -115,7 +115,7 @@ const MatchColum = ({ knowledgeData, selectedHeader, setMappedIndexValue, mapped
           </table>
         </div>
       ) : (
-        <p className='w-full justify-center text-[16px] 2xl:text-[20px] shadow-md rounded-lg'>No data to display</p>
+        <p className='w-full justify-center text-standard shadow-md rounded-lg'>No data to display</p>
       )}
     </div>
   );

@@ -27,16 +27,16 @@ const EnterQuestion = ({setAskQuestion, askQuestion, handleSubmit ,isLoading}) =
 
 
   return (
-    <div className="w-[32%] bg-white h-[500px] px-5 py-3">
+    <div className="w-[32%] bg-white h-[500px] px-5 py-3 rounded">
       <h1 className="p-2 font-bold">Ask a question</h1>
       <hr
-        style={{ height: "2px", backgroundColor: "#D8D8D8", border: "none" }}
+        style={{ height: "2px", backgroundColor: "#E4E4E7", border: "none" }}
       />
 
       <div className="p-2 space-y-4">
         <form onSubmit={handleSubmit}>
-          <div>
-            <label className="text-[16px] 2xl:text-[20px]">
+          <div className="pb-1">
+            <label className="text-standard">
               Associated product(s) <span className="text-red-500">*</span>
             </label>
             <div className="gap-x-6 gap-y-2 flex flex-wrap my-1">
@@ -45,10 +45,12 @@ const EnterQuestion = ({setAskQuestion, askQuestion, handleSubmit ,isLoading}) =
                   key={index}
                   isSelected={askQuestion.productIds.includes(item.id)} // Check if product is selected
                   onChange={() => handleCheckboxChange(item.id)} // Handle checkbox change
-                  className="2xl:text-[20px] !text-[50px]"
                   radius="none"
-                  size="lg"
-                  classNames={{ wrapper: "!rounded-[3px]" }}
+                      size="lg"
+                      classNames={{
+                        label: "!rounded-[3px] text-standard",
+                        wrapper: "!rounded-[3px]" 
+                      }}
                 >
                   {item.name}
                 </Checkbox>
@@ -56,17 +58,18 @@ const EnterQuestion = ({setAskQuestion, askQuestion, handleSubmit ,isLoading}) =
             </div>
           </div>
           <div className="mt-2 mb-3">
-            <label className="text-[16px] 2xl:text-[20px]">
+            <label className="text-standard">
               Question <span className="text-red-500">*</span>
             </label>
             <Textarea
               variant="bordered"
               minRows={8}
+              radius="sm"
               placeholder="Type the question here"
-              value={askQuestion.question} // Bind value to state
-              onChange={handleQuestionChange} // Handle textarea change
+              value={askQuestion.question}
+              onChange={handleQuestionChange} 
               classNames={{
-                input: "text-[16px] 2xl:text-[20px] ",
+                input: "text-standard",
               }}
             />
           </div>

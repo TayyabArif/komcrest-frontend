@@ -208,7 +208,7 @@ const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
   return (
     <>
       {isMounted && (
-        <div className="flex flex-col   w-[80%] mx-auto">
+        <div className="flex flex-col  w-[80%] mx-auto">
           <div className="flex flex-col w-full gap-5   py-10  min-h-screen">
             <div className="flex items-start justify-between w-full h-full">
               <UsersDetailsCard
@@ -236,7 +236,7 @@ const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
                   <Button
                     radius="none"
                     size="md"
-                    className="rounded-md 2xl:text-[20px] text-[16px] bg-red-200 text-red-500 font-semibold"
+                    className="global-cancel-btn"
                     onClick={() => router.push("/vendor/setting/user-management")}
                   >
                     Cancel
@@ -244,7 +244,7 @@ const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
                   <Button
                     radius="none"
                     size="md"
-                    className="text-white rounded-md 2xl:text-[20px] text-[16px]  bg-btn-primary"
+                    className="global-success-btn"
                     onPress={onOpen}
                     isLoading={isLoading}
                     isDisabled={

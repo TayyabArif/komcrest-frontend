@@ -34,7 +34,7 @@ const SelectHeaderRow = ({ knowledgeData, setSelectedHeader, selectedRowIndex, s
         <div className='flex-1 overflow-auto'>
           <table className="text-sm w-full border-collapse">
             <thead className='sticky -top-1 bg-[#E5E7EB] z-50'>
-              <tr className='bg-[#ebeef2] text-[16px] 2xl:text-[20px]'>
+              <tr className='bg-[#ebeef2] text-standard'>
                 <th style={thStyle}>
                   <input
                     type="radio"
@@ -50,7 +50,7 @@ const SelectHeaderRow = ({ knowledgeData, setSelectedHeader, selectedRowIndex, s
             </thead>
             <tbody>
               {knowledgeData.questions.slice(1).map((row, rowIndex) => (
-                <tr key={rowIndex + 1} className={`${rowIndex % 2 === 0 ? 'bg-gray-100 text-[16px] 2xl:text-[20px]' : 'text-[16px] 2xl:text-[20px]'}`}>
+                <tr key={rowIndex + 1} className={`text-standard ${rowIndex % 2 === 0 ? 'bg-gray-100' : ''}`}>
                   <td style={tdStyle}>
                     <input
                       type="radio"

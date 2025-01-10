@@ -63,7 +63,7 @@ const KnowledgeHome = () => {
             your prospects and clients. We will index them to improve the
             accuracy of Komcrest AI responses.
           </p>
-          <p className="my-4 text-[15px] 2xl:text-[20px] leading-7">
+          <p className="my-4 text-standard leading-7">
             You don’t know where to start from? Download our list of questions
             HERE. It will help you shape build up your knowledge base and
             clarify your roadmap.
@@ -71,7 +71,7 @@ const KnowledgeHome = () => {
           <Button
             radius="none"
             size="sm"
-            className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
+            className="text-white px-[10px] text-standard cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
             onClick={() => router.push("/vendor/knowledge/Import")}
           >
             Add questions and answers

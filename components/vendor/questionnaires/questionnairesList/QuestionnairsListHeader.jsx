@@ -71,12 +71,12 @@ const QuestionnairsListHeader = ({
         <div className="leading-7 flex gap-2 items-center">
           <p
             onClick={() => router.push("/vendor/questionnaires")}
-            className="text-[16px] 2xl:text-[20px] cursor-pointer"
+            className="text-standard cursor-pointer"
           >
             Questionnaires
           </p>
           <ArrowRight size={20} />
-          <p className="text-[16px] 2xl:text-[20px]">
+          <p className="text-standard">
             {questionnaireData?.customerName}
             {/* - {questionnaireData?.fileName.replace(".xlsx", "")} */}
           </p>
@@ -87,7 +87,7 @@ const QuestionnairsListHeader = ({
               <select
                 onChange={(e) => questionnaireStatusUpdated(e.target.value , id)}
                 value={currentStatus}
-                className=" cursor-pointer  bg-[#D8D8D8] text-[16px] 2xl:text-[20px] font-semibold border  rounded-[6px] h-[2.5rem]  px-2"
+                className=" cursor-pointer  bg-[#D8D8D8] text-standard font-semibold border  rounded-[6px] h-[2.5rem]  px-2"
               >
                 <option disabled>Change Status</option>
                 <option value="To Process">To Process</option>
@@ -124,7 +124,7 @@ const QuestionnairsListHeader = ({
                   <PopoverContent>
                     <div className="px-3 py-2 space-y-1.5 text-[16px]">
                       <div
-                        className="text-sm 2xl:text-[18px] cursor-pointer"
+                        className="text-standard cursor-pointer"
                         onClick={() => {
                           handleDownload(questionnaireData?.filePath);
                           setDropDownOpen(false);
@@ -134,7 +134,7 @@ const QuestionnairsListHeader = ({
                       </div>
 
                       <div
-                        className="text-sm  2xl:text-[18px] cursor-pointer"
+                        className="text-standard cursor-pointer"
                         onClick={(e) => {
                           e.stopPropagation();
                           router.push(`/vendor/questionnaires/update?id=${id}`);
@@ -144,7 +144,7 @@ const QuestionnairsListHeader = ({
                       </div>
 
                       <div
-                        className="text-sm 2xl:text-[18px] text-red-600 cursor-pointer "
+                        className="text-standard text-red-600 cursor-pointer "
                         onClick={(e) => {
                           onOpen();
                           setDropDownOpen(false);

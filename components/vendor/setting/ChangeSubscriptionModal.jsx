@@ -18,8 +18,8 @@ const ChangeSubscriptionModal = ({ isOpen, onOpen, onOpenChange }) => {
           Change Subscription
         </ModalHeader>
         <ModalBody>
-          <div className="text-center space-y-4 py-[2rem] 2xl:text-[20px] text-[16px]">
-            <h1 className="font-bold text-[20px]">
+          <div className="text-center space-y-4 py-[2rem] text-standard">
+            <h1 className="font-bold text-standard">
               Ready to explore new possibilities?
             </h1>
             <p className="w-[90%] mx-auto">
@@ -28,18 +28,17 @@ const ChangeSubscriptionModal = ({ isOpen, onOpen, onOpenChange }) => {
             </p>
             <Button
               size="md"
-              color="primary"
-              className="rounded-md 2xl:text-[20px]  text-[16px]"
+              className="global-success-btn"
               onClick={()=>router.push("/vendor/setting/upgrade-subscription")}
             >
               View Plans
             </Button>
             <div className="text-[16px] font-semibold leading-5">
-              <p className="2xl:text-[20px] text-[16px]">Write us to</p>
-              <p className="text-blue-700 underline cursor-pointer 2xl:text-[20px] text-[16px] ">
+              <p className="text-standard">Write us to</p>
+              <p className="text-blue-700 underline cursor-pointer text-standard ">
                 support@komcrest.com
               </p>
-              <p className="2xl:text-[20px] text-[16px]">
+              <p className="text-standard">
                 and we will take care of you.
               </p>
             </div>

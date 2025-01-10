@@ -174,8 +174,8 @@ const OnlineResourceComponent = () => {
               <div className="overflow-auto flex-1 relative  ">
                 <table className="w-[100%]">
                   <thead className="block md:table-header-group sticky -top-1 z-30 ">
-                    <tr className="border text-[16px] 2xl:text-[20px] ">
-                      <th className="py-2 px-4 border  text-left bg-gray-200">
+                    <tr className="border text-standard bg-gray-200">
+                      <th className="py-2 px-4 border  text-left">
                         <Checkbox
                           isSelected={isHeaderChecked && bulkDeleted.length > 0}
                           onChange={handleHeaderCheckboxChange}
@@ -185,22 +185,22 @@ const OnlineResourceComponent = () => {
                           classNames={{ wrapper: "!rounded-[3px]" }}
                         />
                       </th>
-                      <th className="bg-gray-200 !max-w-[100px] px-2 font-bold md:border md: text-left block md:table-cell ">
+                      <th className="!max-w-[100px] px-2 font-bold md:border md: text-left block md:table-cell ">
                         Title
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell">
+                      <th className="p-1 font-bold md:border md: text-left block md:table-cell">
                         URL
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell min-w-[200px]">
+                      <th className=" p-1 font-bold md:border md: text-left block md:table-cell min-w-[200px]">
                         Indexation file
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell min-w-[250px]">
+                      <th className=" p-1 font-bold md:border md: text-left block md:table-cell min-w-[250px]">
                         Product
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell min-w-[200px]">
+                      <th className="p-1 font-bold md:border md: text-left block md:table-cell min-w-[200px]">
                         Last indexation date
                       </th>
-                      <th className="bg-gray-200 p-1  font-bold md:border md: text-left block md:table-cell">
+                      <th className="p-1  font-bold md:border md: text-left block md:table-cell">
                         Indexation method
                       </th>
                       <th
@@ -219,7 +219,7 @@ const OnlineResourceComponent = () => {
                           key={index}
                           className={` ${ 
                             index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                          } h-[100px]  border  md:border-none block md:table-row text-[16px] 2xl:text-[20px]`}
+                          } h-[100px]  border  md:border-none block md:table-row text-standard`}
                         >
                           <td className="py-2 px-4 border ">
                             <Checkbox
@@ -240,7 +240,7 @@ const OnlineResourceComponent = () => {
                             {item.url}
                           </td>
 
-                          <td className="p-2 border   text-left block md:table-cell py-3">
+                          <td className="p-2 border text-left block md:table-cell py-3">
                             {item.file ? (
                               <div className="flex flex-col">
                                 <span
@@ -290,7 +290,7 @@ const OnlineResourceComponent = () => {
                               <PopoverContent>
                                 <div className="px-3 py-2 space-y-2">
                                   <div
-                                    className="text-small cursor-pointer 2xl:text-[20px]"
+                                    className="text-standard cursor-pointer"
                                     onClick={() =>
                                       router.push(
                                         `/vendor/onlineResource/update?id=${item.id}`
@@ -300,7 +300,7 @@ const OnlineResourceComponent = () => {
                                     Update
                                   </div>
                                   <div
-                                    className="text-small text-red-600 cursor-pointer 2xl:text-[20px]"
+                                    className="text-standard text-red-600 cursor-pointer text-standard"
                                     onClick={() => {
                                       // setSelectedQuestion(data);
                                       setSelectedId(item.id);

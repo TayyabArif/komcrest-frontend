@@ -23,14 +23,14 @@ const Validate = ({ knowledgeData, questions , selectedRowIndex }) => {
   return (
     <div className="w-full overflow-x-auto">
     {questions ? (
-      <div className=" relative">
-        <table className="min-w-max bg-white border border-gray-300 table-fixed text-sm w-full border-collapse">
+      <div className="relative">
+        <table className="min-w-max bg-white border border-gray-300 table-fixed w-full border-collapse">
           <thead className="bg-gray-50 sticky -top-1  z-50">
-            <tr className="bg-[#ebeef2]  ">
+            <tr className="bg-[#ebeef2]  text-standard">
               {Object.keys(questions[0]).map((header) => (
                 <th
                   key={header}
-                  className="px-2 py-3 border text-left text-xs text-black font-semibold uppercase tracking-wider text-[16px] 2xl:text-[20px]"
+                  className="px-2 py-2 border text-left  text-black  uppercase  text-standard"
                 >
                   {header == "coverage" ? "Compliance" : header}
                 </th>
@@ -41,12 +41,12 @@ const Validate = ({ knowledgeData, questions , selectedRowIndex }) => {
             {questions.map((item, index) => (
               <tr
                 key={index}
-                className={` break-words ${index % 2 === 0 ? "bg-gray-100" : ""}`}
+                className={`text-standard break-words ${index % 2 === 0 ? "bg-gray-100" : ""}`}
               >
                 {Object.keys(item).map((key) => (
                   <td
                     key={key}
-                    className="px-2 py-2 border text-sm font-medium  text-gray-900 text-[16px] 2xl:text-[20px] text-wrap"
+                    className="px-2 py-2 border  text-gray-900 text-standard text-wrap"
                   >
                     {truncate(item[key], 30)} 
                   </td>
@@ -57,7 +57,7 @@ const Validate = ({ knowledgeData, questions , selectedRowIndex }) => {
         </table>
       </div>
     ) : (
-      <p className="w-full justify-center text-[16px] 2xl:text-[20px] shadow-md rounded-lg">No data to display</p>
+      <p className="w-full justify-center text-standard shadow-md rounded-lg">No data to display</p>
     )}
   </div>
   );

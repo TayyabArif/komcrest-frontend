@@ -37,16 +37,16 @@ const DocumentHistory = ({
         documentReferenceData.map((doc, index) => (
           <div
             key={index}
-            className="bg-white shadow-md rounded-md py-2 px-4 break-words"
+            className="bg-white rounded py-2 px-4 break-words"
           >
             <a
               href="#"
               onClick={() => handleFileDownload(doc.filePath)}
-              className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] "
+              className="text-blue-600 font-bold block mb-1 text-standard "
             >
               {doc.title} 
             </a>
-            <p className="2xl:text-[20px] text-[16px] break-words ">
+            <p className="text-standard break-words ">
               {doc.referenceString}{" "}
             </p>
             <div className="flex justify-between items-center py-2">
@@ -118,7 +118,7 @@ const DocumentHistory = ({
           </div>
         ))
       ) : (
-        <p className="2xl:text-[20px] text-[16px]">No reference found</p>
+        <p className="text-standard">No reference found</p>
       )}
     </div>
   );

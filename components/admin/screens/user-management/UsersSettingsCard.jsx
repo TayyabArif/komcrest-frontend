@@ -6,7 +6,6 @@ import DeleteModal from "@/components/vendor/shared/DeleteModal";
 import { useRouter } from "next/router";
 import { useMyContext } from "@/context";
 
-
 const UsersSettingsCard = ({
   action,
   handleChange,
@@ -16,27 +15,25 @@ const UsersSettingsCard = ({
   selectedProducts,
   role,
   showRemoveBtn,
-  isEdit
+  isEdit,
 }) => {
   const router = useRouter();
   const { id } = router.query;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const deleteModalContent = "Are you sure to delete user?";
-  const {removeCompanyUser} = useMyContext();
-
-
+  const { removeCompanyUser } = useMyContext();
 
   const handleDelete = async () => {
-    removeCompanyUser(id)
+    removeCompanyUser(id);
   };
   return (
     <div className="w-[45%]">
-      <div className="flex flex-col bg-white shadow-md w-full pb-20 mt-12  min-h-[550px]">
-        <p className="px-6 py-4 border border-1.5 text-[16px] 2xl:text-[20px] border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold">
-          {`${isEdit ? "Update" : "" }`} User settings
+      <div className="flex flex-col bg-white rounded w-full pb-20 mt-12  min-h-[550px]">
+        <p className="px-6 py-4  border-1.5 text-standard border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold">
+          {`${isEdit ? "Update" : ""}`} User settings
         </p>
         <div className="flex flex-col mt-7 px-6">
-          <p className="mb-2 font-[550] text-[16px] 2xl:text-[20px]">User role</p>
+          <p className="mb-2  text-standard">User role</p>
           <div className="flex flex-col gap-5">
             {/* <Checkbox radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>Admin</Checkbox>
             <Checkbox defaultSelected radius="none" classNames={{wrapper: "!rounded-[3px] bg-gray-100"}}>Contributor</Checkbox>
@@ -45,21 +42,27 @@ const UsersSettingsCard = ({
               name="Admin"
               isSelected={formData.role === "Admin"}
               onChange={handleChange}
-              radius="sm"
-              size="lg"
               isDisabled={role ? true : false}
-              classNames={{ wrapper: "!rounded-[3px] text-[16px] 2xl:text-[20px] bg-gray-100" }}
+              radius="none"
+              size="lg"
+              classNames={{
+                label: "!rounded-[3px] text-standard",
+                wrapper: "!rounded-[3px]",
+              }}
             >
-              Admin 
+              Admin
             </Checkbox>
             <Checkbox
               name="Contributor"
               isSelected={formData.role === "Contributor"}
               onChange={handleChange}
-              radius="sm"
-              size="lg"
               isDisabled={role ? true : false}
-              classNames={{ wrapper: "!rounded-[3px] text-[16px] 2xl:text-[20px] bg-gray-100" }}
+              radius="none"
+              size="lg"
+              classNames={{
+                label: "!rounded-[3px] text-standard",
+                wrapper: "!rounded-[3px]",
+              }}
             >
               Contributor
             </Checkbox>
@@ -67,30 +70,36 @@ const UsersSettingsCard = ({
               name="Viewer"
               isSelected={formData.role === "Viewer"}
               onChange={handleChange}
-              radius="sm"
-              size="lg"
               isDisabled={role ? true : false}
-              classNames={{ wrapper: "!rounded-[3px] text-[16px] 2xl:text-[20px] bg-gray-100" }}
+              radius="none"
+              size="lg"
+              classNames={{
+                label: "!rounded-[3px] text-standard",
+                wrapper: "!rounded-[3px]",
+              }}
             >
               Viewer
             </Checkbox>
           </div>
         </div>
         <div className="flex flex-col mt-8 px-6">
-          <p className="mb-2 font-[550] text-[16px] 2xl:text-[20px]">Associated products</p>
+          <p className="mb-2 text-standard">Associated products</p>
           <div className="flex flex-col gap-5">
             {products?.map((item, index) => (
               <Checkbox
                 key={index}
                 // isDisabled={role && role !== "Admin"}
-                 isDisabled={true}
+                isDisabled={true}
                 onChange={handleProductsChange}
                 value={item.id}
                 isSelected={selectedProducts.includes(item.id)}
                 name="products"
-                radius="sm"
+                radius="none"
                 size="lg"
-                classNames={{ wrapper: "!rounded-[3px] text-[16px] 2xl:text-[20px] bg-gray-100" }}
+                classNames={{
+                  label: "!rounded-[3px] text-standard",
+                  wrapper: "!rounded-[3px]",
+                }}
               >
                 {item.name}
               </Checkbox>
@@ -106,7 +115,7 @@ const UsersSettingsCard = ({
               className="rounded-md 2xl:text-[20px] text-[16px] bg-red-200 text-red-500 w-[80%]  font-semibold"
               onClick={() => {
                 // setSelectedQuestion(data);
-                
+
                 onOpen();
                 // setOpenPopoverIndex(null);
               }}

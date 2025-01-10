@@ -582,9 +582,9 @@ const QuestionnairesView = () => {
                   type="text"
                   classNames={{
                     inputWrapper: "bg-white rounded-md",
-                    input: "2xl:text-[20px] text-[16px]",
+                    input: "text-standard",
                   }}
-                  className="max-w-xs"
+                  className=""
                 />
                 <div
                   className="bg-white p-1 border border-gray-300 rounded-[5px] shadow-md cursor-pointer"
@@ -648,7 +648,7 @@ const QuestionnairesView = () => {
                     <PopoverContent>
                       <div className="px-3 py-2  space-y-1.5 text-[16px]">
                         <div
-                          className="text-sm cursor-pointer 2xl:text-[18px]"
+                          className="text-standard cursor-pointer "
                           // onClick={() => {
                           //   setAnswerIsUpdate("multiple");
                           //   setDropDownOpen(false);
@@ -661,7 +661,7 @@ const QuestionnairesView = () => {
                           Improve answer
                         </div>
                         <div
-                          className="text-sm cursor-pointer 2xl:text-[18px]"
+                          className="cursor-pointer text-standard"
                           onClick={() => {
                             reRunForAnswer(bulkSelected);
                             setDropDownOpen(false);
@@ -670,7 +670,7 @@ const QuestionnairesView = () => {
                           Re-run AI for compliance & answer
                         </div>
                         <div
-                          className="text-sm cursor-pointer 2xl:text-[18px]"
+                          className="text-standard cursor-pointer "
                           onClick={() => {
                             notifyDisclosure.onOpen();
                             setOpenPopoverIndex(null);
@@ -680,7 +680,7 @@ const QuestionnairesView = () => {
                           Notify for help
                         </div>
                         <div
-                          className="text-sm text-red-600 cursor-pointer 2xl:text-[18px]"
+                          className="text-standard text-red-600 cursor-pointer 2"
                           onClick={() => {
                             deleteDisclosure.onOpen();
                             setDeleteAction("bulk");
@@ -708,14 +708,14 @@ const QuestionnairesView = () => {
               <div className="overflow-auto w-[100%] flex-1 bg-white">
                 <table className="min-w-[100%] border-2  ">
                   <thead className="border  sticky -top-1 bg-[#E5E7EB] z-50">
-                    <tr className="2xl:text-[20px] text-[16px]">
+                    <tr className="text-standard">
                       <th className="px-4 py-2 text-center ">
                         <Checkbox
                           isSelected={isHeaderChecked && bulkSelected.length > 0}
                           onChange={handleHeaderCheckboxChange}
                           className="2xl:text-[20px] !text-[50px]"
                           radius="none"
-                          size="md"
+                          size="lg"
                           classNames={{ wrapper: "!rounded-[3px]" }}
                         />
                       </th>
@@ -764,7 +764,7 @@ const QuestionnairesView = () => {
                         ?.map((item, index) => (
                           <tr
                             key={index}
-                            className={`border-b 2xl:text-[20px] text-[16px] ${
+                            className={`border-b text-standard ${
                               index % 2 === 0 ? "bg-gray-100" : "bg-white"
                             }`}
                           >
@@ -774,7 +774,7 @@ const QuestionnairesView = () => {
                                 onChange={() => handleCheckboxChange(item.id)}
                                 className="2xl:text-[20px] !text-[50px]"
                                 radius="none"
-                                size="md"
+                                size="lg"
                                 classNames={{ wrapper: "!rounded-[3px]" }}
                               />
                             </td>
@@ -817,7 +817,7 @@ const QuestionnairesView = () => {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full text-[16px] 2xl:text-[20px] rounded-lg bg-transparent"
+                                  className="w-full text-standard rounded-lg bg-transparent"
                                 >
                                   {/* Placeholder for "Select" */}
                                   <option disabled value="">
@@ -908,7 +908,7 @@ const QuestionnairesView = () => {
                                         setAnswerIsUpdate("");
                                         setSelectedTextAreaId("");
                                       }}
-                                      className={` mx-2 text-[16px] 2xl:text-[20px] bg-red-400   cursor-pointer rounded-sm px-2   text-white`}
+                                      className={` mx-2 text-standard bg-red-400   cursor-pointer rounded-sm px-2   text-white`}
                                     >
                                       Cancel
                                     </p>
@@ -923,13 +923,13 @@ const QuestionnairesView = () => {
                                         setAnswerIsUpdate("");
                                         setSelectedTextAreaId("");
                                       }}
-                                      className={` text-[16px] 2xl:text-[20px] rounded-lg ${
+                                      className={`text-standard rounded-lg ${
                                         item.status == "approved"
                                           ? "bg-green-700"
                                           : item.status == "Flagged"
                                           ? "bg-yellow-500"
                                           : "bg-blue-500"
-                                      }  cursor-pointer rounded-sm px-2   text-white`}
+                                      }  cursor-pointer rounded-sm px-2 text-white`}
                                     >
                                       Update
                                     </p>
@@ -938,7 +938,7 @@ const QuestionnairesView = () => {
                               </div>
                             </td>
                             <td
-                              className={`px-4 py-2  border w-[100px]   border-b-0  outline outline-[#E5E7EB] text-left sticky -right-[1px] ${
+                              className={`px-4 py-2  border w-[100px] border-b-0 outline outline-[#E5E7EB] text-left sticky -right-[1px] ${
                                 index % 2 === 0 ? "bg-gray-100" : "bg-white"
                               }`}
                             >
@@ -1012,7 +1012,7 @@ const QuestionnairesView = () => {
                                     />
                                   </PopoverTrigger>
                                   <PopoverContent>
-                                    <div className="px-3 py-2  space-y-1.5 text-[16px] cursor-pointer">
+                                    <div className="px-3 py-2  space-y-1.5 text-standard cursor-pointer">
                                       <div
                                         // onClick={() => {
                                         //   setSelectedId(item.id);
@@ -1022,12 +1022,12 @@ const QuestionnairesView = () => {
                                           setOpenPopoverIndex(null);
                                           reRunForAnswer([item.id] ,"improveAnswer");
                                         }}
-                                        className="text-sm 2xl:text-[18px] cursor-pointer "
+                                        className="text-standard cursor-pointer "
                                       >
                                         Improve answer
                                       </div>
                                       <div
-                                        className="text-sm 2xl:text-[18px] cursor-pointer"
+                                        className="text-standard cursor-pointer"
                                         onClick={() => {
                                           setOpenPopoverIndex(null);
                                           reRunForAnswer([item.id]);
@@ -1036,7 +1036,7 @@ const QuestionnairesView = () => {
                                         Re-run AI for compliance & answer
                                       </div>
                                       <div
-                                        className="text-sm 2xl:text-[18px] cursor-pointer"
+                                        className="text-standard cursor-pointer"
                                         onClick={() => {
                                           setBulkSelected([
                                             ...bulkSelected,
@@ -1049,7 +1049,7 @@ const QuestionnairesView = () => {
                                         Notify for help
                                       </div>
                                       <div
-                                        className="text-sm 2xl:text-[18px] text-red-600 cursor-pointer"
+                                        className="text-standard text-red-600 cursor-pointer"
                                         onClick={() => {
                                           setSelectedId(item.id);
                                           deleteDisclosure.onOpen();
@@ -1065,7 +1065,7 @@ const QuestionnairesView = () => {
                               </div>
                             </td>
                             <td
-                              className={`my-2    text-left sticky -right-[1px] ${
+                              className={`my-2 text-left sticky -right-[1px] ${
                                 item.status === "approved"
                                   ? "bg-green-600"
                                   : item.status === "Flagged" ||

@@ -30,12 +30,12 @@ const KnowledgeHistory = ({
   };
 
   return (
-    <div className="max-w-md mx-auto   flex flex-col gap-5">
+    <div className="max-w-md mx-auto  flex flex-col gap-5">
       {questionReferenceData?.length > 0 ? (
         questionReferenceData.map((item, index) => (
           <div
             key={index}
-            className="bg-[#FFFFFF] rounded-md p-4 space-y-3 2xl:text-[20px] text-[16px] break-words "
+            className="bg-white rounded p-4 space-y-3 text-standard break-words "
           >
             <p className="font-bold ">
               Question: <span className="font-normal">{item.question}</span>
@@ -120,7 +120,7 @@ const KnowledgeHistory = ({
           </div>
         ))
       ) : (
-        <p className="2xl:text-[20px] text-[16px]">No reference found</p>
+        <p className="text-standard">No reference found</p>
       )}
     </div>
   );

@@ -38,27 +38,27 @@ const ChangeSubscription = () => {
               <div
                 key={index}
                 style={{ backgroundColor: data.cardColor }}
-                className="w-[30%] p-4 bg-white group    rounded-md lg:hover:-translate-y-1 ease-in duration-300 hover:bg-[#0B0641] hover:text-white border xl:border-none border-[#0B0641]"
+                className="w-[30%] p-4 bg-white group rounded-md lg:hover:-translate-y-1 ease-in duration-300 border xl:border-none border-[#0B0641]"
               >
                 <div className="flex flex-row gap-5 items-center">
-                  <span className="text-2xl font-bold  mb-5">{data.name}</span>
+                  <span className="text-xl font-bold mb-5">{data.name}</span>
                 </div>
                 <div className="my-0 space-y-3">
-                  <p className="font-semibold text-[16px] flex items-center gap-2">
+                  <p className="font-semibold text-standard flex items-center gap-2">
                     <CircleCheckBig size={18} /> {data.benefits?.Questions}{" "}
                     Questions
                   </p>
-                  <p className="font-semibold text-[16px] flex items-center gap-2">
+                  <p className="font-semibold text-standard flex items-center gap-2">
                     <CircleCheckBig size={18} /> {data.benefits?.Questionnaires}{" "}
                     Questionnaires
                   </p>
-                  <p className="font-semibold text-[16px] flex items-center gap-2">
+                  <p className="font-semibold text-standard flex items-center gap-2">
                     <CircleCheckBig size={18} /> Un Limited Documents
                   </p>
-                  <p className="font-semibold text-[16px] flex items-center gap-2">
+                  <p className="font-semibold text-standard flex items-center gap-2">
                     <CircleCheckBig size={18} /> Un Limited Online Resource
                   </p>
-                  <p className="font-semibold text-[16px] flex items-center gap-2">
+                  <p className="font-semibold text-standard flex items-center gap-2">
                     <CircleCheckBig size={18} /> Day support
                   </p>
                 </div>
@@ -72,7 +72,7 @@ const ChangeSubscription = () => {
                       <Button
                         size="md"
                         color="primary"
-                        className="rounded-md 2xl:text-[20px]  text-[16px]"
+                        className="global-success-btn"
                       >
                         {index == 1 ? "Activated" : "Upgrade"}
                       </Button>
