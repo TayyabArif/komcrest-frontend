@@ -144,8 +144,14 @@ const RegistrationForm = () => {
       </div>
       <div className="bg-blue-600 my-10">
         <div className="w-full relative bottom-2  -ml-2 border-2 bg-white border-black text-center md:p-5 p-2  lg:px-10">
-          <ChoosePlan setPlanId={setPlanId} planId={planId} setFormErrors={setFormErrors}/>
-          {formErrors?.plan && <p className="text-red-500">{formErrors?.plan}</p>}
+          <ChoosePlan
+            setPlanId={setPlanId}
+            planId={planId}
+            setFormErrors={setFormErrors}
+          />
+          {formErrors?.plan && (
+            <p className="text-red-500">{formErrors?.plan}</p>
+          )}
           <div className="text-left mt-10 space-y-10 ">
             <div>
               <h1 className="md:text-[30px] text-[25px] font-bold">
@@ -326,9 +332,9 @@ const RegistrationForm = () => {
                 wrapper: "!rounded-[3px]",
               }}
             >
-              J'accepte les{" "}
+              J&apos;accepte les{" "}
               <span className="text-blue-600 underline">
-                conditions générales de vente et d'utilisation
+                conditions générales de vente et d&apos;utilisation
               </span>
             </Checkbox>
 

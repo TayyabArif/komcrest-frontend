@@ -28,22 +28,27 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
     }));
   };
 
-  const getMinRangeQuestionnaire = (name) =>{
+  const getMinRangeQuestionnaire = (name) => {
     switch (name) {
-      case "Essential": return "3"
-      case "Standard": return "5"
-      case "Professional": return "10"
-      
-      default:return null
+      case "Essential":
+        return "3";
+      case "Standard":
+        return "5";
+      case "Professional":
+        return "10";
+
+      default:
+        return null;
     }
-  }
+  };
 
   return (
     <div className="w-full">
       <h1 className="md:text-[35px] text-[30px]">Votre abonnement</h1>
       <h4 className="text-standard">
-        Sélectionnez le niveau d'abonnement souhaité
+        Sélectionnez le niveau d&apos;abonnement souhaité
       </h4>
+
       <div className="flex gap-6 justify-center md:my-5 my-3">
         <button
           className={`px-4 py-2 text-[18px] font-semibold cursor-pointer border-b-2 ${
@@ -78,10 +83,11 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
               <h1 className="text-[24px] font-extrabold">{item.name}</h1>
 
               <p className="font-semibold text-standard">
-              {item.benefits?.Questions} Questions
+                {item.benefits?.Questions} Questions
               </p>
               <p className="font-semibold text-standard">
-              {getMinRangeQuestionnaire(item.name)} à {item.benefits?.Questionnaires} Questionnaires
+                {getMinRangeQuestionnaire(item.name)} à{" "}
+                {item.benefits?.Questionnaires} Questionnaires
               </p>
               {/* <p className="font-semibold text-standard">Un Limited Documents</p>
               <p className="font-semibold text-standard">
