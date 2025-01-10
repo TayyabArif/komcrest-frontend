@@ -22,8 +22,8 @@ const ChoosePlan = ({ planId, setPlanId}) => {
 
   return (
     <div className="w-full">
-      <h1 className="md:text-[40px] text-[33px]">Your subscription</h1>
-      <h4>Select the desired subscription level</h4>
+      <h1 className="md:text-[35px] text-[30px]">Votre abonnement</h1>
+      <h4 className="text-standard">Select the desired subscription level</h4>
       <div className="flex gap-6 justify-center md:my-5 my-3">
         <button
           className={`px-4 py-2 text-[18px] font-semibold cursor-pointer border-b-2 ${
@@ -55,17 +55,17 @@ const ChoosePlan = ({ planId, setPlanId}) => {
             >
               <h1 className="text-[24px] font-extrabold">{item.name}</h1>
 
-              <p className="font-semibold text-[16px]">
+              <p className="font-semibold text-standard">
                 {item.benefits?.Questions} Questions
               </p>
-              <p className="font-semibold text-[16px]">
+              <p className="font-semibold text-standard">
                 {item.benefits?.Questionnaires} Questionnaires
               </p>
-              <p className="font-semibold text-[16px]">Un Limited Documents</p>
-              <p className="font-semibold text-[16px]">
+              <p className="font-semibold text-standard">Un Limited Documents</p>
+              <p className="font-semibold text-standard">
                 Un Limited Online Resource
               </p>
-              <p className="font-semibold text-[16px]">Day support</p>
+              <p className="font-semibold text-standard">Day support</p>
 
               <div className="flex items-center justify-center font-extrabold">
                 <Euro size={25} style={{ strokeWidth: 3 }} />

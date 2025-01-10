@@ -129,14 +129,12 @@ const RegistrationForm = () => {
         <div className="flex justify-center">
           <Image src="/logo.png" alt="Komcrest Logo" width={230} height={230} />
         </div>
-        <h1 className="md:text-[40px] text-[33px]">Free trial</h1>
-        <p className=" md:text-[22px] text-[18px]">
-          Thank you for your interest in our automated security and compliance
-          questionnaire response solution.
+        <h1 className="md:text-[35px] text-[30px]">Essai gratuit</h1>
+        <p className="text-standard">
+        Merci pour l'intérêt que vous portez à notre solution de réponse automatisée aux questionnaires de sécurité et de conformité.
         </p>
-        <p className="md:text-[22px] text-[18px]">
-          In a few moments, you will be able to test all of the features that
-          Komcrest offers for free, for 7 days.
+        <p className="text-standard">
+        Dans quelques instants vous allez pouvoir tester gratuitement l'intégralité des fonctionnalités qu'offre Komcrest, et ce pendant 7 jours.
         </p>
       </div>
       <div className="bg-blue-600 my-10">
@@ -161,11 +159,12 @@ const RegistrationForm = () => {
                       type="text"
                       variant="underlined"
                       size="md"
+                      radius="sm"
                       classNames={{
-                        input: "text-base 2xl:text-[20px]",
+                        input: "text-standard",
                       }}
                     />
-                    <span>komcrest.com</span>
+                    <span className="text-standard">komcrest.com</span>
                   </div>
                   {formErrors.subdomain && (
                     <p className="text-red-500 text-sm">
@@ -183,15 +182,15 @@ const RegistrationForm = () => {
                     variant="underlined"
                     size="md"
                     classNames={{
-                      input: "text-base 2xl:text-[20px]",
+                      input: "text-standard",
                     }}
                   />
                 </div>
               </div>
             </div>
-            <div>
+            <div className="text-standard">
               <h1 className="md:text-[30px] text-[25px] font-bold">Your information</h1>
-              <p>
+              <p className="text-standard">
                 To ensure your request is processed quickly, please provide your
                 email and professional telephone number.
               </p>
@@ -204,7 +203,7 @@ const RegistrationForm = () => {
                   type="text"
                   size="md"
                   classNames={{
-                    input: "text-base 2xl:text-[20px]",
+                    input: "text-standard",
                   }}
                   variant="underlined"
                 />
@@ -217,7 +216,7 @@ const RegistrationForm = () => {
                   variant="underlined"
                   size="md"
                   classNames={{
-                    input: "text-base 2xl:text-[20px]",
+                    input: "text-standard",
                   }}
                 />
               </div>
@@ -232,7 +231,7 @@ const RegistrationForm = () => {
                     variant="underlined"
                     size="md"
                     classNames={{
-                      input: "text-base 2xl:text-[20px] w-full",
+                      input: "text-standard w-full",
                     }}
                   />
                   {formErrors.email && (
@@ -248,7 +247,7 @@ const RegistrationForm = () => {
                   variant="underlined"
                   size="md"
                   classNames={{
-                    input: "text-base 2xl:text-[20px]",
+                    input: "text-standard",
                   }}
                 />
               </div>
@@ -256,7 +255,7 @@ const RegistrationForm = () => {
 
             <div>
               <h1 className="md:text-[30px] text-[25px] font-bold">Your products</h1>
-              <p>
+              <p className="text-standard">
                 Provide information on the different products you sell that
                 require you to answer dedicated questionnaires.
               </p>
@@ -268,7 +267,7 @@ const RegistrationForm = () => {
                   value={product}
                   size="md"
                   classNames={{
-                    input: "text-base 2xl:text-[20px]",
+                    input: "text-standard",
                   }}
                   onChange={(e) => setProduct(e.target.value)}
                 />
@@ -299,13 +298,17 @@ const RegistrationForm = () => {
             </div>
 
             <Checkbox
-              size="lg"
               isSelected={
                 registerFormData.termsServices && registerFormData.privacyPolicy
               }
               onChange={handleCheckboxChange}
-              classNames={{ wrapper: "!rounded-[3px]" }}
               radius="none"
+              size="lg"
+              classNames={{
+                label: "!rounded-[3px] text-standard",
+                wrapper: "!rounded-[3px]" 
+              }}
+             
             >
               I accept the general conditions of sale and use
             </Checkbox>
