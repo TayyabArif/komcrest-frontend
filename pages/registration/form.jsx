@@ -67,16 +67,16 @@ const RegistrationForm = () => {
 
   const handleFormSubmit = () => {
     if (publicDomain.includes(registerFormData.subdomain)) {
-      setFormErrors({ subdomain: "Domain not Available" });
+      setFormErrors({ subdomain: "ce domain n’est pas disponible" });
       return;
     }
 
     if (!planId) {
-      setFormErrors({ plan: "Please select a subscription plan." });
+      setFormErrors({ plan: "Veuillez sélectionner un plan d'abonnement" });
       return;
     }
     if (products.length == 0) {
-      setFormErrors({ products: "Please add products." });
+      setFormErrors({ products: "Veuillez ajouter des produits." });
       return;
     }
     setIsLoading(true);
@@ -105,9 +105,7 @@ const RegistrationForm = () => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          router.push(
-            `http://app.komcrest.com/registration/thank-you`
-          );
+          router.push(`http://app.komcrest.com/registration/thank-you`);
         } else {
           setFormErrors({
             ...formErrors,
@@ -125,35 +123,43 @@ const RegistrationForm = () => {
   return (
     <div className="w-[90%] lg:w-[80%] xl:w-[70%]  mx-auto my-10">
       {/* {JSON.stringify(companyPlan)} */}
-      <div className="text-center">
+      <div className="text-center lg:w-[60%] mx-auto space-y-4">
         <div className="flex justify-center">
           <Image src="/logo.png" alt="Komcrest Logo" width={230} height={230} />
         </div>
         <h1 className="md:text-[35px] text-[30px]">Essai gratuit</h1>
         <p className="text-standard">
-    Merci pour l&apos;intérêt que vous portez à notre solution de réponse automatisée aux questionnaires de sécurité et de conformité.
-</p>
-<p className="text-standard">
-    Dans quelques instants vous allez pouvoir tester gratuitement l&apos;intégralité des fonctionnalités qu&apos;offre Komcrest, et ce pendant 7 jours.
-</p>
-
+          Merci pour l&apos;intérêt que vous portez à notre solution de réponse
+          automatisée aux questionnaires de sécurité et de conformité.
+        </p>
+        <p className="text-standard">
+          Dans quelques instants vous allez pouvoir tester
+          <span className="font-bold">
+            {" "}
+            gratuitement l&apos;intégralité des fonctionnalités{" "}
+          </span>{" "}
+          qu&apos;offre Komcrest, et ce
+          <span className="font-bold">pendant 7 jours.</span>
+        </p>
       </div>
       <div className="bg-blue-600 my-10">
         <div className="w-full relative bottom-2  -ml-2 border-2 bg-white border-black text-center md:p-5 p-2  lg:px-10">
-          <ChoosePlan setPlanId={setPlanId} planId={planId} />
-          {formErrors.plan && <p className="text-red-500">{formErrors.plan}</p>}
+          <ChoosePlan setPlanId={setPlanId} planId={planId} setFormErrors={setFormErrors}/>
+          {formErrors?.plan && <p className="text-red-500">{formErrors?.plan}</p>}
           <div className="text-left mt-10 space-y-10 ">
             <div>
-              <h1 className="md:text-[30px] text-[25px] font-bold">Name of your company</h1>
+              <h1 className="md:text-[30px] text-[25px] font-bold">
+                Nom de votre société
+              </h1>
               <p>
-                Your company name will be used for your domain
+                Le nom de votre société sera utitisé pour votre domaine
                 societe.komcrest.com
               </p>
               <div className="md:flex gap-10">
-                <div className="md:w-[30%]">
+                <div className="md:w-[32%]">
                   <div className="flex items-end gap-4">
                     <Input
-                      label="Domain Name"
+                      label="Societe (sans accent)*                      "
                       name="subdomain"
                       value={registerFormData.subdomain}
                       onChange={handleInputChange}
@@ -163,6 +169,7 @@ const RegistrationForm = () => {
                       radius="sm"
                       classNames={{
                         input: "text-standard",
+                        label: "text-standard",
                       }}
                     />
                     <span className="text-standard">komcrest.com</span>
@@ -173,9 +180,9 @@ const RegistrationForm = () => {
                     </p>
                   )}
                 </div>
-                <div className="flex md:w-[30%] items-end gap-4">
+                <div className="flex md:w-[35%] items-end gap-4">
                   <Input
-                    label="Company Name"
+                    label="Nom de l'enterprise"
                     name="name"
                     value={registerFormData.name}
                     onChange={handleInputChange}
@@ -184,20 +191,23 @@ const RegistrationForm = () => {
                     size="md"
                     classNames={{
                       input: "text-standard",
+                      label: "text-standard",
                     }}
                   />
                 </div>
               </div>
             </div>
             <div className="text-standard">
-              <h1 className="md:text-[30px] text-[25px] font-bold">Your information</h1>
+              <h1 className="md:text-[30px] text-[25px] font-bold">
+                Vos informations
+              </h1>
               <p className="text-standard">
-                To ensure your request is processed quickly, please provide your
-                email and professional telephone number.
+                Pour garantir une prise en compte rapide de votre demande, merci
+                de renseigner votre email et votre téléphone professionnel.
               </p>
               <div className="md:flex md:w-[70%] gap-4">
                 <Input
-                  label="Your first name"
+                  label="Votre prémon*"
                   name="firstName"
                   value={registerFormData.firstName}
                   onChange={handleInputChange}
@@ -205,11 +215,12 @@ const RegistrationForm = () => {
                   size="md"
                   classNames={{
                     input: "text-standard",
+                    label: "text-standard",
                   }}
                   variant="underlined"
                 />
                 <Input
-                  label="Your last name"
+                  label="Votre nom*"
                   name="lastName"
                   value={registerFormData.lastName}
                   onChange={handleInputChange}
@@ -218,13 +229,14 @@ const RegistrationForm = () => {
                   size="md"
                   classNames={{
                     input: "text-standard",
+                    label: "text-standard",
                   }}
                 />
               </div>
               <div className="md:flex md:w-[70%] gap-4">
                 <div className="w-full">
                   <Input
-                    label="Your professional email"
+                    label="Votre email professionnel*"
                     name="email"
                     value={registerFormData.email}
                     onChange={handleInputChange}
@@ -233,6 +245,7 @@ const RegistrationForm = () => {
                     size="md"
                     classNames={{
                       input: "text-standard w-full",
+                      label: "text-standard",
                     }}
                   />
                   {formErrors.email && (
@@ -240,7 +253,7 @@ const RegistrationForm = () => {
                   )}
                 </div>
                 <Input
-                  label="Your phone number"
+                  label="Votre numéro de téléphone*"
                   name="phoneNumber"
                   value={registerFormData.phoneNumber}
                   onChange={handleInputChange}
@@ -249,35 +262,38 @@ const RegistrationForm = () => {
                   size="md"
                   classNames={{
                     input: "text-standard",
+                    label: "text-standard",
                   }}
                 />
               </div>
             </div>
 
             <div>
-              <h1 className="md:text-[30px] text-[25px] font-bold">Your products</h1>
+              <h1 className="md:text-[30px] text-[25px] font-bold">
+                Vos produits
+              </h1>
               <p className="text-standard">
-                Provide information on the different products you sell that
-                require you to answer dedicated questionnaires.
+                Renseignez les différents produits qui vous vendez qui
+                nécessitent de répondre à des questionnaires dédiés
               </p>
               <div className="flex items-center gap-4 mt-2 md:w-[70%]">
                 <Input
                   type="text"
-                  placeholder="Enter Product"
+                  placeholder="Product*"
                   variant="underlined"
                   value={product}
                   size="md"
                   classNames={{
                     input: "text-standard",
+                    label: "text-standard",
                   }}
                   onChange={(e) => setProduct(e.target.value)}
                 />
                 <Button
-                  className="text-white px-[10px] text-sm bg-btn-primary w-max rounded-[4px]"
+                  className="global-success-btn px-7"
                   onPress={handleAddProduct}
-                  size="sm"
                 >
-                  Add
+                  Ajouter un produit
                 </Button>
               </div>
               {formErrors.products && (
@@ -307,11 +323,13 @@ const RegistrationForm = () => {
               size="lg"
               classNames={{
                 label: "!rounded-[3px] text-standard",
-                wrapper: "!rounded-[3px]" 
+                wrapper: "!rounded-[3px]",
               }}
-             
             >
-              I accept the general conditions of sale and use
+              J'accepte les{" "}
+              <span className="text-blue-600 underline">
+                conditions générales de vente et d'utilisation
+              </span>
             </Checkbox>
 
             <div className="flex justify-center">

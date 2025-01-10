@@ -27,7 +27,7 @@ const ResizableHeader = ({ columnName, columnWidth, onResize, children }) => {
       style={{ minWidth: `${columnWidth}px` }}
     >
       <div className="flex items-center justify-between select-none">
-        {children}
+        {children} {columnWidth}
         <div
           ref={resizerRef}
           className="absolute right-0 top-0 h-full w-[15px] bg-[#E5E7EB] cursor-col-resize"

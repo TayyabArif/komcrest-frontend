@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Euro } from "lucide-react";
 import { useMyContext } from "@/context";
 
-const ChoosePlan = ({ planId, setPlanId}) => {
+const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
   const [billingType, setBillingType] = useState("monthly");
   const { plansData } = useMyContext();
 
@@ -20,10 +20,30 @@ const ChoosePlan = ({ planId, setPlanId}) => {
     }
   };
 
+  const selectPlan = (selectPlan) => {
+    setPlanId(selectPlan);
+    setFormErrors((prev) => ({
+      ...prev,
+      plan: "",
+    }));
+  };
+
+  const getMinRangeQuestionnaire = (name) =>{
+    switch (name) {
+      case "Essential": return "3"
+      case "Standard": return "5"
+      case "Professional": return "10"
+      
+      default:return null
+    }
+  }
+
   return (
     <div className="w-full">
       <h1 className="md:text-[35px] text-[30px]">Votre abonnement</h1>
-      <h4 className="text-standard">Select the desired subscription level</h4>
+      <h4 className="text-standard">
+        Sélectionnez le niveau d'abonnement souhaité
+      </h4>
       <div className="flex gap-6 justify-center md:my-5 my-3">
         <button
           className={`px-4 py-2 text-[18px] font-semibold cursor-pointer border-b-2 ${
@@ -49,31 +69,33 @@ const ChoosePlan = ({ planId, setPlanId}) => {
           .map((item) => (
             <div
               key={item.name}
-              className={`md:w-[28%] sm:w-[30%]  w-full  rounded text-center p-5 space-y-1 cursor-pointer ${planId == item.id ? "border-4 border-black" : "" }`}
+              className={`md:w-[28%] sm:w-[30%]  w-full  rounded text-center p-5 space-y-1 cursor-pointer ${
+                planId == item.id ? "border-4 border-black" : ""
+              }`}
               style={{ backgroundColor: getCardColor(item.name) }}
-              onClick={() => setPlanId(item.id)}
+              onClick={() => selectPlan(item.id)}
             >
               <h1 className="text-[24px] font-extrabold">{item.name}</h1>
 
               <p className="font-semibold text-standard">
-                {item.benefits?.Questions} Questions
+              {item.benefits?.Questions} Questions
               </p>
               <p className="font-semibold text-standard">
-                {item.benefits?.Questionnaires} Questionnaires
+              {getMinRangeQuestionnaire(item.name)} à {item.benefits?.Questionnaires} Questionnaires
               </p>
-              <p className="font-semibold text-standard">Un Limited Documents</p>
+              {/* <p className="font-semibold text-standard">Un Limited Documents</p>
               <p className="font-semibold text-standard">
                 Un Limited Online Resource
               </p>
-              <p className="font-semibold text-standard">Day support</p>
+              <p className="font-semibold text-standard">Day support</p> */}
 
               <div className="flex items-center justify-center font-extrabold">
                 <Euro size={25} style={{ strokeWidth: 3 }} />
                 <span className="text-[25px]">{item.price}</span>
               </div>
               <p className="font-semibold text-[16px]">
-                per {item.billingCycle === "annual" ? "year" : "month"}{" "}
-                excluding tax
+                Par {item.billingCycle === "annual" ? "annuelle" : "mois"} hors
+                taxe
               </p>
             </div>
           ))}

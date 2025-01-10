@@ -8,11 +8,11 @@ const AuthLayout = ({children, Class, sideBarDesc}) => {
     <div className={`flex flex-col justify-between w-[30%] ${Class} text-white px-10 py-10`}>
       <div className="flex flex-col justify-center flex-grow">
         <p className="text-[35px] font-bold">Komcrest</p>
-        <p className="text-base 2xl:text-[20px] leading-7 mt-1">
+        <p className="text-standard leading-7 mt-1">
           {sideBarDesc}
         </p>
       </div>
-      <p className="text-base 2xl:text-[20px]">Komcrest 1.1.0.2024</p>
+      <p className="text-standard">Komcrest 1.1.0.2024</p>
     </div>
     <div className="w-[70%] flex flex-col justify-center items-center px-10 py-10">
       {children}
