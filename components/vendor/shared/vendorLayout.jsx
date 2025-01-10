@@ -152,7 +152,7 @@ const VendorLayout = ({ children }) => {
             <Button
               radius="none"
               size="md"
-              className=" px-[20px]  bg-btn-primary text-standard font-semibold text-white w-max rounded-[4px] "
+              className="global-success-btn"
               onClick={() =>
                 router.push("/vendor/setting/upgrade-subscription")
               }

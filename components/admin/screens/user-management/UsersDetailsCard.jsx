@@ -27,10 +27,11 @@ const id = 50
         labelPlacement='outside'
         variant="bordered"
         radius='sm'
+        size='md'
         scrollShadowProps={{
           isEnabled: false
         }}
-        classNames={{label: "text-standard ml-0.5"}}
+        classNames={{label: "text-standard ml-0.5",input: "text-standard",value: "text-[16px] 2xl:text-[20px] text-black"}}
         onChange={handleChange}
         name="companyId"
         defaultSelectedKeys={formData.companyId ? [formData.companyId] : []}
@@ -50,12 +51,14 @@ const id = 50
       name="firstName"
       type="text"
       radius='sm'
+      size='md'
       label="First name"
       labelPlacement="outside"
       placeholder='Enter first name'
       variant="bordered"
-      className="max-w-sm"
-      classNames={{label: "text-standard ml-0.5"}}
+      // className="max-w-sm"
+      classNames={{label: "text-standard ml-0.5",input: "text-standard",}}
+     
     />
     </div>
     <div className='mt-6 px-4'>
@@ -67,11 +70,12 @@ const id = 50
       type="text"
       label="Last name"
       radius='sm'
+      size='md'
       labelPlacement="outside"
       placeholder='Enter last name'
       variant="bordered"
       className="max-w-sm"
-      classNames={{label: "text-standard ml-0.5"}}
+      classNames={{label: "text-standard ml-0.5" ,input: "text-standard",}}
     />
     </div>
     <div className='mt-6 px-4'>
@@ -83,12 +87,13 @@ const id = 50
       name="email"
       type="email"
       label="Email"
+      size='md'
       labelPlacement="outside"
       placeholder='Enter email'
       variant="bordered"
       className="max-w-sm"
       radius='sm'
-      classNames={{label: "text-standard ml-0.5"}}
+      classNames={{label: "text-standard ml-0.5" ,input: "text-standard",}}
     />
     </div>
     <div className='mt-6 px-4'>
@@ -100,12 +105,14 @@ const id = 50
       name="position"
       type="text"
       label="Position"
+      size='md'
       labelPlacement="outside"
       placeholder='Enter user position in the company email'
       variant="bordered"
       className="max-w-sm"
       radius='sm'
-      classNames={{label: "text-standard ml-0.5"}}
+      classNames={{label: "text-standard ml-0.5",input: "text-standard", }}
+      
     />
     </div>
   </div>
