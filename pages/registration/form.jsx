@@ -161,8 +161,8 @@ const RegistrationForm = () => {
                 Le nom de votre société sera utitisé pour votre domaine
                 societe.komcrest.com
               </p>
-              <div className="md:flex gap-10">
-                <div className="md:w-[32%]">
+              <div className="md:flex gap-10 md:w-[70%]">
+                <div className="md:w-[100%]">
                   <div className="flex items-end gap-4">
                     <Input
                       label="Societe (sans accent)*                      "
@@ -186,7 +186,8 @@ const RegistrationForm = () => {
                     </p>
                   )}
                 </div>
-                <div className="flex md:w-[35%] items-end gap-4">
+               
+                {/* <div className="flex md:w-[35%] items-end gap-4"> */}
                   <Input
                     label="Nom de l'enterprise"
                     name="name"
@@ -200,7 +201,7 @@ const RegistrationForm = () => {
                       label: "text-standard",
                     }}
                   />
-                </div>
+                {/* </div> */}
               </div>
             </div>
             <div className="text-standard">
