@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
@@ -59,7 +60,7 @@ const UserManagementSideBar = () => {
         <h1 className="text-standard py-2">Your Plan</h1>
       </div>
 
-      <div
+      {/* <div
         className={`flex gap-1 items-center px-4 my-2 cursor-pointer ${
           selectedItem == "upgrade-subscription"
             ? "bg-[#2457d7] text-white shadow-md rounded"
@@ -70,7 +71,7 @@ const UserManagementSideBar = () => {
         }}
       >
         <h1 className="text-standard py-2">Upgrade Plan</h1>
-      </div>
+      </div> */}
     </div>
   );
 };

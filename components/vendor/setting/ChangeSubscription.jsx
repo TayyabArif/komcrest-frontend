@@ -1,17 +1,69 @@
 import React, { useState } from "react";
 import { Button } from "@nextui-org/react";
 import { CircleCheckBig } from "lucide-react";
+import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
 
 import { useMyContext } from "@/context";
 
 const ChangeSubscription = () => {
   const { plansData } = useMyContext();
   const [billingType, setBillingType] = useState("monthly");
+  const [isLoading, setIsLoading] = useState({
+    success: false,
+    id: ""
+  })
+  const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+
+  const handleCreateCheckout = async (data) => {
+    try {
+      setIsLoading({
+        success: true,
+        id: data.id
+      })
+      const item = {
+        priceId: data?.billingCycle === "monthly" ? data?.monthlyStripePriceId : data?.yearlyStripePriceId,
+        billingCycle: data?.billingCycle,
+        plan_id: data?.id
+      }
+      const token = cookiesData?.token;
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", 
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({item}),
+        redirect: "follow",
+      };
+
+      const response = await fetch(`${baseUrl}/stripe/create-checkout`, requestOptions);
+
+      const createdSession = await response.json()
+      if (response.ok) {
+        // toast.success(data.message);
+        console.log(">>>>>>>>>>>>",createdSession?.session?.url)
+        window.open(createdSession?.session?.url, "_blank");
+      } else {
+        toast.error(createdSession?.message);
+      }
+    } catch (error) {
+      toast.error("error");
+      console.error("Error updating Resource:", error);
+    } finally{
+      setIsLoading({
+        success: false,
+        id: ""
+      })
+    }
+  }
   return (
     <div className="w-full">
-      <div className="flex gap-6 justify-center my-2">
+      <div className="flex gap-6 ml-10 my-2">
         <button
-          className={`px-4 py-2 text-[18px] font-semibold cursor-pointer border-b-2 ${
+          className={`px-4 py-2 text-[20px] cursor-pointer border-b-2 ${
             billingType === "monthly" ? "border-blue-700" : "border-transparent"
           }`}
           onClick={() => setBillingType("monthly")}
@@ -19,7 +71,7 @@ const ChangeSubscription = () => {
           Monthly
         </button>
         <button
-          className={`px-4 py-2 text-[18px] font-semibold cursor-pointer border-b-2 ${
+          className={`px-4 py-2 text-[20px] cursor-pointer border-b-2 ${
             billingType === "annual" ? "border-blue-700" : "border-transparent"
           }`}
           onClick={() => setBillingType("annual")}
@@ -28,17 +80,17 @@ const ChangeSubscription = () => {
         </button>
       </div>
       <div className="">
-        <div className="flex flex-wrap  gap-x-[30px] gap-y-4 w-[95%] mx-auto">
+        <div className="flex flex-wrap  gap-x-[30px] gap-y-4 w-[100%] mx-auto">
           {plansData
             ?.filter(
               (item) =>
-                item.planType === "free" || item.billingCycle == billingType
+                item.billingCycle == billingType
             )
             .map((data, index) => (
               <div
                 key={index}
                 style={{ backgroundColor: data.cardColor }}
-                className="w-[30%] p-4 bg-white group rounded-md lg:hover:-translate-y-1 ease-in duration-300 border xl:border-none border-[#0B0641]"
+                className="w-[31%] p-4 bg-white group rounded-md lg:hover:-translate-y-1 ease-in duration-300 border xl:border-none border-[#0B0641]"
               >
                 <div className="flex flex-row gap-5 items-center">
                   <span className="text-xl font-bold mb-5">{data.name}</span>
@@ -66,15 +118,19 @@ const ChangeSubscription = () => {
 
                 <div className="bottom-6 left-6 right-6 ">
                   <div className="flex justify-between items-center">
-                    <span className="text-[32px] font-bold ">{data.price}</span>
+                    <span className="text-[20px] font-bold ">{data.price}</span>
 
                     {data.planType !== "free" && (
                       <Button
                         size="md"
                         color="primary"
                         className="global-success-btn"
+                        isLoading = {isLoading?.success && isLoading?.id === data?.id}
+                        isDisabled = {isLoading?.success}
+                        onPress={() => handleCreateCheckout(data)}
                       >
-                        {index == 1 ? "Activated" : "Upgrade"}
+                        {/* {index == 1 ? "Activated" : "Upgrade"} */}
+                        Upgrade
                       </Button>
                     )}
                   </div>
