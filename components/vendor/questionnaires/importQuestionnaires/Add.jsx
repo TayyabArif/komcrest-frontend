@@ -202,7 +202,7 @@ const Add = ({
             value={importQuestionnaires.customerName}
             onChange={handleData}
             classNames={{
-              input: "text-standard text-gray-500",
+              input: "text-standard",
             }}
           />
           {errors.customerName && <p className="text-red-500">{errors.customerName}</p>}
@@ -345,7 +345,7 @@ const Add = ({
             }
           }}
           min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}  
-          className=" border-2 px-2 text-gray-500 w-full py-1 border-gray-200 rounded-lg text-standard"
+          className=" border-2 px-2  w-full py-1 border-gray-200 rounded-lg text-standard"
         />
           </div>
           {errors.returnDate && <p className="text-red-500">{errors.returnDate}</p>}

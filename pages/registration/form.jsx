@@ -139,7 +139,7 @@ const RegistrationForm = () => {
             gratuitement l&apos;intégralité des fonctionnalités{" "}
           </span>{" "}
           qu&apos;offre Komcrest, et ce
-          <span className="font-bold">pendant 7 jours.</span>
+          <span className="font-bold"> pendant 7 jours.</span>
         </p>
       </div>
       <div className="bg-blue-600 my-10">
@@ -150,14 +150,14 @@ const RegistrationForm = () => {
             setFormErrors={setFormErrors}
           />
           {formErrors?.plan && (
-            <p className="text-red-500">{formErrors?.plan}</p>
+            <p className="text-[#f31260]">{formErrors?.plan}</p>
           )}
           <div className="text-left mt-10 space-y-10 ">
             <div>
               <h1 className="md:text-[30px] text-[25px] font-bold">
                 Nom de votre société
               </h1>
-              <p>
+              <p className="text-standard">
                 Le nom de votre société sera utitisé pour votre domaine
                 societe.komcrest.com
               </p>
@@ -181,7 +181,7 @@ const RegistrationForm = () => {
                     <span className="text-standard">komcrest.com</span>
                   </div>
                   {formErrors.subdomain && (
-                    <p className="text-red-500 text-sm">
+                    <p className="text-[#f31260] text-sm">
                       {formErrors.subdomain}
                     </p>
                   )}
@@ -252,11 +252,13 @@ const RegistrationForm = () => {
                     size="md"
                     classNames={{
                       input: "text-standard w-full",
-                      label: "text-standard",
+                      label: "text-standard ",
+                      errorMessage: "text-sm text-[#f31260]",
                     }}
+                      errorMessage={`Veuillez inclure un '@' dans l'adresse e-mail. ${registerFormData.email} manque un '@'.`}
                   />
                   {formErrors.email && (
-                    <p className="text-red-500 text-sm">{formErrors.email}</p>
+                    <p className="text-[#f31260] text-sm">{formErrors.email}</p>
                   )}
                 </div>
                 <Input
@@ -286,7 +288,7 @@ const RegistrationForm = () => {
               <div className="flex items-center gap-4 mt-2 md:w-[70%]">
                 <Input
                   type="text"
-                  placeholder="Product*"
+                  placeholder="Produit*"
                   variant="underlined"
                   value={product}
                   size="md"
@@ -304,7 +306,7 @@ const RegistrationForm = () => {
                 </Button>
               </div>
               {formErrors.products && (
-                <p className="text-red-500 text-sm">{formErrors.products}</p>
+                <p className="text-[#f31260] text-sm">{formErrors.products}</p>
               )}
               <div className="flex flex-col px-4 gap-2 my-4">
                 {products.map((product, index) => (
@@ -351,7 +353,7 @@ const RegistrationForm = () => {
                 className="text-white  2xl:text-[20px] text-[16px] bg-btn-primary w-max rounded-[4px]"
                 onPress={handleFormSubmit}
               >
-                Confirm registration
+                Confirmer l'inscription
               </Button>
             </div>
           </div>

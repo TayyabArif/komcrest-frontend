@@ -10,7 +10,7 @@ const MyContext = createContext();
 
 export const MyProvider = ({ children }) => {
   const socket = useSocket();
-  const [overAllLoading , setOverAllLoading] = useState(false)
+  const [overAllLoading, setOverAllLoading] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -21,21 +21,26 @@ export const MyProvider = ({ children }) => {
   const [dataUpdated, setDataUpdated] = useState(false);
   const [questionnaireUpdated, setQuestionnaireUpdated] = useState(false);
   const [onlineResourceData, setOnlineResourceData] = useState([]);
-  const [onlineResourceDataUpdate, setOnlineResourceDataUpdate] = useState(false);
+  const [onlineResourceDataUpdate, setOnlineResourceDataUpdate] =
+    useState(false);
   const [documentData, setDocumentData] = useState([]);
   const [documentDataUpdate, setDocumentDataUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [dataIsLoaded, setDataIsLoaded] = useState(false);
-  const [realFormatCompanyUserData , setRealFormatCompanyUserData] = useState([])
-  const [plansData , setPlansData] = useState([])
+  const [realFormatCompanyUserData, setRealFormatCompanyUserData] = useState(
+    []
+  );
+  const [plansData, setPlansData] = useState([]);
+  const [activePlanDetail , setActivePlanDetail] = useState({})
+  const [reCallPlanDetailApi , setReCallPlanDetailApi] = useState(false)
 
- // knowledge base module states
-  const [knowledgeBasePayloadData , setKnowledgeBasePayloadData ] = useState({})
-  const [knowledgeBaseStepperStart ,setKnowledgeBaseStepperStart] = useState(0)
-  const [isKnowledgeBaseOpenDirect ,setIsKnowledgeBaseOpenDirect] = useState(true)
+  // knowledge base module states
+  const [knowledgeBasePayloadData, setKnowledgeBasePayloadData] = useState({});
+  const [knowledgeBaseStepperStart, setKnowledgeBaseStepperStart] = useState(0);
+  const [isKnowledgeBaseOpenDirect, setIsKnowledgeBaseOpenDirect] =
+    useState(true);
   const [dataUpdate, setDataUpdate] = useState(false);
 
-  
   // questionnaire module states
   const [questionnaireData, setQuestionnaireData] = useState({
     filename: "",
@@ -46,7 +51,8 @@ export const MyProvider = ({ children }) => {
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [isFirstResponse, setIsFirstResponse] = useState(true);
   const isFirstResponseRef = useRef(isFirstResponse);
-  const [currentQuestionnaireImportId , setCurrentQuestionnaireImportId] = useState()
+  const [currentQuestionnaireImportId, setCurrentQuestionnaireImportId] =
+    useState();
 
   useEffect(() => {
     isFirstResponseRef.current = isFirstResponse;
@@ -64,9 +70,7 @@ export const MyProvider = ({ children }) => {
   const [companyUserData, setCompanyUserData] = useState([]);
   //all compnay user include loggedin user
   const [allCompanyUserData, setAllCompanyUserData] = useState([]);
-
   const [companyProducts, setCompanyProducts] = useState([]);
-
   const [allCompanyProducts, setAllCompanyProducts] = useState([]);
   const [questionnaireList, setQuestionnaireList] = useState([]);
 
@@ -74,7 +78,7 @@ export const MyProvider = ({ children }) => {
     if (token) {
       getCompanyUser();
       // getUserCompanyProducts();
-      getAllCompanyProducts()
+      getAllCompanyProducts();
     }
   }, [dataUpdated]);
 
@@ -100,7 +104,7 @@ export const MyProvider = ({ children }) => {
       );
       if (response.ok) {
         //remove unapproved user
-        setRealFormatCompanyUserData(data)
+        setRealFormatCompanyUserData(data);
         const approvedUser = data.filter(
           (user) => user.invitationStatus == "activated"
         );
@@ -156,7 +160,6 @@ export const MyProvider = ({ children }) => {
   //     })
   //     .catch((error) => console.error(error));
   // };
-
 
   const getAllCompanyProducts = async () => {
     const requestOptions = {
@@ -238,7 +241,7 @@ export const MyProvider = ({ children }) => {
         if (isFirstResponseRef.current && questionnaireRecord.questionnaireId) {
           setIsFirstResponse(false);
           uploadFile(questionnaireRecord.questionnaireId);
-          setCurrentQuestionnaireImportId(questionnaireRecord.questionnaireId)
+          setCurrentQuestionnaireImportId(questionnaireRecord.questionnaireId);
         }
         setAllQuestionnireList((prevState) => {
           // Map over the previous state to update it with the new incoming data
@@ -312,7 +315,7 @@ export const MyProvider = ({ children }) => {
       });
   };
 
- // get all online resource
+  // get all online resource
   const getAllResourceData = async () => {
     setIsLoading(true);
     const token = cookiesData && cookiesData.token;
@@ -334,7 +337,6 @@ export const MyProvider = ({ children }) => {
       );
       if (response.ok) {
         setOnlineResourceData(data);
-       
       } else {
         toast.error(data?.error);
       }
@@ -345,15 +347,13 @@ export const MyProvider = ({ children }) => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (token) {
-    getAllResourceData()
+      getAllResourceData();
     }
-  },[onlineResourceDataUpdate ,dataUpdated])
+  }, [onlineResourceDataUpdate, dataUpdated]);
 
-
-
-  // get all documnets 
+  // get all documnets
 
   useEffect(() => {
     const getUserDocument = async () => {
@@ -366,17 +366,21 @@ export const MyProvider = ({ children }) => {
         },
         redirect: "follow",
       };
-  
+
       try {
         const response = await fetch(`${baseUrl}/documents`, requestOptions);
-        const data = await handleResponse(response, router, cookies,removeCookie);
+        const data = await handleResponse(
+          response,
+          router,
+          cookies,
+          removeCookie
+        );
         // const data = await response.json();
         if (response.ok) {
           setDocumentData(data);
           setDataIsLoaded(true);
         } else {
           toast.error(data?.error);
-          
         }
       } catch (error) {
         console.error("Error fetching user documents:", error);
@@ -386,12 +390,11 @@ export const MyProvider = ({ children }) => {
     };
 
     if (token) {
-    getUserDocument();
+      getUserDocument();
     }
-  }, [documentDataUpdate ,dataUpdated]);
+  }, [documentDataUpdate, dataUpdated]);
 
-
-  const questionnaireStatusUpdated = (value , id) => {
+  const questionnaireStatusUpdated = (value, id) => {
     const jsonPayload = JSON.stringify({
       status: value,
     });
@@ -422,11 +425,9 @@ export const MyProvider = ({ children }) => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          
           toast.success(data.message);
           setQuestionnaireUpdated((prev) => !prev);
           setDataUpdate((prev) => !prev);
-          
         } else {
           toast.error(data?.error || "Questionnaires status not Updated");
           console.error("Error:", data);
@@ -466,7 +467,7 @@ export const MyProvider = ({ children }) => {
         if (ok) {
           toast.success("User deleted successfully");
           setDataUpdated((prev) => !prev);
-          router.push("/vendor/setting/user-management")
+          router.push("/vendor/setting/user-management");
         } else {
           toast.error("Error While deactivating company");
         }
@@ -474,41 +475,75 @@ export const MyProvider = ({ children }) => {
       .catch((error) => console.error(error));
   };
 
-    const getPlansData = async () => {
-      const token = cookiesData && cookiesData.token;
-      const requestOptions = {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        redirect: "follow",
-      };
-  
-      try {
-        const response = await fetch(`${baseUrl}/plans`, requestOptions);
+  const getPlansData = async () => {
+    const token = cookiesData && cookiesData.token;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(`${baseUrl}/plans`, requestOptions);
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
+      if (response.ok) {
+        setPlansData(data);
+      } else {
+        toast.error(data?.error);
+      }
+    } catch (error) {
+      console.error("Error fetching user documents:", error);
+    }
+  };
+
+  useEffect(() => {
+    getPlansData();
+  }, []);
+
+  const checkAccountLimitation = async () => {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    };
+    fetch(`${baseUrl}/company/check-question-limit`, requestOptions)
+      .then(async (response) => {
         const data = await handleResponse(
           response,
           router,
           cookies,
           removeCookie
         );
-        if (response.ok) {
-          setPlansData(data)
+        return {
+          status: response.status,
+          ok: response.ok,
+          data,
+        };
+      })
+      .then(({ status, ok, data }) => {
+        if (ok) {
+          setActivePlanDetail(data)
+          console.log("}}}}}}}}}}}}}}}",data);
         } else {
           toast.error(data?.error);
+          console.error("Error:", data);
         }
-      } catch (error) {
-        console.error("Error fetching user documents:", error);
-      }
-    };
-   
-    useEffect(()=>{
-      getPlansData ()
-    },[])
+      })
+      .catch((error) => console.error(error));
+  };
 
-  
-
-  
+  useEffect(() => {
+    checkAccountLimitation()
+  },[reCallPlanDetailApi])
 
   return (
     <MyContext.Provider
@@ -552,7 +587,9 @@ export const MyProvider = ({ children }) => {
         realFormatCompanyUserData,
         removeCompanyUser,
         allCompanyProducts,
-        plansData
+        plansData,
+        activePlanDetail,
+        setReCallPlanDetailApi
       }}
     >
       {children}

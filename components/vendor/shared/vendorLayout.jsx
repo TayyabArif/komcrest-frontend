@@ -17,6 +17,7 @@ import FreeTrialCompletedModal from "./FreeTrialCompletedModal";
 import { useDisclosure } from "@nextui-org/react";
 
 const VendorLayout = ({ children }) => {
+  const { setIsKnowledgeBaseOpenDirect, activePlanDetail } = useMyContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
@@ -24,10 +25,16 @@ const VendorLayout = ({ children }) => {
   const route = router.route;
   const userID = cookiesData?.userId;
   const [loggedInUser, setLoggedInUser] = useState();
-  const [isFreeTrialEnd, setIsFreeTrialEnd] = useState(false);
-
+  // const [isFreeTrialEnd, setIsFreeTrialEnd] = useState(activePlanDetail?.questionLimitDetails?.questionsLeft == 0 ? true : false);
+  const [isFreeTrialEnd, setIsFreeTrialEnd] = useState(
+    isCurrentDateGreaterThanEndDate() ||
+      activePlanDetail?.questionLimitDetails?.questionsLeft == 0
+      ? true
+      : false
+  );
   const [selectedItem, setSelectedItem] = useState("");
-  const { setIsKnowledgeBaseOpenDirect } = useMyContext();
+  const currentDate = new Date();
+
   useEffect(() => {
     const parts = route.split("/");
     const segment = parts[2];
@@ -41,6 +48,25 @@ const VendorLayout = ({ children }) => {
     localStorage.removeItem("selectedSideBar");
     toast.success("Logout Successfully");
   }
+
+  function isCurrentDateGreaterThanEndDate() {
+    const endDate = new Date(activePlanDetail?.subscriptionDetails?.endDate);
+    const currentDate = new Date();
+
+    return currentDate > endDate;
+  }
+
+
+function getDayDifference() {
+  const endData = new Date(activePlanDetail?.subscriptionDetails?.endDate);  
+  const currentDate = new Date(); 
+
+  const timeDifference = endData - currentDate;
+
+  const dayDifference = Math.round(timeDifference / (1000 * 3600 * 24));
+
+  return dayDifference;
+}
 
   return (
     <div className="flex w-full">
@@ -148,23 +174,23 @@ const VendorLayout = ({ children }) => {
       </div>
       <div className="ml-[15%] w-[85%] fixed h-screen pb-4">
         <div className=" flex justify-between w-[85%] mx-auto">
-          <div className="py-[6px] flex-1  bg-y text-right flex items-center gap-2 font-bold cursor-pointer  m-auto text-standard">
-            <Button
-              radius="none"
-              size="md"
-              className="global-success-btn"
-              onClick={() =>
-                router.push("/vendor/setting/upgrade-subscription")
-              }
-            >
-              Activate Plan
-            </Button>
-            <h1 className="text-blue-700 text-standard">
-              Trial period: 7 days & 200 questions left (unlimited documents &
-              knowledge base entries)
-            </h1>
-          </div>
-
+          {activePlanDetail?.subscriptionDetails?.planName == "Free" && (
+            <div className="py-[6px] flex-1  bg-y text-right flex items-center gap-2 font-bold cursor-pointer  m-auto text-standard">
+              <Button
+                radius="none"
+                size="md"
+                className="global-success-btn"
+                onClick={() => router.push("/vendor/setting/subscription-plan")}
+              >
+                Activate Plan
+              </Button>
+              <h1 className="text-blue-700 text-standard">
+              Trial period: {getDayDifference()} days &{" "}
+                {activePlanDetail?.questionLimitDetails?.questionsLeft}{" "}
+                questions left (unlimited documents & knowledge base entries)
+              </h1>
+            </div>
+          )}
           <div className="py-[6px]   justify-end text-right flex  items-center gap-2 font-bold cursor-pointer m-auto text-standard">
             <h1>{loggedInUser}</h1>
             <Button
@@ -184,9 +210,7 @@ const VendorLayout = ({ children }) => {
       </div>
 
       <FreeTrialCompletedModal
-        isOpen={
-          isFreeTrialEnd && route !== "/vendor/setting/upgrade-subscription"
-        }
+        isOpen={isFreeTrialEnd && route !== "/vendor/setting/subscription-plan"}
         onOpen={onOpen}
         onOpenChange={onOpenChange}
       />

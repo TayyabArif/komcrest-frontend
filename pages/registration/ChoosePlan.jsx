@@ -56,7 +56,7 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
           }`}
           onClick={() => setBillingType("monthly")}
         >
-          Monthly
+          Mensuel
         </button>
         <button
           className={`px-4 py-2 text-[18px] font-semibold cursor-pointer border-b-2 ${
@@ -64,7 +64,7 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
           }`}
           onClick={() => setBillingType("annual")}
         >
-          Annual
+          Annuel
         </button>
       </div>
 
@@ -86,7 +86,7 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
                 {item.benefits?.Questions} Questions
               </p>
               <p className="font-semibold text-standard">
-                {getMinRangeQuestionnaire(item.name)} à{" "}
+                ~ {getMinRangeQuestionnaire(item.name)} à{" "}
                 {item.benefits?.Questionnaires} Questionnaires
               </p>
               {/* <p className="font-semibold text-standard">Un Limited Documents</p>
