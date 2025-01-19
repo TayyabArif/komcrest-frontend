@@ -16,7 +16,7 @@ const Login = ({ type }) => {
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
-  const { setDataUpdated ,dataUpdated ,setQuestionnaireUpdated } = useMyContext();
+  const { setDataUpdated ,dataUpdated ,setQuestionnaireUpdated, setReCallPlanDetailApi } = useMyContext();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [formData, setFormData] = useState({
@@ -77,6 +77,7 @@ const Login = ({ type }) => {
           setCookie('myCookie',  userData, { path: '/' });
           setDataUpdated(!dataUpdated)
           setQuestionnaireUpdated((prev)=>!prev)
+          setReCallPlanDetailApi((prev)=>!prev)
           console.log("Success:", data);
           if (data?.user?.Company?.companyType === "vendor") {
             router.push("/vendor/document");

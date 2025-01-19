@@ -22,7 +22,7 @@ const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange }) => {
             </h1>
             <div>
               <p>We hope you enjoyed Komcrest!</p>
-              <p className="w-[90%] mx-auto">
+              <p className="w-[90%] mx-auto 2xl:text-[20px] text-[16px]">
                 To reactivate your account based on your selected plan please
                 click on the button below:
               </p>
@@ -32,12 +32,12 @@ const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange }) => {
               color="primary"
               className="rounded-md 2xl:text-[20px]  text-[16px]"
               onClick={() =>
-                router.push("/vendor/setting/upgrade-subscription")
+                router.push("/vendor/setting/subscription-plan")
               }
             >
               Activate Plan
             </Button>
-            <div className="text-[16px] font-semibold leading-5">
+            <div className="text-[16px]  leading-5">
               <p className="2xl:text-[20px] text-[16px] w-[80%] mx-auto">
                 Your data is safe with us. If you need more time to decide,
                 don&apos;t worry — we’ll keep your data secure, and it will only

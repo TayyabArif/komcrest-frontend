@@ -20,7 +20,6 @@ import { useMyContext } from "@/context";
 import useSocket from "@/customHook/useSocket";
 
 const Import = ({ setNewQuestionnaireCreated }) => {
-  const { companyProducts } = useMyContext();
   const [stepper, setStepper] = useState(0);
   const {
     setQuestionnaireUpdated,
@@ -29,6 +28,9 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     setCurrentQuestionnaireImportId,
     setIsSocketConnected,
     setIsFirstResponse,
+    activePlanDetail,
+    companyProducts,
+    setReCallPlanDetailApi
   } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -178,30 +180,43 @@ const Import = ({ setNewQuestionnaireCreated }) => {
         toast.error("Please choose the question first to proceed");
       }
     } else if (stepper === 3) {
+     
       const finalData = getDatafromChild();
       console.log("finalDatafinalData", finalData);
-      setStepper(stepper + 1);
-      setProgressBar(progressBar + 27);
-      const transformedData = {};
-      for (const key in finalData) {
-        const rows = excelFile[key];
-        const headers = rows[0];
-        const dataRows = finalData[key];
-        transformedData[key] = dataRows.map((row) => {
-          let obj = {};
-          const mapping = columnMapping[key];
 
-          row.forEach((value, index) => {
-            const mappedHeader = mapping[index];
-            if (mappedHeader) {
-              obj[mappedHeader] = value;
-            }
-          });
-          return obj;
-        });
+      let totalCount = 0;
+      for (const key in finalData) {
+        totalCount += finalData[key].length;
       }
-      submitQuestions(transformedData);
-      console.log("transformedDatatransformedData", transformedData);
+
+      if (totalCount <= activePlanDetail?.questionLimitDetails?.questionsLeft) {
+        setStepper(stepper + 1);
+        setProgressBar(progressBar + 27);
+        const transformedData = {};
+        for (const key in finalData) {
+          const rows = excelFile[key];
+          const headers = rows[0];
+          const dataRows = finalData[key];
+          transformedData[key] = dataRows.map((row) => {
+            let obj = {};
+            const mapping = columnMapping[key];
+
+            row.forEach((value, index) => {
+              const mappedHeader = mapping[index];
+              if (mappedHeader) {
+                obj[mappedHeader] = value;
+              }
+            });
+            return obj;
+          });
+        }
+
+        console.log("transformedDatatransformedData", transformedData);
+        submitQuestions(transformedData);
+        setTotalCount(totalCount);
+      }else{
+        toast.error(`Your remaining limit for questions is ${activePlanDetail?.questionLimitDetails?.questionsLeft}, but you uploaded ${totalCount}`)
+      }
     }
   };
 
@@ -237,7 +252,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
       customerName: importQuestionnaires.customerName,
       originalFile: importQuestionnaires.originalFile,
     });
-    setTotalCount(payload.Questionnaires.length);
+    // setTotalCount(payload.Questionnaires.length);
     const token = cookiesData.token;
 
     console.log("questionnire payload", payload);
@@ -275,6 +290,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
         if (ok) {
           toast.success("Questionnaires created successfully");
           setQuestionnaireUpdated((prev) => !prev);
+          setReCallPlanDetailApi((prev) => !prev)
           localStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
           setCurrentQuestionnaireImportId("");
           setIsFirstResponse(true);

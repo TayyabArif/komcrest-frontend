@@ -3,11 +3,11 @@ import { Button } from "@nextui-org/react";
 import { CircleCheckBig } from "lucide-react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-
 import { useMyContext } from "@/context";
+import { MdOutlineEuroSymbol } from "react-icons/md";
 
 const ChangeSubscription = () => {
-  const { plansData } = useMyContext();
+  const { plansData , activePlanDetail} = useMyContext();
   const [billingType, setBillingType] = useState("monthly");
   const [isLoading, setIsLoading] = useState({
     success: false,
@@ -18,6 +18,7 @@ const ChangeSubscription = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
   const handleCreateCheckout = async (data) => {
+
     try {
       setIsLoading({
         success: true,
@@ -63,7 +64,7 @@ const ChangeSubscription = () => {
     <div className="w-full">
       <div className="flex gap-6 ml-10 my-2">
         <button
-          className={`px-4 py-2 text-[20px] cursor-pointer border-b-2 ${
+          className={`px-4 py-2 text-standard cursor-pointer border-b-2 ${
             billingType === "monthly" ? "border-blue-700" : "border-transparent"
           }`}
           onClick={() => setBillingType("monthly")}
@@ -71,7 +72,7 @@ const ChangeSubscription = () => {
           Monthly
         </button>
         <button
-          className={`px-4 py-2 text-[20px] cursor-pointer border-b-2 ${
+          className={`px-4 py-2 text-standard cursor-pointer border-b-2 ${
             billingType === "annual" ? "border-blue-700" : "border-transparent"
           }`}
           onClick={() => setBillingType("annual")}
@@ -118,7 +119,7 @@ const ChangeSubscription = () => {
 
                 <div className="bottom-6 left-6 right-6 ">
                   <div className="flex justify-between items-center">
-                    <span className="text-[20px] font-bold ">{data.price}</span>
+                    <span className="text-[20px] font-bold flex items-center">< MdOutlineEuroSymbol /> {data.price}</span>
 
                     {data.planType !== "free" && (
                       <Button
@@ -126,11 +127,11 @@ const ChangeSubscription = () => {
                         color="primary"
                         className="global-success-btn"
                         isLoading = {isLoading?.success && isLoading?.id === data?.id}
-                        isDisabled = {isLoading?.success}
+                        isDisabled = {activePlanDetail?.subscriptionDetails?.planId == data.id}
                         onPress={() => handleCreateCheckout(data)}
                       >
-                        {/* {index == 1 ? "Activated" : "Upgrade"} */}
-                        Upgrade
+                        {activePlanDetail?.subscriptionDetails?.planId == data.id ? "Activated" : "Upgrade"}
+                        
                       </Button>
                     )}
                   </div>
