@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Button } from "@nextui-org/react";
-function index() {
+function Index() {
 	const router = useRouter();
 	const { status, type, planType } = router.query;
 	return (
@@ -88,4 +88,4 @@ function index() {
 	);
 }
 
-export default index;
+export default Index;
