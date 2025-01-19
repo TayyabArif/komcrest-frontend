@@ -353,7 +353,7 @@ const RegistrationForm = () => {
                 className="text-white  2xl:text-[20px] text-[16px] bg-btn-primary w-max rounded-[4px]"
                 onPress={handleFormSubmit}
               >
-                Confirmer l'inscription
+                Confirmer l&apos;inscription
               </Button>
             </div>
           </div>
