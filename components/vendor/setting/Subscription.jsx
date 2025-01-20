@@ -70,7 +70,6 @@ const Subscription = () => {
       console.error("Unexpected error:", error);
     }
   };
-   debugger
   return (
     <div className="h-full w-full flex flex-col items-center overflow-y-scroll">
       <div className="w-[82%] h-[180px] mx-auto bg-white rounded mt-20">

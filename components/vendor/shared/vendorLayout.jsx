@@ -173,8 +173,8 @@ function getDayDifference() {
         </div>
       </div>
       <div className="ml-[15%] w-[85%] fixed h-screen pb-4">
-        <div className=" flex justify-between w-[85%] mx-auto">
-          {activePlanDetail?.subscriptionDetails?.planName == "Free" && (
+        <div className=" flex justify-end w-[85%] mx-auto">
+          {activePlanDetail?.subscriptionDetails?.planName == "Free"  && (
             <div className="py-[6px] flex-1  bg-y text-right flex items-center gap-2 font-bold cursor-pointer  m-auto text-standard">
               <Button
                 radius="none"
@@ -191,7 +191,7 @@ function getDayDifference() {
               </h1>
             </div>
           )}
-          <div className="py-[6px]   justify-end text-right flex  items-center gap-2 font-bold cursor-pointer m-auto text-standard">
+          <div className="py-[6px] justify-end text-right flex  items-center gap-2 font-bold cursor-pointer  text-standard">
             <h1>{loggedInUser}</h1>
             <Button
               radius="none"
