@@ -175,7 +175,7 @@ const RegistrationForm = () => {
                       radius="sm"
                       classNames={{
                         input: "text-standard",
-                        label: "text-standard",
+                        label: "text-standard mb-1",
                       }}
                     />
                     <span className="text-standard">komcrest.com</span>
@@ -198,7 +198,7 @@ const RegistrationForm = () => {
                     size="md"
                     classNames={{
                       input: "text-standard",
-                      label: "text-standard",
+                      label: "text-standard mb-1",
                     }}
                   />
                 {/* </div> */}
@@ -222,7 +222,7 @@ const RegistrationForm = () => {
                   size="md"
                   classNames={{
                     input: "text-standard",
-                    label: "text-standard",
+                    label: "text-standard mb-1",
                   }}
                   variant="underlined"
                 />
@@ -236,7 +236,7 @@ const RegistrationForm = () => {
                   size="md"
                   classNames={{
                     input: "text-standard",
-                    label: "text-standard",
+                    label: "text-standard mb-1",
                   }}
                 />
               </div>
@@ -252,7 +252,7 @@ const RegistrationForm = () => {
                     size="md"
                     classNames={{
                       input: "text-standard w-full",
-                      label: "text-standard ",
+                      label: "text-standard mb-1",
                       errorMessage: "text-sm text-[#f31260]",
                     }}
                       errorMessage={`Veuillez inclure un '@' dans l'adresse e-mail. ${registerFormData.email} manque un '@'.`}
@@ -271,7 +271,7 @@ const RegistrationForm = () => {
                   size="md"
                   classNames={{
                     input: "text-standard",
-                    label: "text-standard",
+                    label: "text-standard mb-1",
                   }}
                 />
               </div>
@@ -294,7 +294,7 @@ const RegistrationForm = () => {
                   size="md"
                   classNames={{
                     input: "text-standard",
-                    label: "text-standard",
+                    label: "text-standard mb-1",
                   }}
                   onChange={(e) => setProduct(e.target.value)}
                 />

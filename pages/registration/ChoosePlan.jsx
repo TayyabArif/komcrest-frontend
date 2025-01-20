@@ -71,6 +71,7 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
       <div className="sm:flex justify-evenly flex-wrap lg:gap-10 gap-5 w-full  my-5 md:space-y-0 space-y-3">
         {plansData
           .filter((item) => item.billingCycle == billingType)
+          .sort((a, b) => a.id - b.id  )
           .map((item) => (
             <div
               key={item.name}
