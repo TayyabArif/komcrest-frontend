@@ -11,7 +11,7 @@ const ThankYou = () => {
         <div className="bg-blue-600 w-[70%] mx-auto rounded">
           <p className="text-[16px] py-2 px-10 text-white">
             Génial ! Vous recevrez un email pour confirmer la création de votre
-            compte et activer votre période d&apos;essaie.
+            compte et activer votre période d&apos;essai.
           </p>
         </div>
       </div>

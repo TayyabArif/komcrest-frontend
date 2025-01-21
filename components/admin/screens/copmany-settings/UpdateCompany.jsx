@@ -7,6 +7,7 @@ import ConfirmationModal from "../../shared/ConfirmationModal";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
+import CompanyPlan from "./CompanyPlan";
 
 const modalData = {
   heading: "Create Company",
@@ -19,10 +20,10 @@ const UpdateCompany = () => {
   const router = useRouter();
   const [cookies] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  const [isLoading, setIsLoading] = useState(false)
-  const [isCompanyLoading, setIsCompanyLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCompanyLoading, setIsCompanyLoading] = useState(true);
   const [products, setProducts] = useState([]);
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { id } = router.query;
   const [formData, setFormData] = useState({
     companyName: "",
@@ -31,6 +32,7 @@ const UpdateCompany = () => {
     companyType: "",
     displayTOS: false,
     displayPrivacyPolicy: false,
+    planId : ""
   });
   useEffect(() => {
     if (id) {
@@ -49,7 +51,7 @@ const UpdateCompany = () => {
       fetch(`${baseUrl}/companies/${id}`, requestOptions)
         .then((response) => response.text())
         .then((result) => {
-          const companyData = JSON.parse(result)
+          const companyData = JSON.parse(result);
           setFormData({
             companyName: companyData?.name,
             companyEmail: companyData?.email,
@@ -57,9 +59,12 @@ const UpdateCompany = () => {
             companyType: companyData?.companyType,
             displayTOS: companyData?.termsServices,
             displayPrivacyPolicy: companyData?.privacyPolicy,
+            planId:companyData?.planId
           });
-          const filteredProducts = companyData?.Products.map((item) => item.name)
-          setProducts(filteredProducts || [])
+          const filteredProducts = companyData?.Products.map(
+            (item) => item.name
+          );
+          setProducts(filteredProducts || []);
           console.log(companyData);
         })
         .catch((error) => console.error(error))
@@ -74,21 +79,24 @@ const UpdateCompany = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
-      if(name==="vendor" || name === "purchaser") {
+      if (name === "vendor" || name === "purchaser") {
         setFormData((prevState) => ({
           ...prevState,
-          companyType: name === "vendor" ? 'vendor' : 'purchaser',
+          companyType: name === "vendor" ? "vendor" : "purchaser",
         }));
-      } else if (name==="displayTOSYes" || name === "displayTOSNo") {
+      } else if (name === "displayTOSYes" || name === "displayTOSNo") {
         setFormData((prevState) => ({
           ...prevState,
           displayTOS: name === "displayTOSYes" ? checked : !checked,
         }));
-      }
-      else if (name==="displayPrivacyPolicyYes" || name === "displayPrivacyPolicyNo") {
+      } else if (
+        name === "displayPrivacyPolicyYes" ||
+        name === "displayPrivacyPolicyNo"
+      ) {
         setFormData((prevState) => ({
           ...prevState,
-          displayPrivacyPolicy: name === "displayPrivacyPolicyYes" ? checked : !checked,
+          displayPrivacyPolicy:
+            name === "displayPrivacyPolicyYes" ? checked : !checked,
         }));
       }
     } else {
@@ -101,7 +109,7 @@ const UpdateCompany = () => {
 
   const handleSubmit = async () => {
     const token = cookiesData.token;
-    setIsLoading(true)
+    setIsLoading(true);
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", `Bearer ${token}`);
@@ -113,7 +121,8 @@ const UpdateCompany = () => {
       email: formData?.companyEmail,
       products,
       termsServices: formData?.displayTOS,
-      privacyPolicy: formData?.displayPrivacyPolicy
+      privacyPolicy: formData?.displayPrivacyPolicy,
+      planId:formData?.planId
     });
 
     const requestOptions = {
@@ -132,11 +141,11 @@ const UpdateCompany = () => {
         }));
       })
       .then(({ status, ok, data }) => {
-        if (ok){
-          toast.success("Company updated successfully")
-          router.push("/admin/company-settings")
-        }else{
-          toast.error(data?.details?.errors[0]?.message)
+        if (ok) {
+          toast.success("Company updated successfully");
+          router.push("/admin/company-settings");
+        } else {
+          toast.error(data?.details?.errors[0]?.message);
         }
       })
       .catch((error) => console.error(error))
@@ -147,58 +156,69 @@ const UpdateCompany = () => {
 
   return (
     <div className="flex flex-col w-full bg-white">
-      {isCompanyLoading ?
-      <div className='flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen'>
-        <CircularProgress label="Fetching Company......" size="lg"/>
-      </div>
-      :
+      {isCompanyLoading ? (
+        <div className="flex flex-col gap-2 bg-gray-200 items-center justify-center pl-20 pr-10 py-3 min-h-screen">
+          <CircularProgress label="Fetching Company......" size="lg" />
+        </div>
+      ) : (
         <>
-          <div className="flex flex-col justify-between w-full gap-5 pl-20 pr-10 py-10 bg-gray-200 min-h-screen ">
-            <div className="flex justify-start w-full gap-10 pl-20">
-              <CompanyInfoCard
-                action="update"
-                formData={formData}
-                handleChange={(value) => handleChange(value)}
-              />
-              <CompanyProductCard
-                action="update"
-                setProducts={setProducts}
-                products={products}
-              />
-            </div>
-            <div className="flex justify-end mb-5 pr-16">
+          <div className="flex flex-col w-full bg-gray-200">
+            <div className="flex flex-col justify-between w-[80%] mx-auto  gap-5 pl-20 pr-10 py-10  min-h-screen ">
+              <div className="flex justify-center  gap-10 ">
+                <CompanyInfoCard
+                  action="update"
+                  formData={formData}
+                  handleChange={(value) => handleChange(value)}
+                />
+                <CompanyProductCard
+                  action="update"
+                  setProducts={setProducts}
+                  products={products}
+                />
+              </div>
+
               <div>
-                <div className="flex items-center gap-5">
-                  <Button
-                    radius="none"
-                    size="sm"
-                    className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
-                    onPress={() => router.push("/admin/company-settings")}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    radius="none"
-                    size="sm"
-                    className="text-white px-5 h-[28px] text-sm bg-btn-primary w-max rounded-[4px]"
-                    onPress={onOpen}
-                    isDisabled={!formData?.companyName || !formData?.companyDomain || !formData?.companyEmail}
-                  >
-                    Update Company
-                  </Button>
+                <CompanyPlan setFormData={setFormData} formData={formData} />
+              </div>
+
+              <div className="flex justify-end mb-5 ">
+                <div>
+                  <div className="flex items-center gap-5">
+                    <Button
+                      radius="none"
+                      size="sm"
+                      className="text-[#c51317] px-5 h-[28px] text-sm bg-[#f5c8d1] font-bold w-max rounded-[4px]"
+                      onPress={() => router.push("/admin/company-settings")}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      radius="none"
+                      size="sm"
+                      className="text-white px-5 h-[28px] text-sm bg-btn-primary w-max rounded-[4px]"
+                      onPress={onOpen}
+                      isDisabled={
+                        !formData?.companyName ||
+                        !formData?.companyDomain ||
+                        !formData?.companyEmail
+                      }
+                    >
+                      Update Company
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
+            <ConfirmationModal
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+              data={modalData}
+              handleSubmit={handleSubmit}
+              isLoading={isLoading}
+            />
           </div>
-          <ConfirmationModal
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-            data={modalData}
-            handleSubmit={handleSubmit}
-            isLoading={isLoading}
-          />
         </>
-      }
+      )}
     </div>
   );
 };

@@ -31,8 +31,8 @@ function Index() {
 									success
 								</span>
 							</div>
-							<p className="mb-4 text-[20px] font-normal opacity-90 text-gray-900 dark:text-white">
-								{planType === "Annual" ? "Thank you for subscribing. This confirms the start of your annual subscription plan. You’ll enjoy unlimited credits with FreeAdCopy.com for the next 12 months. At the end of that period, your annual plan will renew. We’ll make sure to notify you prior to your subscription renewal so you can make an informed decision at that time. You can also manage subscriptions in your settings." : "Thank you for subscribing. This confirms the start of your annual subscription plan. You’ll enjoy Creating your questions for the next month. At the end of that period, your monthly plan will renew. We’ll make sure to notify you prior to your subscription renewal so you can make an informed decision at that time. You can also manage subscriptions in your settings."}
+							<p className="mb-4 text-standard font-normal opacity-90 text-gray-900 dark:text-white">
+								{planType === "Annual" ? "Thank you for subscribing. This confirms the start of your annual subscription plan. You’ll enjoy unlimited credits with FreeAdCopy.com for the next 12 months. At the end of that period, your annual plan will renew. We’ll make sure to notify you prior to your subscription renewal so you can make an informed decision at that time. You can also manage subscriptions in your settings." : "Thank you for subscribing. This confirms the start of your monthly subscription plan. You’ll enjoy creating your questions for the next month. At the end of that period, your monthly plan will renew. We’ll make sure to notify you prior to your subscription renewal so you can make an informed decision at that time. You can also manage subscriptions in your settings."}
 							</p>
 							<Button
 								size="md"

@@ -43,7 +43,7 @@ const CompanySettings = () => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          setAllCompanies(data)
+          setAllCompanies(data.sort((a, b) =>  b.id - a.id))
         } else {
           toast.error("Error while fetching companies, please contact support team")
         }

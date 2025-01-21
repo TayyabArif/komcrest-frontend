@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { publicDomain } from "@/constants";
+import Link from "next/link";
 
 const RegistrationForm = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -186,21 +187,21 @@ const RegistrationForm = () => {
                     </p>
                   )}
                 </div>
-               
+
                 {/* <div className="flex md:w-[35%] items-end gap-4"> */}
-                  <Input
-                    label="Nom de l'enterprise"
-                    name="name"
-                    value={registerFormData.name}
-                    onChange={handleInputChange}
-                    type="text"
-                    variant="underlined"
-                    size="md"
-                    classNames={{
-                      input: "text-standard",
-                      label: "text-standard mb-1",
-                    }}
-                  />
+                <Input
+                  label="Nom de l'enterprise"
+                  name="name"
+                  value={registerFormData.name}
+                  onChange={handleInputChange}
+                  type="text"
+                  variant="underlined"
+                  size="md"
+                  classNames={{
+                    input: "text-standard",
+                    label: "text-standard mb-1",
+                  }}
+                />
                 {/* </div> */}
               </div>
             </div>
@@ -255,7 +256,7 @@ const RegistrationForm = () => {
                       label: "text-standard mb-1",
                       errorMessage: "text-sm text-[#f31260]",
                     }}
-                      errorMessage={`Veuillez inclure un '@' dans l'adresse e-mail. ${registerFormData.email} manque un '@'.`}
+                    errorMessage={`Veuillez inclure un '@' dans l'adresse e-mail. ${registerFormData.email} manque un '@'.`}
                   />
                   {formErrors.email && (
                     <p className="text-[#f31260] text-sm">{formErrors.email}</p>
@@ -323,23 +324,34 @@ const RegistrationForm = () => {
               </div>
             </div>
 
-            <Checkbox
-              isSelected={
-                registerFormData.termsServices && registerFormData.privacyPolicy
-              }
-              onChange={handleCheckboxChange}
-              radius="none"
-              size="lg"
-              classNames={{
-                label: "!rounded-[3px] text-standard",
-                wrapper: "!rounded-[3px]",
-              }}
-            >
-              J&apos;accepte les{" "}
-              <span className="text-blue-600 underline">
-                conditions générales de vente et d&apos;utilisation
+            <div className="flex gap-1">
+              <Checkbox
+                isSelected={
+                  registerFormData.termsServices &&
+                  registerFormData.privacyPolicy
+                }
+                onChange={handleCheckboxChange}
+                radius="none"
+                size="lg"
+                classNames={{
+                  label: "!rounded-[3px] text-standard",
+                  wrapper: "!rounded-[3px]",
+                }}
+              ></Checkbox>
+
+              <span>
+                J&apos;accepte les{" "}
+                <a
+                  href="https://komcrest.com/conditions-generales-de-vente"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="text-blue-600 underline">
+                    Conditions générales de vente et d&apos;utilisation
+                  </span>
+                </a>
               </span>
-            </Checkbox>
+            </div>
 
             <div className="flex justify-center">
               <Button

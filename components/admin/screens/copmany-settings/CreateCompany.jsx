@@ -87,6 +87,7 @@ const CreateCompany = () => {
       products,
       termsServices: formData?.displayTOS,
       privacyPolicy: formData?.displayPrivacyPolicy,
+      planId:formData?.planId
     });
 
     const requestOptions = {

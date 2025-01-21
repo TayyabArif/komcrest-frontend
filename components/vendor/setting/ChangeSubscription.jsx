@@ -18,7 +18,6 @@ const ChangeSubscription = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
   const handleCreateCheckout = async (data) => {
-
     try {
       setIsLoading({
         success: true,
@@ -87,6 +86,7 @@ const ChangeSubscription = () => {
               (item) =>
                 item.billingCycle == billingType
             )
+            .sort((a, b) => a.id - b.id)
             .map((data, index) => (
               <div
                 key={index}
@@ -97,29 +97,40 @@ const ChangeSubscription = () => {
                   <span className="text-xl font-bold mb-5">{data.name}</span>
                 </div>
                 <div className="my-0 space-y-3">
-                  <p className="font-semibold text-standard flex items-center gap-2">
-                    <CircleCheckBig size={18} /> {data.benefits?.Questions}{" "}
-                    Questions
+                  <p className=" text-standard flex items-center gap-2 leading-6">
+                    <div>
+                    <CircleCheckBig size={22} /> 
+                    </div>
+                    {data.benefits?.Questions}{" "}
+                    Questions / automated answer
                   </p>
-                  <p className="font-semibold text-standard flex items-center gap-2">
-                    <CircleCheckBig size={18} /> {data.benefits?.Questionnaires}{" "}
+                  <p className=" text-standard flex items-center gap-2 leading-6">
+                  <div>
+                    <CircleCheckBig size={22} /> 
+                    </div>{data.benefits?.Questionnaires}{" "}
                     Questionnaires
                   </p>
-                  <p className="font-semibold text-standard flex items-center gap-2">
-                    <CircleCheckBig size={18} /> Un Limited Documents
+                  <p className=" text-standard flex items-center gap-2 leading-6">
+                  <div>
+                    <CircleCheckBig size={22} /> 
+                    </div> Answers from the market-leading LLM
                   </p>
-                  <p className="font-semibold text-standard flex items-center gap-2">
-                    <CircleCheckBig size={18} /> Un Limited Online Resource
+                  <p className=" text-standard flex items-center gap-2 leading-6">
+                  <div>
+                    <CircleCheckBig size={22} /> 
+                    </div> Unlimited resources and knowledge base entries
                   </p>
-                  <p className="font-semibold text-standard flex items-center gap-2">
-                    <CircleCheckBig size={18} /> Day support
+                  <p className=" text-standard flex items-center gap-2 leading-6">
+                  <div>
+                    <CircleCheckBig size={22} /> 
+                    </div> {data.name =="Professionnel" ? "Priority support" : "Standard support"}
                   </p>
                 </div>
                 <div className="border border-dashed border-[#A9A9AA] tracking-widest my-4" />
 
                 <div className="bottom-6 left-6 right-6 ">
                   <div className="flex justify-between items-center">
-                    <span className="text-[20px] font-bold flex items-center">< MdOutlineEuroSymbol /> {data.price}</span>
+                    <span className="text-[20px] font-semibold flex items-center">< MdOutlineEuroSymbol /> {data.price} per month excl. VAT</span>
 
                     {data.planType !== "free" && (
                       <Button

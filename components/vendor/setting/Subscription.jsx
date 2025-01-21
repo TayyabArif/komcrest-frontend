@@ -9,9 +9,10 @@ import { handleResponse } from "../../../helper";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { useMyContext } from "@/context";
+import { Button } from "@nextui-org/react";
 
 const Subscription = () => {
-  const {activePlanDetail} = useMyContext();
+  const { activePlanDetail ,handleCreateCheckout , plansData ,isLoading} = useMyContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isChangePlanClick, setIsChangePlanClick] = useState(false);
   const [cancelExplanation, setCancelExplanation] = useState("");
@@ -20,7 +21,7 @@ const Subscription = () => {
   const role = cookiesData?.role;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
-
+  debugger;
   const cancelSubscription = async () => {
     try {
       // Fetch the token from cookies
@@ -59,8 +60,8 @@ const Subscription = () => {
       if (data?.message) {
         toast.success(data.message);
         console.log("Subscription canceled successfully:", data);
-        setCancelExplanation("")
-        onOpenChange(); 
+        setCancelExplanation("");
+        onOpenChange();
       } else {
         toast.error("Unexpected response received.");
         console.error("Unexpected response format:", data);
@@ -70,6 +71,17 @@ const Subscription = () => {
       console.error("Unexpected error:", error);
     }
   };
+
+  function planActivated (){
+    const selectedPlanId = activePlanDetail?.subscriptionDetails?.selectedPlanId
+    const selectedPlan = plansData?.find((item) => item.id == selectedPlanId)
+  if(selectedPlan?.name !== "Free"){
+    handleCreateCheckout(selectedPlan)
+  }
+  }
+
+
+
   return (
     <div className="h-full w-full flex flex-col items-center overflow-y-scroll">
       <div className="w-[82%] h-[180px] mx-auto bg-white rounded mt-20">
@@ -80,11 +92,27 @@ const Subscription = () => {
 
         <div className="flex justify-between my-10 px-5">
           <h1 className="flex w-full justify-between text-standard">
-            {activePlanDetail?.subscriptionDetails?.planName} – {activePlanDetail?.questionLimitDetails?.totalAllowedQuestions} questions
-            {role == "Admin" && `- EUR ${activePlanDetail?.subscriptionDetails?.planPrice} per ${activePlanDetail?.subscriptionDetails?.billingCycle} not including VAT`}
-            <span className="text-blue-700 text-standard">
-              {activePlanDetail?.questionLimitDetails?.questionsLeft} question left
-            </span>
+            {activePlanDetail?.subscriptionDetails?.planName} –{" "}
+            {activePlanDetail?.questionLimitDetails?.totalAllowedQuestions}{" "}
+            questions
+            {role == "Admin" &&
+              `- EUR ${activePlanDetail?.subscriptionDetails?.planPrice} per ${activePlanDetail?.subscriptionDetails?.billingCycle} not including VAT`}
+            {activePlanDetail?.subscriptionDetails?.planName !== "Free" ? (
+              <span className="text-blue-700 text-standard">
+                {activePlanDetail?.questionLimitDetails?.questionsLeft} question
+                left
+              </span>
+            ) : (
+              <Button
+                radius="none"
+                size="md"
+                className="global-success-btn"
+                isLoading={isLoading}
+                onClick={() => planActivated()}
+              >
+                Activate Plan
+              </Button>
+            )}
           </h1>
 
           {/* {role == "Admin" && (
@@ -100,7 +128,7 @@ const Subscription = () => {
       {role == "Admin" && (
         <div className="flex flex-col w-[82%]">
           <div
-            className="flex gap-3 items-center mt-10 ml-10 cursor-pointer w-max"
+            className="flex gap-3 items-center mt-10 ml-4 cursor-pointer w-max"
             onClick={() => setIsChangePlanClick(!isChangePlanClick)}
           >
             <p className="text-standard">Change plan</p>
@@ -113,12 +141,16 @@ const Subscription = () => {
               height={18}
             />
           </div>
-          {isChangePlanClick && <ChangeSubscription />}
-          <div className="flex justify-end mt-7 mx-auto mr-5">
-            <p className="text-standard cursor-pointer" onClick={onOpen}>
-              Cancel Subscription
-            </p>
-          </div>
+          {isChangePlanClick && (
+            <>
+              <ChangeSubscription />
+              <div className="flex justify-end mt-7 mx-auto mr-5">
+                <p className="text-standard cursor-pointer" onClick={onOpen}>
+                  Cancel Subscription
+                </p>
+              </div>
+            </>
+          )}
         </div>
       )}
       <CancelSubscriptionModal
