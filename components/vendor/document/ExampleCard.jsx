@@ -48,7 +48,7 @@ const ExampleCard = () => {
                 className="w-[20%]  bg-white rounded-lg  my-4 flex flex-col justify-between mx-2"
               >
                 <div className=" text-left px-4 pt-5 h-full py-6">
-                  <h1 className="text-[14px] font-semibold 2xl:text-[20px]">{item.title}</h1>
+                  <h1 className="text-[16px] font-semibold 2xl:text-[20px]">{item.title}</h1>
                 </div>
 
                 <div className="flex justify-between items-center border-t-2 py-2 px-4">

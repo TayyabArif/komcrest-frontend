@@ -17,15 +17,15 @@ import FreeTrialCompletedModal from "./FreeTrialCompletedModal";
 import { useDisclosure } from "@nextui-org/react";
 
 const VendorLayout = ({ children }) => {
-  const { setIsKnowledgeBaseOpenDirect, activePlanDetail } = useMyContext();
+  const { setIsKnowledgeBaseOpenDirect, activePlanDetail,plansData , handleCreateCheckout , isLoading} = useMyContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const router = useRouter();
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const route = router.route;
   const userID = cookiesData?.userId;
   const [loggedInUser, setLoggedInUser] = useState();
-  // const [isFreeTrialEnd, setIsFreeTrialEnd] = useState(activePlanDetail?.questionLimitDetails?.questionsLeft == 0 ? true : false);
   const [isFreeTrialEnd, setIsFreeTrialEnd] = useState(
     isCurrentDateGreaterThanEndDate() ||
       activePlanDetail?.questionLimitDetails?.questionsLeft == 0
@@ -34,6 +34,10 @@ const VendorLayout = ({ children }) => {
   );
   const [selectedItem, setSelectedItem] = useState("");
   const currentDate = new Date();
+  // const [isLoading, setIsLoading] = useState({
+  //   success: false,
+  //   id: ""
+  // })
 
   useEffect(() => {
     const parts = route.split("/");
@@ -67,6 +71,60 @@ function getDayDifference() {
 
   return dayDifference;
 }
+
+function planActivated (){
+  const selectedPlanId = activePlanDetail?.subscriptionDetails?.selectedPlanId
+  const selectedPlan = plansData?.find((item) => item.id == selectedPlanId)
+if(selectedPlan?.name == "Free"){
+  router.push("/vendor/setting/subscription-plan")
+}else{
+  handleCreateCheckout(selectedPlan)
+}
+}
+
+
+// const handleCreateCheckout = async (data) => {
+//   try {
+//     setIsLoading({
+//       success: true,
+//       id: data.id
+//     })
+//     const item = {
+//       priceId: data?.billingCycle === "monthly" ? data?.monthlyStripePriceId : data?.yearlyStripePriceId,
+//       billingCycle: data?.billingCycle,
+//       plan_id: data?.id
+//     }
+//     const token = cookiesData?.token;
+//     const requestOptions = {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json", 
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: JSON.stringify({item}),
+//       redirect: "follow",
+//     };
+
+//     const response = await fetch(`${baseUrl}/stripe/create-checkout`, requestOptions);
+
+//     const createdSession = await response.json()
+//     if (response.ok) {
+//       // toast.success(data.message);
+//       console.log(">>>>>>>>>>>>",createdSession?.session?.url)
+//       window.open(createdSession?.session?.url, "_blank");
+//     } else {
+//       toast.error(createdSession?.message);
+//     }
+//   } catch (error) {
+//     toast.error("error");
+//     console.error("Error updating Resource:", error);
+//   } finally{
+//     setIsLoading({
+//       success: false,
+//       id: ""
+//     })
+//   }
+// }
 
   return (
     <div className="flex w-full">
@@ -180,7 +238,8 @@ function getDayDifference() {
                 radius="none"
                 size="md"
                 className="global-success-btn"
-                onClick={() => router.push("/vendor/setting/subscription-plan")}
+                // isLoading={isLoading}
+                onClick={() => planActivated()}
               >
                 Activate Plan
               </Button>
@@ -213,6 +272,7 @@ function getDayDifference() {
         isOpen={isFreeTrialEnd && route !== "/vendor/setting/subscription-plan"}
         onOpen={onOpen}
         onOpenChange={onOpenChange}
+        planActivated={planActivated}
       />
     </div>
   );

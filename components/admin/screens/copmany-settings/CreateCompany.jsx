@@ -33,6 +33,7 @@ const CreateCompany = () => {
     displayTOS: false,
     displayPrivacyPolicy: false,
     planId : ""
+    
   });
   const [products, setProducts] = useState([]);
   const handleChange = (e) => {
@@ -87,6 +88,8 @@ const CreateCompany = () => {
       products,
       termsServices: formData?.displayTOS,
       privacyPolicy: formData?.displayPrivacyPolicy,
+      planId:formData?.planId,
+      createdBy:"admin"
     });
 
     const requestOptions = {

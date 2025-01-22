@@ -545,6 +545,49 @@ export const MyProvider = ({ children }) => {
     checkAccountLimitation()
   },[reCallPlanDetailApi])
 
+
+
+  const handleCreateCheckout = async (data) => {
+    try {
+      // setIsLoading({
+      //   success: true,
+      //   id: data.id
+      // })
+      setIsLoading(true);
+      const item = {
+        priceId: data?.billingCycle === "monthly" ? data?.monthlyStripePriceId : data?.yearlyStripePriceId,
+        billingCycle: data?.billingCycle,
+        plan_id: data?.id
+      }
+      const token = cookiesData?.token;
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", 
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({item}),
+        redirect: "follow",
+      };
+  
+      const response = await fetch(`${baseUrl}/stripe/create-checkout`, requestOptions);
+  
+      const createdSession = await response.json()
+      if (response.ok) {
+        // toast.success(data.message);
+        console.log(">>>>>>>>>>>>",createdSession?.session?.url)
+        window.open(createdSession?.session?.url, "_blank");
+      } else {
+        toast.error(createdSession?.message);
+      }
+    } catch (error) {
+      toast.error("error");
+      console.error("Error updating Resource:", error);
+    } finally{
+      setIsLoading(false);
+    }
+  }
+
   return (
     <MyContext.Provider
       value={{
@@ -589,7 +632,8 @@ export const MyProvider = ({ children }) => {
         allCompanyProducts,
         plansData,
         activePlanDetail,
-        setReCallPlanDetailApi
+        setReCallPlanDetailApi,
+        handleCreateCheckout
       }}
     >
       {children}

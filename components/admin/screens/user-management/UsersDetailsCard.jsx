@@ -56,7 +56,7 @@ const id = 50
       labelPlacement="outside"
       placeholder='Enter first name'
       variant="bordered"
-      // className="max-w-sm"
+      className="max-w-sm"
       classNames={{label: "text-standard ml-0.5",input: "text-standard",}}
      
     />

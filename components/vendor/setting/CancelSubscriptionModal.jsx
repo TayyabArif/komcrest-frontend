@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/router";
 
-const CancelSubscriptionModal = ({ isOpen, onOpen, onOpenChange, cancelExplanation, setCancelExplanation ,cancelSubscription }) => {
+const CancelSubscriptionModal = ({ isOpen, onOpen, onOpenChange, cancelExplanation, setCancelExplanation ,cancelSubscription ,cancelIsLoading}) => {
   const router = useRouter()
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">
@@ -33,6 +33,7 @@ const CancelSubscriptionModal = ({ isOpen, onOpen, onOpenChange, cancelExplanati
               size="md"
               className="global-success-btn"
               onClick={()=>cancelSubscription()}
+              isLoading={cancelIsLoading}
               isDisabled={!cancelExplanation}
             >
              Send cancellation request

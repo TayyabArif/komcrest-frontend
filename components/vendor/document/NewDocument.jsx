@@ -22,7 +22,6 @@ const NewDocument = () => {
   const { companyProducts, setDocumentDataUpdate } = useMyContext();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  debugger;
   const router = useRouter();
   const { id } = router.query;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;

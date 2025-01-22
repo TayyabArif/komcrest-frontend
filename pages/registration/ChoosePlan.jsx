@@ -8,11 +8,11 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
 
   const getCardColor = (name) => {
     switch (name) {
-      case "Essential":
+      case "Essentiel":
         return "#88AEFF";
       case "Standard":
         return "#01FFA3";
-      case "Professional":
+      case "Professionnel":
         return "#01CFFD";
 
       default:
@@ -30,11 +30,11 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
 
   const getMinRangeQuestionnaire = (name) => {
     switch (name) {
-      case "Essential":
+      case "Essentiel":
         return "3";
       case "Standard":
         return "5";
-      case "Professional":
+      case "Professionnel":
         return "10";
 
       default:
@@ -71,7 +71,7 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
       <div className="sm:flex justify-evenly flex-wrap lg:gap-10 gap-5 w-full  my-5 md:space-y-0 space-y-3">
         {plansData
           .filter((item) => item.billingCycle == billingType)
-          .sort((a, b) => a.id - b.id  )
+          .sort((a, b) => a.id - b.id )
           .map((item) => (
             <div
               key={item.name}
