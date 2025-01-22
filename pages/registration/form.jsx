@@ -30,6 +30,7 @@ const RegistrationForm = () => {
     termsServices: false,
     privacyPolicy: false,
     phoneNumber: "",
+    createdBy:"user"
   });
 
   const handleInputChange = (e) => {

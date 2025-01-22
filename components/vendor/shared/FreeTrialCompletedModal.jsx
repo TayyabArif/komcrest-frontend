@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/router";
 
-const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange }) => {
+const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange ,planActivated }) => {
   const router = useRouter();
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
@@ -30,10 +30,8 @@ const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange }) => {
             <Button
               size="md"
               color="primary"
-              className="rounded-md 2xl:text-[20px]  text-[16px]"
-              onClick={() =>
-                router.push("/vendor/setting/subscription-plan")
-              }
+              className="global-success-btn"
+              onClick={() =>planActivated() }
             >
               Activate Plan
             </Button>

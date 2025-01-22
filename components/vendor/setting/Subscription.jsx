@@ -12,7 +12,8 @@ import { useMyContext } from "@/context";
 import { Button } from "@nextui-org/react";
 
 const Subscription = () => {
-  const { activePlanDetail ,handleCreateCheckout , plansData ,isLoading} = useMyContext();
+  const { activePlanDetail, handleCreateCheckout, plansData, isLoading } =
+    useMyContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isChangePlanClick, setIsChangePlanClick] = useState(false);
   const [cancelExplanation, setCancelExplanation] = useState("");
@@ -21,8 +22,10 @@ const Subscription = () => {
   const role = cookiesData?.role;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
-  debugger;
+  const [cancelIsLoading , setCancelIsLoading] = useState(false)
+
   const cancelSubscription = async () => {
+    setCancelIsLoading(true)
     try {
       // Fetch the token from cookies
       const token = cookiesData?.token;
@@ -69,18 +72,18 @@ const Subscription = () => {
     } catch (error) {
       toast.error("An unexpected error occurred. Please try again later.");
       console.error("Unexpected error:", error);
+    } finally{
+      setCancelIsLoading(false)
     }
   };
 
-  function planActivated (){
-    const selectedPlanId = activePlanDetail?.subscriptionDetails?.selectedPlanId
-    const selectedPlan = plansData?.find((item) => item.id == selectedPlanId)
-  if(selectedPlan?.name !== "Free"){
-    handleCreateCheckout(selectedPlan)
-  }
-  }
-
-
+  // function planActivated (){
+  //   const selectedPlanId = activePlanDetail?.subscriptionDetails?.selectedPlanId
+  //   const selectedPlan = plansData?.find((item) => item.id == selectedPlanId)
+  // if(selectedPlan?.name !== "Free"){
+  //   handleCreateCheckout(selectedPlan)
+  // }
+  // }
 
   return (
     <div className="h-full w-full flex flex-col items-center overflow-y-scroll">
@@ -97,22 +100,10 @@ const Subscription = () => {
             questions
             {role == "Admin" &&
               `- EUR ${activePlanDetail?.subscriptionDetails?.planPrice} per ${activePlanDetail?.subscriptionDetails?.billingCycle} not including VAT`}
-            {activePlanDetail?.subscriptionDetails?.planName !== "Free" ? (
-              <span className="text-blue-700 text-standard">
-                {activePlanDetail?.questionLimitDetails?.questionsLeft} question
-                left
-              </span>
-            ) : (
-              <Button
-                radius="none"
-                size="md"
-                className="global-success-btn"
-                isLoading={isLoading}
-                onClick={() => planActivated()}
-              >
-                Activate Plan
-              </Button>
-            )}
+            <span className="text-blue-700 text-standard">
+              {activePlanDetail?.questionLimitDetails?.questionsLeft} question
+              left
+            </span>
           </h1>
 
           {/* {role == "Admin" && (
@@ -144,11 +135,13 @@ const Subscription = () => {
           {isChangePlanClick && (
             <>
               <ChangeSubscription />
-              <div className="flex justify-end mt-7 mx-auto mr-5">
-                <p className="text-standard cursor-pointer" onClick={onOpen}>
-                  Cancel Subscription
-                </p>
-              </div>
+              { activePlanDetail?.subscriptionDetails?.planName &&  activePlanDetail?.subscriptionDetails?.planName !== "Free" && (
+                <div className="flex justify-end mt-7 mx-auto mr-5">
+                  <p className="text-standard cursor-pointer" onClick={onOpen}>
+                    Cancel Subscription
+                  </p>
+                </div>
+              )}
             </>
           )}
         </div>
@@ -160,6 +153,7 @@ const Subscription = () => {
         setCancelExplanation={setCancelExplanation}
         cancelExplanation={cancelExplanation}
         cancelSubscription={cancelSubscription}
+        cancelIsLoading={cancelIsLoading}
       />
     </div>
   );

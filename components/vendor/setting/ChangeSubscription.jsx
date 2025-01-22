@@ -130,7 +130,7 @@ const ChangeSubscription = () => {
 
                 <div className="bottom-6 left-6 right-6 ">
                   <div className="flex justify-between items-center">
-                    <span className="text-[20px] font-semibold flex items-center">< MdOutlineEuroSymbol /> {data.price} per month excl. VAT</span>
+                    <span className="text-[20px] font-semibold flex items-center">< MdOutlineEuroSymbol /> {data.price} <span className="text-standard px-1"> excl. VAT</span></span>
 
                     {data.planType !== "free" && (
                       <Button

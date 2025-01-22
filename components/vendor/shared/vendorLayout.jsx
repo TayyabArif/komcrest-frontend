@@ -238,7 +238,7 @@ if(selectedPlan?.name == "Free"){
                 radius="none"
                 size="md"
                 className="global-success-btn"
-                isLoading={isLoading}
+                // isLoading={isLoading}
                 onClick={() => planActivated()}
               >
                 Activate Plan
@@ -272,6 +272,7 @@ if(selectedPlan?.name == "Free"){
         isOpen={isFreeTrialEnd && route !== "/vendor/setting/subscription-plan"}
         onOpen={onOpen}
         onOpenChange={onOpenChange}
+        planActivated={planActivated}
       />
     </div>
   );
