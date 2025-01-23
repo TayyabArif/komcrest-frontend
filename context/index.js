@@ -538,14 +538,16 @@ export const MyProvider = ({ children }) => {
           console.error("Error:", data);
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error("Error occurred: ", error);
+        setActivePlanDetail({})
+      });
+      
   };
 
   useEffect(() => {
     checkAccountLimitation()
   },[reCallPlanDetailApi])
-
-
 
   const handleCreateCheckout = async (data) => {
     try {

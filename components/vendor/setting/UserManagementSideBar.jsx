@@ -9,7 +9,7 @@ const UserManagementSideBar = () => {
   const cookiesData = cookies.myCookie || {}; 
   const userID = cookiesData?.userId || "";
   const role = cookiesData?.role || "";
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
   const route = router.route;
 
   useEffect(() => {
@@ -17,6 +17,8 @@ const UserManagementSideBar = () => {
     const segment = parts[3];
     setSelectedItem(segment);
   }, [route]);
+
+  if (selectedItem === null) return null;
 
   return (
     <div className="bg-[#F8FAFC] w-[20%] h-full">

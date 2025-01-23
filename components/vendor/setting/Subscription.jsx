@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDisclosure } from "@nextui-org/react";
 import ChangeSubscriptionModal from "./ChangeSubscriptionModal";
 import { useCookies } from "react-cookie";
@@ -12,20 +12,25 @@ import { useMyContext } from "@/context";
 import { Button } from "@nextui-org/react";
 
 const Subscription = () => {
-  const { activePlanDetail, handleCreateCheckout, plansData, isLoading } =
-    useMyContext();
+  const {
+    activePlanDetail,
+    handleCreateCheckout,
+    plansData,
+    isLoading,
+    setReCallPlanDetailApi,
+  } = useMyContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isChangePlanClick, setIsChangePlanClick] = useState(false);
   const [cancelExplanation, setCancelExplanation] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  const role = cookiesData?.role;
+  const [role, setRole] = useState(null);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
-  const [cancelIsLoading , setCancelIsLoading] = useState(false)
+  const [cancelIsLoading, setCancelIsLoading] = useState(false);
 
   const cancelSubscription = async () => {
-    setCancelIsLoading(true)
+    setCancelIsLoading(true);
     try {
       // Fetch the token from cookies
       const token = cookiesData?.token;
@@ -63,6 +68,7 @@ const Subscription = () => {
       if (data?.message) {
         toast.success(data.message);
         console.log("Subscription canceled successfully:", data);
+        setReCallPlanDetailApi((prev) => !prev);
         setCancelExplanation("");
         onOpenChange();
       } else {
@@ -72,18 +78,30 @@ const Subscription = () => {
     } catch (error) {
       toast.error("An unexpected error occurred. Please try again later.");
       console.error("Unexpected error:", error);
-    } finally{
-      setCancelIsLoading(false)
+    } finally {
+      setCancelIsLoading(false);
     }
   };
 
-  // function planActivated (){
-  //   const selectedPlanId = activePlanDetail?.subscriptionDetails?.selectedPlanId
-  //   const selectedPlan = plansData?.find((item) => item.id == selectedPlanId)
-  // if(selectedPlan?.name !== "Free"){
-  //   handleCreateCheckout(selectedPlan)
-  // }
-  // }
+  useEffect(() => {
+    const roleFromCookies = cookiesData?.role;
+    setRole(roleFromCookies);
+  }, [cookiesData]);
+
+  function getPlanDetail(id) {
+    const plan = plansData?.find((item) => item.id == id);
+
+    console.log(">>>>>>>", plan);
+    return plan;
+  }
+
+  function planActivated() {
+    const selectedPlanId =
+      activePlanDetail?.subscriptionDetails?.selectedPlanId;
+    const selectedPlan = plansData?.find((item) => item.id == selectedPlanId);
+    handleCreateCheckout(selectedPlan);
+  }
+
   return (
     <div className="h-full w-full flex flex-col items-center overflow-y-scroll">
       <div className="w-[82%] h-[180px] mx-auto bg-white rounded mt-20">
@@ -91,25 +109,57 @@ const Subscription = () => {
         <hr
           style={{ height: "2px", backgroundColor: "#E4E4E7", border: "none" }}
         />
-
         <div className="flex justify-between my-10 px-5">
-          {activePlanDetail?.subscriptionDetails ?
-          <h1 className="flex w-full justify-between text-standard">
-            {activePlanDetail?.subscriptionDetails?.planName} –{" "}
-            {activePlanDetail?.questionLimitDetails?.totalAllowedQuestions}{" "}
-            questions
-            {role == "Admin" &&
-              `- EUR ${activePlanDetail?.subscriptionDetails?.planPrice} per ${activePlanDetail?.subscriptionDetails?.billingCycle} not including VAT`}
-            <span className="text-blue-700 text-standard">
-              {activePlanDetail?.questionLimitDetails?.questionsLeft} question
-              left
-            </span>
-          </h1>
-          :
-          <h1 className="flex w-full justify-between text-standard text-blue-700">
-            No Active plan Currently
-          </h1>
-          }
+          {activePlanDetail?.subscriptionDetails ? (
+            <h1 className="flex w-full justify-between text-standard">
+              {activePlanDetail?.subscriptionDetails?.planName == "Free"
+                ? getPlanDetail(
+                    activePlanDetail?.subscriptionDetails?.selectedPlanId
+                  ).name
+                : activePlanDetail?.subscriptionDetails?.planName}{" "}
+              –{" "}
+              {activePlanDetail?.subscriptionDetails?.planName == "Free"
+                ? getPlanDetail(
+                    activePlanDetail?.subscriptionDetails?.selectedPlanId
+                  ).benefits?.Questions
+                : activePlanDetail?.questionLimitDetails
+                    ?.totalAllowedQuestions}{" "}
+              questions
+              {role == "Admin" &&
+                `- EUR ${
+                  activePlanDetail?.subscriptionDetails?.planName == "Free"
+                    ? getPlanDetail(
+                        activePlanDetail?.subscriptionDetails?.selectedPlanId
+                      ).price
+                    : activePlanDetail?.subscriptionDetails?.planPrice
+                } per Month not including VAT`}
+              {activePlanDetail?.subscriptionDetails?.planName == "Free" ? (
+                <Button
+                  radius="none"
+                  size="md"
+                  className="global-success-btn"
+                  // isLoading={isLoading}
+                  isDisabled={
+                    getPlanDetail(
+                      activePlanDetail?.subscriptionDetails?.selectedPlanId
+                    ).name == "Free"
+                  }
+                  onClick={() => planActivated()}
+                >
+                  Activate Plan
+                </Button>
+              ) : (
+                <span className="text-blue-700 text-standard">
+                  {activePlanDetail?.questionLimitDetails?.questionsLeft}{" "}
+                  question left
+                </span>
+              )}
+            </h1>
+          ) : (
+            <h1 className="flex w-full justify-between text-standard text-blue-700">
+              No Active plan Currently
+            </h1>
+          )}
 
           {/* {role == "Admin" && (
             <h1
@@ -140,13 +190,17 @@ const Subscription = () => {
           {isChangePlanClick && (
             <>
               <ChangeSubscription />
-              { activePlanDetail?.subscriptionDetails?.planName &&  activePlanDetail?.subscriptionDetails?.planName !== "Free" && (
-                <div className="flex justify-end mt-7 mx-auto mr-5">
-                  <p className="text-standard cursor-pointer" onClick={onOpen}>
-                    Cancel Subscription
-                  </p>
-                </div>
-              )}
+              {activePlanDetail?.subscriptionDetails?.planName &&
+                activePlanDetail?.subscriptionDetails?.planName !== "Free" && (
+                  <div className="flex justify-end mt-7 mx-auto mr-5">
+                    <p
+                      className="text-standard cursor-pointer"
+                      onClick={onOpen}
+                    >
+                      Cancel Subscription
+                    </p>
+                  </div>
+                )}
             </>
           )}
         </div>

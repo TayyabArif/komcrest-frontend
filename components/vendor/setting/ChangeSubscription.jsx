@@ -141,7 +141,7 @@ const ChangeSubscription = () => {
                         isDisabled = {activePlanDetail?.subscriptionDetails?.planId == data.id}
                         onPress={() => handleCreateCheckout(data)}
                       >
-                        {activePlanDetail?.subscriptionDetails?.planId == data.id ? "Activated" : "Upgrade"}
+                        { activePlanDetail?.subscriptionDetails?.planName == "Free" ? activePlanDetail?.subscriptionDetails?.selectedPlanId == data.id ? "Activate Plan" : "Upgrade"  :    activePlanDetail?.subscriptionDetails?.planId == data.id ? "Activated" : "Upgrade"}
                         
                       </Button>
                     )}

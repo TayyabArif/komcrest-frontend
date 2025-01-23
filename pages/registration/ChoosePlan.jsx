@@ -101,8 +101,7 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
                 <span className="text-[25px]">{item.price}</span>
               </div>
               <p className="font-semibold text-[16px]">
-                Par {item.billingCycle === "annual" ? "annuelle" : "mois"} hors
-                taxe
+                Par mois hors taxe
               </p>
             </div>
           ))}
