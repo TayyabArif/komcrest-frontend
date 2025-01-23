@@ -84,7 +84,6 @@ const Subscription = () => {
   //   handleCreateCheckout(selectedPlan)
   // }
   // }
-
   return (
     <div className="h-full w-full flex flex-col items-center overflow-y-scroll">
       <div className="w-[82%] h-[180px] mx-auto bg-white rounded mt-20">
@@ -94,6 +93,7 @@ const Subscription = () => {
         />
 
         <div className="flex justify-between my-10 px-5">
+          {activePlanDetail?.subscriptionDetails ?
           <h1 className="flex w-full justify-between text-standard">
             {activePlanDetail?.subscriptionDetails?.planName} –{" "}
             {activePlanDetail?.questionLimitDetails?.totalAllowedQuestions}{" "}
@@ -105,6 +105,11 @@ const Subscription = () => {
               left
             </span>
           </h1>
+          :
+          <h1 className="flex w-full justify-between text-standard text-blue-700">
+            No Active plan Currently
+          </h1>
+          }
 
           {/* {role == "Admin" && (
             <h1
