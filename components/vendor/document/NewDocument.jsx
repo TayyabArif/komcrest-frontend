@@ -28,6 +28,7 @@ const NewDocument = () => {
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [titleError, setTitleError] = useState(false);
   const [fileError, setFileError] = useState(false);
+  const [isLoading , setIsLoading] = useState(false)
 
   const [documentData, setDocumentData] = useState({
     title: "",
@@ -99,6 +100,11 @@ const NewDocument = () => {
       setFileError(documentData.file || documentData.filePath ? false : true);
       return null;
     }
+
+    try {
+      
+   
+    setIsLoading(true)
     const formData = new FormData();
     formData.append("title", documentData.title);
     formData.append("description", documentData.description);
@@ -181,6 +187,13 @@ const NewDocument = () => {
         })
         .catch((error) => console.error(error));
     }
+
+  } catch (error) {
+      console.log(error)
+  } finally { setIsLoading(false)}
+
+
+
   };
 
   useEffect(() => {
@@ -415,6 +428,7 @@ const NewDocument = () => {
                   size="md"
                   onPress={SubmitDocument}
                   className="global-success-btn"
+                  isLoading={isLoading}
                   isDisabled={isDescriptionInvalid || isTitleInvalid}
                 >
                   {id ? "Update Document" : "Add Document"}

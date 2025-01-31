@@ -163,24 +163,22 @@ export const multipleSelectStyle = {
 };
 
 
-  export const handleExport = async (data, filePath) => {
+  export const handleExport = async (data, signedURL ,fileName) => {
       const extractedData = data.map(item => ({
           question: item.question,
           compliance: item.compliance,
           answer: item.answer,
           sheetTag: item.sheetTag
       }));
-      if (typeof filePath === "string") {
-          const fileName = filePath.split("/").pop();
-          const downloadUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${fileName}`;
+      if (typeof signedURL === "string") {
           try {
-              const response = await fetch(downloadUrl);
+              const response = await fetch(signedURL);
               if (!response.ok) {
                   alert("File fetch failed!");
                   return;
-              }
-  
+              }  
               const arrayBuffer = await response.arrayBuffer();
+              console.log("==========",arrayBuffer)
               const workbook = new ExcelJS.Workbook();
               await workbook.xlsx.load(arrayBuffer);
   

@@ -1,8 +1,13 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Button } from "@nextui-org/react";
+import { toast } from "react-toastify";
+import { useMyContext } from "@/context";
 
 const KnowledgeHeader = ({ buttonShow, headerData }) => {
+  const {
+    activePlanDetail
+  } = useMyContext();
   const router = useRouter();
   return (
     <div className="bg-gray-50 py-2">
@@ -38,7 +43,12 @@ const KnowledgeHeader = ({ buttonShow, headerData }) => {
                   size="md"
                   className="global-success-btn"
                   onClick={() => {
-                    router.push(headerData.rightButtonPath);
+                    if(headerData.title == "Questionnaires" && activePlanDetail?.subscriptionDetails?.status == "cancelled"){
+                      toast.error("No Plan Active")
+                    }else{
+                      router.push(headerData.rightButtonPath);
+                    }
+                   
                   }}
                 >
                   {headerData.rightButtonText}

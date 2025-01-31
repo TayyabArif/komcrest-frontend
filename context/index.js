@@ -5,6 +5,7 @@ import { handleResponse } from "@/helper";
 import { useCookies } from "react-cookie";
 import useSocket from "@/customHook/useSocket";
 import { toast } from "react-toastify";
+import { saveAs } from "file-saver";
 
 const MyContext = createContext();
 
@@ -31,8 +32,8 @@ export const MyProvider = ({ children }) => {
     []
   );
   const [plansData, setPlansData] = useState([]);
-  const [activePlanDetail , setActivePlanDetail] = useState({})
-  const [reCallPlanDetailApi , setReCallPlanDetailApi] = useState(false)
+  const [activePlanDetail, setActivePlanDetail] = useState({});
+  const [reCallPlanDetailApi, setReCallPlanDetailApi] = useState(false);
 
   // knowledge base module states
   const [knowledgeBasePayloadData, setKnowledgeBasePayloadData] = useState({});
@@ -531,8 +532,8 @@ export const MyProvider = ({ children }) => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          setActivePlanDetail(data)
-          console.log("}}}}}}}}}}}}}}}",data);
+          setActivePlanDetail(data);
+          console.log("}}}}}}}}}}}}}}}", data);
         } else {
           toast.error(data?.error);
           console.error("Error:", data);
@@ -540,14 +541,13 @@ export const MyProvider = ({ children }) => {
       })
       .catch((error) => {
         console.error("Error occurred: ", error);
-        setActivePlanDetail({})
+        setActivePlanDetail({});
       });
-      
   };
 
   useEffect(() => {
-    checkAccountLimitation()
-  },[reCallPlanDetailApi])
+    checkAccountLimitation();
+  }, [reCallPlanDetailApi]);
 
   const handleCreateCheckout = async (data) => {
     try {
@@ -557,27 +557,33 @@ export const MyProvider = ({ children }) => {
       // })
       setIsLoading(true);
       const item = {
-        priceId: data?.billingCycle === "monthly" ? data?.monthlyStripePriceId : data?.yearlyStripePriceId,
+        priceId:
+          data?.billingCycle === "monthly"
+            ? data?.monthlyStripePriceId
+            : data?.yearlyStripePriceId,
         billingCycle: data?.billingCycle,
-        plan_id: data?.id
-      }
+        plan_id: data?.id,
+      };
       const token = cookiesData?.token;
       const requestOptions = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", 
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({item}),
+        body: JSON.stringify({ item }),
         redirect: "follow",
       };
-  
-      const response = await fetch(`${baseUrl}/stripe/create-checkout`, requestOptions);
-  
-      const createdSession = await response.json()
+
+      const response = await fetch(
+        `${baseUrl}/stripe/create-checkout`,
+        requestOptions
+      );
+
+      const createdSession = await response.json();
       if (response.ok) {
         // toast.success(data.message);
-        console.log(">>>>>>>>>>>>",createdSession?.session?.url)
+        console.log(">>>>>>>>>>>>", createdSession?.session?.url);
         window.open(createdSession?.session?.url, "_blank");
       } else {
         toast.error(createdSession?.message);
@@ -585,11 +591,56 @@ export const MyProvider = ({ children }) => {
     } catch (error) {
       toast.error("error");
       console.error("Error updating Resource:", error);
-    } finally{
+    } finally {
       setIsLoading(false);
     }
-  }
+  };
 
+
+  const s3FileDownload = async (filePath, getSignedURL) => {
+    const token = cookiesData?.token;
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ filePath }),
+      redirect: "follow",
+    };
+  
+    try {
+      const response = await fetch(`${baseUrl}/file-download`, requestOptions);
+      const data = await response.json();
+  
+      if (response.ok) {
+        if (getSignedURL) {
+          return data.url; // Return the signed URL
+        } else {
+          // Direct file download
+          const parts = filePath.split("/");
+          const fileName = parts[parts.length - 1];
+          const fileResponse = await fetch(data.url);
+          const blob = await fileResponse.blob();
+          const link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          toast.success("File Downloaded");
+          link.click();
+          link.remove();
+        }
+      } else {
+        toast.error(data?.error);
+        return null; // Return null on error
+      }
+    } catch (error) {
+      console.error(error);
+      return null; // Handle errors gracefully
+    }
+  };
+  
+ 
   return (
     <MyContext.Provider
       value={{
@@ -635,7 +686,8 @@ export const MyProvider = ({ children }) => {
         plansData,
         activePlanDetail,
         setReCallPlanDetailApi,
-        handleCreateCheckout
+        handleCreateCheckout,
+        s3FileDownload,
       }}
     >
       {children}
