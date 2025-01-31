@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { useMyContext } from "@/context";
 import { Button } from "@nextui-org/react";
+import { getOnlyDate } from "../../../helper";
 
 const Subscription = () => {
   const {
@@ -28,7 +29,7 @@ const Subscription = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const router = useRouter();
   const [cancelIsLoading, setCancelIsLoading] = useState(false);
-
+debugger
   const cancelSubscription = async () => {
     setCancelIsLoading(true);
     try {
@@ -117,7 +118,7 @@ const Subscription = () => {
                     activePlanDetail?.subscriptionDetails?.selectedPlanId
                   ).name
                 : activePlanDetail?.subscriptionDetails?.planName}{" "}
-              –{" "}
+              – {" "}
               {activePlanDetail?.subscriptionDetails?.planName == "Free"
                 ? getPlanDetail(
                     activePlanDetail?.subscriptionDetails?.selectedPlanId
@@ -126,13 +127,21 @@ const Subscription = () => {
                     ?.totalAllowedQuestions}{" "}
               questions
               {role == "Admin" &&
-                `- EUR ${
+                ` – EUR ${
                   activePlanDetail?.subscriptionDetails?.planName == "Free"
                     ? getPlanDetail(
                         activePlanDetail?.subscriptionDetails?.selectedPlanId
                       ).price
                     : activePlanDetail?.subscriptionDetails?.planPrice
-                } per Month not including VAT`}
+                } per Month not including VAT`} {" "}
+                {activePlanDetail?.subscriptionDetails?.status == "cancelled" && (
+                   `(expires of the ${getOnlyDate(activePlanDetail?.subscriptionDetails?.endDate)})`
+                ) }
+
+
+
+
+
               {activePlanDetail?.subscriptionDetails?.planName == "Free" ? (
                 <Button
                   radius="none"
@@ -190,7 +199,7 @@ const Subscription = () => {
           {isChangePlanClick && (
             <>
               <ChangeSubscription />
-              {activePlanDetail?.subscriptionDetails?.planName &&
+              {activePlanDetail?.subscriptionDetails?.status =="active" &&
                 activePlanDetail?.subscriptionDetails?.planName !== "Free" && (
                   <div className="flex justify-end mt-7 mx-auto mr-5">
                     <p

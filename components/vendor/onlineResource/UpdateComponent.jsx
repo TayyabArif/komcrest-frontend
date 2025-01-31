@@ -15,13 +15,12 @@ import { now, getLocalTimeZone } from "@internationalized/date";
 import { handleResponse } from "@/helper";
 import Dropzone from "react-dropzone";
 import { toast } from "react-toastify";
-import { handleDownload } from "@/helper";
 import FileUploadModal from "../shared/FileUploadModal";
 import useSocket from "@/customHook/useSocket";
 import { useMyContext } from "@/context";
 
 const UpdateComponent = () => {
-  const { setOnlineResourceDataUpdate } = useMyContext();
+  const { setOnlineResourceDataUpdate, s3FileDownload } = useMyContext();
   const socket = useSocket();
   const languageOptions = [
     { key: "French", label: "French" },
@@ -396,7 +395,7 @@ const UpdateComponent = () => {
                       size="sm"
                       color="primary"
                       className="rounded-md 2xl:text-[18px] cursor-pointer text-[16px] font-semibold mb-1"
-                      onClick={() => handleDownload(onlineResource.file)}
+                      onClick={() =>  s3FileDownload(onlineResource.file)}
                     >
                       Download File
                     </Button>

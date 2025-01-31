@@ -15,6 +15,7 @@ import { useMyContext } from "@/context";
 import { handleExport, handleDownload } from "@/helper";
 
 
+
 const deleteModalContent = "Are you sure to delete this Questionnaires?";
 
 const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
@@ -25,7 +26,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
   const cookiesData = cookies.myCookie;
   const router = useRouter();
   const [questionnaireProgressBar, setQuestionnaireProgressBar] = useState({});
-  const { setQuestionnaireUpdated, setOverAllLoading ,setKnowledgeBasePayloadData ,setIsKnowledgeBaseOpenDirect,questionnaireStatusUpdated} = useMyContext();
+  const { setQuestionnaireUpdated, setOverAllLoading ,setKnowledgeBasePayloadData ,setIsKnowledgeBaseOpenDirect,questionnaireStatusUpdated, s3FileDownload} = useMyContext();
   const [{ isDragging }, dragRef] = useDrag({
     type: "QUESTIONNAIRE_CARD",
     item: { id, status },
@@ -114,12 +115,19 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
       })
     }
 
-
     setKnowledgeBasePayloadData (transformedData)
     setIsKnowledgeBaseOpenDirect(false)
     router.push("/vendor/knowledge/Import")
   }
 
+
+
+  const questionnaireExport =async (data , filePath)=>{
+    const parts = filePath.split("/")
+    const fileName = parts[parts.length - 1]
+    const signedURL = await s3FileDownload(filePath , "getSignedURL")
+    handleExport(data, signedURL , fileName)
+  }
 
   return (
     <div>
@@ -265,7 +273,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                     <div className="text-standard cursor-pointer"
                     onClick={(e) =>{
                       e.stopPropagation()
-                      handleExport(data?.questionnaireRecords  , data.filePath)
+                      questionnaireExport(data?.questionnaireRecords , data.filePath)
                     }}
                     >
                       Export questionnaire with answers
@@ -277,7 +285,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
                   onClick={(e) => {
                     console.log("data?.filePath", data);
                     e.stopPropagation();
-                    handleDownload(data?.filePath);
+                    s3FileDownload(data?.filePath);
                     setOpenPopoverIndex(null);
                   }}
                 >

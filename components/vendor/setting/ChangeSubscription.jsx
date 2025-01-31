@@ -7,44 +7,50 @@ import { useMyContext } from "@/context";
 import { MdOutlineEuroSymbol } from "react-icons/md";
 
 const ChangeSubscription = () => {
-  const { plansData , activePlanDetail} = useMyContext();
+  const { plansData, activePlanDetail } = useMyContext();
   const [billingType, setBillingType] = useState("monthly");
   const [isLoading, setIsLoading] = useState({
     success: false,
-    id: ""
-  })
+    id: "",
+  });
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const handleCreateCheckout = async (data) => {
     try {
       setIsLoading({
         success: true,
-        id: data.id
-      })
+        id: data.id,
+      });
       const item = {
-        priceId: data?.billingCycle === "monthly" ? data?.monthlyStripePriceId : data?.yearlyStripePriceId,
+        priceId:
+          data?.billingCycle === "monthly"
+            ? data?.monthlyStripePriceId
+            : data?.yearlyStripePriceId,
         billingCycle: data?.billingCycle,
-        plan_id: data?.id
-      }
+        plan_id: data?.id,
+      };
       const token = cookiesData?.token;
       const requestOptions = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", 
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({item}),
+        body: JSON.stringify({ item }),
         redirect: "follow",
       };
 
-      const response = await fetch(`${baseUrl}/stripe/create-checkout`, requestOptions);
+      const response = await fetch(
+        `${baseUrl}/stripe/create-checkout`,
+        requestOptions
+      );
 
-      const createdSession = await response.json()
+      const createdSession = await response.json();
       if (response.ok) {
         // toast.success(data.message);
-        console.log(">>>>>>>>>>>>",createdSession?.session?.url)
+        console.log(">>>>>>>>>>>>", createdSession?.session?.url);
         window.open(createdSession?.session?.url, "_blank");
       } else {
         toast.error(createdSession?.message);
@@ -52,13 +58,13 @@ const ChangeSubscription = () => {
     } catch (error) {
       toast.error("error");
       console.error("Error updating Resource:", error);
-    } finally{
+    } finally {
       setIsLoading({
         success: false,
-        id: ""
-      })
+        id: "",
+      });
     }
-  }
+  };
   return (
     <div className="w-full">
       <div className="flex gap-6 ml-10 my-2">
@@ -82,10 +88,7 @@ const ChangeSubscription = () => {
       <div className="">
         <div className="flex flex-wrap  gap-x-[30px] gap-y-4 w-[100%] mx-auto">
           {plansData
-            ?.filter(
-              (item) =>
-                item.billingCycle == billingType
-            )
+            ?.filter((item) => item.billingCycle == billingType)
             .sort((a, b) => a.id - b.id)
             .map((data, index) => (
               <div
@@ -99,50 +102,77 @@ const ChangeSubscription = () => {
                 <div className="my-0 space-y-3">
                   <p className=" text-standard flex items-center gap-2 leading-6">
                     <div>
-                    <CircleCheckBig size={22} /> 
+                      <CircleCheckBig size={22} />
                     </div>
-                    {data.benefits?.Questions}{" "}
-                    Questions / automated answer
+                    {data.benefits?.Questions} Questions / automated answer
                   </p>
                   <p className=" text-standard flex items-center gap-2 leading-6">
-                  <div>
-                    <CircleCheckBig size={22} /> 
-                    </div>{data.benefits?.Questionnaires}{" "}
-                    Questionnaires
+                    <div>
+                      <CircleCheckBig size={22} />
+                    </div>
+                    {data.benefits?.Questionnaires} Questionnaires
                   </p>
                   <p className=" text-standard flex items-center gap-2 leading-6">
-                  <div>
-                    <CircleCheckBig size={22} /> 
-                    </div> Answers from the market-leading LLM
+                    <div>
+                      <CircleCheckBig size={22} />
+                    </div>{" "}
+                    Answers from the market-leading LLM
                   </p>
                   <p className=" text-standard flex items-center gap-2 leading-6">
-                  <div>
-                    <CircleCheckBig size={22} /> 
-                    </div> Unlimited resources and knowledge base entries
+                    <div>
+                      <CircleCheckBig size={22} />
+                    </div>{" "}
+                    Unlimited resources and knowledge base entries
                   </p>
                   <p className=" text-standard flex items-center gap-2 leading-6">
-                  <div>
-                    <CircleCheckBig size={22} /> 
-                    </div> {data.name =="Professionnel" ? "Priority support" : "Standard support"}
+                    <div>
+                      <CircleCheckBig size={22} />
+                    </div>{" "}
+                    {data.name == "Professionnel"
+                      ? "Priority support"
+                      : "Standard support"}
                   </p>
                 </div>
                 <div className="border border-dashed border-[#A9A9AA] tracking-widest my-4" />
 
                 <div className="bottom-6 left-6 right-6 ">
                   <div className="flex justify-between items-center">
-                    <span className="text-[20px] font-semibold flex items-center">< MdOutlineEuroSymbol /> {data.price} <span className="text-standard px-1"> excl. VAT</span></span>
+                    <span className="text-[20px] font-semibold flex items-center">
+                      <MdOutlineEuroSymbol /> {data.price}{" "}
+                      <span className="text-standard px-1"> excl. VAT</span>
+                    </span>
 
                     {data.planType !== "free" && (
                       <Button
                         size="md"
                         color="primary"
                         className="global-success-btn"
-                        isLoading = {isLoading?.success && isLoading?.id === data?.id}
-                        isDisabled = {activePlanDetail?.subscriptionDetails?.planId == data.id}
+                        isLoading={
+                          isLoading?.success && isLoading?.id === data?.id
+                        }
+                        isDisabled={
+                          activePlanDetail?.subscriptionDetails?.status ==
+                          "active"
+                            ? activePlanDetail?.subscriptionDetails?.planId ==
+                              data.id
+                            : ""
+                        }
                         onPress={() => handleCreateCheckout(data)}
                       >
-                        { activePlanDetail?.subscriptionDetails?.planName == "Free" ? activePlanDetail?.subscriptionDetails?.selectedPlanId == data.id ? "Activate Plan" : "Upgrade"  :    activePlanDetail?.subscriptionDetails?.planId == data.id ? "Activated" : "Upgrade"}
-                        
+                        {activePlanDetail?.subscriptionDetails?.status ==
+                        "inactive" || activePlanDetail?.subscriptionDetails?.status ==
+                        "active"
+                          ? activePlanDetail?.subscriptionDetails?.planName ==
+                            "Free"
+                            ? activePlanDetail?.subscriptionDetails
+                                ?.selectedPlanId == data.id
+                              ? "Activate Plan"
+                              : "Upgrade"
+                            : activePlanDetail?.subscriptionDetails?.planId ==
+                              data.id
+                            ? "Activated"
+                            : "Upgrade"
+                          : "Upgrade"}
                       </Button>
                     )}
                   </div>

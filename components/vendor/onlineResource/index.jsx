@@ -32,7 +32,7 @@ const headerData = {
 const deleteModalContent = "Are you sure to delete this online resource?";
 
 const OnlineResourceComponent = () => {
-  const { onlineResourceData ,setOnlineResourceData ,setOnlineResourceDataUpdate,isLoading} = useMyContext();
+  const { onlineResourceData ,setOnlineResourceData ,setOnlineResourceDataUpdate,isLoading , s3FileDownload} = useMyContext();
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -245,7 +245,7 @@ const OnlineResourceComponent = () => {
                               <div className="flex flex-col">
                                 <span
                                   className="text-blue-500 hover:underline cursor-pointer"
-                                  onClick={() => handleDownload(item.file)}
+                                  onClick={() => s3FileDownload(item.file)}
                                 >
                                   {item.file?.split("/").pop()}
                                 </span>

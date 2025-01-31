@@ -9,12 +9,10 @@ import { useRouter } from "next/router";
 import { formatDate } from "../../../helper";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import { handleFileDownload} from "@/helper";
-import { saveAs } from "file-saver";
 import { useMyContext } from "@/context";
 
 const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
-  const {setDocumentDataUpdate } = useMyContext();
+  const {setDocumentDataUpdate , s3FileDownload } = useMyContext();
   const router = useRouter();
   const [openPopoverIndex, setOpenPopoverIndex] = React.useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
@@ -62,6 +60,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
   
  
   const handleDocumentLink = (link) => {
+    alert(link)
     const formattedLink =
       link.startsWith("http://") || link.startsWith("https://")
         ? link
@@ -74,7 +73,7 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
     <div className="overflow-auto">
       <div className="flex flex-wrap w-[85%] mx-auto py-6 gap-[3.4rem]">
         {cardData &&
-          cardData.map((item, index) => {
+          cardData?.sort((a, b) => b.id - a.id).map((item, index) => {
             return (
               <div
                 key={index}
@@ -116,8 +115,8 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
                         {item.filePath && (
                           <div
                             onClick={() => {
-                              // handleDownload(item.filePath);
-                              handleFileDownload(item.filePath)
+                              s3FileDownload(item.filePath)
+                              // handleFileDownload(item.filePath)
                               setOpenPopoverIndex(null);
                             }}
                             className="cursor-pointer text-standard"

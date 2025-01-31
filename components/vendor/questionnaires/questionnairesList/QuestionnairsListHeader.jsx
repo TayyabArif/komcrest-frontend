@@ -26,7 +26,7 @@ const QuestionnairsListHeader = ({
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [dropDownOpen, setDropDownOpen] = useState(false);
-  const { setQuestionnaireUpdated, currentQuestionnaireImportId , questionnaireStatusUpdated } =
+  const { setQuestionnaireUpdated, currentQuestionnaireImportId , questionnaireStatusUpdated, s3FileDownload } =
     useMyContext();
   const [id, setId] = useState(null);
 
@@ -65,6 +65,14 @@ const QuestionnairsListHeader = ({
     }
   };
 
+  const questionnaireExport =async (data , filePath)=>{
+    const parts = filePath.split("/")
+    const fileName = parts[parts.length - 1]
+   const signedURL = await s3FileDownload(filePath , "getSignedURL")
+   console.log(signedURL, 'sssss')
+   handleExport(data, signedURL , fileName)
+  }
+
   return (
     <div className="bg-gray-50 py-2">
       <div className="flex justify-between items-center  w-[85%] mx-auto">
@@ -101,7 +109,8 @@ const QuestionnairsListHeader = ({
                 size="md"
                 className="text-white text-[17px] 2xl:text-[20px] bg-btn-primary w-max rounded-[4px] my-4 py-2"
                 onClick={() =>
-                  handleExport(questionnaireData?.questionnaireRecords  , questionnaireData.filePath)
+                  questionnaireExport(questionnaireData?.questionnaireRecords , questionnaireData.filePath)
+                  // handleExport(questionnaireData?.questionnaireRecords  , questionnaireData.filePath)
                 }
               >
                 Export .XLS
@@ -126,7 +135,7 @@ const QuestionnairsListHeader = ({
                       <div
                         className="text-standard cursor-pointer"
                         onClick={() => {
-                          handleDownload(questionnaireData?.filePath);
+                          s3FileDownload(questionnaireData?.filePath);
                           setDropDownOpen(false);
                         }}
                       >

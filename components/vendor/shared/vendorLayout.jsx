@@ -27,10 +27,7 @@ const VendorLayout = ({ children }) => {
   const userID = cookiesData?.userId;
   const [loggedInUser, setLoggedInUser] = useState();
   const [isFreeTrialEnd, setIsFreeTrialEnd] = useState(
-    isCurrentDateGreaterThanEndDate() ||
-      activePlanDetail?.questionLimitDetails?.questionsLeft == 0
-      ? true
-      : false
+    isCurrentDateGreaterThanEndDate() || activePlanDetail?.questionLimitDetails?.questionsLeft == 0
   );
   const [selectedItem, setSelectedItem] = useState("");
   const currentDate = new Date();
@@ -83,48 +80,6 @@ if(selectedPlan?.name == "Free"){
 }
 
 
-// const handleCreateCheckout = async (data) => {
-//   try {
-//     setIsLoading({
-//       success: true,
-//       id: data.id
-//     })
-//     const item = {
-//       priceId: data?.billingCycle === "monthly" ? data?.monthlyStripePriceId : data?.yearlyStripePriceId,
-//       billingCycle: data?.billingCycle,
-//       plan_id: data?.id
-//     }
-//     const token = cookiesData?.token;
-//     const requestOptions = {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json", 
-//         Authorization: `Bearer ${token}`,
-//       },
-//       body: JSON.stringify({item}),
-//       redirect: "follow",
-//     };
-
-//     const response = await fetch(`${baseUrl}/stripe/create-checkout`, requestOptions);
-
-//     const createdSession = await response.json()
-//     if (response.ok) {
-//       // toast.success(data.message);
-//       console.log(">>>>>>>>>>>>",createdSession?.session?.url)
-//       window.open(createdSession?.session?.url, "_blank");
-//     } else {
-//       toast.error(createdSession?.message);
-//     }
-//   } catch (error) {
-//     toast.error("error");
-//     console.error("Error updating Resource:", error);
-//   } finally{
-//     setIsLoading({
-//       success: false,
-//       id: ""
-//     })
-//   }
-// }
 
   return (
     <div className="flex w-full">

@@ -1,6 +1,12 @@
 import React from "react";
+import { useMyContext } from "@/context";
+
+
+
+
 
 const ValidateData = ({ resourceData, companyProducts }) => {
+  const { s3FileDownload } = useMyContext();
   console.log("resourceDataresourceDataresourceData", resourceData);
   const getNameById = (id) => {
     const product = companyProducts.find((item) => item.id === id);
@@ -44,7 +50,7 @@ const ValidateData = ({ resourceData, companyProducts }) => {
                     <span>Click to download Docx file</span>
                     <span
                       className="text-blue-500 hover:underline cursor-pointer"
-                      onClick={() => handleDownload(item.file)}
+                      onClick={() => s3FileDownload(item.file)}
                     >
                       {typeof item.file === "object" && item.file !== null
                         ? item.file.name
