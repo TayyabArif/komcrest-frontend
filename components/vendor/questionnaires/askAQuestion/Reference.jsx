@@ -62,7 +62,8 @@ const Reference = ({reference}) => {
       setQuestionReferenceData([]);
     }
     if (onlineResourceIds?.length > 0) {
-      fetchReferenceOnlineResource();
+  
+      fetchReferenceOnlineResource(); 
     } else {
       setOnlineResourceReferenceData([]);
     }
@@ -103,13 +104,13 @@ const Reference = ({reference}) => {
         console.log("::::::::::", data);
 
         const updatedArray = data.map((item) => {
-          const match = questionIds.find((ref) => ref.referenceId === item.id);
+          const match = reference?.questions.find((ref) => ref.id === item.id);
           if (match) {
             return {
               ...item,
-              referenceStatus: match.referenceStatus[0]?.likeType,
+              // referenceStatus: match.referenceStatus[0]?.likeType,
               referenceRecordId: match.referenceRecordId,
-              referenceString : match.referenceString
+              referenceString : match.reference
             };
           }
           return item;
@@ -126,6 +127,7 @@ const Reference = ({reference}) => {
   const fetchReferenceOnlineResource = async () => {
     const token = cookiesData && cookiesData.token;
  
+    console.log(":::::::::::::",onlineResourceIds)
     const paylaod = { ids: onlineResourceIds };
     const requestOptions = {
       method: "POST",
@@ -147,22 +149,26 @@ const Reference = ({reference}) => {
       );
       if (response.ok) {
         console.log("::::::::::", data);
+       
+
 
         const updatedArray = data.map((item) => {
-          const match = onlineResourceIds.find(
-            (ref) => ref.referenceId === item.id
+          const match = reference?.onlineResources?.find(
+            (ref) => ref.id === item.id
           );
           if (match) {
+         
             return {
               ...item,
-              pageNumber: match.pageNumber,
-              referenceStatus: match.referenceStatus[0]?.likeType,
-              referenceRecordId: match.referenceRecordId,
-              referenceString : match.referenceString
+              pageNumber: match.page,
+              referenceString : match.reference,
+              // referenceStatus: match.referenceStatus[0]?.likeType,
             };
           }
           return item;
         });
+
+        
         setOnlineResourceReferenceData(updatedArray);
       } else {
         toast.error(data?.error);
@@ -196,14 +202,14 @@ const Reference = ({reference}) => {
         console.log(">>>>>>>>>>", data);
 
         const updatedArray = data.map((item) => {
-          const match = documentIds.find((ref) => ref.referenceId === item.id);
+          const match = reference?.documents.find((ref) => ref.id === item.id);
           if (match) {
             return {
               ...item,
-              pageNumber: match.pageNumber,
-              referenceStatus: match.referenceStatus[0]?.likeType,
-              referenceRecordId: match.referenceRecordId,
-              referenceString : match.referenceString
+              pageNumber: match.page,
+              // referenceStatus: match.referenceStatus[0]?.likeType,
+              // referenceRecordId: match.referenceRecordId,
+              referenceString : match.reference
             };
           }
           return item;

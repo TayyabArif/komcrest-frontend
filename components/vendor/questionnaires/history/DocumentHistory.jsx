@@ -9,6 +9,7 @@ import {
 import { useRouter } from "next/router";
 import { handleFileDownload } from "@/helper";
 import Link from "next/link";
+import { useMyContext } from "@/context";
 
 const DocumentHistory = ({
   documentReferenceData,
@@ -17,6 +18,7 @@ const DocumentHistory = ({
   isButtonClickAble,
 }) => {
   const router = useRouter();
+  const { s3FileDownload } = useMyContext();
 
   const ReferenceStatusUpdate = (referenceRecordId, type) => {
     setDocumentReferenceData((prev) => {
@@ -41,7 +43,7 @@ const DocumentHistory = ({
           >
             <a
               href="#"
-              onClick={() => handleFileDownload(doc.filePath)}
+              onClick={() => s3FileDownload(doc.filePath)}
               className="text-blue-600 font-bold block mb-1 text-standard "
             >
               {doc.title} 
