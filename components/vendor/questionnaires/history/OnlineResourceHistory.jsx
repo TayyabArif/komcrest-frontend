@@ -1,6 +1,7 @@
 import React from "react";
 import { ThumbsUp, ThumbsDown, FilePenLine } from "lucide-react";
 import { handleDownload } from "@/helper";
+import { useMyContext } from "@/context";
 
 import {
   FaRegThumbsDown,
@@ -17,6 +18,8 @@ const OnlineResourceHistory = ({
   setOnlineResourceReferenceData,
   isButtonClickAble,
 }) => {
+
+  const { s3FileDownload } = useMyContext();
   const router = useRouter();
 
   const ReferenceStatusUpdate = (referenceRecordId, type) => {
@@ -42,7 +45,7 @@ const OnlineResourceHistory = ({
           >
             <a
               href="#"
-              onClick={() => handleDownload(doc.file)}
+              onClick={() => s3FileDownload(doc.file)}
               className="text-blue-600 font-bold block mb-1 2xl:text-[20px] text-[16px] "
             >
               {doc.title}

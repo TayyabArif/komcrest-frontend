@@ -20,6 +20,7 @@ import { Button } from "@nextui-org/react";
 import { CircularProgress } from "@nextui-org/react";
 import DeleteModal from "../../shared/DeleteModal";
 import ResizableHeader from "../../shared/ResizeTbaleHeader";
+import { useMyContext } from "@/context";
 
 const komcrestCategories = [
   { value: "", text: "Select a Category" },
@@ -52,6 +53,7 @@ const KnowledgeBase = ({
   filters,
   dataLoaded,
 }) => {
+  const {s3FileDownload} = useMyContext();
   const [openPopoverIndex, setOpenPopoverIndex] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -556,7 +558,7 @@ const KnowledgeBase = ({
                               key={item.id} // Always provide a unique key when rendering lists
                               className="cursor-pointer"
                               onClick={() => {
-                                handleFileDownload(item?.filePath);
+                                s3FileDownload(item?.filePath);
                               }}
                             >
                               {item.title}
@@ -564,7 +566,7 @@ const KnowledgeBase = ({
                           )),
                           ...data.onlineResources.map((item) => (
                             <h1
-                              onClick={() => handleDownload(item?.file)}
+                              onClick={() => s3FileDownload(item?.file)}
                               key={item.id}
                             >
                               {item.title}

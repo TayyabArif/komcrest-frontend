@@ -129,7 +129,7 @@ const AddDocument = () => {
               </p>
               <Button
                 radius="none"
-                size="sm"
+                size="md"
                 className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
                 onClick={() => {
                   router.push("/vendor/document/AddDocument");

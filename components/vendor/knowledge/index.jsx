@@ -70,8 +70,8 @@ const KnowledgeHome = () => {
           </p>
           <Button
             radius="none"
-            size="sm"
-            className="text-white px-[10px] text-standard cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
+            size="md"
+            className="global-success-btn"
             onClick={() => router.push("/vendor/knowledge/Import")}
           >
             Add questions and answers

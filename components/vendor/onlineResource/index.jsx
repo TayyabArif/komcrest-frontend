@@ -161,7 +161,7 @@ const OnlineResourceComponent = () => {
                 {bulkDeleted.length > 0 && (
                   <Button
                     size="md"
-                    className="rounded-md 2xl:text-[20px] cursor-pointer text-red-600 bg-transparent  text-[13px] font-semibold"
+                    className="rounded-md text-standard  cursor-pointer text-red-600 bg-transparent   font-semibold"
                     onClick={() => {
                       onOpen();
                       setDeleteAction("bulk");
@@ -244,7 +244,7 @@ const OnlineResourceComponent = () => {
                             {item.file ? (
                               <div className="flex flex-col">
                                 <span
-                                  className="text-blue-500 hover:underline cursor-pointer"
+                                  className="text-blue-600 hover:underline cursor-pointer"
                                   onClick={() => s3FileDownload(item.file)}
                                 >
                                   {item.file?.split("/").pop()}
