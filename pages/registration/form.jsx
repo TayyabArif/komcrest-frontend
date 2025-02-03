@@ -107,7 +107,7 @@ const RegistrationForm = () => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          router.push(`http://app.komcrest.com/registration/thank-you`);
+          router.push(`http://onboarding.komcrest.com/registration/thank-you`);
         } else {
           setFormErrors({
             ...formErrors,
@@ -268,7 +268,7 @@ const RegistrationForm = () => {
                   name="phoneNumber"
                   value={registerFormData.phoneNumber}
                   onChange={handleInputChange}
-                  type="text"
+                  type="number"
                   variant="underlined"
                   size="md"
                   classNames={{
