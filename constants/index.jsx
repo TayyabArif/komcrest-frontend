@@ -28,4 +28,4 @@ export const QuestionnaireStepsContent = {
 };
 
 
-export const publicDomain = ["onbording" , "app"]
+export const publicDomain = ["onboarding" , "app"]
