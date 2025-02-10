@@ -5,7 +5,7 @@ import { Textarea, Input } from "@nextui-org/react";
 const GetAnswer = ({answerData}) => {
   return (
     <div className="w-[32%] bg-white h-[500px] px-5 py-3 rounded">
-      <h1 className="p-2 font-bold">Get an answer</h1>
+      <h1 className="p-2 font-bold 2xl:text-[20px] text-[16px]">Get an answer</h1>
       <hr
         style={{ height: "2px", backgroundColor: "#E4E4E7", border: "none" }}
       />

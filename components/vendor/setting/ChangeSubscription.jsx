@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { useMyContext } from "@/context";
 import { MdOutlineEuroSymbol } from "react-icons/md";
+import { convertPlanNameEnglish } from "@/helper";
 
 const ChangeSubscription = () => {
   const { plansData, activePlanDetail } = useMyContext();
@@ -65,6 +66,7 @@ const ChangeSubscription = () => {
       });
     }
   };
+
   return (
     <div className="w-full">
       <div className="flex gap-6 ml-10 my-2">
@@ -97,7 +99,7 @@ const ChangeSubscription = () => {
                 className="w-[31%] p-4 bg-white group rounded-md lg:hover:-translate-y-1 ease-in duration-300 border xl:border-none border-[#0B0641]"
               >
                 <div className="flex flex-row gap-5 items-center">
-                  <span className="text-xl font-bold mb-5">{data.name}</span>
+                  <span className="text-xl font-bold mb-5">{convertPlanNameEnglish(data.name)}</span>
                 </div>
                 <div className="my-0 space-y-3">
                   <p className=" text-standard flex items-center gap-2 leading-6">
@@ -110,7 +112,7 @@ const ChangeSubscription = () => {
                     <div>
                       <CircleCheckBig size={22} />
                     </div>
-                    {data.benefits?.Questionnaires} Questionnaires
+                    Approx. {data.benefits?.Questionnaires} Questionnaires
                   </p>
                   <p className=" text-standard flex items-center gap-2 leading-6">
                     <div>
@@ -139,7 +141,7 @@ const ChangeSubscription = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-[20px] font-semibold flex items-center">
                       <MdOutlineEuroSymbol /> {data.price}{" "}
-                      <span className="text-standard px-1"> excl. VAT</span>
+                      <span className="text-standard px-1 leading-4"> excl. VAT per month</span>
                     </span>
 
                     {data.planType !== "free" && (

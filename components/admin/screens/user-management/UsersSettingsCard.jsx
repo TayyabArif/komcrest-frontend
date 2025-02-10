@@ -16,6 +16,7 @@ const UsersSettingsCard = ({
   role,
   showRemoveBtn,
   isEdit,
+  myAccount
 }) => {
   const router = useRouter();
   const { id } = router.query;
@@ -30,7 +31,7 @@ const UsersSettingsCard = ({
     <div className="w-[45%]">
       <div className="flex flex-col bg-white rounded w-full pb-20 mt-12  min-h-[550px]">
         <p className="px-6 py-4  border-1.5 text-standard border-b-gray-200 border-r-0 border-l-0 border-t-0 font-semibold">
-          {`${isEdit ? "Update" : ""}`} User settings
+        {myAccount ? "Account Setting" : `${isEdit ? "Update" : "" } User settings`}
         </p>
         <div className="flex flex-col mt-7 px-6">
           <p className="mb-2  text-standard">User role</p>
