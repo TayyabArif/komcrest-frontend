@@ -14,7 +14,7 @@ const UserEdit = () => {
     <div className="flex h-full ">
       <UserManagementSideBar />
       <div className="flex-1">
-      <UserManagement role={role}/>
+      <UserManagement role={role} myAccount/>
       </div>
     </div>
   </VendorLayout>

@@ -12,12 +12,12 @@ const companies = [
   {id: "2", label: "Sodexo"},
   {id: "3", label: "staffbase"},
 ];
-const UsersDetailsCard = ({handleChange, formData, allCompanies ,isDisabled , role , isEdit}) => {
+const UsersDetailsCard = ({handleChange, formData, allCompanies, isDisabled, role, isEdit, myAccount}) => {
 
 const id = 50
   return (
     <div className='flex flex-col bg-white rounded w-[45%] min-h-[550px] mt-12 pb-10'>
-    <p className='px-4 py-4 border border-1.5 border-b-gray-200 text-standard  border-r-0 border-l-0 border-t-0 font-semibold'> {`${isEdit ? "Update" : "Invite new"} user`}</p>
+    <p className='px-4 py-4 border border-1.5 border-b-gray-200 text-standard  border-r-0 border-l-0 border-t-0 font-semibold'>{myAccount ? "Account Detail" : `${isEdit ? "Update" : "Invite new"} user`}</p>
     <div className='mt-7 px-4'>
       <Select
         label="Company"

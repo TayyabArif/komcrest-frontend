@@ -10,9 +10,10 @@ import { useCookies } from "react-cookie";
 import { useMyContext } from "@/context";
 
 
-const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
+
+const UserManagement = ({role,showRemoveBtn, isEdit, myAccount}) => {
   const { companyProducts, setDataUpdated ,allCompanyProducts } = useMyContext();
-  const [cookies] = useCookies(["myCookie"]);
+  const [cookies, setCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const [isClick, setClick] = useState(false);
   const [allCompanies, setAllCompanies] = useState([]);
@@ -156,6 +157,9 @@ const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
           toast.success(
             id ? "User updated successfully" : "User created successfully"
           );
+          if(myAccount){
+            updateDataInCookie(useCookies, formData?.lastName)
+          }
           router.push("/vendor/setting/user-management");
         } else {
           toast.error(data?.error);
@@ -205,11 +209,20 @@ const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
     }
   }, [id]);
 
+  const updateDataInCookie = () => {
+    if (cookies.myCookie) {
+      const updatedData = { ...cookies.myCookie, userName: `${formData?.firstName} ${formData?.lastName}` };
+      setCookie("myCookie", updatedData, { path: "/" });
+    }
+
+  };
+  
+
   return (
     <>
       {isMounted && (
         <div className="flex flex-col  w-[80%] mx-auto">
-          <div className="flex flex-col w-full gap-5   py-10  min-h-screen">
+          <div className="flex flex-col w-full gap-5  py-10  min-h-screen">
             <div className="flex items-start justify-between w-full h-full">
               <UsersDetailsCard
                 isDisabled={true}
@@ -218,6 +231,7 @@ const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
                 allCompanies={allCompanies}
                 role={role}
                 isEdit={isEdit}
+                myAccount={myAccount}
               />
               <UsersSettingsCard
                 formData={formData}
@@ -228,6 +242,7 @@ const UserManagement = ({role,showRemoveBtn ,isEdit}) => {
                 role={role}
                 showRemoveBtn={showRemoveBtn}
                 isEdit={isEdit}
+                myAccount={myAccount}
               />
             </div>
             <div className="flex justify-end mb-5 ">

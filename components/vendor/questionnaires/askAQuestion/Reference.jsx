@@ -149,9 +149,6 @@ const Reference = ({reference}) => {
       );
       if (response.ok) {
         console.log("::::::::::", data);
-       
-
-
         const updatedArray = data.map((item) => {
           const match = reference?.onlineResources?.find(
             (ref) => ref.id === item.id
@@ -227,7 +224,7 @@ const Reference = ({reference}) => {
   return (
     <div className="w-[23%] bg-[#F2F2F2] h-[500px] px-5 pb-3 overflow-auto rounded">
       <div className="sticky top-0 bg-[#F2F2F2]  z-50"> 
-      <h1 className="pb-2 py-5 font-bold ">Reference</h1>
+      <h1 className="pb-2 py-5 font-bold cursor-pointer 2xl:text-[20px] text-[16px] ">Reference</h1>
       <hr
         style={{ height: "2px", backgroundColor: "#E4E4E7", border: "none" }}
       />

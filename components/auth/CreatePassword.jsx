@@ -29,7 +29,7 @@ const CreatePassword = ({type, isNew}) => {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
-  const { token } = router.query;
+  const { token , createdBy } = router.query;
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -45,13 +45,13 @@ const CreatePassword = ({type, isNew}) => {
   };
   const handleSubmit= async () => {
     if(isNew) {
-      if (isTermsService) {
+      if (isTermsService && createdBy !== "user") {
         if(!isTermsAggree) {
           toast.error("You need to aggree with terms and conditions to proceed ")
           return
         }
       }
-      if (isPrivacyPolicy) {
+      if (isPrivacyPolicy && createdBy !== "user") {
         if(!isPrivacyAggree) {
           toast.error("You need to aggree with Komcrest privacy policy to proceed ")
           return
@@ -125,11 +125,15 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
           const companyData = JSON.parse(result)
           setIsTermsService(companyData?.termsServices)
           setIsPrivacyPolicy(companyData?.privacyPolicy)
-          console.log(companyData);
+          console.log(":::::::::::::",companyData);
         })
         .catch((error) => console.error(error));
     }
   }, [token])
+
+
+
+
   const handleAggree = (value) => {
     if (value === "terms") {
       setIsTermsServiceClick(false)
@@ -186,7 +190,8 @@ fetch(`${baseUrl}/users/reset-password`, requestOptions)
             }
 
           />
-          {isNew &&
+    
+          {isNew && createdBy !== "user" &&
             <div className="flex flex-col">
               {isTermsService &&
                 <Checkbox isSelected={isTermsAggree} onChange={() => setIsTermsAggree(!isTermsAggree)} size="md" className="mt-2" classNames={{ label: "mt-0 text-base 2xl:text-[20px]" }}>

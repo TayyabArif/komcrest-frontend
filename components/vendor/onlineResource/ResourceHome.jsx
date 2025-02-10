@@ -60,14 +60,14 @@ const ResourceHome = () => {
               <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-[85%] mx-auto leading-7 mt-3">
               Our intelligent system will analyse and indexes your added content.
               </h1>
-              <p className="text-[15px] leading-7 2xl:text-[20px] w-[85%] mx-auto my-1">
+              <p className="text-[16px] leading-7 2xl:text-[20px] w-[85%] mx-auto my-1">
               By incorporating diverse online resources, you’ll expand your information repository and improve the accuracy and relevance of AI-generated answers.
               </p>
              
               <Button
                 radius="none"
                 size="sm"
-                className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold py-5 bg-btn-primary w-max rounded-[4px] my-4"
+                className="text-white px-[10px] text-[16px] 2xl:text-[20px] cursor-pointer font-semibold py-5 bg-btn-primary w-max rounded-[4px] my-4"
                onClick={()=>router.push("/vendor/onlineResource/addResources")}
               >
                 Add online sources

@@ -273,7 +273,20 @@ export const multipleSelectStyle = {
           alert("Invalid file path.");
       }
   };
+
+  export  const convertPlanNameEnglish = (key)=>{
+
+    const planName = {
+      Essentiel : "Essential",
+      Standard : "Standard",
+      Professionnel : "Professional"
+    }
+
+    return planName[key]
+  }
   
+
+
   
 
 
