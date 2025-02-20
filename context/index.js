@@ -41,6 +41,7 @@ export const MyProvider = ({ children }) => {
   const [isKnowledgeBaseOpenDirect, setIsKnowledgeBaseOpenDirect] =
     useState(true);
   const [dataUpdate, setDataUpdate] = useState(false);
+  const [isFetchingAllQuestionnaire , setIsFetchingAllQuestionnaire] = useState(false)
 
   // questionnaire module states
   const [questionnaireData, setQuestionnaireData] = useState({
@@ -201,6 +202,8 @@ export const MyProvider = ({ children }) => {
   };
 
   const fetchAllQuestionnaires = async () => {
+    // setOverAllLoading(true);
+    setIsFetchingAllQuestionnaire(true)
     const token = cookiesData && cookiesData.token;
     const requestOptions = {
       method: "GET",
@@ -230,6 +233,9 @@ export const MyProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error fetching Questionnaire:", error);
+    } finally {
+      setOverAllLoading(false);
+      setIsFetchingAllQuestionnaire(false)
     }
   };
   useEffect(() => {
@@ -238,8 +244,6 @@ export const MyProvider = ({ children }) => {
     }
   }, [questionnaireUpdated]);
 
-
- 
   socket?.on("Question", (questionnaireRecord) => {
     const currentQuestionnaireImportId = localStorage.getItem("CurrentQuestionnaireImportId");
     if (!currentQuestionnaireImportId) {
@@ -685,7 +689,8 @@ export const MyProvider = ({ children }) => {
         setReCallPlanDetailApi,
         handleCreateCheckout,
         s3FileDownload,
-        uploadFile
+        uploadFile,
+        isFetchingAllQuestionnaire
       }}
     >
       {children}

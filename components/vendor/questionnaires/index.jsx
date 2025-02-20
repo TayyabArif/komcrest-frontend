@@ -35,8 +35,12 @@ const Questionnaires = () => {
   // const [questionnaireList , setQuestionnaireList] = useState([])
   const [questionnaireProgressBar, setQuestionnaireProgressBar] = useState({});
   const [dataLoaded, setDataLoaded] = useState(true);
-  const { questionnaireList, setQuestionnaireList, setQuestionnaireUpdated } =
-    useMyContext();
+  const {
+    questionnaireList,
+    setQuestionnaireList,
+    setQuestionnaireUpdated,
+    isFetchingAllQuestionnaire,
+  } = useMyContext();
 
   const filterStatus = (status) => {
     const filteredData = questionnaireList?.filter(
@@ -150,43 +154,51 @@ const Questionnaires = () => {
             </div>
             {filterValue == "progress" ? (
               <div ref={divRef} className="flex flex-1  gap-3 overflow-auto">
-                <DndProvider backend={HTML5Backend}>
-                  <FilterStatus
-                    onCardDrop={handleCardDrop}
-                    title="To Process"
-                    data={filterStatus("To Process")}
-                    stepsContent={QuestionnaireStepsContent.process}
-                    setDataUpdate={setDataUpdate}
-                    divHeight={divHeight}
-                  />
+                {isFetchingAllQuestionnaire ? (
+                  <div className="flex items-center justify-center w-full">
+                    <h1 className="text-center text-standard">
+                      Fetching data please wait...
+                    </h1>
+                  </div>
+                ) : (
+                  <DndProvider backend={HTML5Backend}>
+                    <FilterStatus
+                      onCardDrop={handleCardDrop}
+                      title="To Process"
+                      data={filterStatus("To Process")}
+                      stepsContent={QuestionnaireStepsContent.process}
+                      setDataUpdate={setDataUpdate}
+                      divHeight={divHeight}
+                    />
 
-                  <FilterStatus
-                    onCardDrop={handleCardDrop}
-                    title="Started"
-                    data={filterStatus("Started")}
-                    stepsContent={QuestionnaireStepsContent.Started}
-                    setDataUpdate={setDataUpdate}
-                    divHeight={divHeight}
-                  />
+                    <FilterStatus
+                      onCardDrop={handleCardDrop}
+                      title="Started"
+                      data={filterStatus("Started")}
+                      stepsContent={QuestionnaireStepsContent.Started}
+                      setDataUpdate={setDataUpdate}
+                      divHeight={divHeight}
+                    />
 
-                  <FilterStatus
-                    onCardDrop={handleCardDrop}
-                    title="For Review"
-                    data={filterStatus("For Review")}
-                    stepsContent={QuestionnaireStepsContent.Review}
-                    setDataUpdate={setDataUpdate}
-                    divHeight={divHeight}
-                  />
+                    <FilterStatus
+                      onCardDrop={handleCardDrop}
+                      title="For Review"
+                      data={filterStatus("For Review")}
+                      stepsContent={QuestionnaireStepsContent.Review}
+                      setDataUpdate={setDataUpdate}
+                      divHeight={divHeight}
+                    />
 
-                  <FilterStatus
-                    onCardDrop={handleCardDrop}
-                    title="Approved"
-                    data={filterStatus("Approved")}
-                    stepsContent={QuestionnaireStepsContent.Approved}
-                    setDataUpdate={setDataUpdate}
-                    divHeight={divHeight}
-                  />
-                </DndProvider>
+                    <FilterStatus
+                      onCardDrop={handleCardDrop}
+                      title="Approved"
+                      data={filterStatus("Approved")}
+                      stepsContent={QuestionnaireStepsContent.Approved}
+                      setDataUpdate={setDataUpdate}
+                      divHeight={divHeight}
+                    />
+                  </DndProvider>
+                )}
               </div>
             ) : (
               <div className="flex flex-wrap gap-5 w-[25%] overflow-auto">
