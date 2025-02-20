@@ -8,9 +8,6 @@ import {Button} from "@nextui-org/react";
 
 const AddUrls = ({ allResources, setAllResources, errors }) => {
 
-
-
-  // debugger
   const handleData = (e, index) => {
     const { name, value } = e.target;
     const newResources = [...allResources];

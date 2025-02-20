@@ -8,7 +8,8 @@ const ImportQuestionnaire = () => {
   
   return (
     <VendorLayout>
-      {newQuestionnaireCreated ?  <Import  setNewQuestionnaireCreated={setNewQuestionnaireCreated} /> : <SocketQuestionnairesList />}
+      {/* {newQuestionnaireCreated ?  <Import  setNewQuestionnaireCreated={setNewQuestionnaireCreated} /> : <SocketQuestionnairesList />} */}
+      <Import />
     </VendorLayout>
   );
 };

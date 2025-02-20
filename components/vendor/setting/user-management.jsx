@@ -189,7 +189,6 @@ const UserManagement = ({role,showRemoveBtn, isEdit, myAccount}) => {
         .then((response) => response.text())
         .then((result) => {
           const userData = JSON.parse(result);
-          console.log("+++++++++++++++++++")
           setFormData({
             firstName: userData?.firstName,
             lastName: userData?.lastName,

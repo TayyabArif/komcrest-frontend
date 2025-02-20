@@ -36,7 +36,7 @@ const Login = ({ type }) => {
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify({
-      email: formData?.email,
+      email: formData?.email.toLowerCase(),
       password: formData?.password,
     });
 

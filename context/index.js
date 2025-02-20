@@ -48,7 +48,11 @@ export const MyProvider = ({ children }) => {
     customerName: "",
   });
   const [questionList, setQuestionList] = useState([]);
-  const [allQuestionnaireList, setAllQuestionnireList] = useState([]);
+  const [allQuestionnaireList, setAllQuestionnireList] = useState(
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("questions"))
+      : []
+  );
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [isFirstResponse, setIsFirstResponse] = useState(true);
   const isFirstResponseRef = useRef(isFirstResponse);
@@ -234,89 +238,85 @@ export const MyProvider = ({ children }) => {
     }
   }, [questionnaireUpdated]);
 
-  useEffect(() => {
-    if (isSocketConnected) {
-      setQuestionnaireUpdated((prev) => !prev);
-      socket?.on("Question", (questionnaireRecord) => {
-        console.log("::::", questionnaireRecord);
-        if (isFirstResponseRef.current && questionnaireRecord.questionnaireId) {
-          setIsFirstResponse(false);
-          uploadFile(questionnaireRecord.questionnaireId);
-          setCurrentQuestionnaireImportId(questionnaireRecord.questionnaireId);
-        }
-        setAllQuestionnireList((prevState) => {
-          // Map over the previous state to update it with the new incoming data
-          let updateData = prevState.map((data) =>
-            data.Question === questionnaireRecord.question
-              ? {
-                  ...data,
-                  compliance: questionnaireRecord.compliance,
-                  answer: questionnaireRecord.answer,
-                }
-              : data
-          );
-          // Return the updated state
-          return updateData;
-        });
-      });
+
+ 
+  socket?.on("Question", (questionnaireRecord) => {
+    const currentQuestionnaireImportId = localStorage.getItem("CurrentQuestionnaireImportId");
+    if (!currentQuestionnaireImportId) {
+      console.log("save in localstorage")
+      localStorage.setItem("QuestionnaireId", questionnaireRecord.questionnaireId);
+      localStorage.setItem("CurrentQuestionnaireImportId", questionnaireRecord.questionnaireId);
+      router.push(`/vendor/questionnaires/view?name=${questionnaireData.customerName}`);
     }
+    setAllQuestionnireList((prevState) => {
+      // Map over the previous state to update it with the new incoming data
+      let updateData = prevState?.map((data) =>
+        data.Question === questionnaireRecord.question
+          ? {
+              ...data,
+              compliance: questionnaireRecord.compliance,
+              answer: questionnaireRecord.answer,
+            }
+          : data
+      );
+      // Return the updated state
+      // if (updateData !== undefined && updateData !== null) {
+        localStorage.setItem("questions", JSON.stringify(updateData));
+      // }
+      return updateData;
+    });
+  });
 
-    // Clean up on component unmount
-    return () => {
-      if (socket) {
-        socket.off("Question");
-      }
-    };
-  }, [isSocketConnected]);
+  socket?.on("AllAnswersDone", (data) => {
+    localStorage.removeItem("CurrentQuestionnaireImportId");
+    setQuestionnaireUpdated((prev) => !prev);
+    setReCallPlanDetailApi((prev) => !prev);
+    localStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
+    localStorage.removeItem('questions');
+    window.location.href = `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`;
+  });
+  
+  socket?.on("errorInQuestionnaire", (data)=>{
+    localStorage.removeItem("CurrentQuestionnaireImportId");
+    setQuestionnaireUpdated((prev) => !prev);
+    setReCallPlanDetailApi((prev) => !prev);
+    localStorage.removeItem('questions');
+    // toast.error("Error Please try again")
+    router.push("/vendor/questionnaires")
+  })
 
-  // questionnaire file upload
-
-  const uploadFile = (id) => {
+  const uploadFile = async (file) => {
     const formData = new FormData();
-    formData.append("file", questionnaireData.originalFile);
+    formData.append("file", file);
     const token = cookiesData.token;
+  
     let requestOptions = {
-      method: "PUT",
+      method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
       redirect: "follow",
     };
-
-    fetch(`${baseUrl}/questionnaire/file/${id}`, requestOptions)
-      .then(async (response) => {
-        const data = await handleResponse(
-          response,
-          router,
-          cookies,
-          removeCookie
-        );
-        return {
-          status: response.status,
-          ok: response.ok,
-          data,
-        };
-      })
-      .then(({ status, ok, data }) => {
-        if (ok) {
-          setQuestionnaireUpdated((prev) => !prev);
-        } else {
-          console.error("Error:", data);
-        }
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.error("API Error:", error.response);
-          toast.error(
-            error.response.data?.error ||
-              "An error occurred while Updated  Questionnaires status"
-          );
-        }
-      });
+  
+    try {
+      const response = await fetch(`${baseUrl}/file-upload`, requestOptions);
+      const data = await handleResponse(response, router, cookies, removeCookie);
+  
+      if (response.ok) {
+        console.log("File uploaded successfully:", data);
+        return data.filePath;
+      } else {
+        console.error("File upload failed:", data);
+        return null;
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+      toast.error("An error occurred while uploading the file. Try Again");
+      return null;
+    }
   };
 
-  // get all online resource
   const getAllResourceData = async () => {
     setIsLoading(true);
     const token = cookiesData && cookiesData.token;
@@ -353,8 +353,6 @@ export const MyProvider = ({ children }) => {
       getAllResourceData();
     }
   }, [onlineResourceDataUpdate, dataUpdated]);
-
-  // get all documnets
 
   useEffect(() => {
     const getUserDocument = async () => {
@@ -596,7 +594,6 @@ export const MyProvider = ({ children }) => {
     }
   };
 
-
   const s3FileDownload = async (filePath, getSignedURL) => {
     const token = cookiesData?.token;
     const requestOptions = {
@@ -608,11 +605,11 @@ export const MyProvider = ({ children }) => {
       body: JSON.stringify({ filePath }),
       redirect: "follow",
     };
-  
+
     try {
       const response = await fetch(`${baseUrl}/file-download`, requestOptions);
       const data = await response.json();
-  
+
       if (response.ok) {
         if (getSignedURL) {
           return data.url; // Return the signed URL
@@ -639,8 +636,7 @@ export const MyProvider = ({ children }) => {
       return null; // Handle errors gracefully
     }
   };
-  
- 
+
   return (
     <MyContext.Provider
       value={{
@@ -688,6 +684,7 @@ export const MyProvider = ({ children }) => {
         setReCallPlanDetailApi,
         handleCreateCheckout,
         s3FileDownload,
+        uploadFile
       }}
     >
       {children}
