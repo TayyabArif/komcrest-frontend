@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Euro, X } from "lucide-react";
 import { Input, Button, Checkbox } from "@nextui-org/react";
 import ChoosePlan from "./ChoosePlan";
@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { publicDomain } from "@/constants";
 import Link from "next/link";
+import PageNotFound from "@/components/pageNotFound";
 
 const RegistrationForm = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -19,6 +20,7 @@ const RegistrationForm = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [domainName, setDomainName] = useState();
 
   const [registerFormData, setRegisterFormData] = useState({
     name: "",
@@ -30,7 +32,7 @@ const RegistrationForm = () => {
     termsServices: false,
     privacyPolicy: false,
     phoneNumber: "",
-    createdBy:"user"
+    createdBy: "user",
   });
 
   const handleInputChange = (e) => {
@@ -42,6 +44,9 @@ const RegistrationForm = () => {
 
     setRegisterFormData((prev) => ({ ...prev, [name]: value }));
   };
+  useEffect(() => {
+    setDomainName(window.location.hostname.split(".")[0]);
+  }, []);
 
   const handleCheckboxChange = () => {
     setRegisterFormData((prev) => ({
@@ -89,6 +94,7 @@ const RegistrationForm = () => {
       ...registerFormData,
       products,
       planId,
+      email : registerFormData.email.toLowerCase()
     });
     const requestOptions = {
       method: "POST",
@@ -122,6 +128,10 @@ const RegistrationForm = () => {
       });
   };
 
+  if (domainName !== "onbording") {
+    return <PageNotFound />
+  }
+
   return (
     <div className="w-[90%] lg:w-[80%] xl:w-[70%]  mx-auto my-10">
       {/* {JSON.stringify(companyPlan)} */}
@@ -129,7 +139,9 @@ const RegistrationForm = () => {
         <div className="flex justify-center">
           <Image src="/logo.png" alt="Komcrest Logo" width={230} height={230} />
         </div>
-        <h1 className="md:text-[35px] text-[30px]">Essai gratuit</h1>
+        <h1 className="md:text-[35px] text-[30px]">
+          Essai gratuit{domainName}
+        </h1>
         <p className="text-standard">
           Merci pour l&apos;intérêt que vous portez à notre solution de réponse
           automatisée aux questionnaires de sécurité et de conformité.

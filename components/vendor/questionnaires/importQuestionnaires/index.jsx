@@ -19,7 +19,7 @@ import ValidateData from "./ValidateData";
 import { useMyContext } from "@/context";
 import useSocket from "@/customHook/useSocket";
 
-const Import = ({ setNewQuestionnaireCreated }) => {
+const Import = () => {
   const [stepper, setStepper] = useState(0);
   const {
     setQuestionnaireUpdated,
@@ -30,7 +30,8 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     setIsFirstResponse,
     activePlanDetail,
     companyProducts,
-    setReCallPlanDetailApi
+    setReCallPlanDetailApi,
+    uploadFile
   } = useMyContext();
   const [progressBar, setProgressBar] = useState(13);
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
@@ -96,8 +97,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
       case 2:
         return "Identify questions & categories if available";
       case 3:
-      case 4:
-        return " Remove unnecessary rows and validate the questions to import and to be answered by Komcrest AI";
+        return "Remove unnecessary rows and validate the questions to import and to be answered by Komcrest AI";
       default:
         return "";
     }
@@ -158,7 +158,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     });
   };
 
-  const handleNextClick = () => {
+  const handleNextClick = async  () => {
     if (stepper === 0 && firstStepValidation()) {
       setStepper(stepper + 1);
       setProgressBar(progressBar + 27);
@@ -190,8 +190,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
       }
 
       if (totalCount <= activePlanDetail?.questionLimitDetails?.questionsLeft) {
-        setStepper(stepper + 1);
-        setProgressBar(progressBar + 27);
+        
         const transformedData = {};
         for (const key in finalData) {
           const rows = excelFile[key];
@@ -210,17 +209,28 @@ const Import = ({ setNewQuestionnaireCreated }) => {
             return obj;
           });
         }
-
-        console.log("transformedDatatransformedData", transformedData);
-        submitQuestions(transformedData);
         setTotalCount(totalCount);
+        setStepper(stepper + 1);
+        setProgressBar(progressBar + 27);
+
+        // first save file then pass file path in questionnaire payload
+        const filePath = await uploadFile(importQuestionnaires.originalFile);
+        if (filePath) {
+          console.log("File path received:", filePath);
+          submitQuestions(transformedData ,filePath);
+          setTotalCount(totalCount);
+        } else {
+          console.error("File upload failed, not submitting questions.");
+          router.push("/vendor/questionnaires")
+        }
+        
       }else{
         toast.error(`Your remaining limit for questions is ${activePlanDetail?.questionLimitDetails?.questionsLeft}, but you uploaded ${totalCount}`)
       }
     }
   };
 
-  const submitQuestions = (transformedData) => {
+  const submitQuestions = (transformedData,filePath) => {
     // convert object data in array of object
     let result = [];
     for (const [sheetTag, questions] of Object.entries(transformedData)) {
@@ -240,13 +250,16 @@ const Import = ({ setNewQuestionnaireCreated }) => {
       ...importQuestionnaires,
       Questionnaires: result,
       questionnaireLink,
+      filePath,
       collaborators: importQuestionnaires.collaborators.filter(
         (id) => id !== userID
       ),
     };
-
     setQuestionList(result);
-
+    if (result !== undefined && result !== null ) {
+      localStorage.setItem("questions", JSON.stringify(result));
+  }
+  
     setQuestionnaireData({
       fileName: importQuestionnaires.fileName,
       customerName: importQuestionnaires.customerName,
@@ -254,9 +267,6 @@ const Import = ({ setNewQuestionnaireCreated }) => {
     });
     // setTotalCount(payload.Questionnaires.length);
     const token = cookiesData.token;
-
-    console.log("questionnire payload", payload);
-
     let requestOptions = {
       method: "POST",
       headers: {
@@ -267,10 +277,10 @@ const Import = ({ setNewQuestionnaireCreated }) => {
       redirect: "follow",
     };
     // Introduce a 2-second delay before making the API call
-    setTimeout(() => {
-      setIsSocketConnected(true);
-      setNewQuestionnaireCreated(false);
-    }, 1500);
+    // setTimeout(() => {
+    //   setIsSocketConnected(true);
+    //   setNewQuestionnaireCreated(false);
+    // }, 1500);
 
     fetch(`${baseUrl}/questionnaires`, requestOptions)
       .then(async (response) => {
@@ -288,12 +298,13 @@ const Import = ({ setNewQuestionnaireCreated }) => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
+          localStorage.removeItem("CurrentQuestionnaireImportId");
           toast.success("Questionnaires created successfully");
           setQuestionnaireUpdated((prev) => !prev);
           setReCallPlanDetailApi((prev) => !prev)
           localStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
-          setCurrentQuestionnaireImportId("");
-          setIsFirstResponse(true);
+          // setCurrentQuestionnaireImportId("");
+          // setIsFirstResponse(true);
           router.push(
             `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`
           );
@@ -301,6 +312,7 @@ const Import = ({ setNewQuestionnaireCreated }) => {
           toast.error(data?.error || "Questionnaires not Created");
           console.error("Error:", data);
         }
+        localStorage.removeItem('questions');
       })
       .catch((error) => {
         if (error.response) {

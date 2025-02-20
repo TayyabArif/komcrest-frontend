@@ -11,19 +11,20 @@ import stringSimilarity from "string-similarity";
 
 
 export const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = monthNames[date.getUTCMonth()]; 
-    const day = date.getUTCDate().toString().padStart(2, '0'); 
-    const year = date.getUTCFullYear();
-  
-    return `${month}-${day}-${year}`;
-  }
+  const date = new Date(dateString);
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const month = monthNames[date.getUTCMonth()]; 
+  const day = date.getUTCDate().toString().padStart(2, '0'); 
+  const year = date.getUTCFullYear();
+
+  return `${month} ${day}, ${year}`;
+}
+
 
 export function formatDateWithTime(dateString) {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
-    month: 'short',
+    month: 'long',
     day: '2-digit',
     hour: 'numeric',
     minute: 'numeric',
@@ -44,7 +45,7 @@ export function getOnlyDate(dateString) {
     const data = await response.json();
     if (response.ok) {
       return data;
-    } else if (response.status === 400) {
+    } else if (response.status === 401 && (data?.error == "Invalid token")) {
       // router.push("/vendor/login/access");
       removeCookie('myCookie', { path: '/' });
       // router.push("/vendor/login/access");
@@ -285,6 +286,12 @@ export const multipleSelectStyle = {
     return planName[key]
   }
   
+
+  export const validateEmail = (email) => {
+    if (/[A-Z]/.test(email)) return "No capital letters allowed in email";
+    if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(email)) return "Please enter a valid email";
+    return "";
+  };
 
 
   

@@ -158,8 +158,6 @@ const QuestionnairesView = () => {
       if (response.ok) {
         setCurrentStatus(data.questionnaire.status);
         setQuestionnaireData(data?.questionnaire);
-        setDataLoaded(true);
-
         const transformCollaborator = data?.questionnaire.collaborators.map(
           (item) => ({
             value: item?.id,
@@ -173,6 +171,9 @@ const QuestionnairesView = () => {
       }
     } catch (error) {
       console.error("Error fetching Questionnaire:", error);
+      router.push("/vendor/questionnaires")
+    } finally{
+      setDataLoaded(true);
     }
   };
 
@@ -758,7 +759,7 @@ const QuestionnairesView = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {questionnaireData?.questionnaireRecords.length > 0 ? (
+                    {questionnaireData?.questionnaireRecords?.length > 0 ? (
                       questionnaireData?.questionnaireRecords
                         ?.sort((a, b) => a.id - b.id)
                         ?.map((item, index) => (

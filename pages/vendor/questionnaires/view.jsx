@@ -6,10 +6,13 @@ import SocketQuestionnairesList from "@/components/vendor/questionnaires/questio
 
 const QuestionnairView = () => {
   const [id, setId] = useState(null);
-  const { currentQuestionnaireImportId } = useMyContext();
+  const [currentQuestionnaireImportId , setCurrentQuestionnaireImportId] = useState(null)
+  // const { currentQuestionnaireImportId } = useMyContext();
 
   useEffect(() => {
     const storedId = localStorage.getItem("QuestionnaireId");
+    const QuestionnaireImportId =  localStorage.getItem("CurrentQuestionnaireImportId");
+    setCurrentQuestionnaireImportId(QuestionnaireImportId)
     setId(storedId);
   }, []);
 

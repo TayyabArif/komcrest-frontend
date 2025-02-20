@@ -9,12 +9,13 @@ import { useRouter } from "next/router";
 import Loader from "@/components/commonComponent/Loader";
 import { useMyContext } from "@/context";
 
+
 // Move the component that uses `useMyContext` inside MyProvider
 
 export default function App({ Component, pageProps }) {
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const router = useRouter();
-
+ 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
@@ -38,8 +39,8 @@ export default function App({ Component, pageProps }) {
 
 // Create a separate component to use `useMyContext`
 const AppContent = ({ Component, pageProps }) => {
-  const { overAllLoading } = useMyContext();
-
+  const { overAllLoading} = useMyContext();
+  // const socket = useSocket()
   return (
     <>
       {overAllLoading && <Loader />}
