@@ -88,9 +88,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
     } catch (error) {
       console.error("Error during bulk delete:", error);
       toast.error("An error occurred during deletion");
-    } finally {
-      setOverAllLoading(false);
-    }
+    } 
   };
 
 
