@@ -244,6 +244,7 @@ export const MyProvider = ({ children }) => {
     const currentQuestionnaireImportId = localStorage.getItem("CurrentQuestionnaireImportId");
     if (!currentQuestionnaireImportId) {
       console.log("save in localstorage")
+      setQuestionnaireUpdated((prev)=>!prev)
       localStorage.setItem("QuestionnaireId", questionnaireRecord.questionnaireId);
       localStorage.setItem("CurrentQuestionnaireImportId", questionnaireRecord.questionnaireId);
       router.push(`/vendor/questionnaires/view?name=${questionnaireData.customerName}`);
