@@ -94,6 +94,7 @@ const RegistrationForm = () => {
       ...registerFormData,
       products,
       planId,
+      email : registerFormData.email.toLowerCase()
     });
     const requestOptions = {
       method: "POST",
