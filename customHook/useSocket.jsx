@@ -14,7 +14,9 @@ const useSocket = () => {
   const tabId = typeof window !== "undefined" ? sessionStorage.getItem("tab_id") : null;
   
   useEffect(() => {
-    if (socketUrl) {
+    console.log()
+    if (socketUrl && tabId) {
+      console.log("tabIdtabIdtabIdtabIdtabIdtabIdtabId",tabId)
       const socketInstance = io(
         process.env.NEXT_PUBLIC_BACKEND_URL.split("/api")[0],
         {
@@ -46,7 +48,7 @@ const useSocket = () => {
     } else {
       console.error("Socket URL is not defined");
     }
-  }, [socketUrl]);
+  }, [socketUrl , tabId]);
 
   return socket;
 };
