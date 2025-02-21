@@ -31,7 +31,7 @@ const QuestionnairsListHeader = ({
   const [id, setId] = useState(null);
 
   useEffect(() => {
-    const storedId = localStorage.getItem("QuestionnaireId");
+    const storedId = sessionStorage.getItem("QuestionnaireId");
     setId(storedId);
   }, []);
 

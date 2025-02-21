@@ -132,7 +132,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
       <div
         onClick={() => {
           router.push(`/vendor/questionnaires/view?name=${data.customerName}`);
-          localStorage.setItem("QuestionnaireId", data.id);
+          sessionStorage.setItem("QuestionnaireId", data.id);
         }}
         className=" bg-white rounded-lg cursor-pointer"
       >

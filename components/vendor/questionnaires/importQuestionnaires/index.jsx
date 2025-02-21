@@ -49,6 +49,7 @@ const Import = () => {
   const [reamingData, setReamingData] = useState();
   const ValidateComponentRef = useRef();
   const currentYear = new Date().getFullYear();
+  const tabId = typeof window !== "undefined" ? sessionStorage.getItem("tab_id") : null;
   const [importQuestionnaires, setImportQuestionnaire] = useState({
     customerName: "",
     customerDomain: "",
@@ -257,7 +258,7 @@ const Import = () => {
     };
     setQuestionList(result);
     if (result !== undefined && result !== null ) {
-      localStorage.setItem("questions", JSON.stringify(result));
+      sessionStorage.setItem("questions", JSON.stringify(result));
   }
   
     setQuestionnaireData({
@@ -272,6 +273,7 @@ const Import = () => {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        Tabid : tabId
       },
       body: JSON.stringify(payload),
       redirect: "follow",
@@ -298,11 +300,11 @@ const Import = () => {
       })
       .then(({ status, ok, data }) => {
         if (ok) {
-          localStorage.removeItem("CurrentQuestionnaireImportId");
+          sessionStorage.removeItem("CurrentQuestionnaireImportId");
           toast.success("Questionnaires created successfully");
           setQuestionnaireUpdated((prev) => !prev);
           setReCallPlanDetailApi((prev) => !prev)
-          localStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
+          sessionStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
           // setCurrentQuestionnaireImportId("");
           // setIsFirstResponse(true);
           router.push(
@@ -312,7 +314,7 @@ const Import = () => {
           toast.error(data?.error || "Questionnaires not Created");
           console.error("Error:", data);
         }
-        localStorage.removeItem('questions');
+        sessionStorage.removeItem('questions');
       })
       .catch((error) => {
         if (error.response) {

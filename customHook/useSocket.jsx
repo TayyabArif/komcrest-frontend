@@ -11,13 +11,15 @@ const useSocket = () => {
   const cookiesData = cookies.myCookie;
   const token = cookiesData?.token;
 
+  const tabId = typeof window !== "undefined" ? sessionStorage.getItem("tab_id") : null;
+  
   useEffect(() => {
     if (socketUrl) {
       const socketInstance = io(
         process.env.NEXT_PUBLIC_BACKEND_URL.split("/api")[0],
         {
           path: "/api/socket.io",
-          query: { token },
+          query: { tabId },
           transports: ["websocket"],
         }
       );
