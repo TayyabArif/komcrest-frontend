@@ -31,6 +31,7 @@ const AddResource = () => {
   const [errors, setErrors] = useState([]);
   const {companyProducts ,setOnlineResourceDataUpdate } = useMyContext();
   const [buttonIsDisable , setButtonIsDisable] = useState(false)
+  const tabId = typeof window !== "undefined" ? sessionStorage.getItem("tab_id") : null;
   const [resourceData, setResourceData] = useState({
     language: "",
     productIds: [],
@@ -131,6 +132,7 @@ const AddResource = () => {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
+         Tabid : tabId
       },
       body: jsonPayload,
       redirect: "follow",

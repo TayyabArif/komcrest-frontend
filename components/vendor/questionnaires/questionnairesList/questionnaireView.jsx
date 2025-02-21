@@ -117,7 +117,7 @@ const QuestionnairesView = () => {
       console.log("Notify Questions:", notifyQuestions);
 
       if (Questionnair) {
-        localStorage.setItem("QuestionnaireId", Questionnair);
+        sessionStorage.setItem("QuestionnaireId", Questionnair);
         setFilters([
           {
             name: "id",
@@ -178,7 +178,7 @@ const QuestionnairesView = () => {
   };
 
   useEffect(() => {
-    id = localStorage.getItem("QuestionnaireId");
+    id = sessionStorage.getItem("QuestionnaireId");
     if (id && getFilterData == "filtered") {
       fetchQuestionnaire();
     }
@@ -264,7 +264,7 @@ const QuestionnairesView = () => {
   const handleBulkDelete = async () => {
     const token = cookiesData.token;
     const payLoad = JSON.stringify({
-      questionnaireId: localStorage.getItem("QuestionnaireId"),
+      questionnaireId: sessionStorage.getItem("QuestionnaireId"),
       ids: bulkSelected,
     });
 
@@ -368,7 +368,7 @@ const QuestionnairesView = () => {
       field: property,
       value: value,
       eventType: `${property}Changed`,
-      questionnairId: localStorage.getItem("QuestionnaireId"),
+      questionnairId: sessionStorage.getItem("QuestionnaireId"),
     };
 
     const jsonPayload = JSON.stringify(updatedData);

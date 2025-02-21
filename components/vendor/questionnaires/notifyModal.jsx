@@ -46,7 +46,7 @@ const NotifyModal = ({
   
 
   const queryParams = new URLSearchParams();
-  queryParams.append("Questionnair", localStorage.getItem("QuestionnaireId"));
+  queryParams.append("Questionnair", sessionStorage.getItem("QuestionnaireId"));
   bulkSelected.forEach((id) => {
   queryParams.append("notifyQuestions[]", id);
 });

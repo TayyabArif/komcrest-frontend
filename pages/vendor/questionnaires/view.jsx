@@ -10,8 +10,8 @@ const QuestionnairView = () => {
   // const { currentQuestionnaireImportId } = useMyContext();
 
   useEffect(() => {
-    const storedId = localStorage.getItem("QuestionnaireId");
-    const QuestionnaireImportId =  localStorage.getItem("CurrentQuestionnaireImportId");
+    const storedId = sessionStorage.getItem("QuestionnaireId");
+    const QuestionnaireImportId = sessionStorage.getItem("CurrentQuestionnaireImportId");
     setCurrentQuestionnaireImportId(QuestionnaireImportId)
     setId(storedId);
   }, []);

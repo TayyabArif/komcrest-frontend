@@ -41,7 +41,8 @@ export const MyProvider = ({ children }) => {
   const [isKnowledgeBaseOpenDirect, setIsKnowledgeBaseOpenDirect] =
     useState(true);
   const [dataUpdate, setDataUpdate] = useState(false);
-  const [isFetchingAllQuestionnaire , setIsFetchingAllQuestionnaire] = useState(false)
+  const [isFetchingAllQuestionnaire, setIsFetchingAllQuestionnaire] =
+    useState(false);
 
   // questionnaire module states
   const [questionnaireData, setQuestionnaireData] = useState({
@@ -49,11 +50,28 @@ export const MyProvider = ({ children }) => {
     customerName: "",
   });
   const [questionList, setQuestionList] = useState([]);
-  const [allQuestionnaireList, setAllQuestionnireList] = useState(
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("questions"))
-      : []
-  );
+
+  const [allQuestionnaireList, setAllQuestionnireList] = useState(() => {
+    if (typeof window !== "undefined") {
+      const storedQuestions = sessionStorage.getItem("questions");
+      console.log("MMMMM", storedQuestions);
+  
+      if (storedQuestions === null || storedQuestions === undefined) {
+        console.log("Session storage key 'questions' does not exist.");
+        return [];
+      } else {
+        try {
+          return JSON.parse(storedQuestions);
+        } catch (error) {
+          console.error("Error parsing sessionStorage data:", error);
+          return [];
+        }
+      }
+    }
+    return [];
+  });
+  
+
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [isFirstResponse, setIsFirstResponse] = useState(true);
   const isFirstResponseRef = useRef(isFirstResponse);
@@ -203,7 +221,7 @@ export const MyProvider = ({ children }) => {
 
   const fetchAllQuestionnaires = async () => {
     // setOverAllLoading(true);
-    setIsFetchingAllQuestionnaire(true)
+    setIsFetchingAllQuestionnaire(true);
     const token = cookiesData && cookiesData.token;
     const requestOptions = {
       method: "GET",
@@ -235,7 +253,7 @@ export const MyProvider = ({ children }) => {
       console.error("Error fetching Questionnaire:", error);
     } finally {
       setOverAllLoading(false);
-      setIsFetchingAllQuestionnaire(false)
+      setIsFetchingAllQuestionnaire(false);
     }
   };
   useEffect(() => {
@@ -245,13 +263,23 @@ export const MyProvider = ({ children }) => {
   }, [questionnaireUpdated]);
 
   socket?.on("Question", (questionnaireRecord) => {
-    const currentQuestionnaireImportId = localStorage.getItem("CurrentQuestionnaireImportId");
+    const currentQuestionnaireImportId = sessionStorage.getItem(
+      "CurrentQuestionnaireImportId"
+    );
     if (!currentQuestionnaireImportId) {
-      console.log("save in localstorage")
-      setQuestionnaireUpdated((prev)=>!prev)
-      localStorage.setItem("QuestionnaireId", questionnaireRecord.questionnaireId);
-      localStorage.setItem("CurrentQuestionnaireImportId", questionnaireRecord.questionnaireId);
-      router.push(`/vendor/questionnaires/view?name=${questionnaireData.customerName}`);
+      console.log("save in localstorage");
+      setQuestionnaireUpdated((prev) => !prev);
+      sessionStorage.setItem(
+        "QuestionnaireId",
+        questionnaireRecord.questionnaireId
+      );
+      sessionStorage.setItem(
+        "CurrentQuestionnaireImportId",
+        questionnaireRecord.questionnaireId
+      );
+      router.push(
+        `/vendor/questionnaires/view?name=${questionnaireData.customerName}`
+      );
     }
     setAllQuestionnireList((prevState) => {
       // Map over the previous state to update it with the new incoming data
@@ -266,35 +294,35 @@ export const MyProvider = ({ children }) => {
       );
       // Return the updated state
       // if (updateData !== undefined && updateData !== null) {
-        localStorage.setItem("questions", JSON.stringify(updateData));
+      sessionStorage.setItem("questions", JSON.stringify(updateData));
       // }
       return updateData;
     });
   });
 
   socket?.on("AllAnswersDone", (data) => {
-    localStorage.removeItem("CurrentQuestionnaireImportId");
+    sessionStorage.removeItem("CurrentQuestionnaireImportId");
     setQuestionnaireUpdated((prev) => !prev);
     setReCallPlanDetailApi((prev) => !prev);
-    localStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
-    localStorage.removeItem('questions');
+    sessionStorage.setItem("QuestionnaireId", data?.fullQuestionnaire?.id);
+    sessionStorage.removeItem("questions");
     window.location.href = `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`;
   });
-  
-  socket?.on("errorInQuestionnaire", (data)=>{
-    localStorage.removeItem("CurrentQuestionnaireImportId");
+
+  socket?.on("errorInQuestionnaire", (data) => {
+    sessionStorage.removeItem("CurrentQuestionnaireImportId");
     setQuestionnaireUpdated((prev) => !prev);
     setReCallPlanDetailApi((prev) => !prev);
-    localStorage.removeItem('questions');
+    sessionStorage.removeItem("questions");
     // toast.error("Error Please try again")
-    router.push("/vendor/questionnaires")
-  })
+    router.push("/vendor/questionnaires");
+  });
 
   const uploadFile = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
     const token = cookiesData.token;
-  
+
     let requestOptions = {
       method: "POST",
       headers: {
@@ -303,11 +331,16 @@ export const MyProvider = ({ children }) => {
       body: formData,
       redirect: "follow",
     };
-  
+
     try {
       const response = await fetch(`${baseUrl}/file-upload`, requestOptions);
-      const data = await handleResponse(response, router, cookies, removeCookie);
-  
+      const data = await handleResponse(
+        response,
+        router,
+        cookies,
+        removeCookie
+      );
+
       if (response.ok) {
         console.log("File uploaded successfully:", data);
         return data.filePath;
@@ -690,7 +723,7 @@ export const MyProvider = ({ children }) => {
         handleCreateCheckout,
         s3FileDownload,
         uploadFile,
-        isFetchingAllQuestionnaire
+        isFetchingAllQuestionnaire,
       }}
     >
       {children}
