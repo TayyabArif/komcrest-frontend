@@ -60,7 +60,6 @@ const DocumentCard = ({ cardData, setIsDeleted, isDeleted }) => {
   
  
   const handleDocumentLink = (link) => {
-    alert(link)
     const formattedLink =
       link.startsWith("http://") || link.startsWith("https://")
         ? link
