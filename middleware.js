@@ -7,6 +7,8 @@ export function middleware(request) {
   const myCookie = cookies.get('myCookie');
   const { pathname } = request.nextUrl;
 
+  const captchaVerified = cookies.get('captcha_verified');
+
   console.log("+++++++++",pathname)
 
   // Exclude login and unauthorized routes from protection
@@ -20,6 +22,13 @@ export function middleware(request) {
     '/vendor/login/password-recovery/password-update',
     '/vendor/login/valid-domain'
   ];
+
+   // ✅ If CAPTCHA is not verified, redirect to CAPTCHA page first
+   if (!captchaVerified && !unprotectedRoutes.includes(pathname)) {
+    return NextResponse.redirect(new URL('/captcha', request.url));
+  }
+
+
 
   if (unprotectedRoutes.includes(pathname)) {
     return NextResponse.next();

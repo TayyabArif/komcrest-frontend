@@ -5,18 +5,23 @@ import AuthLayout from "./AuthLayout";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 import { useMyContext } from "@/context";
-
-
+// import Turnstile from "react-turnstile";
 
 const Login = ({ type }) => {
-  const [cookies, setCookie, removeCookie] = useCookies(['myCookie']);
+  const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
-  const { setDataUpdated ,dataUpdated ,setQuestionnaireUpdated, setReCallPlanDetailApi } = useMyContext();
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  // const [token, setToken] = useState("");
+  const {
+    setDataUpdated,
+    dataUpdated,
+    setQuestionnaireUpdated,
+    setReCallPlanDetailApi,
+  } = useMyContext();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [formData, setFormData] = useState({
@@ -69,15 +74,15 @@ const Login = ({ type }) => {
             token: data.token,
             role: data.user.role,
             companyType: data.user?.Company?.companyType,
-            companyId : data.user.companyId,
-            userName : `${data.user.firstName} ${data.user.lastName}`,
-            userId :  data.user.id
+            companyId: data.user.companyId,
+            userName: `${data.user.firstName} ${data.user.lastName}`,
+            userId: data.user.id,
           };
-         
-          setCookie('myCookie',  userData, { path: '/' });
-          setDataUpdated(!dataUpdated)
-          setQuestionnaireUpdated((prev)=>!prev)
-          setReCallPlanDetailApi((prev)=>!prev)
+
+          setCookie("myCookie", userData, { path: "/" });
+          setDataUpdated(!dataUpdated);
+          setQuestionnaireUpdated((prev) => !prev);
+          setReCallPlanDetailApi((prev) => !prev);
           console.log("Success:", data);
           if (data?.user?.Company?.companyType === "vendor") {
             router.push("/vendor/document");
@@ -117,7 +122,11 @@ const Login = ({ type }) => {
           type="email"
           placeholder="Email"
           className="mt-6 -ml-1"
-          classNames={{ inputWrapper: "h-[50px]", input: "text-base 2xl:text-[20px]", errorMessage: "text-base 2xl:text-[20px]" }}
+          classNames={{
+            inputWrapper: "h-[50px]",
+            input: "text-base 2xl:text-[20px]",
+            errorMessage: "text-base 2xl:text-[20px]",
+          }}
         />
         <Input
           isRequired
@@ -136,22 +145,35 @@ const Login = ({ type }) => {
             </button>
           }
           type={isVisible ? "text" : "password"}
-          classNames={{ inputWrapper: "h-[50px]", input: "text-base 2xl:text-[20px]" }}
+          classNames={{
+            inputWrapper: "h-[50px]",
+            input: "text-base 2xl:text-[20px]",
+          }}
           className="mt-4 -ml-1"
         />
         <p
-          className="underline mt-1 cursor-pointer text-base 2xl:text-[20px]"
+          className="underline my-1 cursor-pointer text-base 2xl:text-[20px]"
           onClick={() =>
             router.push(`/${type}/login/password-recovery/request`)
           }
         >
           Forget password
         </p>
+
+        {/* <Turnstile
+          sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          onVerify={(token) => {
+            setToken(token);
+          }}
+        /> */}
+
         <Button
           radius="none"
           size="sm"
           className="mt-4 text-white px-[45px] text-base 2xl:text-[20px] bg-[#4fa82e] w-max rounded-[4px] -ml-1"
-          isDisabled={!formData.email || !formData.password || isLoading}
+          isDisabled={
+            !formData.email || !formData.password || isLoading
+          }
           isLoading={isLoading}
           onPress={handleSubmit}
         >

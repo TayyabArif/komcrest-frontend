@@ -28,7 +28,7 @@ const NewDocument = () => {
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [titleError, setTitleError] = useState(false);
   const [fileError, setFileError] = useState(false);
-  const [isLoading , setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const [documentData, setDocumentData] = useState({
     title: "",
@@ -102,98 +102,94 @@ const NewDocument = () => {
     }
 
     try {
-      
-   
-    setIsLoading(true)
-    const formData = new FormData();
-    formData.append("title", documentData.title);
-    formData.append("description", documentData.description);
-    formData.append("file", documentData.file);
-    formData.append("productIds", JSON.stringify(documentData.productIds));
-    formData.append("documentLink", documentData.documentLink);
-    formData.append("language", documentData.language);
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("title", documentData.title);
+      formData.append("description", documentData.description);
+      formData.append("file", documentData.file);
+      formData.append("productIds", JSON.stringify(documentData.productIds));
+      formData.append("documentLink", documentData.documentLink);
+      formData.append("language", documentData.language);
 
-    const token = cookiesData.token;
-    let requestOptions;
-    if (id) {
-      requestOptions = {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-        redirect: "follow",
-      };
+      const token = cookiesData.token;
+      let requestOptions;
+      if (id) {
+        requestOptions = {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+          redirect: "follow",
+        };
 
-      fetch(`${baseUrl}/documents/${id}`, requestOptions)
-        .then(async (response) => {
-          const data = await handleResponse(
-            response,
-            router,
-            cookies,
-            removeCookie
-          );
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
-            toast.success("Document updated successfully");
-            setDocumentDataUpdate((prev) => !prev);
-            router.push("/vendor/document");
-          } else {
-            toast.error(data?.error);
-            console.error("Error:", data);
-          }
-        })
-        .catch((error) => console.error(error));
-    } else {
-      requestOptions = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-        redirect: "follow",
-      };
+        fetch(`${baseUrl}/documents/${id}`, requestOptions)
+          .then(async (response) => {
+            const data = await handleResponse(
+              response,
+              router,
+              cookies,
+              removeCookie
+            );
+            return {
+              status: response.status,
+              ok: response.ok,
+              data,
+            };
+          })
+          .then(({ status, ok, data }) => {
+            if (ok) {
+              toast.success("Document updated successfully");
+              setDocumentDataUpdate((prev) => !prev);
+              router.push("/vendor/document");
+            } else {
+              toast.error(data?.error);
+              console.error("Error:", data);
+            }
+          })
+          .catch((error) => console.error(error));
+      } else {
+        requestOptions = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+          redirect: "follow",
+        };
 
-      fetch(`${baseUrl}/documents`, requestOptions)
-        .then(async (response) => {
-          const data = await handleResponse(
-            response,
-            router,
-            cookies,
-            removeCookie
-          );
-          return {
-            status: response.status,
-            ok: response.ok,
-            data,
-          };
-        })
-        .then(({ status, ok, data }) => {
-          if (ok) {
-            console.log("Success:", data);
-            toast.success("Document created successfully");
-            setDocumentDataUpdate((prev) => !prev);
-            router.push("/vendor/document");
-          } else {
-            toast.error(data?.error || "Document not Created");
-            console.error("Error:", data);
-          }
-        })
-        .catch((error) => console.error(error));
+        fetch(`${baseUrl}/documents`, requestOptions)
+          .then(async (response) => {
+            const data = await handleResponse(
+              response,
+              router,
+              cookies,
+              removeCookie
+            );
+            return {
+              status: response.status,
+              ok: response.ok,
+              data,
+            };
+          })
+          .then(({ status, ok, data }) => {
+            if (ok) {
+              console.log("Success:", data);
+              toast.success("Document created successfully");
+              setDocumentDataUpdate((prev) => !prev);
+              router.push("/vendor/document");
+            } else {
+              toast.error(data?.error || "Document not Created");
+              console.error("Error:", data);
+            }
+          })
+          .catch((error) => console.error(error));
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
-
-  } catch (error) {
-      console.log(error)
-  } finally { setIsLoading(false)}
-
-
-
   };
 
   useEffect(() => {
@@ -408,7 +404,7 @@ const NewDocument = () => {
                       size="lg"
                       classNames={{
                         label: "!rounded-[3px] text-standard",
-                        wrapper: "!rounded-[3px]" 
+                        wrapper: "!rounded-[3px]",
                       }}
                     >
                       {item.name}
