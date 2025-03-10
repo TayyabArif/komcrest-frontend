@@ -67,7 +67,7 @@ const AddDocument = () => {
             isDeleted={isDeleted}
           />
         ) : (
-          <div className="text-center space-y-[3rem] py-7">
+          <div className="text-center space-y-[2rem] py-7">
             <div className="text-center w-[36%] mx-auto my-5">
               <div className="flex justify-center items-center">
                 <svg
@@ -130,7 +130,7 @@ const AddDocument = () => {
               <Button
                 radius="none"
                 size="md"
-                className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] my-4"
+                className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] "
                 onClick={() => {
                   router.push("/vendor/document/AddDocument");
                 }}

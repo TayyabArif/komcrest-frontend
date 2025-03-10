@@ -116,13 +116,13 @@ debugger
               {activePlanDetail?.subscriptionDetails?.planName == "Free"
                 ? getPlanDetail(
                     activePlanDetail?.subscriptionDetails?.selectedPlanId
-                  ).name
+                  )?.name
                 : activePlanDetail?.subscriptionDetails?.planName}{" "}
               – {" "}
               {activePlanDetail?.subscriptionDetails?.planName == "Free"
                 ? getPlanDetail(
                     activePlanDetail?.subscriptionDetails?.selectedPlanId
-                  ).benefits?.Questions
+                  )?.benefits?.Questions
                 : activePlanDetail?.questionLimitDetails
                     ?.totalAllowedQuestions}{" "}
               questions
@@ -131,7 +131,7 @@ debugger
                   activePlanDetail?.subscriptionDetails?.planName == "Free"
                     ? getPlanDetail(
                         activePlanDetail?.subscriptionDetails?.selectedPlanId
-                      ).price
+                      )?.price
                     : activePlanDetail?.subscriptionDetails?.planPrice
                 } per Month not including VAT`} {" "}
                 {activePlanDetail?.subscriptionDetails?.status == "cancelled" && (
