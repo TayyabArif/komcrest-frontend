@@ -20,7 +20,7 @@ const RegistrationForm = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const [domainName, setDomainName] = useState();
+  const [domainName, setDomainName] = useState("onboarding");
 
   const [registerFormData, setRegisterFormData] = useState({
     name: "",
@@ -128,7 +128,7 @@ const RegistrationForm = () => {
       });
   };
 
-  if (domainName !== "onbording") {
+  if (domainName !== "onboarding") {
     return <PageNotFound />
   }
 

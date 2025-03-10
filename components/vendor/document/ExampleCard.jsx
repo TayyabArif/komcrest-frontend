@@ -38,8 +38,8 @@ const ExampleCard = () => {
       },
   ];
   return (
-    <div>
-      <div className="flex justify-between flex-wrap w-[70%] mx-auto">
+ 
+      <div className="flex justify-between flex-wrap w-[70%] mx-auto ">
         {ExampleData &&
           ExampleData.map((item, index) => {
             return (
@@ -60,7 +60,6 @@ const ExampleCard = () => {
             );
           })}
       </div>
-    </div>
   );
 };
 

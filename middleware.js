@@ -24,9 +24,16 @@ export function middleware(request) {
   ];
 
    // ✅ If CAPTCHA is not verified, redirect to CAPTCHA page first
-   if (!captchaVerified && !unprotectedRoutes.includes(pathname)) {
+
+   console.log("myCookiemyCookiemyCookie",myCookie)
+   if (
+    !captchaVerified &&
+    !unprotectedRoutes.includes(pathname) &&
+    myCookie !== undefined // ✅ Ensure myCookie is defined before checking further
+  ) {
     return NextResponse.redirect(new URL('/captcha', request.url));
   }
+  
 
 
 
