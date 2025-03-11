@@ -8,31 +8,29 @@ export default function CaptchaPage() {
   const router = useRouter();
   const [cookies, setCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
-  const [domain, setDomain] = useState("");
-
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const hostname = window.location.hostname; 
-      const subdomain = hostname.split(".")[0];
-      setDomain(subdomain);
-    }
-  }, []);
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
   const handleVerify = async (token) => {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://${domain}.${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/verify-captcha`, {
+      const response = await fetch(`${baseUrl}/verify-captcha`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-        credentials: "include", // ✅ Important for setting cookies
+        body: JSON.stringify({ token })
       });
 
       const data = await response.json();
       if (data.success) {
+
+        setCookie("captcha_verified", true, {
+          path: "/",
+          maxAge: 10800,
+          sameSite: "Strict",
+          secure: true,
+        });
+
         setMessage("✅ CAPTCHA verified successfully!");
         setTimeout(() => {
           if (cookiesData?.companyType == "vendor") {
@@ -73,3 +71,8 @@ export default function CaptchaPage() {
     </div>
   );
 }
+
+
+
+
+
