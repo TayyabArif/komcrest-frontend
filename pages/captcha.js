@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Turnstile from "react-turnstile";
 import { useCookies } from "react-cookie";
@@ -6,14 +6,25 @@ import { useCookies } from "react-cookie";
 export default function CaptchaPage() {
   const [message, setMessage] = useState(null);
   const router = useRouter();
-    const [cookies, setCookie] = useCookies(["myCookie"]);
-    const cookiesData = cookies.myCookie;
+  const [cookies, setCookie] = useCookies(["myCookie"]);
+  const cookiesData = cookies.myCookie;
+  const [domain, setDomain] = useState("");
+
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hostname = window.location.hostname; 
+      const subdomain = hostname.split(".")[0];
+      setDomain(subdomain);
+    }
+  }, []);
+
 
   const handleVerify = async (token) => {
     if (!token) return;
 
     try {
-      const response = await fetch("/api/verify-captcha", {
+      const response = await fetch(`http://${domain}.${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/verify-captcha`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
