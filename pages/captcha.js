@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Turnstile from "react-turnstile";
 import { useCookies } from "react-cookie";
+import jwt from "jwt-simple";
 
 export default function CaptchaPage() {
   const [message, setMessage] = useState(null);
@@ -10,27 +11,26 @@ export default function CaptchaPage() {
   const cookiesData = cookies.myCookie;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-
   const handleVerify = async (token) => {
     if (!token) return;
-
     try {
       const response = await fetch(`${baseUrl}/verify-captcha`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token })
+        body: JSON.stringify({ token }),
       });
 
       const data = await response.json();
       if (data.success) {
 
-        setCookie("captcha_verified", true, {
-          path: "/",
-          maxAge: 10800,
-          sameSite: "Strict",
-          secure: true,
-        });
+        const jwtPayload = {
+          captchaVerified: true,
+        }
+        const expirationTime = Math.floor(Date.now() / 1000) + (60 * 60 * 3);
+        jwtPayload.exp = expirationTime;
+        const jwtToken = jwt.encode(jwtPayload, process.env.NEXT_PUBLIC_JWT_SECRET);
 
+        setCookie("cpatchajwtToken", jwtToken, { path: "/" , expires: expirationTime});
         setMessage("✅ CAPTCHA verified successfully!");
         setTimeout(() => {
           if (cookiesData?.companyType == "vendor") {
@@ -51,7 +51,7 @@ export default function CaptchaPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="text-center space-y-10 p-10 bg-white shadow-lg rounded-lg">
-        <h2 className="text-[40px]">Please verify you are human</h2>
+        <h2 className="text-[33px]">Please verify you are human</h2>
         <div
           style={{
             transform: "scale(1.3)",
@@ -71,8 +71,3 @@ export default function CaptchaPage() {
     </div>
   );
 }
-
-
-
-
-

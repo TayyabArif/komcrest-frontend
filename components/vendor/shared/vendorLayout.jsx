@@ -58,16 +58,43 @@ const VendorLayout = ({ children }) => {
   }
 
 
-function getDayDifference() {
-  const endData = new Date(activePlanDetail?.subscriptionDetails?.endDate);  
-  const currentDate = new Date(); 
-
-  const timeDifference = endData - currentDate;
-
-  const dayDifference = Math.round(timeDifference / (1000 * 3600 * 24));
-
-  return dayDifference;
-}
+  function getDayDifference() {
+    const endData = new Date(activePlanDetail?.subscriptionDetails?.endDate);  
+    const currentDate = new Date(); 
+    const milliseconds = endData - currentDate;
+  
+    // Calculate days, hours, and minutes
+    const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+  
+    let result = "";
+  
+    // If the difference is more than a day, show days
+    if (days > 0) {
+      result += `${days} day${days > 1 ? "s" : ""}`;
+    }
+    // If less than a day, only show hours and minutes
+    else {
+      if (hours > 0) {
+        result += `${hours} hour${hours > 1 ? "s" : ""}`;
+      }
+      if (minutes > 0) {
+        result += `${minutes} minute${minutes > 1 ? "s" : ""}`;
+      }
+    }
+  
+    // If no days, hours, or minutes are greater than zero, return "0 day"
+    if (result.trim() === "") {
+      result = "0 day";
+    }
+  
+    // Return the result
+    return result.trim();
+  }
+  
+  
+  
 
 function planActivated (){
   const selectedPlanId = activePlanDetail?.subscriptionDetails?.selectedPlanId
@@ -199,7 +226,7 @@ if(selectedPlan?.name == "Free"){
                 Activate Plan
               </Button>
               <h1 className="text-blue-700 text-standard">
-              Trial period: {getDayDifference()} days &{" "}
+              Trial period: {getDayDifference()} &{" "}
                 {activePlanDetail?.questionLimitDetails?.questionsLeft}{" "}
                 questions left (unlimited documents & knowledge base entries)
               </h1>
