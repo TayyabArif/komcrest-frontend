@@ -17,24 +17,27 @@ import FreeTrialCompletedModal from "./FreeTrialCompletedModal";
 import { useDisclosure } from "@nextui-org/react";
 
 const VendorLayout = ({ children }) => {
-  const { setIsKnowledgeBaseOpenDirect, activePlanDetail,plansData , handleCreateCheckout , isLoading} = useMyContext();
+  const {
+    setIsKnowledgeBaseOpenDirect,
+    activePlanDetail,
+    plansData,
+    handleCreateCheckout,
+    isLoading,
+  } = useMyContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [cookies, setCookie, removeCookie] = useCookies(["myCookie"]);
   const cookiesData = cookies.myCookie;
   const router = useRouter();
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const route = router.route;
   const userID = cookiesData?.userId;
   const [loggedInUser, setLoggedInUser] = useState();
   const [isFreeTrialEnd, setIsFreeTrialEnd] = useState(
-    isCurrentDateGreaterThanEndDate() || activePlanDetail?.questionLimitDetails?.questionsLeft == 0
+    isCurrentDateGreaterThanEndDate() ||
+      activePlanDetail?.questionLimitDetails?.questionsLeft == 0
   );
   const [selectedItem, setSelectedItem] = useState("");
   const currentDate = new Date();
-  // const [isLoading, setIsLoading] = useState({
-  //   success: false,
-  //   id: ""
-  // })
 
   useEffect(() => {
     const parts = route.split("/");
@@ -57,19 +60,20 @@ const VendorLayout = ({ children }) => {
     return currentDate > endDate;
   }
 
-
   function getDayDifference() {
-    const endData = new Date(activePlanDetail?.subscriptionDetails?.endDate);  
-    const currentDate = new Date(); 
+    const endData = new Date(activePlanDetail?.subscriptionDetails?.endDate);
+    const currentDate = new Date();
     const milliseconds = endData - currentDate;
-  
+
     // Calculate days, hours, and minutes
     const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const hours = Math.floor(
+      (milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
-  
+
     let result = "";
-  
+
     // If the difference is more than a day, show days
     if (days > 0) {
       result += `${days} day${days > 1 ? "s" : ""}`;
@@ -83,30 +87,26 @@ const VendorLayout = ({ children }) => {
         result += `${minutes} minute${minutes > 1 ? "s" : ""}`;
       }
     }
-  
+
     // If no days, hours, or minutes are greater than zero, return "0 day"
     if (result.trim() === "") {
       result = "0 day";
     }
-  
+
     // Return the result
     return result.trim();
   }
-  
-  
-  
 
-function planActivated (){
-  const selectedPlanId = activePlanDetail?.subscriptionDetails?.selectedPlanId
-  const selectedPlan = plansData?.find((item) => item.id == selectedPlanId)
-if(selectedPlan?.name == "Free"){
-  router.push("/vendor/setting/subscription-plan")
-}else{
-  handleCreateCheckout(selectedPlan)
-}
-}
-
-
+  function planActivated() {
+    const selectedPlanId =
+      activePlanDetail?.subscriptionDetails?.selectedPlanId;
+    const selectedPlan = plansData?.find((item) => item.id == selectedPlanId);
+    if (selectedPlan?.name == "Free") {
+      router.push("/vendor/setting/subscription-plan");
+    } else {
+      handleCreateCheckout(selectedPlan);
+    }
+  }
 
   return (
     <div className="flex w-full">
@@ -214,7 +214,7 @@ if(selectedPlan?.name == "Free"){
       </div>
       <div className="ml-[15%] w-[85%] fixed h-screen pb-4">
         <div className=" flex justify-end w-[85%] mx-auto">
-          {activePlanDetail?.subscriptionDetails?.planName == "Free"  && (
+          {activePlanDetail?.subscriptionDetails?.planName == "Free" && (
             <div className="py-[6px] flex-1  bg-y text-right flex items-center gap-2 font-bold cursor-pointer  m-auto text-standard">
               <Button
                 radius="none"
@@ -226,7 +226,7 @@ if(selectedPlan?.name == "Free"){
                 Activate Plan
               </Button>
               <h1 className="text-blue-700 text-standard">
-              Trial period: {getDayDifference()} &{" "}
+                Trial period: {getDayDifference()} &{" "}
                 {activePlanDetail?.questionLimitDetails?.questionsLeft}{" "}
                 questions left (unlimited documents & knowledge base entries)
               </h1>

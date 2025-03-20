@@ -21,26 +21,33 @@ export async function middleware(request) {
     "/vendor/login/valid-domain",
   ];
 
-  if (!cpatchajwtToken && !unprotectedRoutes.includes(pathname)) {
-    return NextResponse.redirect(new URL("/captcha", request.url)); // 🔥 Fixed here
-  } else {
-    try {
-      // Use jose to verify and decode the JWT
-      const secret = new TextEncoder().encode(
-        process.env.NEXT_PUBLIC_JWT_SECRET
-      );
-      const { payload } = await jwtVerify(cpatchajwtToken.value, secret);
 
-      if (payload.captchaVerified) {
-        console.log(":verified");
-      } else {
-        return NextResponse.redirect(new URL("/captcha", request.url)); // 🔥 Fixed here
-      }
-    } catch (error) {
-      console.error("Invalid JWT token:", error);
-      return NextResponse.redirect(new URL("/captcha", request.url)); // 🔥 Fixed here
-    }
-  }
+
+
+  // try {
+  //   if (cpatchajwtToken) {
+  //     const secret = new TextEncoder().encode(
+  //       process.env.NEXT_PUBLIC_JWT_SECRET
+  //     );
+  //     const { payload } = await jwtVerify(cpatchajwtToken.value, secret);   
+  //     if (!payload.captchaVerified) {
+  //       return NextResponse.redirect(
+  //         new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+  //       );
+  //     }
+  //   } else {
+  //     return NextResponse.redirect(
+  //       new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+  //     );
+  //   }
+  // } catch (error) {
+  //   console.error("Error verifying JWT:", error);
+  //   return NextResponse.redirect(
+  //     new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+  //   );
+  // }
+  
+
 
   if (unprotectedRoutes.includes(pathname)) {
     return NextResponse.next();
