@@ -1,40 +1,52 @@
 // middleware.js
-import { NextResponse } from 'next/server';
-// import jwt from 'jsonwebtoken';
+import { NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
-export function middleware(request) {
+export async function middleware(request) {
   const { cookies } = request;
-  const myCookie = cookies.get('myCookie');
+  const myCookie = cookies.get("myCookie");
   const { pathname } = request.nextUrl;
 
-  const captchaVerified = cookies.get('captcha_verified');
-
-  console.log("+++++++++",pathname)
+  const cpatchajwtToken = cookies.get("cpatchajwtToken");
 
   // Exclude login and unauthorized routes from protection
   const unprotectedRoutes = [
-    '/admin/login',
-    '/login',
-    '/unauthorized',
-    '/vendor/login/access',
-    '/vendor/login/password-recovery/request',
-    '/vendor/login/password-confimation',
-    '/vendor/login/password-recovery/password-update',
-    '/vendor/login/valid-domain'
+    "/admin/login",
+    "/login",
+    "/unauthorized",
+    "/vendor/login/access",
+    "/vendor/login/password-recovery/request",
+    "/vendor/login/password-confimation",
+    "/vendor/login/password-recovery/password-update",
+    "/vendor/login/valid-domain",
   ];
 
-   // ✅ If CAPTCHA is not verified, redirect to CAPTCHA page first
 
-   console.log("myCookiemyCookiemyCookie",myCookie)
-   if (
-    !captchaVerified &&
-    !unprotectedRoutes.includes(pathname) &&
-    myCookie !== undefined // ✅ Ensure myCookie is defined before checking further
-  ) {
-    return NextResponse.redirect(new URL('/captcha', request.url));
-  }
+
+
+  // try {
+  //   if (cpatchajwtToken) {
+  //     const secret = new TextEncoder().encode(
+  //       process.env.NEXT_PUBLIC_JWT_SECRET
+  //     );
+  //     const { payload } = await jwtVerify(cpatchajwtToken.value, secret);   
+  //     if (!payload.captchaVerified) {
+  //       return NextResponse.redirect(
+  //         new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+  //       );
+  //     }
+  //   } else {
+  //     return NextResponse.redirect(
+  //       new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+  //     );
+  //   }
+  // } catch (error) {
+  //   console.error("Error verifying JWT:", error);
+  //   return NextResponse.redirect(
+  //     new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+  //   );
+  // }
   
-
 
 
   if (unprotectedRoutes.includes(pathname)) {
@@ -42,13 +54,13 @@ export function middleware(request) {
   } else if (myCookie) {
     try {
       let cookieValue;
-      if (typeof myCookie === 'string') {
+      if (typeof myCookie === "string") {
         cookieValue = JSON.parse(decodeURIComponent(myCookie));
       } else {
         cookieValue = myCookie;
       }
 
-      if (typeof cookieValue === 'string') {
+      if (typeof cookieValue === "string") {
         cookieValue = JSON.parse(cookieValue);
       }
       const decodedCookie = decodeURIComponent(myCookie.value);
@@ -60,48 +72,58 @@ export function middleware(request) {
       const { token, role, companyType } = cookieValue;
       console.log("Token:", token, "Role:", role, "Company Type:", companyType);
 
-
       // Define role-based protected routes
-      const adminRoutes = ['/admin', '/admin/*'];
-      const vendorRoutes = ['/vendor', '/vendor/*'];
+      const adminRoutes = ["/admin", "/admin/*"];
+      const vendorRoutes = ["/vendor", "/vendor/*"];
 
-      const isVendorUserManagementRoute = pathname.startsWith('/vendor/setting/user-management');
-      const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route));
-      const isVendorRoute = vendorRoutes.some(route => pathname.startsWith(route));
+      const isVendorUserManagementRoute = pathname.startsWith(
+        "/vendor/setting/user-management"
+      );
+      const isAdminRoute = adminRoutes.some((route) =>
+        pathname.startsWith(route)
+      );
+      const isVendorRoute = vendorRoutes.some((route) =>
+        pathname.startsWith(route)
+      );
 
       // Check if the route is an admin route
       if (isAdminRoute) {
         // Only Super Admins can access admin routes
-        if (role !== 'Super Admin') {
-          return NextResponse.redirect(new URL('/admin/login', request.url));
+        if (role !== "Super Admin") {
+          return NextResponse.redirect(new URL("/admin/login", request.url));
         }
       }
 
       // Check if the route is a vendor route
       if (isVendorRoute) {
         // Only users with role 'Admin' and company type 'vendor' can access vendor routes
-        if (companyType !== 'vendor') {
-          return NextResponse.redirect(new URL('/vendor/login/access', request.url));
+        if (companyType !== "vendor") {
+          return NextResponse.redirect(
+            new URL("/vendor/login/access", request.url)
+          );
         }
-        
-        if (isVendorUserManagementRoute && (role !== 'Admin')) {
-          return NextResponse.redirect(new URL('/vendor/login/access', request.url));
+
+        if (isVendorUserManagementRoute && role !== "Admin") {
+          return NextResponse.redirect(
+            new URL("/vendor/login/access", request.url)
+          );
         }
       }
-
     } catch (error) {
-      console.error('Error decoding or parsing cookie:', error);
+      console.error("Error decoding or parsing cookie:", error);
       // Redirect to admin login page in case of an error
-      return NextResponse.redirect(new URL('/admin/login', request.url));
+      return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   } else {
     // Redirect to appropriate login page if no cookie is found
-    if (pathname.startsWith('/admin')) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
-    } else if (pathname.startsWith('/vendor')) {
-      return NextResponse.redirect(new URL('/vendor/login/access', request.url));
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    } else if (pathname.startsWith("/vendor")) {
+      return NextResponse.redirect(
+        new URL("/vendor/login/access", request.url)
+      );
     } else {
-      return NextResponse.redirect(new URL('/login', request.url));
+      return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
@@ -110,5 +132,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*' ,'/vendor/:path*'],
+  matcher: ["/admin/:path*", "/vendor/:path*"],
 };

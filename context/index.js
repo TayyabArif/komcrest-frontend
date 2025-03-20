@@ -19,6 +19,7 @@ export const MyProvider = ({ children }) => {
   const companyId = cookiesData?.companyId;
   const userId = cookiesData?.userId;
   const token = cookiesData && cookiesData.token;
+  const companyType = cookiesData && cookiesData.companyType
   const [dataUpdated, setDataUpdated] = useState(false);
   const [questionnaireUpdated, setQuestionnaireUpdated] = useState(false);
   const [onlineResourceData, setOnlineResourceData] = useState([]);
@@ -71,7 +72,6 @@ export const MyProvider = ({ children }) => {
     return [];
   });
   
-
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [isFirstResponse, setIsFirstResponse] = useState(true);
   const isFirstResponseRef = useRef(isFirstResponse);
@@ -582,7 +582,9 @@ export const MyProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    checkAccountLimitation();
+    if(companyType && companyType == "vendor"){
+      checkAccountLimitation();
+    }
   }, [reCallPlanDetailApi]);
 
   const handleCreateCheckout = async (data) => {
