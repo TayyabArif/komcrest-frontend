@@ -22,30 +22,28 @@ export async function middleware(request) {
   ];
 
 
-
-
-  // try {
-  //   if (cpatchajwtToken) {
-  //     const secret = new TextEncoder().encode(
-  //       process.env.NEXT_PUBLIC_JWT_SECRET
-  //     );
-  //     const { payload } = await jwtVerify(cpatchajwtToken.value, secret);   
-  //     if (!payload.captchaVerified) {
-  //       return NextResponse.redirect(
-  //         new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
-  //       );
-  //     }
-  //   } else {
-  //     return NextResponse.redirect(
-  //       new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
-  //     );
-  //   }
-  // } catch (error) {
-  //   console.error("Error verifying JWT:", error);
-  //   return NextResponse.redirect(
-  //     new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
-  //   );
-  // }
+  try {
+    if (cpatchajwtToken) {
+      const secret = new TextEncoder().encode(
+        process.env.NEXT_PUBLIC_JWT_SECRET
+      );
+      const { payload } = await jwtVerify(cpatchajwtToken.value, secret);   
+      if (!payload.captchaVerified) {
+        return NextResponse.redirect(
+          new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+        );
+      }
+    } else {
+      return NextResponse.redirect(
+        new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+      );
+    }
+  } catch (error) {
+    console.error("Error verifying JWT:", error);
+    return NextResponse.redirect(
+      new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+    );
+  }
   
 
 
