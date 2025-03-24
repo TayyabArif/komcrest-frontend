@@ -22,29 +22,69 @@ export async function middleware(request) {
   ];
 
 
+  // try {
+  //   if (cpatchajwtToken) {
+  //     const secret = new TextEncoder().encode(
+  //       process.env.NEXT_PUBLIC_JWT_SECRET
+  //     );
+  //     const { payload } = await jwtVerify(cpatchajwtToken.value, secret);   
+  //     if (!payload.captchaVerified) {
+  //       return NextResponse.redirect(
+  //         new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+  //       );
+  //     }
+  //   } else {
+  //     return NextResponse.redirect(
+  //       new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+  //     );
+  //   }
+  // } catch (error) {
+  //   console.error("Error verifying JWT:", error);
+  //   return NextResponse.redirect(
+  //     new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+  //   );
+  // }
+  
+
   try {
     if (cpatchajwtToken) {
-      const secret = new TextEncoder().encode(
-        process.env.NEXT_PUBLIC_JWT_SECRET
-      );
-      const { payload } = await jwtVerify(cpatchajwtToken.value, secret);   
+      const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET);
+      const { payload } = await jwtVerify(cpatchajwtToken.value, secret);
       if (!payload.captchaVerified) {
+        // Extract the full URL (including query params)
+        const currentUrl = request.nextUrl.href;
+        const redirectUrl = encodeURIComponent(currentUrl);
         return NextResponse.redirect(
-          new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+          new URL(`/captcha?redirectUrl=${redirectUrl}`, request.url)
         );
       }
     } else {
+      // Extract the full URL (including query params)
+      const currentUrl = request.nextUrl.href;
+      const redirectUrl = encodeURIComponent(currentUrl);
       return NextResponse.redirect(
-        new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+        new URL(`/captcha?redirectUrl=${redirectUrl}`, request.url)
       );
     }
   } catch (error) {
     console.error("Error verifying JWT:", error);
+    // Extract the full URL (including query params)
+    const currentUrl = request.nextUrl.href;
+    const redirectUrl = encodeURIComponent(currentUrl);
     return NextResponse.redirect(
-      new URL(`/captcha?redirectUrl=${encodeURIComponent(request.nextUrl.pathname)}`, request.url)
+      new URL(`/captcha?redirectUrl=${redirectUrl}`, request.url)
     );
   }
   
+
+
+
+
+
+
+
+
+
 
 
   if (unprotectedRoutes.includes(pathname)) {

@@ -20,9 +20,7 @@ const FindDomain = ({ type }) => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-
-      const payLoad = JSON.stringify({ subdomain: domain });
-
+      const payLoad = JSON.stringify({ subdomain: domain.toLowerCase() });
       const response = await fetch(`${baseUrl}/checkdomain`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
