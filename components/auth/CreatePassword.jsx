@@ -216,46 +216,61 @@ const CreatePassword = ({ type, isNew }) => {
         {isNew && createdBy !== "user" && (
           <div className="flex flex-col">
             {isTermsService && (
-              <Checkbox
-                isSelected={isTermsAggree}
-                onChange={() => setIsTermsAggree(!isTermsAggree)}
-                size="md"
-                className="mt-2"
-                classNames={{ label: "mt-0 text-base 2xl:text-[20px]" }}
-              >
-                {" "}
-                I agree to Komcrest’s{" "}
-                <a
-                  className="underline text-base 2xl:text-[20px]"
-                  onClick={() => {
-                    setIsTermsServiceClick(true);
-                    onOpen();
-                  }}
-                >
-                  Terms of Services
-                </a>
-              </Checkbox>
+             <div className="flex items-end gap-2">
+             <Checkbox
+               isSelected={isTermsAggree}
+               onChange={() => {
+                //  setIsTermsAggree(!isTermsAggree);
+                 setIsTermsServiceClick(true);
+                 onOpen();
+                 
+               }}
+               size="md"
+               className="mt-2"
+               classNames={{ label: "mt-0 text-base 2xl:text-[20px]" }}
+             >
+               I agree to Komcrest’s{" "}
+             </Checkbox>
+             
+             <a
+               className="underline text-base 2xl:text-[20px] cursor-pointer"
+               href="https://komcrest.com/conditions-generales-de-vente" // The link to the terms
+               target="_blank" // Opens the link in a new tab
+               rel="noopener noreferrer" // For security reasons
+             >
+               Terms of Services
+             </a>
+           </div>
+           
+             
             )}
             {isPrivacyPolicy && (
+                 <div className="flex items-end gap-2">
               <Checkbox
                 isSelected={isPrivacyAggree}
-                onChange={() => setIsPrivacyAggree(!isPrivacyAggree)}
+                onChange={() => {  
+                  // setIsPrivacyAggree(!isPrivacyAggree) 
+                  setIsPrivacyPolicyClick(true);
+                  onOpen();
+                }
+                }
                 size="md"
                 className="mt-2"
                 classNames={{ label: "mt-0 text-base 2xl:text-[20px]" }}
               >
                 {" "}
                 I agree to Komcrest’s{" "}
+                </Checkbox>
                 <a
                   className="underline"
-                  onClick={() => {
-                    setIsPrivacyPolicyClick(true);
-                    onOpen();
-                  }}
+                  href="https://komcrest.com/regles-de-confidentialite-protection-des-donnees-a-caractere-personnel" // The link to the terms
+                  target="_blank" // Opens the link in a new tab
+                  rel="noopener noreferrer" // For security reasons
                 >
                   Privacy Policy
                 </a>{" "}
-              </Checkbox>
+         
+              </div>
             )}
           </div>
         )}

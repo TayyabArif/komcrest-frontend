@@ -94,7 +94,8 @@ const RegistrationForm = () => {
       ...registerFormData,
       products,
       planId,
-      email : registerFormData.email.toLowerCase()
+      email : registerFormData.email.toLowerCase(),
+      subdomain : registerFormData.subdomain.toLowerCase()
     });
     const requestOptions = {
       method: "POST",
@@ -134,13 +135,12 @@ const RegistrationForm = () => {
 
   return (
     <div className="w-[90%] lg:w-[80%] xl:w-[70%]  mx-auto my-10">
-      {/* {JSON.stringify(companyPlan)} */}
       <div className="text-center lg:w-[60%] mx-auto space-y-4">
         <div className="flex justify-center">
           <Image src="/logo.png" alt="Komcrest Logo" width={230} height={230} />
         </div>
         <h1 className="md:text-[35px] text-[30px]">
-          Essai gratuit{domainName}
+          Essai gratuit
         </h1>
         <p className="text-standard">
           Merci pour l&apos;intérêt que vous portez à notre solution de réponse

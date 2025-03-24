@@ -86,10 +86,10 @@ const ChoosePlan = ({ planId, setPlanId, setFormErrors }) => {
               <p className="font-semibold text-standard">
                 {item.benefits?.Questions} Questions
               </p>
-              <p className="font-semibold text-standard">
+              {/* <p className="font-semibold text-standard">
                 ~ {getMinRangeQuestionnaire(item.name)} à{" "}
                 {item.benefits?.Questionnaires} Questionnaires
-              </p>
+              </p> */}
               {/* <p className="font-semibold text-standard">Un Limited Documents</p>
               <p className="font-semibold text-standard">
                 Un Limited Online Resource
