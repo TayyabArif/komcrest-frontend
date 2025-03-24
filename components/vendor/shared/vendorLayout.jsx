@@ -64,21 +64,25 @@ const VendorLayout = ({ children }) => {
     const endData = new Date(activePlanDetail?.subscriptionDetails?.endDate);
     const currentDate = new Date();
     const milliseconds = endData - currentDate;
-
+  
     // Calculate days, hours, and minutes
     const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
     const hours = Math.floor(
       (milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
     );
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
-
+  
     let result = "";
-
-    // If the difference is more than a day, show days
+  
+    // Show days and hours if days > 0
     if (days > 0) {
       result += `${days} day${days > 1 ? "s" : ""}`;
+      // Only show hours if they are more than 0
+      if (hours > 0) {
+        result += ` ${hours} hour${hours > 1 ? "s" : ""}`;
+      }
     }
-    // If less than a day, only show hours and minutes
+    // If no days, show only hours and minutes
     else {
       if (hours > 0) {
         result += `${hours} hour${hours > 1 ? "s" : ""}`;
@@ -87,15 +91,16 @@ const VendorLayout = ({ children }) => {
         result += `${minutes} minute${minutes > 1 ? "s" : ""}`;
       }
     }
-
+  
     // If no days, hours, or minutes are greater than zero, return "0 day"
     if (result.trim() === "") {
       result = "0 day";
     }
-
+  
     // Return the result
     return result.trim();
   }
+  
 
   function planActivated() {
     const selectedPlanId =
