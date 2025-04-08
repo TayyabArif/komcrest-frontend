@@ -310,10 +310,11 @@ const RegistrationForm = () => {
                     input: "text-standard",
                     label: "text-standard mb-1",
                   }}
+                  className="w-[70%] md:w-full"
                   onChange={(e) => setProduct(e.target.value)}
                 />
                 <Button
-                  className="global-success-btn px-7"
+                  className="global-success-btn px-7 !font-semibold"
                   onPress={handleAddProduct}
                 >
                   Ajouter un produit
