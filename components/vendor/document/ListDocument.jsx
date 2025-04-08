@@ -68,7 +68,7 @@ const AddDocument = () => {
           />
         ) : (
           <div className="text-center space-y-[2rem] py-7">
-            <div className="text-center w-[36%] mx-auto my-5">
+            <div className="text-center w-[36%] mx-auto my-5 space-y-3">
               <div className="flex justify-center items-center">
                 <svg
                   height="100px"
@@ -119,18 +119,20 @@ const AddDocument = () => {
                   priority
                 /> */}
               </div>
+              <div className="">
               <span className="font-semibold text-[16px] 2xl:text-[20px]">
                 It appears that you haven’t uploaded any documents yet.
               </span>
-              <p className="text-[15px] leading-7 2xl:text-[20px] my-1">
+              <p className="text-[15px]  2xl:text-[20px] ">
                 We encourage you to add key documents that you frequently share
                 with your prospects and clients. We will index them to improve
                 the accuracy of Komcrest Generative AI.
               </p>
+              </div>
               <Button
                 radius="none"
                 size="md"
-                className="text-white px-[10px] text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] "
+                className="text-white px-[10px]  text-[15px] 2xl:text-[20px] cursor-pointer font-semibold bg-btn-primary w-max rounded-[4px] "
                 onClick={() => {
                   router.push("/vendor/document/AddDocument");
                 }}
