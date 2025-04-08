@@ -6,13 +6,77 @@
 
 @import url('https://cdn.jsdelivr.net/npm/futura-font@1.0.0/styles.min.css');
 
-html, body {
-  font-family: 'Futura PT', 'sans-serif';
-}
 
 :root {
 
 }
+
+/* @font-face {
+  font-family: 'Tilda Sans';
+  src: url('/fonts/tilda/TildaSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tilda Sans';
+  src: url('/fonts/tilda/TildaSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tilda Sans';
+  src: url('/fonts/tilda/TildaSans-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+} */
+
+@font-face {
+  font-family: 'Tilda Sans';
+  src: url('/fonts/tilda/TildaSans-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tilda Sans';
+  src: url('/fonts/tilda/TildaSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tilda Sans';
+  src: url('/fonts/tilda/TildaSans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tilda Sans';
+  src: url('/fonts/tilda/TildaSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tilda Sans';
+  src: url('/fonts/tilda/TildaSans-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+
+/* Apply globally */
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -20,6 +84,11 @@ html, body {
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0; */
   }
+}
+
+html, body {
+  font-family: 'Tilda Sans', sans-serif;
+  /* font-family: 'Futura PT', 'sans-serif'; */
 }
 
 body {
