@@ -10,8 +10,8 @@ const KnowledgeHome = () => {
   return (
     <div>
       <KnowledgeHeader buttonShow={false} />
-      <div className=" py-7  min-h-[85vh] flex items-center justify-center">
-        <div className="text-center w-[43%] mx-auto my-5">
+      <div className="py-7 min-h-[85vh] flex items-center justify-center">
+        <div className="text-center w-[45%] mx-auto my-5 space-y-3">
           <div className="flex justify-center items-center">
             <svg
               height="100px"
@@ -54,20 +54,22 @@ const KnowledgeHome = () => {
               </g>
             </svg>
           </div>
-          <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-[85%] mx-auto leading-7 mt-3">
+          <div>
+          <h1 className="font-semibold text-[16px] 2xl:text-[20px] w-[85%] mx-auto">
             It appears that you haven’t uploaded any requirements, questions and
             answers yet.
           </h1>
-          <p className="text-[15px] leading-7 2xl:text-[20px] w-[85%] mx-auto my-1">
+          <p className="text-standard w-[85%] mx-auto">
             We encourage you to add key documents that you frequently share with
             your prospects and clients. We will index them to improve the
             accuracy of Komcrest AI responses.
           </p>
-          <p className="my-4 text-standard leading-7">
+          <p className="text-standard">
             You don’t know where to start from? Download our list of questions
             HERE. It will help you shape build up your knowledge base and
             clarify your roadmap.
           </p>
+          </div>
           <Button
             radius="none"
             size="md"
