@@ -88,7 +88,7 @@ const VendorLayout = ({ children }) => {
         result += `${hours} hour${hours > 1 ? "s" : ""}`;
       }
       if (minutes > 0) {
-        result += `${minutes} minute${minutes > 1 ? "s" : ""}`;
+        result += ` ${minutes} minute${minutes > 1 ? "s" : ""}`;
       }
     }
   
@@ -103,9 +103,15 @@ const VendorLayout = ({ children }) => {
   
 
   function planActivated() {
+    alert("okokk")
     const selectedPlanId =
       activePlanDetail?.subscriptionDetails?.selectedPlanId;
     const selectedPlan = plansData?.find((item) => item.id == selectedPlanId);
+
+    console.log("????????????",selectedPlanId)
+    console.log("++++++++++++++",selectedPlan)
+
+
     if (selectedPlan?.name == "Free") {
       router.push("/vendor/setting/subscription-plan");
     } else {
