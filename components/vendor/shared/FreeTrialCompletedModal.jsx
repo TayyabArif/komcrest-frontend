@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/router";
 
-const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange ,planActivated }) => {
+const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange , planActivated }) => {
   const router = useRouter();
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
@@ -31,7 +31,8 @@ const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange ,planActivated }
               size="md"
               color="primary"
               className="global-success-btn"
-              onClick={() =>planActivated() }
+              onClick={() =>{
+                planActivated() }}
             >
               Activate Plan
             </Button>
