@@ -9,6 +9,7 @@ import ConfirmationModal from '../../shared/ConfirmationModal';
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
+import CompanyPreviewModal from './CompanyPreviewModal';
 
 const modalDataDeactivate = {
   heading: "Deactivate Company",
@@ -32,6 +33,8 @@ const CompaniesTable = ({allCompanies, setAllCompanies, isDeleted, setIsDeleted}
   const router = useRouter();
   const [filteredCompanies, setFilteredCompanies] = useState(allCompanies);
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [companyFullDetail, setCompanyFullDetail] = useState(null);
 
 
   useEffect(() => {
@@ -53,7 +56,6 @@ const handleUpdate = async () => {
   if (updateAction === "Reactive") {
     const myHeaders = new Headers();
     myHeaders.append("Host", "tenant1.localhost");
-
     const requestOptions = {
       method: "POST",
       headers: {
@@ -61,7 +63,6 @@ const handleUpdate = async () => {
       },
       redirect: "follow"
     };
-
     fetch(`${baseUrl}/companies/${selectedDecativateCompany?.id}/reactivate`, requestOptions)
     .then((response) => {
       return response.json().then((data) => ({
@@ -111,6 +112,27 @@ const handleUpdate = async () => {
 
   const renderCell = useCallback((company, columnKey) => {
     const cellValue = company[columnKey];
+    
+
+    const handlePreviewOpen = async (id) => {
+      const token = cookiesData.token;
+      try {
+        const response = await fetch(`${baseUrl}/company/${id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+    
+        const result = await response.json();
+        setCompanyFullDetail(result);
+      } catch (error) {
+        console.error(error);
+      }
+    
+      setIsPreviewOpen(true);
+    };
+    
 
     switch (columnKey) {
       case "name":
@@ -177,12 +199,15 @@ const handleUpdate = async () => {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className='rounded-sm w-[120px] items-start text-start'>
-                <div className="px-2 py-2">
+                <div className="px-2 py-2 space-y-1">
+                <div className="text-sm font-bold cursor-pointer"
+                 onClick={() => handlePreviewOpen(company.id)}
+                  >View Detail</div>
                   <div className="text-sm font-bold cursor-pointer"
                    onClick={() => router.push(`/admin/company-settings/update-company?id=${company.id}`)}
                   >Update</div>
                   {!company?.deletedAt ?  
-                  <div className="text-sm mt-2 text-red-500 font-bold cursor-pointer" onClick={() => {
+                  <div className="text-sm  text-red-500 font-bold cursor-pointer" onClick={() => {
                     setupdateAction("Deactivate")
                     setSelectedDecativateCompany(company)
                     onOpen()
@@ -205,6 +230,8 @@ const handleUpdate = async () => {
         return cellValue;
     }
   }, []);
+
+  
 
   return (
     <div className='flex flex-col gap-2 bg-gray-200 pl-20 pr-10 py-3 min-h-screen'>
@@ -249,6 +276,11 @@ const handleUpdate = async () => {
     </div>
     }
     <ConfirmationModal isOpen={isOpen} onOpenChange ={onOpenChange} data={updateAction === "Reactive" ? modalDataActivate : modalDataDeactivate} handleSubmit={handleUpdate} name={selectedDecativateCompany?.name}/>
+    <CompanyPreviewModal
+        isOpen={isPreviewOpen}
+        onOpenChange={setIsPreviewOpen}
+        companyFullDetail={companyFullDetail}
+      />
     </div>
   )
 }

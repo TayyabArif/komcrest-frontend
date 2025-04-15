@@ -32,7 +32,6 @@ const FreeTrialCompletedModal = ({ isOpen, onOpen, onOpenChange , planActivated 
               color="primary"
               className="global-success-btn"
               onClick={() =>{
-                alert("trigger modal")
                 planActivated() }}
             >
               Activate Plan

@@ -103,15 +103,9 @@ const VendorLayout = ({ children }) => {
   
 
   function planActivated() {
-    alert("okokk")
     const selectedPlanId =
       activePlanDetail?.subscriptionDetails?.selectedPlanId;
     const selectedPlan = plansData?.find((item) => item.id == selectedPlanId);
-
-    console.log("????????????",selectedPlanId)
-    console.log("++++++++++++++",selectedPlan)
-
-
     if (selectedPlan?.name == "Free") {
       router.push("/vendor/setting/subscription-plan");
     } else {
