@@ -35,6 +35,7 @@ const CompaniesTable = ({allCompanies, setAllCompanies, isDeleted, setIsDeleted}
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [companyFullDetail, setCompanyFullDetail] = useState(null);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
 
   useEffect(() => {
@@ -132,6 +133,8 @@ const handleUpdate = async () => {
     
       setIsPreviewOpen(true);
     };
+
+    
     
 
     switch (columnKey) {
@@ -186,9 +189,10 @@ const handleUpdate = async () => {
           </div>
         );
       case "actions":
+
         return (
           <div className="relative flex items-center gap-2">
-            <Popover placement="bottom" showArrow={true} >
+            <Popover  placement="bottom" showArrow={true} >
               <PopoverTrigger>
                 <Button className='' size="sm">
                 <Tooltip content="Edit user">
