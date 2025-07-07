@@ -116,6 +116,7 @@ const RegistrationForm = () => {
         if (ok) {
           router.push(`http://onboarding.komcrest.com/registration/thank-you`);
         } else {
+          toast.error(data.error)
           setFormErrors({
             ...formErrors,
             subdomain: data.message.subdomain,
@@ -123,7 +124,9 @@ const RegistrationForm = () => {
           });
         }
       })
-      .catch((error) => console.error("+++", error))
+      .catch((error) => {
+        console.error("+++++++++", error)
+      })
       .finally(() => {
         setIsLoading(false);
       });

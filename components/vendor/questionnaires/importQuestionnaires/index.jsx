@@ -311,19 +311,21 @@ const Import = () => {
             `/vendor/questionnaires/view?name=${data?.fullQuestionnaire?.customerName}`
           );
         } else {
-          toast.error(data?.error || "Questionnaires not Created");
+          toast.error("Questionnaires not Created");
           console.error("Error:", data);
         }
         sessionStorage.removeItem('questions');
       })
       .catch((error) => {
+        console.error("Caught error in catch block:", error);
+        toast.error(error.message || "Unexpected error occurred");
         if (error.response) {
-          console.error("API Error:", error.response);
           toast.error(
             error.response.data?.error ||
               "An error occurred while creating the document"
           );
         }
+        setStepper(3)
       });
   };
 
