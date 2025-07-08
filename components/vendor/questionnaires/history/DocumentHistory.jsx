@@ -39,7 +39,7 @@ const DocumentHistory = ({
         documentReferenceData.map((doc, index) => (
           <div
             key={index}
-            className="bg-white rounded py-2 px-4 break-words"
+            className="bg-white rounded py-2  px-4 break-words my-3"
           >
             <a
               href="#"
@@ -65,8 +65,6 @@ const DocumentHistory = ({
                     size={18}
                   />
                 </Link>
-              
-
                 {isButtonClickAble && (
                   <div className="flex items-center gap-3">
                     {doc.referenceStatus == "like" ? (

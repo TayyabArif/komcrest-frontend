@@ -146,6 +146,7 @@ const NewDocument = () => {
               toast.error(data?.error);
               console.error("Error:", data);
             }
+            setIsLoading(false); 
           })
           .catch((error) => console.error(error));
       } else {
@@ -178,18 +179,21 @@ const NewDocument = () => {
               toast.success("Document created successfully");
               setDocumentDataUpdate((prev) => !prev);
               router.push("/vendor/document");
+
             } else {
               toast.error(data?.error || "Document not Created");
               console.error("Error:", data);
             }
+            setIsLoading(false); 
           })
           .catch((error) => console.error(error));
       }
+
+
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+      setIsLoading(false); 
+    } 
   };
 
   useEffect(() => {
@@ -253,7 +257,7 @@ const NewDocument = () => {
     <div className="w-[100%] h-full">
       <div className="w-[80%] mx-auto  mt-[4rem]">
         <h1 className="font-bold rounded-t bg-slate-50 px-4 py-2 text-standard">
-          Dropzone
+          Dropzone 
         </h1>
         {dataIsLoaded && (
           <div className="px-4 rounded-b bg-white pb-6">
@@ -262,7 +266,7 @@ const NewDocument = () => {
             </h1>
             <div className="my-3">
               <div className="flex  space-y-3 items-center gap-2">
-                <div className="w-[50%]">
+                <div className="w-[50%] flex-1">
                   <p className="text-standard leading-6">
                     Drag and drop sections for your file uploads or click and
                     select file to upload to be indexed by Komcrest AI.
@@ -280,7 +284,7 @@ const NewDocument = () => {
                   >
                     <input {...getInputProps()} />
                     {documentData.file || documentData.filePath ? (
-                      <div className="mt-2">
+                      <div className="mt-2 ">
                         <p>
                           {typeof documentData.file !== "string"
                             ? documentData.file?.name
