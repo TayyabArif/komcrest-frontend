@@ -318,22 +318,15 @@ const Import = () => {
       })
       .catch((error) => {
         console.error("Caught error in catch block:", error);
-        
-        // Check if the error is a Cloudflare timeout (status 524)
-        if (error.response && error.response.status === 524) {
-            console.log("Cloudflare timeout error (524) occurred, no toast shown");
-        } else {
-            toast.error(error.message || "Unexpected error occurred");
-            if (error.response) {
-                toast.error(
-                    error.response.data?.error ||
-                    "An error occurred while creating the document"
-                );
-            }
-        }
-        setStepper(3);
-    });
-    
+        // toast.error(error.message || "Unexpected error occurred");
+        // if (error.response) {
+        //   toast.error(
+        //     error.response.data?.error ||
+        //       "An error occurred while creating the document"
+        //   );
+        // }
+        setStepper(3)
+      });
   };
 
   const handleCancelClick = () => {
