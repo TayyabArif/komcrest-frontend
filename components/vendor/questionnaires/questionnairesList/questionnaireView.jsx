@@ -785,7 +785,7 @@ const QuestionnairesView = () => {
                                   item.status === "approved"
                                     ? "bg-green-600"
                                     : item.status === "Flagged" ||
-                                      item.confidence < 7
+                                      item.confidence < 8
                                     ? "bg-yellow-500"
                                     : "bg-blue-600"
                                 }`}
@@ -843,7 +843,7 @@ const QuestionnairesView = () => {
                               className={`px-4 py-2 !text-wrap border ${
                                 item.status === "approved"
                                   ? "" 
-                                  : item.confidence < 7
+                                  : item.confidence < 8
                                   ? "outline outline-[#FFC001] text-[#FFC001] shadow-inner" // Confidence condition ke liye styling
                                   : ""
                               }`}
@@ -1070,7 +1070,7 @@ const QuestionnairesView = () => {
                                 item.status === "approved"
                                   ? "bg-green-600"
                                   : item.status === "Flagged" ||
-                                    item.confidence < 7
+                                    item.confidence < 8
                                   ? "bg-yellow-500"
                                   : "bg-blue-600"
                               }`}

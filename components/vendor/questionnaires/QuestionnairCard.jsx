@@ -40,7 +40,7 @@ const QuestionnairCard = ({ data, index, setDataUpdate, id }) => {
     if (totalQuestion === 0) return;
 
     const statusCounts = data?.questionnaireRecords.reduce((acc, record) => {
-      if (record.confidence < 7 && record.status !== "approved") {
+      if (record.confidence < 8 && record.status !== "approved") {
         acc["Flagged"] = (acc["Flagged"] || 0) + 1;
       } else {
         // Increment count for each status
